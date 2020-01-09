@@ -5,7 +5,7 @@ plugins {
 
 apply plugin: 'idea'
 
-def ROBOT_MAIN_CLASS = "edu.greenblitz.bigRodika.Robot" // set this to the full name of the robot class (including package)
+def ROBOT_MAIN_CLASS = "edu.greenblitz.bigRodika.main" // set this to the full name of the robot class (including package)
 
 gradle.projectsEvaluated {
     tasks.withType(JavaCompile) {
@@ -45,10 +45,12 @@ dependencies {
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 
+    nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio) 
+    nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
     // Optional lines, adds common robot code libraries to the project
     // The jitpack line in repositories is required for these libraries.
     compile 'com.github.GreenBlitz.MotionControl:motion:c0f2e92d83b15ecd3c855a329c4d30ddb31d4423'
-    compile 'com.github.GreenBlitz:GBLib:f8dfc924f047648b42c541f2b58e719c6c0f95e5'
+    compile 'com.github.GreenBlitz:GBLib:756c105d941fe748fb05edb1c612a9748c390e7e'
 
     compile group: 'com.google.guava', name: 'guava', version: '11.0.2'
 
