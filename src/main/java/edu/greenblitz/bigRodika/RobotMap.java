@@ -15,5 +15,10 @@ public class RobotMap {
                                         RIGHT_TALON = 4;
             }
         }
+
+        public static class Turn {
+            public static final double RKp = 1, LKp = 1;
+        }
+
     }
 }
