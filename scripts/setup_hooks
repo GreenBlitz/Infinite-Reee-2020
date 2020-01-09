@@ -4,5 +4,6 @@ GIT_DIR=$(git rev-parse --git-dir)
 
 echo "Installing hooks..."
 # this command creates symlink to our pre-commit script
-ln ./pre-commit $GIT_DIR/hooks/pre-commit
+ln -s ./pre-push $GIT_DIR/hooks/pre-push
+ln -s ./prepare-commit-message $GIT_DIR/hooks/prepare-commit-msg
 echo "Done!"
