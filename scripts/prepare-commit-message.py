@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+import re
 
 print("Checking commit")
 
@@ -11,4 +12,6 @@ if len(commit_msg) < 15:
     print("Commit message must be at least 15 chars long!")
     exit(1)
 
-print("Thanks for commiting!")
+if not re.match(".+? - .+", commit_msg):
+    print("Commit doesn't match [name - message] format")
+    exit(1)
