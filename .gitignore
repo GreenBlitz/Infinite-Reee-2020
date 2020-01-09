@@ -34,6 +34,8 @@
 *.iml
 *.ipr
 
+.directory
+
 # CMake
 cmake-build-*/
 

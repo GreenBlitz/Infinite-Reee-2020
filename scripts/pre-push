@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-echo "Running tests...\n"
+echo "Running tests..."
 gradle build
 
 if [ $? -ne 0 ]; then
- echo "\nTests must pass before commit!"
+ echo "Tests must pass before commit!"
  exit 1
 fi
 
-echo "\nThank you for your contribution!"
+echo "Thank you for your contribution!"
