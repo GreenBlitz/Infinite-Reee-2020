@@ -29,9 +29,12 @@
 # auto-import.
 .idea/modules.xml
 .idea/*.iml
+.idea/misc.xml
 .idea/modules
 *.iml
 *.ipr
+
+.directory
 
 # CMake
 cmake-build-*/
