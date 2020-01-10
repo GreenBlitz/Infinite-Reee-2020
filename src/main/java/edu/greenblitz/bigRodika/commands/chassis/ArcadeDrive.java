@@ -1,4 +1,4 @@
-package edu.greenblitz.bigRodika.commands;
+package edu.greenblitz.bigRodika.commands.chassis;
 
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.command.GBCommand;
@@ -6,11 +6,10 @@ import edu.greenblitz.gblib.hid.SmartJoystick;
 
 public class ArcadeDrive extends GBCommand {
 
-    SmartJoystick joystick;
+    private SmartJoystick joystick;
 
     public ArcadeDrive(SmartJoystick joystick) {
-        require(Chassis.getInstance());
-
+        super(Chassis.getInstance());
         this.joystick = joystick;
     }
 

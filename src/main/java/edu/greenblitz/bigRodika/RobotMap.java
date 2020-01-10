@@ -14,6 +14,9 @@ public class RobotMap {
                                         LEFT_TALON = 1,
                                         RIGHT_TALON = 4;
             }
+
+            public static final int PIGEON_PORT = 0;
+
         }
     }
 }
