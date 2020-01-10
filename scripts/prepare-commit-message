@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-python3 ./scripts/prepare-commit-message.py $1
+python ./scripts/prepare-commit-message.py $1
 
 if [ $? -ne 0 ]; then
  exit 1
