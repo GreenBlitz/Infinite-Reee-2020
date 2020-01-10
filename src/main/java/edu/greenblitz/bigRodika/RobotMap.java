@@ -26,6 +26,7 @@ public class RobotMap {
             }
 
             public static final int PIGEON_PORT = 4;
+            public static final double WHEEL_DIST = 0.57;
 
         }
 

@@ -2,6 +2,8 @@ package edu.greenblitz.bigRodika.commands.chassis;
 
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.threading.IThreadable;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.app.Localizer;
 
 public class LocalizerCommand implements IThreadable {
@@ -24,7 +26,6 @@ public class LocalizerCommand implements IThreadable {
 
     @Override
     public void run() {
-        System.out.println(chassis.getLeftMeters() + " " + chassis.getRightMeters());
         localizer.update(chassis.getLeftMeters(), chassis.getRightMeters(), chassis.getAngle());
         if (System.currentTimeMillis() - tPrev < minimumLoopTime) {
             try {
@@ -51,6 +52,7 @@ public class LocalizerCommand implements IThreadable {
         chassis = Chassis.getInstance();
         chassis.resetGyro();
         localizer = Localizer.getInstance();
+        localizer.configure(chassis.getWheelDistance(), 0, 0);
         localizer.reset(chassis.getLeftMeters(), chassis.getRightMeters());
         tPrev = System.currentTimeMillis();
     }

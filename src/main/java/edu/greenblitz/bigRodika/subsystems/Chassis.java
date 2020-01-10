@@ -24,7 +24,7 @@ public class Chassis implements Subsystem {
     private VictorSPX leftVictor, rightVictor;
     private TalonSRX leftTalon, rightTalon;
     private IEncoder leftEncoder, rightEncoder;
-    private PigeonGyro gyroscope;
+    private IGyroscope gyroscope;
     private SmartRobotDrive robotDrive;
 
     private Chassis() {
@@ -101,11 +101,13 @@ public class Chassis implements Subsystem {
         gyroscope.reset();
     }
 
+    public double getWheelDistance(){
+        return RobotMap.BigRodika.Chassis.WHEEL_DIST;
+    }
+
     @Override
     public void periodic(){
-        double[] val = new double[3];
-        gyroscope.getPigeon().getYawPitchRoll(val);
-        SmartDashboard.putString("Yaw Pitch Roll", Arrays.toString(val));
+        SmartDashboard.putNumber("Yaw", getAngle());
         SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
     }
 
