@@ -4,6 +4,10 @@ plugins {
 }
 
 apply plugin: 'idea'
+apply plugin: 'java'
+
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
 
 def ROBOT_MAIN_CLASS = "edu.greenblitz.bigRodika.main" // set this to the full name of the robot class (including package)
 
