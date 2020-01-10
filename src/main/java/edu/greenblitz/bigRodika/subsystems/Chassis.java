@@ -7,11 +7,16 @@ import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.ArcadeDrive;
 import edu.greenblitz.gblib.encoder.IEncoder;
+import edu.greenblitz.gblib.encoder.RoborioEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
 import edu.greenblitz.gblib.gyroscope.PigeonGyro;
 import edu.greenblitz.utils.SmartRobotDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import org.greenblitz.motion.app.Localizer;
+
+import java.util.Arrays;
 
 public class Chassis implements Subsystem {
     private static Chassis instance;
@@ -19,7 +24,7 @@ public class Chassis implements Subsystem {
     private VictorSPX leftVictor, rightVictor;
     private TalonSRX leftTalon, rightTalon;
     private IEncoder leftEncoder, rightEncoder;
-    private IGyroscope gyroscope;
+    private PigeonGyro gyroscope;
     private SmartRobotDrive robotDrive;
 
     private Chassis() {
@@ -28,15 +33,21 @@ public class Chassis implements Subsystem {
         leftTalon = new TalonSRX(RobotMap.BigRodika.Chassis.Motor.LEFT_TALON);
         rightTalon = new TalonSRX(RobotMap.BigRodika.Chassis.Motor.RIGHT_TALON);
 
-        leftEncoder = new TalonEncoder(1, leftTalon);
-        rightEncoder = new TalonEncoder(1, rightTalon);
+        leftEncoder = new RoborioEncoder(
+                RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_LEFT,
+                RobotMap.BigRodika.Chassis.Encoder.LEFT_PORT_A,
+                RobotMap.BigRodika.Chassis.Encoder.LEFT_PORT_B);
+        rightEncoder = new RoborioEncoder(
+                RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_RIGHT,
+                RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_A,
+                RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_B);
 
-        gyroscope = new PigeonGyro(new PigeonIMU(RobotMap.BigRodika.Chassis.PIGEON_PORT));
+        gyroscope = new PigeonGyro(new PigeonIMU(rightTalon));
 
         robotDrive = new SmartRobotDrive(rightVictor, rightTalon, leftVictor, leftTalon);
         robotDrive.setInvetedMotor(SmartRobotDrive.TalonID.FRONT_RIGHT, true);
 
-        setDefaultCommand(new ArcadeDrive(OI.getInstance().getMainJoystick()));
+        setDefaultCommand(new ArcadeDrive(this, OI.getInstance().getMainJoystick()));
     }
 
     public static Chassis getInstance() {
@@ -88,6 +99,14 @@ public class Chassis implements Subsystem {
 
     public void resetGyro(){
         gyroscope.reset();
+    }
+
+    @Override
+    public void periodic(){
+        double[] val = new double[3];
+        gyroscope.getPigeon().getYawPitchRoll(val);
+        SmartDashboard.putString("Yaw Pitch Roll", Arrays.toString(val));
+        SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
     }
 
 }

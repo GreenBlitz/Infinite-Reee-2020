@@ -24,6 +24,7 @@ public class LocalizerCommand implements IThreadable {
 
     @Override
     public void run() {
+        System.out.println(chassis.getLeftMeters() + " " + chassis.getRightMeters());
         localizer.update(chassis.getLeftMeters(), chassis.getRightMeters(), chassis.getAngle());
         if (System.currentTimeMillis() - tPrev < minimumLoopTime) {
             try {

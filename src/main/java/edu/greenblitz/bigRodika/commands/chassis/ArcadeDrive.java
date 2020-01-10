@@ -8,8 +8,8 @@ public class ArcadeDrive extends GBCommand {
 
     private SmartJoystick joystick;
 
-    public ArcadeDrive(SmartJoystick joystick) {
-        super(Chassis.getInstance());
+    public ArcadeDrive(Chassis chassis, SmartJoystick joystick) {
+        super(chassis);
         this.joystick = joystick;
     }
 
