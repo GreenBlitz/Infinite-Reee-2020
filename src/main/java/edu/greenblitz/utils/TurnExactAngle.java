@@ -5,12 +5,12 @@ import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 
 public class TurnExactAngle {
-    private double turn;
-    private Chassis base;
+    private double turn, leftInitialMeters, rightInitialMeters;
 
-    public TurnExactAngle(float turn, Chassis base) {
-        this.base = base;
-        this.turn = this.base.getYTurn() + turn;
+    public TurnExactAngle(float turn) {
+        this.turn = Chassis.getInstance().getAngle() + turn;
+        leftInitialMeters = Chassis.getInstance().getLeftMeters();
+        rightInitialMeters = Chassis.getInstance().getRightMeters();
     }
 
     public void execute() {
@@ -18,13 +18,13 @@ public class TurnExactAngle {
     }
 
     public void rightP() {
-        double error = this.base.getYTurn() - this.turn;
-        double norm = error / 3.6;
-        this.base.tankDrive(leftP(), norm * RobotMap.BigRodika.Turn.RKp);
+        double error = this.turn - Chassis.getInstance().getAngle();
+        double norm = error / 1.8;
+        Chassis.getInstance().moveMotors(leftP(), norm * RobotMap.BigRodika.Turn.RKp);
     }
 
     public double leftP() {
-        double error = this.base.getRightTicks() - this.base.getLeftTicks();
+        double error = Chassis.getInstance().getRightMeters() - this.base.getLeftTicks();
         return error * RobotMap.BigRodika.Turn.LKp;
     }
 }
