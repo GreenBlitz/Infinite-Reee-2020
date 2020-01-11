@@ -27,8 +27,8 @@ public class RobotMap {
 
             public static final double WHEEL_DIST = 0.57;
 
-            public static final double MAX_ANG_V = 0,
-                                       MAX_ANG_A = 0;
+            public static final double MAX_ANG_V = 1,
+                                       MAX_ANG_A = 1;
 
         }
 

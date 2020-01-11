@@ -15,6 +15,7 @@ import edu.greenblitz.utils.SmartRobotDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.app.Localizer;
+import org.greenblitz.motion.base.Position;
 
 import java.util.Arrays;
 
@@ -103,6 +104,10 @@ public class Chassis implements Subsystem {
 
     public double getWheelDistance(){
         return RobotMap.BigRodika.Chassis.WHEEL_DIST;
+    }
+
+    public Position getLocation(){
+        return Localizer.getInstance().getLocation();
     }
 
     @Override
