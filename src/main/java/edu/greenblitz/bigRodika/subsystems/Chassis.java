@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -15,6 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.app.Localizer;
 import org.greenblitz.motion.base.Position;
+
+import java.awt.*;
 
 
 public class Chassis implements Subsystem {
@@ -60,6 +63,20 @@ public class Chassis implements Subsystem {
     public void moveMotors(double left, double right){
         leftTalon.set(ControlMode.PercentOutput, left);
         rightTalon.set(ControlMode.PercentOutput, right);
+    }
+
+    public void toBrake(){
+        leftTalon.setNeutralMode(NeutralMode.Brake);
+        leftVictor.setNeutralMode(NeutralMode.Brake);
+        rightTalon.setNeutralMode(NeutralMode.Brake);
+        rightVictor.setNeutralMode(NeutralMode.Brake);
+    }
+
+    public void toCoast(){
+        leftTalon.setNeutralMode(NeutralMode.Coast);
+        leftVictor.setNeutralMode(NeutralMode.Coast);
+        rightTalon.setNeutralMode(NeutralMode.Coast);
+        rightVictor.setNeutralMode(NeutralMode.Coast);
     }
 
     public void arcadeDrive(double moveValue, double rotateValue) {

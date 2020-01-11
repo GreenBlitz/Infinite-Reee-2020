@@ -25,7 +25,7 @@ public class OI {
     private void initTestButtons(){
         mainJoystick.A.whenPressed(new CheckMaxRot(0.5));
         mainJoystick.B.whenPressed(new TurnToAngle(
-                15,20,1,2, 6.65, 0.5));
+                15,10,2,4.8, 8.5, 0.5));
     }
 
     private void initOfficalButtons(){

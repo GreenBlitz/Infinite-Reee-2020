@@ -1,6 +1,5 @@
 package edu.greenblitz.bigRodika.commands.chassis;
 
-import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,7 +17,7 @@ public class TurnToAngle extends GBCommand {
     private double maxV, maxA;
     private double power;
 
-    private boolean over;
+    private int overCount;
 
     public TurnToAngle(double angleToTurnDeg, double locP, double velP,
                        double maxV, double maxA,
@@ -44,7 +43,7 @@ public class TurnToAngle extends GBCommand {
                 0, start, end);
 
         t0 = System.currentTimeMillis();
-        over = false;
+        overCount = 0;
     }
 
     @Override
@@ -54,7 +53,7 @@ public class TurnToAngle extends GBCommand {
 
         if (motionProfile.isOver(timePassed)){
             Chassis.getInstance().moveMotors(0,0);
-            over = true;
+            overCount++;
             return;
         }
 
@@ -65,12 +64,12 @@ public class TurnToAngle extends GBCommand {
 
         double ff = velocity/maxV  + accel/maxA;
         double locPVal = locP * Position.normalizeAngle(location - Chassis.getInstance().getAngle());
-        double velPLeft = velP * (perWheelVel - Chassis.getInstance().getLeftRate());
-        double velPRight = velP * (-perWheelVel - Chassis.getInstance().getLeftRate());
+        double velPLeft = velP * (-perWheelVel - Chassis.getInstance().getLeftRate());
+        double velPRight = velP * (perWheelVel - Chassis.getInstance().getLeftRate());
 
         Chassis.getInstance().moveMotors(
-                clamp(ff + locPVal + velPLeft),
-                -clamp(ff + locPVal + velPRight));
+                -clamp(ff + locPVal + velPLeft),
+                clamp(ff + locPVal + velPRight));
     }
 
     private double clamp(double inp){
@@ -88,6 +87,6 @@ public class TurnToAngle extends GBCommand {
 
     @Override
     public boolean isFinished() {
-        return over;
+        return overCount >= 3;
     }
 }
