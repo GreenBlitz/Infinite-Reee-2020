@@ -25,13 +25,11 @@ public class RobotMap {
                                            NORM_CONST_RIGHT = 1.0/(1.2/2100.0);
             }
 
-            public static final int PIGEON_PORT = 4;
             public static final double WHEEL_DIST = 0.57;
 
-        }
+            public static final double MAX_ANG_V = 0,
+                                       MAX_ANG_A = 0;
 
-        public static class Turn {
-            public static final double RKp = 1, LKp = 1;
         }
 
     }
