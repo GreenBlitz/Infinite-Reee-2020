@@ -12,6 +12,8 @@ import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
 import edu.greenblitz.gblib.gyroscope.PigeonGyro;
 import edu.greenblitz.utils.SmartRobotDrive;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.app.Localizer;
@@ -85,8 +87,8 @@ public class Chassis implements Subsystem {
         return 0.5*(getLeftRate() + getRightRate());
     }
 
-    public double getAngularVelocityByWheels(double wheelDistance){
-        return wheelDistance * (getLeftRate() - getRightRate());
+    public double getAngularVelocityByWheels(){
+        return getWheelDistance() * (getLeftRate() - getRightRate());
     }
 
     public double getAngle(){
@@ -107,7 +109,6 @@ public class Chassis implements Subsystem {
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("Yaw", getAngle());
         SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
     }
 

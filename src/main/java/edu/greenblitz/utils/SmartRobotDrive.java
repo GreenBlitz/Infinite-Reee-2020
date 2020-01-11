@@ -2,6 +2,7 @@ package edu.greenblitz.utils;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SmartRobotDrive {
 
@@ -107,6 +108,8 @@ public class SmartRobotDrive {
     }
 
     public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
+        SmartDashboard.putNumber("Left Power", leftOutput);
+        SmartDashboard.putNumber("Right power", rightOutput);
         m_frontLeft.set(ControlMode.PercentOutput, m_frontLeftInverted * limit(leftOutput) * m_outputScale);
         m_rearLeft.set(ControlMode.PercentOutput, m_rearLeftInverted * limit(leftOutput) * m_outputScale);
         m_frontRight.set(ControlMode.PercentOutput, m_frontRightInverted * limit(rightOutput) * m_outputScale);

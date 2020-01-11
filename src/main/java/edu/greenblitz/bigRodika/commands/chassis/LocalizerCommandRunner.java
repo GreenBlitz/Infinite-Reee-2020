@@ -4,6 +4,6 @@ import edu.greenblitz.gblib.threading.ThreadedCommand;
 
 public class LocalizerCommandRunner extends ThreadedCommand {
     public LocalizerCommandRunner() {
-        super(new LocalizerCommand());
+        super(new LocalizerCommand(20));
     }
 }
