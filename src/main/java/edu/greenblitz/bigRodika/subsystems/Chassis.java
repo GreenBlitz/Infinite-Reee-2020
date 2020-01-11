@@ -1,5 +1,7 @@
 package edu.greenblitz.bigRodika.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -8,17 +10,15 @@ import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.ArcadeDrive;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.RoborioEncoder;
-import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
 import edu.greenblitz.gblib.gyroscope.PigeonGyro;
-import edu.greenblitz.utils.SmartRobotDrive;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.app.Localizer;
+import org.greenblitz.motion.base.Position;
 
-import java.util.Arrays;
+import java.awt.*;
+
 
 public class Chassis implements Subsystem {
     private static Chassis instance;
@@ -27,13 +27,16 @@ public class Chassis implements Subsystem {
     private TalonSRX leftTalon, rightTalon;
     private IEncoder leftEncoder, rightEncoder;
     private IGyroscope gyroscope;
-    private SmartRobotDrive robotDrive;
 
     private Chassis() {
         leftVictor = new VictorSPX(RobotMap.BigRodika.Chassis.Motor.LEFT_VICTOR);
         rightVictor = new VictorSPX(RobotMap.BigRodika.Chassis.Motor.RIGHT_VICTOR);
         leftTalon = new TalonSRX(RobotMap.BigRodika.Chassis.Motor.LEFT_TALON);
         rightTalon = new TalonSRX(RobotMap.BigRodika.Chassis.Motor.RIGHT_TALON);
+
+        rightVictor.setInverted(true);
+        rightVictor.follow(rightTalon);
+        leftVictor.follow(leftTalon);
 
         leftEncoder = new RoborioEncoder(
                 RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_LEFT,
@@ -46,25 +49,38 @@ public class Chassis implements Subsystem {
 
         gyroscope = new PigeonGyro(new PigeonIMU(rightTalon));
 
-        robotDrive = new SmartRobotDrive(rightVictor, rightTalon, leftVictor, leftTalon);
-        robotDrive.setInvetedMotor(SmartRobotDrive.TalonID.FRONT_RIGHT, true);
-
-        setDefaultCommand(new ArcadeDrive(this, OI.getInstance().getMainJoystick()));
     }
 
     public static Chassis getInstance() {
         if (instance == null) {
             instance = new Chassis();
+            Chassis.getInstance().setDefaultCommand(
+                    new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()));
         }
         return instance;
     }
 
     public void moveMotors(double left, double right){
-        robotDrive.tankDrive(left, right);
+        leftTalon.set(ControlMode.PercentOutput, left);
+        rightTalon.set(ControlMode.PercentOutput, right);
+    }
+
+    public void toBrake(){
+        leftTalon.setNeutralMode(NeutralMode.Brake);
+        leftVictor.setNeutralMode(NeutralMode.Brake);
+        rightTalon.setNeutralMode(NeutralMode.Brake);
+        rightVictor.setNeutralMode(NeutralMode.Brake);
+    }
+
+    public void toCoast(){
+        leftTalon.setNeutralMode(NeutralMode.Coast);
+        leftVictor.setNeutralMode(NeutralMode.Coast);
+        rightTalon.setNeutralMode(NeutralMode.Coast);
+        rightVictor.setNeutralMode(NeutralMode.Coast);
     }
 
     public void arcadeDrive(double moveValue, double rotateValue) {
-        robotDrive.arcadeDrive(moveValue, rotateValue);
+        moveMotors(moveValue + rotateValue, moveValue - rotateValue);
     }
 
     public double getLeftMeters(){
@@ -95,6 +111,10 @@ public class Chassis implements Subsystem {
         return gyroscope.getNormalizedYaw();
     }
 
+    public double getRawAngle() {
+        return gyroscope.getRawYaw();
+    }
+
     public double getAngularVelocityByGyro(){
         return gyroscope.getYawRate();
     }
@@ -105,6 +125,10 @@ public class Chassis implements Subsystem {
 
     public double getWheelDistance(){
         return RobotMap.BigRodika.Chassis.WHEEL_DIST;
+    }
+
+    public Position getLocation(){
+        return Localizer.getInstance().getLocation();
     }
 
     @Override

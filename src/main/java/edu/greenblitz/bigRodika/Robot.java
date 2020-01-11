@@ -22,6 +22,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        Chassis.getInstance().toBrake();
         new LocalizerCommandRunner().schedule();
         new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()).schedule();
     }
