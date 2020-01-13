@@ -31,7 +31,7 @@ public class GoFetch extends GBCommand {
        // System.out.println("locations ");
         profile2D = ChassisProfiler2D.generateProfile(locations, JMP, MAX_LIN_V, MAX_ANG_V, MAX_LIN_A, MAX_ANG_A, 0, 1, 800);
        // System.out.println("profile2D");
-        follower2D = new PidFollower2D(1,1,1,1, RobotMap.BigRodika.Chassis.WHEEL_DIST, profile2D);
+        follower2D = null;
         //System.out.println("follower2D");
         System.out.println(profile2D.getTEnd());
     }
