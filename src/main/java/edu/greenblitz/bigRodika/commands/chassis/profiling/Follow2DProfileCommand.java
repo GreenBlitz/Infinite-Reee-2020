@@ -101,7 +101,7 @@ public class Follow2DProfileCommand implements IThreadable {
 
         if (System.currentTimeMillis() - runTStart < minRuntime) {
             try {
-                Thread.sleep(System.currentTimeMillis() - runTStart);
+                Thread.sleep(System.currentTimeMillis() - minRuntime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 died = true;
