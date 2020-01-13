@@ -1,4 +1,4 @@
-package edu.greenblitz.bigRodika.commands.chassis;
+package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
