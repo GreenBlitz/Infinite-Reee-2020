@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.bigRodika.commands.chassis.ArcadeDrive;
+import edu.greenblitz.bigRodika.commands.chassis.*;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.RoborioEncoder;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.app.Localizer;
 import org.greenblitz.motion.base.Position;
 
-import java.awt.*;
 
 
 public class Chassis implements Subsystem {
@@ -83,6 +82,10 @@ public class Chassis implements Subsystem {
         moveMotors(moveValue + rotateValue, moveValue - rotateValue);
     }
 
+    public void tankDrive(double moveX, double moveY){
+        moveMotors(moveX, moveY);
+    }
+
     public double getLeftMeters(){
         return leftEncoder.getNormalizedTicks();
     }
@@ -135,5 +138,6 @@ public class Chassis implements Subsystem {
     public void periodic(){
         SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
     }
+
 
 }

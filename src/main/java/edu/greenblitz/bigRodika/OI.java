@@ -1,8 +1,10 @@
 package edu.greenblitz.bigRodika;
 
+import edu.greenblitz.bigRodika.commands.chassis.GoFetch;
 import edu.greenblitz.bigRodika.commands.chassis.TurnToAngle;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.gblib.hid.SmartJoystick;
+import org.greenblitz.motion.base.Point;
 
 public class OI {
     private static OI instance;
@@ -17,6 +19,7 @@ public class OI {
 
     public static OI getInstance() {
         if (instance == null) {
+
             instance = new OI();
         }
         return instance;
@@ -24,8 +27,7 @@ public class OI {
 
     private void initTestButtons(){
         mainJoystick.A.whenPressed(new CheckMaxRot(0.5));
-        mainJoystick.B.whenPressed(new TurnToAngle(
-                15,10,2,4.8, 8.5, 0.5));
+        mainJoystick.B.whenPressed(new GoFetch(new Point(1,1)));
     }
 
     private void initOfficalButtons(){
