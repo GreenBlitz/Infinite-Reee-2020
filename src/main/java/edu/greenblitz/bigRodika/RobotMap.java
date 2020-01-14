@@ -16,13 +16,13 @@ public class RobotMap {
             }
 
             public static class Encoder{
-                public static final int LEFT_PORT_A = 2,
-                                        LEFT_PORT_B = 3,
+                public static final int LEFT_PORT_A = 4,
+                                        LEFT_PORT_B = 5,
                                         RIGHT_PORT_A = 0,
                                         RIGHT_PORT_B = 1;
 
-                public static final double NORM_CONST_LEFT = 1.0/(1.2/2500.0),
-                                           NORM_CONST_RIGHT = 1.0/(1.2/2100.0);
+                public static final double NORM_CONST_LEFT = 1041.6666666666667 * 0.8333333333333334,
+                                           NORM_CONST_RIGHT = 875 * 0.8333333333333334;
             }
 
             public static final double WHEEL_DIST = 0.57;

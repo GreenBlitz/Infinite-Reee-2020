@@ -47,6 +47,7 @@ public class Chassis implements Subsystem {
                 RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_A,
                 RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_B);
 
+
         gyroscope = new PigeonGyro(new PigeonIMU(rightTalon));
 
     }
@@ -58,6 +59,12 @@ public class Chassis implements Subsystem {
                     new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()));
         }
         return instance;
+    }
+
+    public void resetEncoders(){
+        leftEncoder.reset();
+        rightEncoder.reset();
+        Localizer.getInstance().resetEncoders(getLeftMeters(), getRightMeters());
     }
 
     public void moveMotors(double left, double right){
@@ -133,6 +140,8 @@ public class Chassis implements Subsystem {
 
     @Override
     public void periodic(){
+        SmartDashboard.putNumber("Left ticks", leftEncoder.getRawTicks());
+        SmartDashboard.putNumber("Right Ticks", rightEncoder.getRawTicks());
         SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
     }
 
