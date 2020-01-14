@@ -28,12 +28,12 @@ public class HexAlign extends GBCommand {
         double absAng = Chassis.getInstance().getAngle();
         double angle = Math.PI/2 - absAng + relAng - k*Math.asin(Math.sin(-relAng)*targetY/r);
         endState = new State(hex.getX() + Math.cos(angle),hex.getY() - Math.sin(angle),Math.PI/2 - angle);
-        List<State> path = new ArrayList<State>();
-        path.add(new State (Chassis.getInstance().getLocation(),Chassis.getInstance().getAngle()));
+        List<State> path = new ArrayList<>();
+        path.add(new State(Chassis.getInstance().getLocation(), Chassis.getInstance().getAngle()));
         path.add(endState);
         prof = new Follow2DProf(path,
-                .0001, 3.2, 4.5, 8,
-                15.5, // 15.5, 19.1
+                .0001, 3.2, 4.5, 4.3,
+                7.5,
                 .5, 1, 1,
                 new PIDObject(1.5/3.2, 0.02/4.5, 170/4.5),
                 0.01*3.2, new PIDObject(0),
