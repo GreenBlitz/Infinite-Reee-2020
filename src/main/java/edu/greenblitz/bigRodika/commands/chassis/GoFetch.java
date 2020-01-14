@@ -6,6 +6,7 @@ import edu.greenblitz.gblib.command.GBCommand;
 import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.base.Vector2D;
+import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ChassisProfiler2D;
 import org.greenblitz.motion.profiling.MotionProfile2D;
 import org.greenblitz.motion.profiling.followers.PidFollower2D;
@@ -20,18 +21,21 @@ public class GoFetch extends GBCommand {
     private PidFollower2D follower2D;
     private double power;
     private Vector2D v;
+    PIDObject collapse, ang;
 
     public GoFetch(Point target) {
         super(Chassis.getInstance());
         power = 0.3;
         this.target = target;
+        collapse = new PIDObject(0,0,0);
+        ang = new PIDObject(0,0,0);
         List<State> locations = new ArrayList<>();
         locations.add(new State(0, 0, 0));
         locations.add(new State(target.getX(), target.getY(), 0, 0, 0));
        // System.out.println("locations ");
         profile2D = ChassisProfiler2D.generateProfile(locations, JMP, MAX_LIN_V, MAX_ANG_V, MAX_LIN_A, MAX_ANG_A, 0, 1, 800);
        // System.out.println("profile2D");
-        follower2D = new PidFollower2D(1,1,1,1, RobotMap.BigRodika.Chassis.WHEEL_DIST, profile2D);
+        follower2D = new PidFollower2D(1,1,1,1, collapse,0.0,0.0,ang,0.0,  RobotMap.BigRodika.Chassis.WHEEL_DIST, profile2D);
         //System.out.println("follower2D");
         System.out.println(profile2D.getTEnd());
     }

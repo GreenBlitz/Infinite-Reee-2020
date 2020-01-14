@@ -27,7 +27,7 @@ public class OI {
 
     private void initTestButtons(){
         mainJoystick.A.whenPressed(new CheckMaxRot(0.5));
-        mainJoystick.B.whenPressed(new GoFetch(new Point(1,1)));
+        mainJoystick.B.whenPressed(new GoFetch(new Point(1.5,0.5)));
     }
 
     private void initOfficalButtons(){
