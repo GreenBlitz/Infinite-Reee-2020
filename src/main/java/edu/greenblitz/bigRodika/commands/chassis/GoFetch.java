@@ -32,11 +32,8 @@ public class GoFetch extends GBCommand {
         List<State> locations = new ArrayList<>();
         locations.add(new State(0, 0, 0));
         locations.add(new State(target.getX(), target.getY(), 0, 0, 0));
-       // System.out.println("locations ");
         profile2D = ChassisProfiler2D.generateProfile(locations, JMP, MAX_LIN_V, MAX_ANG_V, MAX_LIN_A, MAX_ANG_A, 0, 1, 800);
-       // System.out.println("profile2D");
         follower2D = new PidFollower2D(1,1,1,1, collapse,0.0,0.0,ang,0.0,  RobotMap.BigRodika.Chassis.WHEEL_DIST, profile2D);
-        //System.out.println("follower2D");
         System.out.println(profile2D.getTEnd());
     }
 
@@ -48,9 +45,8 @@ public class GoFetch extends GBCommand {
 
     @Override
         public void execute() {
-        Vector2D v = follower2D.run(Chassis.getInstance().getLeftRate(), Chassis.getInstance().getRightRate(),Chassis.getInstance().getAngularVelocityByWheels());//, currT
+        Vector2D v = follower2D.run(Chassis.getInstance().getLeftRate(), Chassis.getInstance().getRightRate(),Chassis.getInstance().getAngularVelocityByWheels());
         Chassis.getInstance().arcadeDrive(clamp(v.getX()), clamp(v.getY()));
-        System.out.println(profile2D.getTEnd());
     }
 
     @Override
