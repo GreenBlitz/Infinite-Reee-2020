@@ -25,16 +25,18 @@ public class GoFetch extends GBCommand {
 
     public GoFetch(Point target) {
         super(Chassis.getInstance());
-        power = 0.3;
+        power = 0.4;
         this.target = target;
         collapse = new PIDObject(0,0,0);
         ang = new PIDObject(0,0,0);
         List<State> locations = new ArrayList<>();
         locations.add(new State(0, 0, 0));
-        locations.add(new State(target.getX(), target.getY(), 0, 0, 0));
-        profile2D = ChassisProfiler2D.generateProfile(locations, JMP, MAX_LIN_V, MAX_ANG_V, MAX_LIN_A, MAX_ANG_A, 0, 1, 800);
+        System.out.println(target.getX()+","+target.getY());
+        locations.add(new State(target.getX()+1, target.getY()+1, Math.PI/2, 0, 0));
+        profile2D = ChassisProfiler2D.generateProfile(locations, JMP,
+                RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.4"), 0, 1, 800);
+
         follower2D = new PidFollower2D(1,1,1,1, collapse,0.0,0.0,ang,0.0,  RobotMap.BigRodika.Chassis.WHEEL_DIST, profile2D);
-        System.out.println(profile2D.getTEnd());
     }
 
     @Override
