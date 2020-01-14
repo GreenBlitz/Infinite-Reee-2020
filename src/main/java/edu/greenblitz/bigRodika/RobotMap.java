@@ -1,5 +1,7 @@
 package edu.greenblitz.bigRodika;
 
+import java.util.HashMap;
+
 public class RobotMap {
 
     public static class BigRodika {
@@ -9,10 +11,18 @@ public class RobotMap {
 
         public static class Chassis {
             public static class Motor {
-                public static final int LEFT_VICTOR = 2,
+                /*public static final int LEFT_VICTOR = 2,
                                         RIGHT_VICTOR = 3,
                                         LEFT_TALON = 1,
-                                        RIGHT_TALON = 4;
+                                        RIGHT_TALON = 4; */
+                public static final int  RIGHT_LEADER = 4,
+                RIGHT_FOLLOWER_1 = 5,
+                RIGHT_FOLLOWER_2 = 6,
+                LEFT_LEADER = 1,
+                LEFT_FOLLOWER_1 = 2,
+                LEFT_FOLLOWER_2 = 3;
+
+
             }
 
             public static class Encoder{
@@ -22,13 +32,12 @@ public class RobotMap {
                                         RIGHT_PORT_B = 1;
 
                 public static final double NORM_CONST_LEFT = 1.0/(1.2/2500.0),
-                                           NORM_CONST_RIGHT = 1.0/(1.2/2100.0);
+                                           NORM_CONST_RIGHT = 1.0/(1.2/2100.0),
+                                           MORM_CONST_SPARK = 2300;
             }
 
             public static final double WHEEL_DIST = 0.57;
 
-            public static final double MAX_ANG_V = 0.034,
-                                       MAX_ANG_A = 0.135;
 
         }
 
