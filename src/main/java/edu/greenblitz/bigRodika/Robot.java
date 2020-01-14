@@ -12,7 +12,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         OI.getInstance();
-        Chassis.getInstance();
+        CommandScheduler.getInstance().registerSubsystem(Chassis.getInstance());
         CommandScheduler.getInstance().enable();
     }
 
