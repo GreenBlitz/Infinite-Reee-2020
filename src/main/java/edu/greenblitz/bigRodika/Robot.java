@@ -5,8 +5,7 @@ import edu.greenblitz.bigRodika.commands.chassis.LocalizerCommandRunner;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import jdk.jshell.execution.LoaderDelegate;
-import org.greenblitz.motion.app.Localizer;
+
 
 public class Robot extends TimedRobot {
 
@@ -25,7 +24,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         Chassis.getInstance().toBrake();
-        Chassis.getInstance().resetEncoders();
+
         new LocalizerCommandRunner().schedule();
         new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()).schedule();
     }
