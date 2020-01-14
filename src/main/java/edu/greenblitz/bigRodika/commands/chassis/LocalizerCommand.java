@@ -29,7 +29,7 @@ public class LocalizerCommand implements IThreadable {
         localizer.update(chassis.getLeftMeters(), chassis.getRightMeters(), chassis.getAngle());
         if (System.currentTimeMillis() - tPrev < minimumLoopTime) {
             try {
-                Thread.sleep(System.currentTimeMillis() - tPrev);
+                Thread.sleep(minimumLoopTime - (System.currentTimeMillis() - tPrev));
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 died = true;

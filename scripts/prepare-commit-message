@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
+<<<<<<< HEAD
 sudo python ./scripts/prepare-commit-message.py $1
+=======
+python ./scripts/prepare-commit-message.py $1
+>>>>>>> dev
 
 if [ $? -ne 0 ]; then
   exit 1
