@@ -1,6 +1,5 @@
 package edu.greenblitz.bigRodika.utils;
 
-import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -16,10 +15,10 @@ import org.greenblitz.motion.base.Position;
  */
 public class VisionMaster {
     public enum Algorithm {
-        POWER_CELL("send_power_cell"),
-        HEXAGON("send_hexagon"),
-        FEEDING_STATION("send_feeding_station"),
-        ROULETTE("send_roulette");
+        POWER_CELL("power_cell"),
+        HEXAGON("hexagon"),
+        FEEDING_STATION("feeding_station"),
+        ROULETTE("roulette");
 
         public final String rawAlgorithmName;
 
@@ -30,22 +29,9 @@ public class VisionMaster {
         public String getRawName() {
             return rawAlgorithmName;
         }
-    }
 
-    public enum Error {
-        NOT_ARRAY("vision value not double array"),
-        UNEXPECTED_LENGTH("vision returned other than 4 values"),
-        OK("");
-
-        private final String msg;
-
-        Error(String msg) {
-            this.msg = msg;
-        }
-
-        @Override
-        public String toString() {
-            return msg;
+        public void setAsCurrent(){
+            VisionMaster.getInstance().setCurrentAlgorithm(this);
         }
     }
 
@@ -58,114 +44,51 @@ public class VisionMaster {
         return instance;
     }
 
-    private NetworkTable m_visionTable;
-    private NetworkTableEntry m_algorithm;
-    private NetworkTableEntry m_values;
-    private NetworkTableEntry m_found;
+    private NetworkTable visionTable;
+    private NetworkTableEntry algorithm;
+    private NetworkTableEntry output;
+    private NetworkTableEntry found;
     private Logger logger;
-    private Error m_lastError = Error.OK;
-    private double lastAngleToDrive = 0;
 
-    public VisionMaster() {
+    private VisionMaster() {
         logger = LogManager.getLogger(getClass());
-        m_visionTable = NetworkTableInstance.getDefault().getTable("vision");
-        m_algorithm = m_visionTable.getEntry("algorithm");
-        m_values = m_visionTable.getEntry("output");
-        m_found = m_visionTable.getEntry("found");
+        visionTable = NetworkTableInstance.getDefault().getTable("vision"); // table
+
+        algorithm = visionTable.getEntry("algorithm"); // our output, tells the rpi what algorithm to run
+        output = visionTable.getEntry("output"); // our input, the output of the vision (usually a double array of size 3)
+        found = visionTable.getEntry("found"); // our input, boolean indicating if the last sent data was valid
     }
 
-    public void setCurrentAlgorithm(Algorithm algo) {
-        m_algorithm.setString(algo.getRawName());
+    private void setCurrentAlgorithm(Algorithm algo) {
+        algorithm.setString(algo.getRawName());
     }
 
-    public double[] getCurrentVisionData() {
-        if (m_values.getType() != NetworkTableType.kDoubleArray) {
-            if (m_lastError != Error.NOT_ARRAY) {
-                logger.warn(Error.NOT_ARRAY);
-                m_lastError = Error.NOT_ARRAY;
-            }
+    public boolean isLastDataValid(){
+        return found.getBoolean(false);
+    }
+
+    public double[] getCurrentRawVisionData() {
+        if (output.getType() != NetworkTableType.kDoubleArray) {
+            logger.warn("Vision sent data that isn't a double array");
             return null;
         }
-        var ret = m_values.getValue().getDoubleArray();
-        if (ret.length == 0 || ret.length % 4 != 0) {
-            if (m_lastError != Error.UNEXPECTED_LENGTH) {
-                logger.warn(Error.UNEXPECTED_LENGTH);
-                m_lastError = Error.UNEXPECTED_LENGTH;
-            }
-            return null;
-        }
-
-        m_lastError = Error.OK;
-        return ret;
+        return output.getValue().getDoubleArray();
     }
 
-    public Error getLastError() {
-        return m_lastError;
-    }
+    public VisionLocation getVisionLocation() {
+        double[] input = getCurrentRawVisionData();
 
-    public StandardVisionData[] getStandardizedData() {
-        double[] input = getCurrentVisionData();
+        if (input == null) return new VisionLocation(new double[]{Double.NaN, Double.NaN, Double.NaN});
 
-        if (input == null) return new StandardVisionData[]
-                {new StandardVisionData(new double[]{Double.NaN, Double.NaN, Double.NaN, Double.NaN})};
-
-        StandardVisionData[] ret = new StandardVisionData[input.length / 4];
-        for (int i = 0; i < ret.length; i++) {
-            ret[i] = new StandardVisionData(input[3 * i], input[3 * i + 1], input[3 * i + 2]);
-        }
-        return ret;
-    }
-
-    public double getPlaneryDistance(int ind) {
-        return getStandardizedData()[ind].getPlanerDistance();
-    }
-
-    public double getRelativeAngle(int ind) {
-        return getStandardizedData()[ind].getRelativeAngle();
-    }
-
-    public double getAngle(int ind) {
-        return getStandardizedData()[ind].angle;
-    }
-
-    public double getPlaneryDistance() {
-        return getPlaneryDistance(0);
-    }
-
-    public double getRelativeAngle() {
-        return getRelativeAngle(0);
-    }
-
-    public double getAngle() {
-        return getAngle(0);
-    }
-
-    public void getCurrentVisionData(double[] dest) {
-        m_values.getDoubleArray(dest);
-    }
-
-    public boolean isDataValid() {
-        return m_found.getBoolean(false) && m_lastError == Error.OK;
-    }
-
-    public void updateLastAngleToDrive(double offset) {
-        SmartDashboard.putNumber("Vision::ChassisAngleAtUpdate", Chassis.getInstance().getAngle());
-        SmartDashboard.putNumber("Vision::VisionAngleAtUpdate", getAngle());
-        lastAngleToDrive = Math.toDegrees(Position.normalizeAngle(Math.toRadians(
-                Chassis.getInstance().getAngle() + getAngle() + offset
-        )));
-    }
-
-    public double getLastAngleToDrive() {
-        return lastAngleToDrive;
+        return new VisionLocation(input);
     }
 
     public void update() {
-        var current = getStandardizedData()[0];
-        SmartDashboard.putString("Vision::focus", m_visionTable.getEntry("focus").getString(""));
+        VisionLocation current = getVisionLocation();
         SmartDashboard.putString("Vision::raw data", current.toString());
-        SmartDashboard.putNumber("Vision::planery distance", current.getPlanerDistance());
-        SmartDashboard.putNumber("Vision::derived angle", current.angle);
+        SmartDashboard.putNumber("Vision::planery distance", current.getPlaneDistance());
+        SmartDashboard.putNumber("Vision::derived angle", current.getRelativeAngle());
+        SmartDashboard.putBoolean("Vision::valid", isLastDataValid());
 
     }
 }
