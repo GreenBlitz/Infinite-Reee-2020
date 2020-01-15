@@ -15,7 +15,7 @@ import org.greenblitz.motion.base.Position;
  */
 public class VisionMaster {
     public enum Algorithm {
-        POWER_CELL("power_cell"),
+        POWER_CELLS("power_cells"),
         HEXAGON("hexagon"),
         FEEDING_STATION("feeding_station"),
         ROULETTE("roulette");
@@ -85,6 +85,7 @@ public class VisionMaster {
 
     public void update() {
         VisionLocation current = getVisionLocation();
+        SmartDashboard.putString("Vision::algorithm", algorithm.getString("Not Existing"));
         SmartDashboard.putString("Vision::raw data", current.toString());
         SmartDashboard.putNumber("Vision::planery distance", current.getPlaneDistance());
         SmartDashboard.putNumber("Vision::derived angle", current.getRelativeAngle());
