@@ -20,22 +20,22 @@ public class GoFetch extends GBCommand {
     private MotionProfile2D profile2D;
     private PidFollower2D follower2D;
     private double power;
+    private double angle;
     private Vector2D v;
     PIDObject collapse, ang;
 
-    public GoFetch(Point target) {
+    public GoFetch(Point target, double angle) {
         super(Chassis.getInstance());
         power = 0.4;
         this.target = target;
+        this.angle = angle;
         collapse = new PIDObject(0,0,0);
         ang = new PIDObject(0,0,0);
         List<State> locations = new ArrayList<>();
         locations.add(new State(0, 0, 0));
-        System.out.println(target.getX()+","+target.getY());
-        locations.add(new State(target.getX()+1, target.getY()+1, Math.PI/2, 0, 0));
+        locations.add(new State(target.getX(), target.getY(), angle, 0, 0));
         profile2D = ChassisProfiler2D.generateProfile(locations, JMP,
                 RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.4"), 0, 1, 800);
-
         follower2D = new PidFollower2D(1,1,1,1, collapse,0.0,0.0,ang,0.0,  RobotMap.BigRodika.Chassis.WHEEL_DIST, profile2D);
     }
 
@@ -45,14 +45,18 @@ public class GoFetch extends GBCommand {
         follower2D.init();
     }
 
+
     @Override
         public void execute() {
         Vector2D v = follower2D.run(Chassis.getInstance().getLeftRate(), Chassis.getInstance().getRightRate(),Chassis.getInstance().getAngularVelocityByWheels());
-        Chassis.getInstance().arcadeDrive(clamp(v.getX()), clamp(v.getY()));
+        Chassis.getInstance().moveMotors(v.getX(), v.getY());
+
     }
 
     @Override
     public boolean isFinished() {
+        System.out.println(target.toString() +","+angle);
+        System.out.println(Chassis.getInstance().getLeftMeters() + "," + Chassis.getInstance().getRightMeters() + "," + Chassis.getInstance().getAngle());
         return follower2D.isFinished();
     }
 
