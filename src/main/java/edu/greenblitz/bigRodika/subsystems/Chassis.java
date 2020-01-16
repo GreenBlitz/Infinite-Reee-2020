@@ -186,6 +186,7 @@ public class Chassis implements Subsystem {
         SmartDashboard.putNumber("Right Vel", rightEncoder.getNormalizedVelocity());
         SmartDashboard.putNumber("Ang vel", gyroscope.getYawRate());
         SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
+        SmartDashboard.putNumber("angle", Chassis.getInstance().getAngle());
     }
 
 }
