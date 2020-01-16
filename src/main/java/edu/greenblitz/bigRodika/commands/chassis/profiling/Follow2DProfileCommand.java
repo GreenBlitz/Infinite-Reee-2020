@@ -77,6 +77,9 @@ public class Follow2DProfileCommand implements IThreadable {
         follower.init();
     }
 
+    public void setSendData(boolean val){
+        follower.setSendData(val);
+    }
 
     @Override
     public void run() {
