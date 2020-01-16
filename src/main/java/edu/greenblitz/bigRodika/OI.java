@@ -1,7 +1,6 @@
 package edu.greenblitz.bigRodika;
 
-import edu.greenblitz.bigRodika.commands.chassis.GoFetch;
-import edu.greenblitz.bigRodika.commands.chassis.TurnToAngle;
+import edu.greenblitz.bigRodika.commands.chassis.motion.GoFetch;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import org.greenblitz.motion.base.Point;
