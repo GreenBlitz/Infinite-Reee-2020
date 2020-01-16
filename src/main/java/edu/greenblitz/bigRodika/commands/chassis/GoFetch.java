@@ -28,7 +28,7 @@ public class GoFetch extends GBCommand {
         ProfilingData data =  RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
 
         prof = new Follow2DProfileCommand(locations,
-                .001, 1000,
+                .001, 200,
                 data,
                 0.7, 1, 1,
                 new PIDObject(0*data.getMaxLinearVelocity(), 0, 0*data.getMaxLinearVelocity()), 0.01*data.getMaxLinearVelocity(),
@@ -36,7 +36,6 @@ public class GoFetch extends GBCommand {
                 false);
         prof.setSendData(true);
     }
-
 
     @Override
     public void execute() {
