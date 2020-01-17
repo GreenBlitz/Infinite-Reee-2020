@@ -1,10 +1,13 @@
 package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.bigRodika.commands.chassis.LocalizerCommand;
+import edu.greenblitz.bigRodika.commands.chassis.ThreadedCommandLocalizer;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
+import org.greenblitz.motion.app.Localizer;
 import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
@@ -26,7 +29,6 @@ public class GoFetch extends GBCommand {
         locations.add(new State(target.getX(), target.getY(), angle, 0, 0));
 
         ProfilingData data =  RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
-
         prof = new Follow2DProfileCommand(locations,
                 .001, 200,
                 data,
@@ -45,7 +47,7 @@ public class GoFetch extends GBCommand {
 
     @Override
     public void end(boolean interrupted) {
-        new ThreadedCommand(prof, Chassis.getInstance()).schedule();
+        new ThreadedCommandLocalizer(prof, Chassis.getInstance()).schedule();
     }
 
     @Override

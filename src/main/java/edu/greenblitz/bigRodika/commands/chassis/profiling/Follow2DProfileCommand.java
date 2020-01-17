@@ -27,6 +27,12 @@ public class Follow2DProfileCommand implements IThreadable {
     private boolean died;
     private boolean isOpp;
 
+    private double mult;
+
+    private long runTStart;
+    private long minRuntime = 10;
+
+
     /**
      *
      * @param path
@@ -56,21 +62,16 @@ public class Follow2DProfileCommand implements IThreadable {
         this.angularPIDConsts = angularPIDConsts;
         this.collapsingAngularPIDTol = collapseConstAngular;
         this.maxPower = maxPower;
+        this.follower = new PidFollower2D(this.linKv, this.linKa, this.linKv, this.linKa,
+                this.perWheelPIDConsts,
+                this.collapsingPerWheelPIDTol, 1.0, this.angularPIDConsts, this.collapsingAngularPIDTol,
+                RobotMap.BigRodika.Chassis.WHEEL_DIST,
+                this.profile2D);
+        follower.setSendData(false);
     }
-
-    private double mult;
-
-    private long runTStart;
-    private long minRuntime = 10;
 
     @Override
     public void atInit() {
-        follower = new PidFollower2D(linKv, linKa, linKv, linKa,
-                perWheelPIDConsts,
-                collapsingPerWheelPIDTol, 1.0, angularPIDConsts, collapsingAngularPIDTol,
-                RobotMap.BigRodika.Chassis.WHEEL_DIST,
-                profile2D);
-        follower.setSendData(false);
         Chassis.getInstance().toCoast();
         mult = isOpp ? -1 : 1;
         died = false;

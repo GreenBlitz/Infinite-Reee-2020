@@ -28,10 +28,10 @@ public class OI {
 //        mainJoystick.A.whenPressed(new CheckMaxRot(0.5));
         mainJoystick.R1.whenPressed(new GoFetch(new Point(0.5*0.6,0.5
                 *0.6),Math.PI/2));
-        mainJoystick.A.whenPressed(new GoFetch(new Point(1*0.6,1*0.6),Math.PI/2));
-        mainJoystick.B.whenPressed(new GoFetch(new Point(1*0.6,2*0.6),Math.PI/2));
-        mainJoystick.Y.whenPressed(new GoFetch(new Point(1*0.6,0.5*0.6),Math.PI/2));
-        mainJoystick.X.whenPressed(new GoFetch(new Point(1.50*0.6,2*0.6),Math.PI/2));
+        mainJoystick.A.whenPressed(new GoFetch(new Point(1,1),-Math.PI/2));
+        mainJoystick.B.whenPressed(new GoFetch(new Point(1,2),Math.PI/4));
+        mainJoystick.Y.whenPressed(new GoFetch(new Point(1,0.5),Math.PI/4));
+        mainJoystick.X.whenPressed(new GoFetch(new Point(2,2),Math.PI/6));
 
     }
 
