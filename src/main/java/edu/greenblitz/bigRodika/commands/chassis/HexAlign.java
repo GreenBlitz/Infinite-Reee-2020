@@ -19,28 +19,32 @@ public class HexAlign extends GBCommand {
     private Follow2DProfileCommand prof;
     private final double k = 0.5;
     private final double r = 0.6; //radius
-    private Point hex = new Point(0.3,1);
 
     @Override
     public void initialize(){
-        State startState = new State(Chassis.getInstance().getLocation(), Chassis.getInstance().getAngle());
+        State startState = new State(Chassis.getInstance().getLocation(), -Chassis.getInstance().getAngle());
         //vision give me dataaaaaaa
-        double[] difference = new double[]{0,0,3};//VisionMaster.getInstance().getCurrentVisionData();
+        double[] difference = new double[]{0,0,2};//VisionMaster.getInstance().getCurrentVisionData();
         double targetX = difference[0];
         double targetY = difference[2];
         //assume targetY != 0
         double relAng = Math.atan(targetX/targetY);
-        double absAng = -Chassis.getInstance().getAngle();
-        Point hex = new Point(targetX*Math.cos(absAng) + targetY*Math.sin(absAng) + startState.getX(),targetY*Math.cos(absAng) - targetX*Math.sin(absAng) + startState.getY());
+        double absAng = Chassis.getInstance().getAngle();
+
+        Point hex = new Point(targetX*Math.cos(absAng) - targetY*Math.sin(absAng) + startState.getX(),targetY*Math.cos(absAng) + targetX*Math.sin(absAng) + startState.getY());
         SmartDashboard.putString("hex", hex.toString());
-        double angle = Math.PI/2 - absAng + relAng - k*Math.asin(Math.sin(-relAng)*targetY/r);
-        State endState = new State(hex.getX() - r*Math.cos(angle), hex.getY() - r*Math.sin(angle), -(Math.PI / 2 - angle));
+
+        double angle = (Math.abs(Math.sin(-relAng)*targetY/r) > 1) ? Math.PI/2 - absAng + relAng : Math.PI/2 - absAng + relAng - k*Math.asin(Math.sin(-relAng)*targetY/r);
+        State endState = new State(hex.getX() + r*Math.cos(angle), hex.getY() - r*Math.sin(angle), -(Math.PI / 2 - angle));
+
         List<State> path = new ArrayList<>();
         path.add(startState);
         path.add(endState);
-//        endState.setAngle(Math.toDegrees(endState.getAngle()));
+
+        endState.setAngle(Math.toDegrees(endState.getAngle()));
         SmartDashboard.putString("end", endState.toString());
-//        endState.setAngle(Math.toRadians(endState.getAngle()));
+        endState.setAngle(Math.toRadians(endState.getAngle()));
+
         prof = new Follow2DProfileCommand(path,
                 .001, 1000,
                 RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7"),
