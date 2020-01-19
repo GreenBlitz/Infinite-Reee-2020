@@ -24,7 +24,7 @@ public class HexAlign extends GBCommand {
     @Override
     public void initialize(){
         State startState = new State(Chassis.getInstance().getLocation(), -Chassis.getInstance().getAngle());
-        //vision give me dataaaaaaa
+        VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         double[] difference = VisionMaster.getInstance().getVisionLocation().toDoubleArray();//VisionMaster.getInstance().getCurrentVisionData();
         double targetX = difference[0];
         double targetY = difference[2];
