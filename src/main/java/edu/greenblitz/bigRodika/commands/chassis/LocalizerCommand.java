@@ -4,7 +4,7 @@ import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.threading.IThreadable;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.greenblitz.motion.app.Localizer;
+import org.greenblitz.motion.Localizer;
 
 public class LocalizerCommand implements IThreadable {
 

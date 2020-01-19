@@ -20,7 +20,7 @@ import edu.greenblitz.gblib.gyroscope.PigeonGyro;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import org.greenblitz.motion.app.Localizer;
+import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.base.Position;
 
 import java.awt.*;
