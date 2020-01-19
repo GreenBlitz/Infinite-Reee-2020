@@ -18,14 +18,14 @@ import java.util.List;
 public class HexAlign extends GBCommand {
 
     private Follow2DProfileCommand prof;
-    private final double k = 0.5;
-    private final double r = 0.6; //radius
+    private final double k = 0.2;
+    private final double r = 1.2; //radius
 
     @Override
     public void initialize(){
         State startState = new State(Chassis.getInstance().getLocation(), -Chassis.getInstance().getAngle());
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
-        double[] difference = VisionMaster.getInstance().getVisionLocation().toDoubleArray();//VisionMaster.getInstance().getCurrentVisionData();
+        double[] difference = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
         double targetX = difference[0];
         double targetY = difference[2];
         //assume targetY != 0
@@ -34,6 +34,7 @@ public class HexAlign extends GBCommand {
 
         Point hex = new Point(targetX*Math.cos(absAng) - targetY*Math.sin(absAng) + startState.getX(),targetY*Math.cos(absAng) + targetX*Math.sin(absAng) + startState.getY());
         SmartDashboard.putString("hex", hex.toString());
+        System.err.println("hex " + hex.toString());
 
         double angle = (Math.abs(Math.sin(-relAng)*targetY/r) > 1) ? Math.PI/2 - absAng + relAng : Math.PI/2 - absAng + relAng - k*Math.asin(Math.sin(-relAng)*targetY/r);
         State endState = new State(hex.getX() + r*Math.cos(angle), hex.getY() - r*Math.sin(angle), -(Math.PI / 2 - angle));
@@ -42,9 +43,8 @@ public class HexAlign extends GBCommand {
         path.add(startState);
         path.add(endState);
 
-        endState.setAngle(Math.toDegrees(endState.getAngle()));
         SmartDashboard.putString("end", endState.toString());
-        endState.setAngle(Math.toRadians(endState.getAngle()));
+        System.err.println("end" + endState.toString());
 
         prof = new Follow2DProfileCommand(path,
                 .001, 1000,
