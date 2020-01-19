@@ -69,8 +69,8 @@ public class HexAlign extends GBCommand {
                 .001, 800,
                 data,
                 0.7, 1, 1,
-                new PIDObject(0.0/data.getMaxLinearVelocity(), 0, 0*150.0/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
-                new PIDObject(0/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
+                new PIDObject(0.1875/data.getMaxLinearVelocity(), 0, 100.0/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
+                new PIDObject(0.5/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
                 false);
     }
 
