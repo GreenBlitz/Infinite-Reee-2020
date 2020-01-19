@@ -87,7 +87,7 @@ public class Follow2DProfileCommand implements IThreadable {
 
         Vector2D vals = follower.run(mult * Chassis.getInstance().getLeftRate(),
                 mult * Chassis.getInstance().getRightRate(),
-                mult * Chassis.getInstance().getAngularVelocityByGyro()); // TODO test if this is mult or -mult
+                -mult * Chassis.getInstance().getAngularVelocityByGyro()); // TODO test if this is mult or -mult
 
         if (isOpp){
             vals = vals.scale(-1);

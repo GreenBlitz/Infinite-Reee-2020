@@ -18,8 +18,16 @@ import java.util.List;
 public class HexAlign extends GBCommand {
 
     private Follow2DProfileCommand prof;
-    private final double k = 0.2;
-    private final double r = 1.2; //radius
+    private double k = 0.2;
+    private double r = 2; //radius
+
+    public HexAlign(double r, double k){
+        this.k = k;
+        this.r = r;
+    }
+    public HexAlign(){
+
+    }
 
     @Override
     public void initialize(){
@@ -27,7 +35,7 @@ public class HexAlign extends GBCommand {
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         double[] difference = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
         double targetX = difference[0];
-        double targetY = difference[2];
+        double targetY = difference[1];
         //assume targetY != 0
         double relAng = Math.atan(targetX/targetY);
         double absAng = Chassis.getInstance().getAngle();
@@ -46,12 +54,23 @@ public class HexAlign extends GBCommand {
         SmartDashboard.putString("end", endState.toString());
         System.err.println("end" + endState.toString());
 
+        ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
+
+/**
+        prof = new Follow2DProfileCommand(path,
+                .0002, 1000,
+                data,
+                0.7, 1, 1,
+                new PIDObject(0*data.getMaxLinearVelocity(), 0, 0*data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
+                new PIDObject(0*data.getMaxAngularVelocity(), 0, 0*data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
+                false);
+**/
         prof = new Follow2DProfileCommand(path,
                 .001, 1000,
-                RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7"),
+                data,
                 0.7, 1, 1,
-                new PIDObject(0, 0, 0), .01,
-                new PIDObject(0, 0, 0), .01,
+                new PIDObject(0.26*data.getMaxLinearVelocity(), 0, 1.8*data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
+                new PIDObject(0.14*data.getMaxAngularVelocity(), 0, 0*data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
                 false);
     }
 
