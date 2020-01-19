@@ -66,11 +66,11 @@ public class HexAlign extends GBCommand {
                 false);
 **/
         prof = new Follow2DProfileCommand(path,
-                .001, 1000,
+                .001, 800,
                 data,
                 0.7, 1, 1,
-                new PIDObject(0.26*data.getMaxLinearVelocity(), 0, 1.8*data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
-                new PIDObject(0.14*data.getMaxAngularVelocity(), 0, 0*data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
+                new PIDObject(0.0/data.getMaxLinearVelocity(), 0, 0*150.0/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
+                new PIDObject(0/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
                 false);
     }
 

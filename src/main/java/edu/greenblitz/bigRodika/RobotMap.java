@@ -50,14 +50,14 @@ public class RobotMap {
 
                     POWER = new HashMap<>();
                     POWER.put("0.4", new ProfilingData(0.7,4.6,2.1,10));
-                    POWER.put("0.7", new ProfilingData(1.25, 10, 4, 15));
+                    POWER.put("0.7", new ProfilingData(1.15, 3.75, 4, 10));
                     SmartDashboard.putBoolean("Setup motion vals", true);
 
                 }
 
             }
 
-            public static final double WHEEL_DIST = 0.57;
+            public static final double WHEEL_DIST = 0.595;
 
         }
 
