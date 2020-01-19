@@ -20,6 +20,7 @@ public class HexAlign extends GBCommand {
     private Follow2DProfileCommand prof;
     private double k = 0.2;
     private double r = 2; //radius
+    boolean fuck = false;
 
     public HexAlign(double r, double k){
         this.k = k;
@@ -34,6 +35,10 @@ public class HexAlign extends GBCommand {
         State startState = new State(Chassis.getInstance().getLocation(), -Chassis.getInstance().getAngle());
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         double[] difference = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
+        if(!VisionMaster.getInstance().isLastDataValid()) {
+            fuck = true;
+            return;
+        }
         double targetX = difference[0];
         double targetY = difference[1];
         //assume targetY != 0
@@ -69,7 +74,7 @@ public class HexAlign extends GBCommand {
                 .001, 800,
                 data,
                 0.7, 1, 1,
-                new PIDObject(0.1875/data.getMaxLinearVelocity(), 0, 100.0/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
+                new PIDObject(0.8/data.getMaxLinearVelocity(), 0, 25/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
                 new PIDObject(0.5/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
                 false);
     }
@@ -80,8 +85,8 @@ public class HexAlign extends GBCommand {
 
     @Override
     public void end(boolean interupted) {
+        if(fuck) return;
         new ThreadedCommand(prof, Chassis.getInstance()).schedule();
-
     }
 
     @Override

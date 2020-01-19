@@ -2,7 +2,9 @@ package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.HexAlign;
 //import edu.greenblitz.bigRodika.commands.chassis.PreShoot;
+import edu.greenblitz.bigRodika.commands.chassis.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.TurnToAngle;
+import edu.greenblitz.bigRodika.commands.chassis.TurnToVision;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
@@ -30,9 +32,9 @@ public class OI {
         mainJoystick.A.whenPressed(new CheckMaxRot(0.7));
         mainJoystick.X.whenPressed(new CheckMaxLin(0.7));
         mainJoystick.Y.whenPressed(new HexAlign());
-        //mainJoystick.B.whenPressed(new PreShoot());
+        mainJoystick.B.whenPressed(new TurnToVision());
         //mainJoystick.B.whenPressed(new TurnToAngle(
-       //         15,10,2,4.8, 8.5, 0.5));
+          //      0,5,1,2.1, 10, 0.4));
     }
 
     private void initOfficalButtons(){
