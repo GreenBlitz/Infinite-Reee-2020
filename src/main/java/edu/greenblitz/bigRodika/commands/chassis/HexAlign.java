@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.commands.chassis;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,7 +25,7 @@ public class HexAlign extends GBCommand {
     public void initialize(){
         State startState = new State(Chassis.getInstance().getLocation(), -Chassis.getInstance().getAngle());
         //vision give me dataaaaaaa
-        double[] difference = new double[]{0,0,2};//VisionMaster.getInstance().getCurrentVisionData();
+        double[] difference = VisionMaster.getInstance().getVisionLocation().toDoubleArray();//VisionMaster.getInstance().getCurrentVisionData();
         double targetX = difference[0];
         double targetY = difference[2];
         //assume targetY != 0
