@@ -1,5 +1,8 @@
 package edu.greenblitz.bigRodika;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.greenblitz.motion.profiling.ProfilingData;
+
 import java.util.HashMap;
 
 public class RobotMap {
@@ -34,6 +37,23 @@ public class RobotMap {
                 public static final double NORM_CONST_LEFT = 1.0/(1.2/2500.0),
                                            NORM_CONST_RIGHT = 1.0/(1.2/2100.0),
                                            MORM_CONST_SPARK = 2300;
+            }
+
+            public static class MotionData {
+
+                public static HashMap<String, ProfilingData> POWER;
+                public static HashMap<String, ProfilingData> SPEED;
+
+
+                static {
+
+                    POWER = new HashMap<>();
+                    POWER.put("0.4", new ProfilingData(0.7,4.6,2.1,10));
+                    POWER.put("0.7", new ProfilingData(1.25, 10, 4, 15));
+                    SmartDashboard.putBoolean("Setup motion vals", true);
+
+                }
+
             }
 
             public static final double WHEEL_DIST = 0.57;
