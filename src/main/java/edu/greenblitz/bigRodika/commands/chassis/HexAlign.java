@@ -19,7 +19,7 @@ public class HexAlign extends GBCommand {
 
     private Follow2DProfileCommand prof;
     private double k = 0.2;
-    private double r = 2; //radius
+    private double r = 7; //radius
     boolean fuck = false;
 
     public HexAlign(double r, double k){

@@ -65,9 +65,9 @@ public class Chassis implements Subsystem {
                 RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_RIGHT,
                 RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_A,
                 RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_B);*/   //chassis
-        leftEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.MORM_CONST_SPARK, leftLeader);
+        leftEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK_POWER, leftLeader);
         leftEncoder.invert(true);
-        rightEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.MORM_CONST_SPARK, rightLeader);
+        rightEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK_POWER, rightLeader);
         rightEncoder.invert(true);
 
         //gyroscope = new PigeonGyro(new PigeonIMU(rightTalon));   // chassis
@@ -166,6 +166,11 @@ public class Chassis implements Subsystem {
 
     public double getWheelDistance(){
         return RobotMap.BigRodika.Chassis.WHEEL_DIST;
+    }
+
+    public void setTicksPerMeter(Shifter.Gear gear){
+//        double ticks = gear == Shifter.Gear.POWER ? Sensor.Encoder.TICKS_PER_METER_POWER : Sensor.Encoder.TICKS_PER_METER_SPEED;
+
     }
 
     public Position getLocation(){
