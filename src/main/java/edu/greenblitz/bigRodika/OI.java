@@ -1,7 +1,13 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.motion.GoFetch;
+import edu.greenblitz.bigRodika.commands.chassis.HexAlign;
+import edu.greenblitz.bigRodika.commands.chassis.TurnToVision;
+import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
+
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
+import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
+import edu.greenblitz.bigRodika.subsystems.Shifter;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import org.greenblitz.motion.base.Point;
 
@@ -12,7 +18,7 @@ public class OI {
     private SmartJoystick mainJoystick;
 
     private OI() {
-        mainJoystick = new SmartJoystick(RobotMap.BigRodika.Joystick.MAIN);
+        mainJoystick = new SmartJoystick(RobotMap.BigRodika.Joystick.MAIN, 0.08);
         initTestButtons();
 //        initOfficalButtons();
     }
@@ -25,14 +31,11 @@ public class OI {
     }
 
     private void initTestButtons(){
-//        mainJoystick.A.whenPressed(new CheckMaxRot(0.5));
-        mainJoystick.R1.whenPressed(new GoFetch(new Point(0.5*0.6,0.5
-                *0.6),Math.PI/2));
-        mainJoystick.A.whenPressed(new GoFetch(new Point(1,1),-Math.PI/2));
-        mainJoystick.B.whenPressed(new GoFetch(new Point(1,2),Math.PI/4));
-        mainJoystick.Y.whenPressed(new GoFetch(new Point(1,0.5),Math.PI/4));
-        mainJoystick.X.whenPressed(new GoFetch(new Point(2,2),Math.PI/6));
-
+        mainJoystick.A.whenPressed(new CheckMaxRot(0.7));
+        mainJoystick.X.whenPressed(new CheckMaxLin(0.7));
+        mainJoystick.Y.whenPressed(new HexAlign());
+        mainJoystick.B.whenPressed(new TurnToVision());
+        mainJoystick.L3.whenPressed(new ToggleShift(Shifter.getInstance()));
     }
 
     private void initOfficalButtons(){

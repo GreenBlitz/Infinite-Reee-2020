@@ -1,8 +1,10 @@
 package edu.greenblitz.bigRodika.commands.chassis.profiling;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.greenblitz.gblib.threading.IThreadable;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.base.Vector2D;
 import org.greenblitz.motion.pid.PIDObject;
@@ -23,7 +25,7 @@ public class Follow2DProfileCommand implements IThreadable {
     private double collapsingPerWheelPIDTol;
     private double collapsingAngularPIDTol;
 
-    private double maxPower;
+    private double maxPower = 1.0;
     private boolean died;
     private boolean isOpp;
 
@@ -54,6 +56,7 @@ public class Follow2DProfileCommand implements IThreadable {
                                   double collapseConstAngular, boolean isReverse) {
         this.profile2D = ChassisProfiler2D.generateProfile(path, jump, data,
                 0, 1.0, smoothingTail);
+        SmartDashboard.putString("Data for profile", data.toString());
         this.linKv = velMultLin / data.getMaxLinearVelocity();
         this.linKa = accMultLin / data.getMaxLinearAccel();
         this.perWheelPIDConsts = perWheelPIDCosnts;
@@ -62,16 +65,16 @@ public class Follow2DProfileCommand implements IThreadable {
         this.angularPIDConsts = angularPIDConsts;
         this.collapsingAngularPIDTol = collapseConstAngular;
         this.maxPower = maxPower;
-        this.follower = new PidFollower2D(this.linKv, this.linKa, this.linKv, this.linKa,
-                this.perWheelPIDConsts,
-                this.collapsingPerWheelPIDTol, 1.0, this.angularPIDConsts, this.collapsingAngularPIDTol,
-                RobotMap.BigRodika.Chassis.WHEEL_DIST,
-                this.profile2D);
-        follower.setSendData(false);
     }
 
     @Override
     public void atInit() {
+        follower = new PidFollower2D(linKv, linKa, linKv, linKa,
+                perWheelPIDConsts,
+                collapsingPerWheelPIDTol, 1.0, angularPIDConsts, collapsingAngularPIDTol,
+                RobotMap.BigRodika.Chassis.WHEEL_DIST,
+                profile2D);
+        follower.setSendData(true);
         Chassis.getInstance().toCoast();
         mult = isOpp ? -1 : 1;
         died = false;
@@ -88,27 +91,34 @@ public class Follow2DProfileCommand implements IThreadable {
 
         Vector2D vals = follower.run(mult * Chassis.getInstance().getLeftRate(),
                 mult * Chassis.getInstance().getRightRate(),
-                mult * Chassis.getInstance().getAngularVelocityByGyro()); // TODO test if this is mult or -mult
+                mult * Chassis.getInstance().getAngularVelocityByWheels()); // TODO test if this is mult or -mult
 
         if (isOpp){
             vals = vals.scale(-1);
         }
 
+        if (Double.isNaN(vals.getX() + vals.getY())) {
+            throw new RuntimeException("Profile returned NaN");
+        }
+
         if (!isOpp) {
-            Chassis.getInstance().moveMotors(maxPower * clamp(vals.getX()),
-                    maxPower * clamp(vals.getY()));
+            Chassis.getInstance().moveMotors(
+                    maxPower * clamp(vals.getX()),
+                    maxPower * clamp(vals.getY())
+            );
+//            Chassis.getInstance().moveMotors(0,
+//                   0);
         } else  {
             Chassis.getInstance().moveMotors(maxPower * clamp(vals.getY()),
                     maxPower * clamp(vals.getX()));
         }
 
-
-        if (System.currentTimeMillis() - runTStart < minRuntime) {
+        if (minRuntime != 0) {
             try {
-                Thread.sleep(minRuntime - (System.currentTimeMillis() - runTStart));
+                Thread.sleep(minRuntime);
             } catch (InterruptedException e) {
-                e.printStackTrace();
                 died = true;
+                e.printStackTrace();
             }
         }
     }
