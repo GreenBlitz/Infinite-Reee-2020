@@ -20,10 +20,10 @@ public class HexAlign extends GBCommand {
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
     private double k = 0.2;
-
     private double r = 2; //radius
     private Point hexPos;
-    boolean fuck = false;
+    private boolean fucked = false;
+    private double tolarance = 0.3;
 
     public HexAlign(double r, double k){
         this.k = k;
@@ -42,8 +42,13 @@ public class HexAlign extends GBCommand {
         State startState = new State(Chassis.getInstance().getLocation(), -Chassis.getInstance().getAngle());
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         double[] difference = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
+        double rad = Math.sqrt(Math.pow(difference[0],2) + Math.pow(difference[1],2));
+        if(Math.abs(rad - r) < tolarance) {
+            k = 1;
+        }
+
         if(!VisionMaster.getInstance().isLastDataValid()) {
-            fuck = true;
+            fucked = true;
             return;
         }
         double targetX = difference[0];
@@ -59,6 +64,8 @@ public class HexAlign extends GBCommand {
         double angle = (Math.abs(Math.sin(-relAng)*targetY/r) > 1) ? Math.PI/2 - absAng + relAng : Math.PI/2 - absAng + relAng - k*Math.asin(Math.sin(-relAng)*targetY/r);
         State endState = new State(hexPos.getX() + r*Math.cos(angle), hexPos.getY() - r*Math.sin(angle), -(Math.PI / 2 - angle));
 
+
+        if(Math.abs(rad - r) < tolarance) endState.setAngle(startState.getAngle() + 0.01);
         List<State> path = new ArrayList<>();
         path.add(startState);
         path.add(endState);
@@ -74,7 +81,7 @@ public class HexAlign extends GBCommand {
                 0.7, 1, 1,
                 new PIDObject(0.8/data.getMaxLinearVelocity(), 0, 12/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
                 new PIDObject(0.5/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
-                false);
+                rad<r);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
     }
@@ -85,7 +92,7 @@ public class HexAlign extends GBCommand {
 
     @Override
     public void end(boolean interupted) {
-        if(fuck) return;
+        if(fucked) return;
         cmd.end(interupted);
     }
 
