@@ -8,6 +8,7 @@ import edu.greenblitz.bigRodika.commands.chassis.TurnToVision;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 
 public class OI {
@@ -32,7 +33,7 @@ public class OI {
         mainJoystick.A.whenPressed(new CheckMaxRot(0.7));
         mainJoystick.X.whenPressed(new CheckMaxLin(0.7));
         mainJoystick.Y.whenPressed(new HexAlign());
-        mainJoystick.B.whenPressed(new TurnToVision());
+        mainJoystick.B.whenPressed(new TurnToVision(VisionMaster.Algorithm.HEXAGON,RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.4").getMaxAngularVelocity(),RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.4").getMaxAngularAccel(),0.4));
         //mainJoystick.B.whenPressed(new TurnToAngle(
           //      0,5,1,2.1, 10, 0.4));
     }
