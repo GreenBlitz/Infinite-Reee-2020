@@ -33,8 +33,8 @@ public class GoFetch extends GBCommand {
                 .001, 200,
                 data,
                 0.7, 1, 1,
-                new PIDObject(0*data.getMaxLinearVelocity(), 0, 0*data.getMaxLinearVelocity()), 0.01*data.getMaxLinearVelocity(),
-                new PIDObject(0*data.getMaxAngularVelocity(), 0, 0*data.getMaxAngularAccel()), 0.01*data.getMaxAngularVelocity(),
+                new PIDObject(0.8/data.getMaxLinearVelocity(), 0, 25/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
+                new PIDObject(0.5/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
                 false);
         prof.setSendData(true);
 
