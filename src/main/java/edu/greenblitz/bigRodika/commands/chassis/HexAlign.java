@@ -18,16 +18,23 @@ import java.util.List;
 public class HexAlign extends GBCommand {
 
     private Follow2DProfileCommand prof;
+    private ThreadedCommand cmd;
     private double k = 0.2;
-    private double r = 7; //radius
+
+    private double r = 2; //radius
+    private Point hexPos;
     boolean fuck = false;
 
     public HexAlign(double r, double k){
         this.k = k;
         this.r = r;
     }
-    public HexAlign(){
 
+    public HexAlign(){
+    }
+
+    public Point getHexPos(){
+        return hexPos;
     }
 
     @Override
@@ -45,12 +52,12 @@ public class HexAlign extends GBCommand {
         double relAng = Math.atan(targetX/targetY);
         double absAng = Chassis.getInstance().getAngle();
 
-        Point hex = new Point(targetX*Math.cos(absAng) - targetY*Math.sin(absAng) + startState.getX(),targetY*Math.cos(absAng) + targetX*Math.sin(absAng) + startState.getY());
-        SmartDashboard.putString("hex", hex.toString());
-        System.err.println("hex " + hex.toString());
+        hexPos = new Point(targetX*Math.cos(absAng) - targetY*Math.sin(absAng) + startState.getX(),targetY*Math.cos(absAng) + targetX*Math.sin(absAng) + startState.getY());
+        SmartDashboard.putString("hex", hexPos.toString());
+        System.err.println("hex " + hexPos.toString());
 
         double angle = (Math.abs(Math.sin(-relAng)*targetY/r) > 1) ? Math.PI/2 - absAng + relAng : Math.PI/2 - absAng + relAng - k*Math.asin(Math.sin(-relAng)*targetY/r);
-        State endState = new State(hex.getX() + r*Math.cos(angle), hex.getY() - r*Math.sin(angle), -(Math.PI / 2 - angle));
+        State endState = new State(hexPos.getX() + r*Math.cos(angle), hexPos.getY() - r*Math.sin(angle), -(Math.PI / 2 - angle));
 
         List<State> path = new ArrayList<>();
         path.add(startState);
@@ -61,22 +68,15 @@ public class HexAlign extends GBCommand {
 
         ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
 
-/**
         prof = new Follow2DProfileCommand(path,
-                .0002, 1000,
+                .0002, 800,
                 data,
                 0.7, 1, 1,
-                new PIDObject(0*data.getMaxLinearVelocity(), 0, 0*data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
-                new PIDObject(0*data.getMaxAngularVelocity(), 0, 0*data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
-                false);
-**/
-        prof = new Follow2DProfileCommand(path,
-                .001, 800,
-                data,
-                0.7, 1, 1,
-                new PIDObject(0.8/data.getMaxLinearVelocity(), 0, 25/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
+                new PIDObject(0.8/data.getMaxLinearVelocity(), 0, 12/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
                 new PIDObject(0.5/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
                 false);
+        cmd = new ThreadedCommand(prof);
+        cmd.initialize();
     }
 
     @Override
@@ -86,11 +86,11 @@ public class HexAlign extends GBCommand {
     @Override
     public void end(boolean interupted) {
         if(fuck) return;
-        new ThreadedCommand(prof, Chassis.getInstance()).schedule();
+        cmd.end(interupted);
     }
 
     @Override
     public boolean isFinished(){
-        return true;
+        return cmd.isFinished();
     }
 }
