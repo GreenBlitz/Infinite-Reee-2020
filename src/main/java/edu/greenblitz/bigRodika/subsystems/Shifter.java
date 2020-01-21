@@ -36,7 +36,7 @@ public class Shifter implements Subsystem {
     /**
      * This function creates a new instance of this class.
      */
-    public static void init() {
+    private static void init() {
         if (instance == null) instance = new Shifter();
     }
 
@@ -46,6 +46,7 @@ public class Shifter implements Subsystem {
      * @return The current instance of the class
      */
     public static Shifter getInstance() {
+        init();
         return instance;
     }
 

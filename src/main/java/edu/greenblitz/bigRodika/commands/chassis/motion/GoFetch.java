@@ -1,14 +1,13 @@
 package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.bigRodika.commands.chassis.LocalizerCommand;
 import edu.greenblitz.bigRodika.commands.chassis.ThreadedCommandLocalizer;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.utils.VisionLocation;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
-import org.greenblitz.motion.app.Localizer;
-import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ProfilingData;
@@ -19,40 +18,55 @@ import java.util.List;
 public class GoFetch extends GBCommand {
 
     private Follow2DProfileCommand prof;
+    private ThreadedCommand cmd;
 
-    public GoFetch(Point target, double angle) {
+    public GoFetch() {
         super(Chassis.getInstance());
-        // should be gotten by the network tables
+    }
 
+    @Override
+    public void initialize() {
+        VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
         List<State> locations = new ArrayList<>();
         locations.add(new State(0, 0, 0));
-        locations.add(new State(target.getX(), target.getY(), angle, 0, 0));
 
-        ProfilingData data =  RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
+        VisionLocation location = VisionMaster.getInstance().getVisionLocation();
+
+        double ang;
+        if (location.y == 0){
+            ang = 0;
+        } else if (location.x == 0) {
+            ang = Math.PI / 2;
+        } else {
+            ang = (Math.PI / 2) - Math.atan2( location.y * location.y - location.x * location.x, 2 * location.x * location.y);
+        }
+
+        locations.add(new State(location.x, location.y, ang));
+
+
+        ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
         prof = new Follow2DProfileCommand(locations,
                 .001, 200,
                 data,
                 0.7, 1, 1,
-                new PIDObject(0.8/data.getMaxLinearVelocity(), 0, 25/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
-                new PIDObject(0.5/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
+                new PIDObject(0.8 / data.getMaxLinearVelocity(), 0, 25 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
+                new PIDObject(0.5 /
+                        data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
                 false);
+        cmd = new ThreadedCommand(prof);
+        cmd.initialize();
         prof.setSendData(true);
 
     }
 
     @Override
-    public void execute() {
-
-    }
-
-    @Override
     public void end(boolean interrupted) {
-        new ThreadedCommandLocalizer(prof, Chassis.getInstance()).schedule();
+        cmd.end(interrupted);
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return cmd.isFinished();
     }
 
 }

@@ -3,7 +3,7 @@ package edu.greenblitz.bigRodika.commands.chassis;
 import edu.greenblitz.gblib.threading.IThreadable;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import org.greenblitz.motion.app.Localizer;
+import org.greenblitz.motion.Localizer;
 
 public class ThreadedCommandLocalizer extends ThreadedCommand {
 

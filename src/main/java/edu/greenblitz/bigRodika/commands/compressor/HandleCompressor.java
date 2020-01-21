@@ -15,11 +15,13 @@ public class HandleCompressor extends GBCommand {
 
     @Override
     public void execute() {
-        if (pn.getPressure() < 65) {
-            pn.setCompressor(true);
-        }
-        if (pn.getPressure() > 100) {
-            pn.setCompressor(false);
+        if (false) {
+            if (pn.getPressure() < 65) {
+                pn.setCompressor(true);
+            }
+            if (pn.getPressure() > 100) {
+                pn.setCompressor(false);
+            }
         }
     }
 

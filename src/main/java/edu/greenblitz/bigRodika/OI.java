@@ -31,10 +31,13 @@ public class OI {
     }
 
     private void initTestButtons(){
+        mainJoystick.R1.whenPressed(new GoFetch());
+
         mainJoystick.A.whenPressed(new CheckMaxRot(0.7));
         mainJoystick.X.whenPressed(new CheckMaxLin(0.7));
         mainJoystick.Y.whenPressed(new HexAlign());
         mainJoystick.B.whenPressed(new TurnToVision());
+
         mainJoystick.L3.whenPressed(new ToggleShift(Shifter.getInstance()));
     }
 
