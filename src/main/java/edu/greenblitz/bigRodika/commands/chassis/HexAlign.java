@@ -23,11 +23,19 @@ public class HexAlign extends GBCommand {
     private double r = 2; //radius
     private Point hexPos;
     private boolean fucked = false;
+    private double driveTolerance = 0.05;
     private double tolarance = 0.3;
+    private List<Double> radsAndCritPoints;//crit point - radius - crit - radius - crit .... - radius
 
     public HexAlign(double r, double k){
         this.k = k;
         this.r = r;
+    }
+
+    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance){
+        this.radsAndCritPoints = radsAndCritPoints;
+        this.k = k;
+        this.driveTolerance = driveTolerance;
     }
 
     public HexAlign(){
@@ -41,16 +49,41 @@ public class HexAlign extends GBCommand {
     public void initialize(){
         State startState = new State(Chassis.getInstance().getLocation(), -Chassis.getInstance().getAngle());
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
+
         double[] difference = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
-        double rad = Math.sqrt(Math.pow(difference[0],2) + Math.pow(difference[1],2));
-        if(Math.abs(rad - r) < tolarance) {
-            k = 1;
-        }
 
         if(!VisionMaster.getInstance().isLastDataValid()) {
             fucked = true;
             return;
         }
+
+        double radCenter = Math.sqrt(Math.pow(difference[0] + RobotMap.BigRodika.Chassis.VISION_CAM_X_DIST_CENTER,2) + Math.pow(difference[1] + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER,2));
+
+        if(radsAndCritPoints != null) {
+            if(radCenter < radsAndCritPoints.get(0)){
+                fucked = true;
+                return;
+            }
+            r = radsAndCritPoints.get(radsAndCritPoints.size() - 1);
+            for(int i = 0; i < radsAndCritPoints.size() - 1; i ++){
+                if(radCenter < radsAndCritPoints.get(i + 1) && i >= radsAndCritPoints.get(i)){
+                    r  = radsAndCritPoints.get((i + 1) - i % 2);
+                    break;
+                }
+            }
+        }
+
+        double desRadCenter = r + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER;//TODO This is inaccurate, if cam is not in the middle of the X dir of the robot we are screwed
+        double errRadCenter = Math.abs(radCenter - desRadCenter);
+        //can be done without all of this definitions, just so the code would be readable
+
+        if(errRadCenter < tolarance) {
+            fucked = true;
+            return;
+        }
+
+        if(errRadCenter < driveTolerance) k = 1;
+
         double targetX = difference[0];
         double targetY = difference[1];
         //assume targetY != 0
@@ -58,14 +91,15 @@ public class HexAlign extends GBCommand {
         double absAng = Chassis.getInstance().getAngle();
 
         hexPos = new Point(targetX*Math.cos(absAng) - targetY*Math.sin(absAng) + startState.getX(),targetY*Math.cos(absAng) + targetX*Math.sin(absAng) + startState.getY());
+
         SmartDashboard.putString("hex", hexPos.toString());
         System.err.println("hex " + hexPos.toString());
 
         double angle = (Math.abs(Math.sin(-relAng)*targetY/r) > 1) ? Math.PI/2 - absAng + relAng : Math.PI/2 - absAng + relAng - k*Math.asin(Math.sin(-relAng)*targetY/r);
         State endState = new State(hexPos.getX() + r*Math.cos(angle), hexPos.getY() - r*Math.sin(angle), -(Math.PI / 2 - angle));
 
+        if(errRadCenter < driveTolerance) endState.setAngle(startState.getAngle());
 
-        if(Math.abs(rad - r) < tolarance) endState.setAngle(startState.getAngle() + 0.01);
         List<State> path = new ArrayList<>();
         path.add(startState);
         path.add(endState);
@@ -81,7 +115,7 @@ public class HexAlign extends GBCommand {
                 0.7, 1, 1,
                 new PIDObject(0.8/data.getMaxLinearVelocity(), 0, 12/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
                 new PIDObject(0.5/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
-                rad<r);
+                Math.sqrt(Math.pow(difference[0],2) + Math.pow(difference[1],2)) < r);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
     }

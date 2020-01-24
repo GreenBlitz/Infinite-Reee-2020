@@ -77,6 +77,11 @@ public class RobotMap {
 
             public static final double WHEEL_DIST = 0.595;
 
+            public static final double VISION_CAM_Y_DIST_CENTER  = 0.32;
+
+            public static final double VISION_CAM_X_DIST_CENTER  = 0.0;
+
+
         }
 
 
