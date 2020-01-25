@@ -11,7 +11,6 @@ public class Pneumatics implements Subsystem {
 
     private PressureSensor m_pressureSensor;
     private Compressor m_compressor;
-    private boolean m_activated;
 
     private Pneumatics() {
 
@@ -33,7 +32,6 @@ public class Pneumatics implements Subsystem {
             m_compressor.stop();
         }
 
-        m_activated = compress;
     }
 
     public boolean isEnabled() {
@@ -46,7 +44,6 @@ public class Pneumatics implements Subsystem {
     }
 
     public static Pneumatics getInstance() {
-        if (instance == null) instance = new Pneumatics();
         return instance;
     }
 

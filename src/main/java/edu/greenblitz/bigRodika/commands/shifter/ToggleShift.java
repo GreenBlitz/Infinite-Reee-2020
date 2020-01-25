@@ -2,7 +2,6 @@ package edu.greenblitz.bigRodika.commands.shifter;
 
 
 import edu.greenblitz.bigRodika.subsystems.Shifter;
-import edu.greenblitz.gblib.command.GBCommand;
 
 /**
  * This command switches the Gear from the state it is currently in.
@@ -10,18 +9,16 @@ import edu.greenblitz.gblib.command.GBCommand;
  * The command will stopRolling as soon as the shift is switched.
  */
 
-public class ToggleShift extends GBCommand {
+public class ToggleShift extends ShifterCommand {
 
-    private Shifter sh;
-
-    public ToggleShift(Shifter s){
-        super(s);
-        sh = s;
+    public ToggleShift(Shifter shifter){
+        super(shifter);
+        this.shifter = shifter;
     }
 
     @Override
     public void execute() {
-        sh.setShift(sh.getCurrentGear() == Shifter.Gear.POWER ? Shifter.Gear.SPEED : Shifter.Gear.POWER);
+        shifter.setShift(shifter.getCurrentGear() == Shifter.Gear.POWER ? Shifter.Gear.SPEED : Shifter.Gear.POWER);
     }
 
     @Override
