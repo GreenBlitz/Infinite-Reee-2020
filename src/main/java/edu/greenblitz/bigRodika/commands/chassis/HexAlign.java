@@ -95,7 +95,9 @@ public class HexAlign extends GBCommand {
         SmartDashboard.putString("hex", hexPos.toString());
         System.err.println("hex " + hexPos.toString());
 
-        double angle = (Math.abs(Math.sin(-relAng)*targetY/r) > 1) ? Math.PI/2 - absAng + relAng : Math.PI/2 - absAng + relAng - k*Math.asin(Math.sin(-relAng)*targetY/r);
+        double devConst = 1.5;
+        double angle = (Math.abs(targetX) > r) ? ((targetX < 0) ? (1 - k/devConst)*(Math.PI/2 - absAng + relAng): (1 + k/devConst)*(Math.PI/2 - absAng + relAng) - Math.PI * k/devConst)
+                :Math.PI/2 - absAng + relAng - k*Math.asin(Math.sin(-relAng)*(targetY  - Math.sqrt(r*r - targetX*targetX)/r));
         State endState = new State(hexPos.getX() + r*Math.cos(angle), hexPos.getY() - r*Math.sin(angle), -(Math.PI / 2 - angle));
 
         if(errRadCenter < driveTolerance) endState.setAngle(startState.getAngle());
