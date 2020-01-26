@@ -6,4 +6,9 @@
       <module name="Infinite-Reee-2020.test" target="11" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Infinite-Reee-2020.main" options="--add-exports=jdk.internal.vm.compiler/org.graalvm.compiler.nodeinfo=ALL-UNNAMED" />
+    </option>
+  </component>
 </project>

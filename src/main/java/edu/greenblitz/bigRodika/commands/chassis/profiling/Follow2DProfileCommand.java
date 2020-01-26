@@ -25,9 +25,15 @@ public class Follow2DProfileCommand implements IThreadable {
     private double collapsingPerWheelPIDTol;
     private double collapsingAngularPIDTol;
 
-    private double maxPower = 1.0;
+    private double maxPower;
     private boolean died;
     private boolean isOpp;
+
+    private double mult;
+
+    private long runTStart;
+    private long minRuntime = 10;
+
 
     /**
      *
@@ -61,11 +67,6 @@ public class Follow2DProfileCommand implements IThreadable {
         this.maxPower = maxPower;
     }
 
-    private double mult;
-
-    private long runTStart;
-    private long minRuntime = 10;
-
     @Override
     public void atInit() {
         follower = new PidFollower2D(linKv, linKa, linKv, linKa,
@@ -80,6 +81,9 @@ public class Follow2DProfileCommand implements IThreadable {
         follower.init();
     }
 
+    public void setSendData(boolean val){
+        follower.setSendData(val);
+    }
 
     @Override
     public void run() {
