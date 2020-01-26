@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika;
 
+import edu.greenblitz.gblib.gears.GearDependentValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.profiling.ProfilingData;
 
@@ -51,10 +52,9 @@ public class RobotMap {
                                         RIGHT_PORT_A = 0,
                                         RIGHT_PORT_B = 1;
 
-                public static final double NORM_CONST_LEFT = 1.0/(1.2/2500.0),
-                                           NORM_CONST_RIGHT = 1.0/(1.2/2100.0),
-                                           NORM_CONST_SPARK_POWER = 2300,
-                                           NORM_CONST_SPARK_SPEED = 1234;
+                public static final GearDependentValue<Double>
+                        NORM_CONST_SPARK = new GearDependentValue<>
+                        (2300.0, 1234.0/2.0);
             }
 
             public static class MotionData {

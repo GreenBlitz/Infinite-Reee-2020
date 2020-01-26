@@ -15,9 +15,9 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         CommandScheduler.getInstance().enable();
 
-        Chassis.init();
         Pneumatics.init();
         Shifter.init();
+        Chassis.init(); // Must be last!
 
         OI.getInstance();
 

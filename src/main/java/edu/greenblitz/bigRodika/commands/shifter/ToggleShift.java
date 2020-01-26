@@ -2,6 +2,7 @@ package edu.greenblitz.bigRodika.commands.shifter;
 
 
 import edu.greenblitz.bigRodika.subsystems.Shifter;
+import edu.greenblitz.gblib.gears.Gear;
 
 /**
  * This command switches the Gear from the state it is currently in.
@@ -18,7 +19,7 @@ public class ToggleShift extends ShifterCommand {
 
     @Override
     public void execute() {
-        shifter.setShift(shifter.getCurrentGear() == Shifter.Gear.POWER ? Shifter.Gear.SPEED : Shifter.Gear.POWER);
+        shifter.setShift(shifter.getCurrentGear() == Gear.POWER ? Gear.SPEED : Gear.POWER);
     }
 
     @Override
