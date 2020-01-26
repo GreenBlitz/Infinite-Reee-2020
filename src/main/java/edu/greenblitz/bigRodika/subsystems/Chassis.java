@@ -86,7 +86,7 @@ public class Chassis implements Subsystem {
         if (instance == null) {
             instance = new Chassis();
             instance.setDefaultCommand(
-]                    new ArcadeDrive(instance, OI.getInstance().getMainJoystick()));
+                    new ArcadeDrive(instance, OI.getInstance().getMainJoystick()));
         }
     }
 
