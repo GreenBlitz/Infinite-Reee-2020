@@ -80,7 +80,7 @@ public class TurnToAngle extends GBCommand {
     public void end(boolean interrupted) {
         double err = Math.toDegrees(Chassis.getInstance().getAngle() - end.getX());
         SmartDashboard.putNumber("Final Error", err);
-        if (Math.abs(err) > 2 && !interrupted) {
+        if (Math.abs(err) > 4 && !interrupted) {
             double normalize = 1.0;
             double newLocP = locP * normalize;
             double newVelP = velP * normalize;

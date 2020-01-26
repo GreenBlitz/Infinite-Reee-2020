@@ -128,7 +128,7 @@ public class Follow2DProfileCommand implements IThreadable {
      */
     @Override
     public boolean isFinished() {
-        return follower.isFinished() || died;
+        return follower.isFinished();// || died;
     }
 
     @Override
