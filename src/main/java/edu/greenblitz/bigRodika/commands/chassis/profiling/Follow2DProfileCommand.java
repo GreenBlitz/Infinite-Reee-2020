@@ -25,7 +25,7 @@ public class Follow2DProfileCommand implements IThreadable {
     private double collapsingPerWheelPIDTol;
     private double collapsingAngularPIDTol;
 
-    private double maxPower = 1.0;
+    private double maxPower;
     private boolean died;
     private boolean isOpp;
 
@@ -132,7 +132,7 @@ public class Follow2DProfileCommand implements IThreadable {
      */
     @Override
     public boolean isFinished() {
-        return follower.isFinished() || died;
+        return follower.isFinished();// || died;
     }
 
     @Override

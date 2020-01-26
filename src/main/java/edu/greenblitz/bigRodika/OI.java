@@ -3,13 +3,22 @@ package edu.greenblitz.bigRodika;
 import edu.greenblitz.bigRodika.commands.chassis.motion.GoFetch;
 import edu.greenblitz.bigRodika.commands.chassis.HexAlign;
 import edu.greenblitz.bigRodika.commands.chassis.TurnToVision;
+import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
+import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Shifter;
 import edu.greenblitz.gblib.hid.SmartJoystick;
+import edu.greenblitz.gblib.threading.ThreadedCommand;
 import org.greenblitz.motion.base.Point;
+import org.greenblitz.motion.base.State;
+import org.greenblitz.motion.pid.PIDObject;
+import org.greenblitz.motion.profiling.ProfilingData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class OI {
@@ -37,8 +46,9 @@ public class OI {
         mainJoystick.X.whenPressed(new CheckMaxLin(0.7));
         mainJoystick.Y.whenPressed(new HexAlign());
         mainJoystick.B.whenPressed(new TurnToVision());
-
         mainJoystick.L3.whenPressed(new ToggleShift(Shifter.getInstance()));
+//        mainJoystick.B.whenPressed(new TurnToVision());
+//        mainJoystick.L3.whenPressed(new ToggleShift(Shifter.getInstance()));
     }
 
     private void initOfficalButtons(){

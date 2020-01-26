@@ -13,23 +13,22 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        CommandScheduler.getInstance().registerSubsystem(Chassis.getInstance());
         CommandScheduler.getInstance().enable();
 
-        Chassis.getInstance();
-        Pneumatics.getInstance();
-        Shifter.getInstance();
+        Pneumatics.init();
+        Shifter.init();
+        Chassis.init(); // Must be last!
 
         OI.getInstance();
 
 
-        VisionMaster.getInstance();
+//        VisionMaster.getInstance();
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        VisionMaster.getInstance().update();
+//        VisionMaster.getInstance().update();
     }
 
     @Override

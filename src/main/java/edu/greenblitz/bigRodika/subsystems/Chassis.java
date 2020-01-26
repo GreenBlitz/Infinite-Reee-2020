@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.subsystems;
 import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.gblib.encoder.IEncoder;
+import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
@@ -12,6 +13,7 @@ import edu.greenblitz.gblib.encoder.SparkEncoder;
 import edu.greenblitz.gblib.gyroscope.NavxGyro;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.base.Position;
@@ -64,9 +66,9 @@ public class Chassis implements Subsystem {
                 RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_RIGHT,
                 RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_A,
                 RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_B);*/   //chassis
-        leftEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK_POWER, leftLeader);
+        leftEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
         leftEncoder.invert(true);
-        rightEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK_POWER, rightLeader);
+        rightEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
         rightEncoder.invert(true);
 
         //gyroscope = new PigeonGyro(new PigeonIMU(rightTalon));   // chassis
@@ -75,12 +77,20 @@ public class Chassis implements Subsystem {
 
     }
 
-    public static Chassis getInstance() {
+    public void changeGear(){
+        leftEncoder.switchGear();
+        rightEncoder.switchGear();
+    }
+
+    public static void init() {
         if (instance == null) {
             instance = new Chassis();
-            Chassis.getInstance().setDefaultCommand(
-                    new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()));
+            instance.setDefaultCommand(
+                    new ArcadeDrive(instance, OI.getInstance().getMainJoystick()));
         }
+    }
+
+    public static Chassis getInstance() {
         return instance;
     }
 
@@ -165,11 +175,6 @@ public class Chassis implements Subsystem {
 
     public double getWheelDistance(){
         return RobotMap.BigRodika.Chassis.WHEEL_DIST;
-    }
-
-    public void setTicksPerMeter(Shifter.Gear gear){
-//        double ticks = gear == Shifter.Gear.POWER ? Sensor.Encoder.TICKS_PER_METER_POWER : Sensor.Encoder.TICKS_PER_METER_SPEED;
-
     }
 
     public Position getLocation(){

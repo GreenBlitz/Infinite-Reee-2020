@@ -11,14 +11,12 @@ public class Pneumatics implements Subsystem {
 
     private PressureSensor m_pressureSensor;
     private Compressor m_compressor;
-    private boolean m_activated;
 
     private Pneumatics() {
 
         m_pressureSensor = new PressureSensor(RobotMap.BigRodika.Pneumatics.Sensor.PRESSURE);
         m_compressor = new Compressor(RobotMap.BigRodika.Pneumatics.PCM);
 
-        setDefaultCommand(new HandleCompressor(this));
 
     }
 
@@ -33,7 +31,6 @@ public class Pneumatics implements Subsystem {
             m_compressor.stop();
         }
 
-        m_activated = compress;
     }
 
     public boolean isEnabled() {
@@ -41,12 +38,13 @@ public class Pneumatics implements Subsystem {
     }
 
     public static void init() {
-        if (instance == null)
+        if (instance == null) {
             instance = new Pneumatics();
+            instance.setDefaultCommand(new HandleCompressor(instance));
+        }
     }
 
     public static Pneumatics getInstance() {
-        if (instance == null) instance = new Pneumatics();
         return instance;
     }
 
