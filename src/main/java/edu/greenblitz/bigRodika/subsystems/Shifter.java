@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.subsystems;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.gblib.sendables.SendableDoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /**
@@ -37,7 +38,10 @@ public class Shifter implements Subsystem {
      * This function creates a new instance of this class.
      */
     public static void init() {
-        if (instance == null) instance = new Shifter();
+        if (instance == null) {
+            instance = new Shifter();
+            CommandScheduler.getInstance().registerSubsystem(instance);
+        }
     }
 
     /**

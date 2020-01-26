@@ -12,8 +12,9 @@ import edu.greenblitz.gblib.encoder.SparkEncoder;
 import edu.greenblitz.gblib.gyroscope.NavxGyro;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import org.greenblitz.motion.app.Localizer;
+import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.base.Position;
 
 
@@ -75,12 +76,15 @@ public class Chassis implements Subsystem {
 
     }
 
-    public static Chassis getInstance() {
+    public static void init() {
         if (instance == null) {
             instance = new Chassis();
-            Chassis.getInstance().setDefaultCommand(
-                    new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()));
+            instance.setDefaultCommand(
+                    new ArcadeDrive(instance, OI.getInstance().getMainJoystick()));
         }
+    }
+
+    public static Chassis getInstance() {
         return instance;
     }
 

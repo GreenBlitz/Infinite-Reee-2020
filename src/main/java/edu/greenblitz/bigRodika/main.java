@@ -18,7 +18,11 @@ public class main {
     private static RobotSupplier robotFactory = new RobotSupplier();
 
     public static void main(String... args) {
-        RobotBase.startRobot(robotFactory);
+//        try {
+            RobotBase.startRobot(robotFactory);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
     }
 
     public static Robot getInstance() {

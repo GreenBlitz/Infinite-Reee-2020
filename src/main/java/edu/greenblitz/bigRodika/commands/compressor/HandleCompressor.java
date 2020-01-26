@@ -5,7 +5,7 @@ import edu.greenblitz.gblib.command.GBCommand;
 
 public class HandleCompressor extends CompressorCommand {
 
-    private static final int TURN_ON_THRESHOLD = 65, TURN_OFF_THRESHOLD = 100;
+    private static final int TURN_ON_THRESHOLD = 30, TURN_OFF_THRESHOLD = 40;
 
     public HandleCompressor(Pneumatics pneumatics) {
         super(pneumatics);
