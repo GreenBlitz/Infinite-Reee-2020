@@ -108,7 +108,7 @@ public class HexAlign extends GBCommand {
 
         if(errRadCenter < driveTolerance){
             SmartDashboard.putBoolean("inDriveTol", true);
-            endState = new State(startState.getX(),hexPos.getY() - r*Math.sin(angle), startState.getAngle() + 0.01);
+            endState = new State(startState.getX() + Math.tan(-Chassis.getInstance().getAngle())*(hexPos.getY() - r*Math.sin(angle)),hexPos.getY() - r*Math.sin(angle), startState.getAngle() + 0.01);
         }
 
         List<State> path = new ArrayList<>();
