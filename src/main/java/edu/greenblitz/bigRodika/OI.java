@@ -2,11 +2,12 @@ package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.HexAlign;
 import edu.greenblitz.bigRodika.commands.chassis.PreShoot;
-import edu.greenblitz.bigRodika.commands.chassis.TurnToVision;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.AdaptiveProfilingPursuitController;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
+import edu.greenblitz.bigRodika.commands.chassis.turns.TurnToAngle;
+import edu.greenblitz.bigRodika.commands.chassis.turns.TurnToVision;
 import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Shifter;
@@ -37,6 +38,7 @@ public class OI {
         mainJoystick.X.whenPressed(new PreShoot());
         mainJoystick.Y.whenPressed(new HexAlign());
         mainJoystick.L3.whenPressed(new ToggleShift(Shifter.getInstance()));
+        mainJoystick.R1.whenPressed(new TurnToAngle(90, 5, 1, 2.1, 10, 0.4));
         mainJoystick.B.whenPressed(new TurnToVision(VisionMaster.Algorithm.HEXAGON,RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.4").getMaxAngularVelocity(),RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.4").getMaxAngularAccel(),0.4));
         //mainJoystick.B.whenPressed(new TurnToAngle(
           //      0,5,1,2.1, 10, 0.4));

@@ -20,7 +20,7 @@ public class HexAlign extends GBCommand {
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
     private double k = 0.2;
-    private double r = 3; //radius
+    private double r = 2; //radius
     private Point hexPos;
     private boolean fucked = false;
     private double driveTolerance = 0.3;

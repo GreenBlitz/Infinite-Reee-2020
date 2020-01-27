@@ -7,13 +7,14 @@ import org.greenblitz.motion.base.Position;
 public class DelicateTurn implements IThreadable {
 
     private double POWER = 0.05;
-    private double TOL = Math.toRadians(0.5);
+    private double TOL = Math.toRadians(1);
     private double goal;
     private double rightMult;
 
     public DelicateTurn(double goal){
         this.goal = goal;
     }
+
 
     @Override
     public void run() {
@@ -32,7 +33,7 @@ public class DelicateTurn implements IThreadable {
 
     @Override
     public void atInit() {
-        rightMult = Math.signum(Position.normalizeAngle(goal - Chassis.getInstance().getLocation().getAngle()));
+        rightMult = -Math.signum(Position.normalizeAngle(goal - Chassis.getInstance().getLocation().getAngle()));
         Chassis.getInstance().toBrake();
     }
 }

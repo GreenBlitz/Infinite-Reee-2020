@@ -82,12 +82,12 @@ public class TurnToAngle extends GBCommand {
         double err = Math.toDegrees(Chassis.getInstance().getAngle() - end.getX());
         SmartDashboard.putNumber("Final Error", err);
         if (Math.abs(err) > 2 && !interrupted) {
-            new ThreadedCommand(new DelicateTurn(end.getX()), Chassis.getInstance());
+            new ThreadedCommand(new DelicateTurn(end.getX()), Chassis.getInstance()).schedule();
         }
     }
 
     @Override
     public boolean isFinished() {
-        return overCount >= 3;
+        return overCount >= 10;
     }
 }
