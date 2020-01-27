@@ -1,9 +1,9 @@
 package edu.greenblitz.bigRodika;
 
-import edu.greenblitz.bigRodika.commands.chassis.motion.GoFetch;
 import edu.greenblitz.bigRodika.commands.chassis.HexAlign;
 import edu.greenblitz.bigRodika.commands.chassis.TurnToVision;
-import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
+import edu.greenblitz.bigRodika.commands.chassis.motion.GoFetch;
+import edu.greenblitz.bigRodika.commands.chassis.profiling.AdaptiveProfilingPursuitController;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
@@ -16,9 +16,6 @@ import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ProfilingData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class OI {
@@ -44,8 +41,26 @@ public class OI {
 
         mainJoystick.A.whenPressed(new CheckMaxRot(0.7));
         mainJoystick.X.whenPressed(new CheckMaxLin(0.7));
-        mainJoystick.Y.whenPressed(new HexAlign());
         mainJoystick.B.whenPressed(new TurnToVision());
+        ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
+
+        mainJoystick.Y.whenPressed(new ThreadedCommand(
+                new AdaptiveProfilingPursuitController(() -> {
+                    Point ref = new Point(0, 2);
+                    return new State(ref);
+                },
+                        AdaptiveProfilingPursuitController.TargetMode.RELATIVE_TO_LOCALIZER, 0, data,
+                        0.7,
+                        new PIDObject(0.8/data.getMaxLinearVelocity(), 0, 25/data.getMaxLinearAccel()),
+                        .01*data.getMaxLinearVelocity(),
+                        new PIDObject(0.5/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()),
+                        .01*data.getMaxAngularVelocity(),
+                        false),
+
+                Chassis.getInstance())
+        );
+
+        mainJoystick.B.whenPressed(new HexAlign());
         mainJoystick.L3.whenPressed(new ToggleShift(Shifter.getInstance()));
 //        mainJoystick.B.whenPressed(new TurnToVision());
 //        mainJoystick.L3.whenPressed(new ToggleShift(Shifter.getInstance()));

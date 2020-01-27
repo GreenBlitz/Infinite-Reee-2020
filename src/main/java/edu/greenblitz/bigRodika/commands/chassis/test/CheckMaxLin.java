@@ -14,7 +14,7 @@ public class CheckMaxLin extends GBCommand {
     int count;
 
     public CheckMaxLin(double power) {
-        requires(Chassis.getInstance());
+        require(Chassis.getInstance());
         this.power = power;
     }
 

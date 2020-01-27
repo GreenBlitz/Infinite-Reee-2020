@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
         Chassis.getInstance().toBrake();
 
         new LocalizerCommandRunner().schedule();
-        new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()).schedule();
+//        new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()).schedule();
 
     }
 }
