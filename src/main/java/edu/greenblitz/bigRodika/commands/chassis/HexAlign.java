@@ -20,7 +20,7 @@ public class HexAlign extends GBCommand {
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
     private double k = 0.2;
-    private double r = 2.5; //radius
+    private double r = 3; //radius
     private Point hexPos;
     private boolean fucked = false;
     private double driveTolerance = 0.3;
@@ -138,13 +138,21 @@ public class HexAlign extends GBCommand {
 
         ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
 
+        boolean reverse  =   Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
+
+        if(reverse){
+            endState.setAngle(endState.getAngle() + Math.PI);
+            startState.setAngle(startState.getAngle() + Math.PI);
+        }
+
+
         prof = new Follow2DProfileCommand(path,
                 .001, 800,
                 data,
                 0.7, 1, 1,
                 new PIDObject(0.8 / data.getMaxLinearVelocity(), 0, 6 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
-                new PIDObject(0.5 / data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
-                Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r);
+                new PIDObject(0*0.5 / data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
+                reverse);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
     }
