@@ -76,7 +76,32 @@ public class RobotMap {
 
         }
 
+        public static class Shooter {
+            public static class PID {
+                public static final double P = 9000;
+                public static final double I = 9001;
+                public static final double D = 9002;
+            }
+            public static final int motorID = 69;
 
+        }
+
+        public static class Funnel {
+            public static class PID {
+                public static final double P = 9000;
+                public static final double I = 9001;
+                public static final double D = 9002;
+            }
+
+            public static class Encoder {
+                public static final double whenPower = 6.9;
+                public static final double whenSpeed = 0.69;
+            }
+
+            public static double cannonRotate;
+            public static final int funnelPort = 69;
+            public static final int feedPort = 420;
+        }
 
     }
 }
