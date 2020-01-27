@@ -3,6 +3,9 @@ package edu.greenblitz.bigRodika.commands.chassis.profiling;
 import edu.greenblitz.gblib.threading.IThreadable;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import org.greenblitz.motion.Localizer;
+import org.greenblitz.motion.base.Point;
+import org.greenblitz.motion.base.Position;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.base.Vector2D;
 import org.greenblitz.motion.pid.PIDObject;
@@ -15,10 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AdaptiveProfilingPursuitCommand implements IThreadable {
+public class AdaptiveProfilingPursuitController implements IThreadable {
 
     private static final double JUMP = 0.004;
     private static final int TAIL = 200;
+
+    public enum TargetMode {
+        RELETIVE_TO_ROBOT,
+        RELATIVE_TO_LOCALIZER
+    }
 
     private MotionProfile2D profile2D;
     private ProfilingData data;
@@ -30,10 +38,11 @@ public class AdaptiveProfilingPursuitCommand implements IThreadable {
     private double vEnd;
     private double collapsingPerWheelPIDTol;
     private double collapsingAngularPIDTol;
-    private double finalProfileThreshold = 0.3;
+    private double finalProfileThreshold = 0.5;
     private boolean finalStage;
 
     private List<State> path;
+    private TargetMode mode;
 
     private double maxPower;
     private boolean isOpp;
@@ -41,13 +50,16 @@ public class AdaptiveProfilingPursuitCommand implements IThreadable {
     private double mult;
 
 
-    public AdaptiveProfilingPursuitCommand(TargetSupplier supplier, double vEnd, ProfilingData data,
-                                           double maxPower,
-                                           PIDObject perWheelPIDCosnts, double collapseConstaPerWheel,
-                                           PIDObject angularPIDConsts, double collapseConstAngular,
-                                           boolean isReverse) {
+    public AdaptiveProfilingPursuitController(TargetSupplier supplier,
+                                              TargetMode mode,
+                                              double vEnd, ProfilingData data,
+                                              double maxPower,
+                                              PIDObject perWheelPIDCosnts, double collapseConstaPerWheel,
+                                              PIDObject angularPIDConsts, double collapseConstAngular,
+                                              boolean isReverse) {
         this.linKv = 1.0 / data.getMaxLinearVelocity();
         this.linKa = 1.0 / data.getMaxLinearAccel();
+        this.mode = mode;
         this.perWheelPIDConsts = perWheelPIDCosnts;
         this.collapsingPerWheelPIDTol = collapseConstaPerWheel;
         this.isOpp = isReverse;
@@ -82,9 +94,15 @@ public class AdaptiveProfilingPursuitCommand implements IThreadable {
     @Override
     public void run() {
 
-        Vector2D vals = null;
+        Vector2D vals;
 
         if (finalStage){
+
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             vals = follower.run(mult * Chassis.getInstance().getLeftRate(),
                     mult * Chassis.getInstance().getRightRate(),
@@ -92,9 +110,23 @@ public class AdaptiveProfilingPursuitCommand implements IThreadable {
 
         } else {
             path.set(1, supplier.getTarget());
-            State first = path.get(0);
-            first.setLinearVelocity(Chassis.getInstance().getLinearVelocity());
-            first.setAngularVelocity(Chassis.getInstance().getAngularVelocityByWheels());
+
+            switch (mode){
+                case RELATIVE_TO_LOCALIZER:
+                    Position loc = Localizer.getInstance().getLocation();
+                    path.set(0, new State(loc.getX(), loc.getY(), -loc.getAngle()));
+                    break;
+                case RELETIVE_TO_ROBOT:
+                    path.set(0, new State(0, 0,0));
+                    break;
+            }
+
+            path.get(0).setLinearVelocity(Chassis.getInstance().getLinearVelocity());
+            path.get(0).setAngularVelocity(Chassis.getInstance().getAngularVelocityByWheels());
+
+            System.out.println(path.get(0));
+            System.out.println(path.get(1));
+            System.out.println("-----------------------");
 
             this.profile2D = ChassisProfiler2D.generateProfile(path,
                     JUMP,
@@ -109,7 +141,10 @@ public class AdaptiveProfilingPursuitCommand implements IThreadable {
                     mult * Chassis.getInstance().getRightRate(),
                     mult * Chassis.getInstance().getAngularVelocityByWheels(), 0.01);
 
-            if (path.get(0).norm() <= finalProfileThreshold){
+            if (Point.subtract(path.get(1), path.get(0)).norm() <= finalProfileThreshold){
+
+                System.out.println(profile2D.getTEnd());
+
                 finalStage = true;
                 follower.init();
             }
@@ -142,7 +177,7 @@ public class AdaptiveProfilingPursuitCommand implements IThreadable {
      */
     @Override
     public boolean isFinished() {
-        return supplier.getTarget().norm() <= 0.1;
+        return finalStage && follower.isFinished();
     }
 
     @Override

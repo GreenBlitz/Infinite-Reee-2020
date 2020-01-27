@@ -1,10 +1,7 @@
 package edu.greenblitz.bigRodika;
 
-import edu.greenblitz.bigRodika.commands.chassis.motion.GoFetch;
 import edu.greenblitz.bigRodika.commands.chassis.HexAlign;
-import edu.greenblitz.bigRodika.commands.chassis.TurnToVision;
-import edu.greenblitz.bigRodika.commands.chassis.profiling.AdaptiveProfilingPursuitCommand;
-import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
+import edu.greenblitz.bigRodika.commands.chassis.profiling.AdaptiveProfilingPursuitController;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
@@ -17,9 +14,6 @@ import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ProfilingData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class OI {
@@ -47,12 +41,11 @@ public class OI {
         ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
 
         mainJoystick.Y.whenPressed(new ThreadedCommand(
-                new AdaptiveProfilingPursuitCommand(() -> {
-                    Point ref = new Point(1, 1);
-                    Point dest = Point.subtract(ref, Chassis.getInstance().getLocation());
-                    return new State(dest, Math.PI/2 - Chassis.getInstance().getAngle());
+                new AdaptiveProfilingPursuitController(() -> {
+                    Point ref = new Point(0, 2);
+                    return new State(ref);
                 },
-                        0, data,
+                        AdaptiveProfilingPursuitController.TargetMode.RELATIVE_TO_LOCALIZER, 0, data,
                         0.7,
                         new PIDObject(0.8/data.getMaxLinearVelocity(), 0, 25/data.getMaxLinearAccel()),
                         .01*data.getMaxLinearVelocity(),
