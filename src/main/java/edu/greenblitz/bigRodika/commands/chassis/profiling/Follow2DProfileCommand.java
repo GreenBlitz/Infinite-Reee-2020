@@ -1,6 +1,5 @@
 package edu.greenblitz.bigRodika.commands.chassis.profiling;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.greenblitz.gblib.threading.IThreadable;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;

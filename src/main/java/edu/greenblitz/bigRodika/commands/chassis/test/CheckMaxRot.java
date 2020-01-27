@@ -15,7 +15,7 @@ public class CheckMaxRot extends GBCommand {
     int count;
 
     public CheckMaxRot(double power) {
-        requires(Chassis.getInstance());
+        require(Chassis.getInstance());
         this.power = power;
     }
 
