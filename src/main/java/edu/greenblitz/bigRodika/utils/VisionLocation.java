@@ -58,6 +58,10 @@ public class VisionLocation {
         return Double.isFinite(x) && Double.isFinite(y) && Double.isFinite(z);
     }
 
+    public double[] toDoubleArray() {
+        return new double[]{this.x, this.y, this.z};
+    }
+
     @Override
     public String toString() {
         return "VisionLocation{" +

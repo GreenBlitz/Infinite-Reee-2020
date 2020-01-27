@@ -1,29 +1,23 @@
 package edu.greenblitz.bigRodika.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.ctre.phoenix.sensors.PigeonIMU;
+import edu.greenblitz.bigRodika.OI;
+import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.gblib.encoder.IEncoder;
+import edu.greenblitz.gblib.gears.Gear;
+import edu.greenblitz.gblib.gyroscope.IGyroscope;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.greenblitz.bigRodika.OI;
-import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.ArcadeDrive;
-import edu.greenblitz.gblib.encoder.IEncoder;
-import edu.greenblitz.gblib.encoder.RoborioEncoder;
 import edu.greenblitz.gblib.encoder.SparkEncoder;
-import edu.greenblitz.gblib.gyroscope.IGyroscope;
 import edu.greenblitz.gblib.gyroscope.NavxGyro;
-import edu.greenblitz.gblib.gyroscope.PigeonGyro;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.base.Position;
 
-import java.awt.*;
 
 
 public class Chassis implements Subsystem {
@@ -44,6 +38,9 @@ public class Chassis implements Subsystem {
 
         rightVictor.setInverted(true);
         rightVictor.follow(rightTalon);
+        leftVictor.follow(leftTalon);
+
+        leftEncoder = new RoborioEncoder(
         leftVictor.follow(leftTalon);*/   //chassis
 
         rightLeader = new CANSparkMax(RobotMap.BigRodika.Chassis.Motor.RIGHT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -69,9 +66,9 @@ public class Chassis implements Subsystem {
                 RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_RIGHT,
                 RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_A,
                 RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_B);*/   //chassis
-        leftEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.MORM_CONST_SPARK, leftLeader);
+        leftEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
         leftEncoder.invert(true);
-        rightEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.MORM_CONST_SPARK, rightLeader);
+        rightEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
         rightEncoder.invert(true);
 
         //gyroscope = new PigeonGyro(new PigeonIMU(rightTalon));   // chassis
@@ -80,18 +77,30 @@ public class Chassis implements Subsystem {
 
     }
 
-    public static Chassis getInstance() {
+    public void changeGear(){
+        leftEncoder.switchGear();
+        rightEncoder.switchGear();
+    }
+
+    public static void init() {
         if (instance == null) {
             instance = new Chassis();
-            Chassis.getInstance().setDefaultCommand(
-                    new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()));
+            CommandScheduler.getInstance().registerSubsystem(instance);
+            instance.setDefaultCommand(
+                    new ArcadeDrive(instance, OI.getInstance().getMainJoystick())
+            );
         }
+    }
+
+    public static Chassis getInstance() {
         return instance;
     }
 
     public void moveMotors(double left, double right){
         /*leftTalon.set(ControlMode.PercentOutput, left);
         rightTalon.set(ControlMode.PercentOutput, right);*/   //chassis
+        SmartDashboard.putNumber("Left", left);
+        SmartDashboard.putNumber("Right", right);
         rightLeader.set(-right);
         leftLeader.set(-left);   //big-haim
     }
@@ -179,7 +188,11 @@ public class Chassis implements Subsystem {
         SmartDashboard.putNumber("Yaw", gyroscope.getRawYaw());
         SmartDashboard.putNumber("Left Dist", leftEncoder.getNormalizedTicks());
         SmartDashboard.putNumber("Right Dist", rightEncoder.getNormalizedTicks());
+        SmartDashboard.putNumber("Left Vel", leftEncoder.getNormalizedVelocity());
+        SmartDashboard.putNumber("Right Vel", rightEncoder.getNormalizedVelocity());
+        SmartDashboard.putNumber("Ang vel", gyroscope.getYawRate());
         SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
+        SmartDashboard.putNumber("angle", Chassis.getInstance().getAngle());
     }
 
 }

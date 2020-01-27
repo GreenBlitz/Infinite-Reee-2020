@@ -10,12 +10,12 @@ import org.greenblitz.motion.profiling.Profiler1D;
 
 public class TurnToAngle extends GBCommand {
 
+    private static int ERROR_NORMALIZE;
+
     private ActuatorLocation end;
     private MotionProfile1D motionProfile;
-    private double locP, velP;
+    private double power, locP, velP, maxV, maxA;
     private long t0;
-    private double maxV, maxA;
-    private double power;
 
     private int overCount;
 
@@ -51,8 +51,8 @@ public class TurnToAngle extends GBCommand {
 
         double timePassed = (System.currentTimeMillis() - t0) / 1000.0;
 
-        if (motionProfile.isOver(timePassed)){
-            Chassis.getInstance().moveMotors(0,0);
+        if (motionProfile.isOver(timePassed)) {
+            Chassis.getInstance().moveMotors(0, 0);
             overCount++;
             return;
         }
@@ -62,17 +62,17 @@ public class TurnToAngle extends GBCommand {
         double accel = motionProfile.getAcceleration(timePassed);
         double location = motionProfile.getLocation(timePassed);
 
-        double ff = velocity/maxV  + accel/maxA;
+        double ff = velocity / maxV + accel / maxA;
         double locPVal = locP * Position.normalizeAngle(location - Chassis.getInstance().getAngle());
-        double velPLeft = velP * (-perWheelVel - Chassis.getInstance().getLeftRate());
-        double velPRight = velP * (perWheelVel - Chassis.getInstance().getLeftRate());
+        double velPLeft = velP * (perWheelVel - Chassis.getInstance().getLeftRate());
+        double velPRight = velP * (-perWheelVel - Chassis.getInstance().getRightRate());
 
         Chassis.getInstance().moveMotors(
-                -clamp(ff + locPVal + velPLeft),
-                clamp(ff + locPVal + velPRight));
+                clamp(ff + locPVal + velPLeft),
+                -clamp(ff + locPVal + velPRight));
     }
 
-    private double clamp(double inp){
+    private double clamp(double inp) {
         return Math.copySign(Math.min(Math.abs(inp), 1.0), inp) * power;
     }
 
@@ -80,8 +80,13 @@ public class TurnToAngle extends GBCommand {
     public void end(boolean interrupted) {
         double err = Math.toDegrees(Chassis.getInstance().getAngle() - end.getX());
         SmartDashboard.putNumber("Final Error", err);
-        if (Math.abs(err) > 2 && !interrupted){
-            new TurnToAngle(Math.toDegrees(end.getX()), locP, velP, maxV, maxA, power).schedule();
+        if (Math.abs(err) > 2 && !interrupted) {
+            double normalize = 1.0;
+            double newLocP = locP * normalize;
+            double newVelP = velP * normalize;
+            double newMaxV = maxV * normalize;
+            double newMaxA = maxA * normalize;
+            new TurnToAngle(Math.toDegrees(end.getX()), newLocP, newVelP, newMaxV, newMaxA, power).schedule();
         }
     }
 

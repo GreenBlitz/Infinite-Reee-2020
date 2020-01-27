@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.commands.chassis.profiling;
 import edu.greenblitz.gblib.threading.IThreadable;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.base.Vector2D;
 import org.greenblitz.motion.pid.PIDObject;
@@ -27,6 +28,12 @@ public class Follow2DProfileCommand implements IThreadable {
     private boolean died;
     private boolean isOpp;
 
+    private double mult;
+
+    private long runTStart;
+    private long minRuntime = 10;
+
+
     /**
      *
      * @param path
@@ -48,6 +55,7 @@ public class Follow2DProfileCommand implements IThreadable {
                                   double collapseConstAngular, boolean isReverse) {
         this.profile2D = ChassisProfiler2D.generateProfile(path, jump, data,
                 0, 1.0, smoothingTail);
+        SmartDashboard.putString("Data for profile", data.toString());
         this.linKv = velMultLin / data.getMaxLinearVelocity();
         this.linKa = accMultLin / data.getMaxLinearAccel();
         this.perWheelPIDConsts = perWheelPIDCosnts;
@@ -58,11 +66,6 @@ public class Follow2DProfileCommand implements IThreadable {
         this.maxPower = maxPower;
     }
 
-    private double mult;
-
-    private long runTStart;
-    private long minRuntime = 10;
-
     @Override
     public void atInit() {
         follower = new PidFollower2D(linKv, linKa, linKv, linKa,
@@ -70,13 +73,16 @@ public class Follow2DProfileCommand implements IThreadable {
                 collapsingPerWheelPIDTol, 1.0, angularPIDConsts, collapsingAngularPIDTol,
                 RobotMap.BigRodika.Chassis.WHEEL_DIST,
                 profile2D);
-        follower.setSendData(false);
+        follower.setSendData(true);
         Chassis.getInstance().toCoast();
         mult = isOpp ? -1 : 1;
         died = false;
         follower.init();
     }
 
+    public void setSendData(boolean val){
+        follower.setSendData(val);
+    }
 
     @Override
     public void run() {
@@ -84,27 +90,34 @@ public class Follow2DProfileCommand implements IThreadable {
 
         Vector2D vals = follower.run(mult * Chassis.getInstance().getLeftRate(),
                 mult * Chassis.getInstance().getRightRate(),
-                mult * Chassis.getInstance().getAngularVelocityByGyro()); // TODO test if this is mult or -mult
+                mult * Chassis.getInstance().getAngularVelocityByWheels()); // TODO test if this is mult or -mult
 
         if (isOpp){
             vals = vals.scale(-1);
         }
 
+        if (Double.isNaN(vals.getX() + vals.getY())) {
+            throw new RuntimeException("Profile returned NaN");
+        }
+
         if (!isOpp) {
-            Chassis.getInstance().moveMotors(maxPower * clamp(vals.getX()),
-                    maxPower * clamp(vals.getY()));
+            Chassis.getInstance().moveMotors(
+                    maxPower * clamp(vals.getX()),
+                    maxPower * clamp(vals.getY())
+            );
+//            Chassis.getInstance().moveMotors(0,
+//                   0);
         } else  {
             Chassis.getInstance().moveMotors(maxPower * clamp(vals.getY()),
                     maxPower * clamp(vals.getX()));
         }
 
-
-        if (System.currentTimeMillis() - runTStart < minRuntime) {
+        if (minRuntime != 0) {
             try {
-                Thread.sleep(minRuntime - (System.currentTimeMillis() - runTStart));
+                Thread.sleep(minRuntime);
             } catch (InterruptedException e) {
-                e.printStackTrace();
                 died = true;
+                e.printStackTrace();
             }
         }
     }
@@ -118,7 +131,7 @@ public class Follow2DProfileCommand implements IThreadable {
      */
     @Override
     public boolean isFinished() {
-        return follower.isFinished() || died;
+        return follower.isFinished();// || died;
     }
 
     @Override

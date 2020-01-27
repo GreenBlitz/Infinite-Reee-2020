@@ -1,5 +1,9 @@
 package edu.greenblitz.bigRodika;
 
+import edu.greenblitz.gblib.gears.GearDependentValue;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.greenblitz.motion.profiling.ProfilingData;
+
 import java.util.HashMap;
 
 public class RobotMap {
@@ -7,6 +11,14 @@ public class RobotMap {
     public static class BigRodika {
         public static class Joystick {
             public static final int MAIN = 0;
+        }
+
+        public static class Pneumatics {
+            public static final int PCM = 21;
+
+            public static class Sensor {
+                public static final int PRESSURE = 3;
+            }
         }
 
         public static class Chassis {
@@ -25,21 +37,46 @@ public class RobotMap {
 
             }
 
+            public static class Shifter {
+                public static class Solenoid {
+                    public static final int FORWARD = 3;
+                    public static final int REVERSE = 6;
+                }
+
+                public static final int PCM = 21;
+            }
+
             public static class Encoder{
                 public static final int LEFT_PORT_A = 2,
                                         LEFT_PORT_B = 3,
                                         RIGHT_PORT_A = 0,
                                         RIGHT_PORT_B = 1;
 
-                public static final double NORM_CONST_LEFT = 1.0/(1.2/2500.0),
-                                           NORM_CONST_RIGHT = 1.0/(1.2/2100.0),
-                                           MORM_CONST_SPARK = 2300;
+                public static final GearDependentValue<Double>
+                        NORM_CONST_SPARK = new GearDependentValue<>
+                        (2300.0, 1234.0/2.0);
             }
 
-            public static final double WHEEL_DIST = 0.57;
+            public static class MotionData {
 
+                public static HashMap<String, ProfilingData> POWER;
+                public static HashMap<String, ProfilingData> SPEED;
+
+                static {
+
+                    POWER = new HashMap<>();
+                    POWER.put("0.4", new ProfilingData(0.7,4.6,2.1,10));
+                    POWER.put("0.7", new ProfilingData(1.15, 10, 4, 15));
+
+                }
+
+            }
+
+            public static final double WHEEL_DIST = 0.595;
 
         }
+
+
 
     }
 }
