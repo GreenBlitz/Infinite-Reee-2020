@@ -22,13 +22,13 @@ public class Robot extends TimedRobot {
         OI.getInstance();
 
 
-//        VisionMaster.getInstance();
+        VisionMaster.getInstance();
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-//        VisionMaster.getInstance().update();
+        VisionMaster.getInstance().update();
     }
 
     @Override

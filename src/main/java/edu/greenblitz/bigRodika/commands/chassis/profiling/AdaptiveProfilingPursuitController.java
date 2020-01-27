@@ -38,7 +38,7 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
     private double vEnd;
     private double collapsingPerWheelPIDTol;
     private double collapsingAngularPIDTol;
-    private double finalProfileThreshold = 0.5;
+    private double finalProfileThreshold = 0.65;
     private boolean finalStage;
 
     private List<State> path;
