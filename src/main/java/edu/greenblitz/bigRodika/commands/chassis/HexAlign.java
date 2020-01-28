@@ -2,7 +2,6 @@ package edu.greenblitz.bigRodika.commands.chassis;
 
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
-import edu.greenblitz.bigRodika.commands.chassis.turns.TurnToAngle;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
@@ -22,10 +21,10 @@ public class HexAlign extends GBCommand {
     private ThreadedCommand cmd;
     private double k = 0.2;
     private double r = 2; //radius
-    private Point hexPos;
+    private Point globHexPos;
     private boolean fucked = false;
     private double driveTolerance = 0.3;
-    private double tolarance = 0.05;
+    private double tolerance = 0.05;
     private List<Double> radsAndCritPoints;//crit point - radius - crit - radius - crit .... - radius
     private double endAng;
 
@@ -45,7 +44,7 @@ public class HexAlign extends GBCommand {
     }
 
     public Point getHexPos() {
-        return hexPos;
+        return globHexPos;
     }
 
     @Override
@@ -60,17 +59,22 @@ public class HexAlign extends GBCommand {
             return;
         }
 
-        double radCenter = new Point(difference[0] + RobotMap.BigRodika.Chassis.VISION_CAM_X_DIST_CENTER,
-                difference[1] + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER).norm();
+        double targetX = difference[0] + RobotMap.BigRodika.Chassis.VISION_CAM_X_DIST_CENTER;
+        double targetY = difference[1];
+
+        double cam_y =  RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER;
+
+        double radCenter = new Point(targetX,
+                targetY + cam_y).norm();
 
         if (radsAndCritPoints != null) {
-            if (radCenter < radsAndCritPoints.get(0)) {
+            if (radCenter < radsAndCritPoints.get(0) + cam_y) {
                 fucked = true;
                 return;
             }
             r = radsAndCritPoints.get(radsAndCritPoints.size() - 1);
             for (int i = 0; i < radsAndCritPoints.size() - 1; i++) {
-                if (radCenter < radsAndCritPoints.get(i + 1) && radCenter >= radsAndCritPoints.get(i)) {
+                if (radCenter < radsAndCritPoints.get(i + 1) + cam_y && radCenter >= radsAndCritPoints.get(i) + cam_y) {
                     r = radsAndCritPoints.get((i + 1) - i % 2);
                     break;
                 }
@@ -86,7 +90,7 @@ public class HexAlign extends GBCommand {
         SmartDashboard.putNumber("errRadCenter", errRadCenter);
         //can be done without all of this definitions, just so the code would be readable
 
-        if (errRadCenter < tolarance) {
+        if (errRadCenter < tolerance) {
             fucked = true;
             return;
         }
@@ -97,14 +101,14 @@ public class HexAlign extends GBCommand {
             k = 1;
         }
 
-        double targetX = difference[0];
-        double targetY = difference[1];
         //assume targetY != 0
         double relAng = Math.atan(targetX / targetY);
         double absAng = Chassis.getInstance().getAngle();
 
-        hexPos = new Point(targetX, targetY).rotate(-absAng);
+        Point hexPos = new Point(targetX, targetY).rotate(-absAng);
 
+        globHexPos = new Point(hexPos.getX() + Chassis.getInstance().getLocation().getX(),
+                hexPos.getY() + Chassis.getInstance().getLocation().getY());
         SmartDashboard.putString("hex", hexPos.toString());
         System.err.println("hex " + hexPos.toString());
 
@@ -128,6 +132,8 @@ public class HexAlign extends GBCommand {
         State endState = new State(hexPos.getX() + r * Math.cos(angle),
                 hexPos.getY() - r * Math.sin(angle),
                 -(Math.PI / 2 - angle));
+
+        endState.translate(new Point(0, cam_y).rotate(-absAng)).translate(new Point (0,-cam_y).rotate(endState.getAngle()));
 
         endAng = -endState.getAngle();
 

@@ -18,8 +18,8 @@ public class PreShoot extends SequentialCommandGroup {
         rds.add(2.0);
         rds.add(2.5);
         rds.add(3.0);
-        //HexAlign hexAlign = new HexAlign(rds,0.2,0.3);
-        HexAlign hexAlign = new HexAlign();
+        HexAlign hexAlign = new HexAlign(rds,0.2,0.3);
+        //HexAlign hexAlign = new HexAlign();
         addCommands(hexAlign,
 
                 new WaitMiliSeconds(300),
