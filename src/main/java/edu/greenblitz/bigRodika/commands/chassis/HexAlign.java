@@ -2,6 +2,7 @@ package edu.greenblitz.bigRodika.commands.chassis;
 
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
+import edu.greenblitz.bigRodika.commands.chassis.turns.TurnToAngle;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
@@ -21,21 +22,19 @@ public class HexAlign extends GBCommand {
     private ThreadedCommand cmd;
     private double k = 0.2;
     private double r = 2; //radius
-    private Point globHexPos;
+    private Point hexPos;
     private boolean fucked = false;
     private double driveTolerance = 0.3;
-    private double tolerance = 0.05;
+    private double tolarance = 0.05;
     private List<Double> radsAndCritPoints;//crit point - radius - crit - radius - crit .... - radius
     private double endAng;
 
     public HexAlign(double r, double k) {
-        super(Chassis.getInstance());
         this.k = k;
         this.r = r;
     }
 
     public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance) {
-        super(Chassis.getInstance());
         this.radsAndCritPoints = radsAndCritPoints;
         this.k = k;
         this.driveTolerance = driveTolerance;
@@ -46,7 +45,7 @@ public class HexAlign extends GBCommand {
     }
 
     public Point getHexPos() {
-        return globHexPos;
+        return hexPos;
     }
 
     @Override
@@ -64,8 +63,6 @@ public class HexAlign extends GBCommand {
         double radCenter = new Point(difference[0] + RobotMap.BigRodika.Chassis.VISION_CAM_X_DIST_CENTER,
                 difference[1] + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER).norm();
 
-        SmartDashboard.putNumber("radCenter" , radCenter);
-
         if (radsAndCritPoints != null) {
             if (radCenter < radsAndCritPoints.get(0)) {
                 fucked = true;
@@ -73,7 +70,7 @@ public class HexAlign extends GBCommand {
             }
             r = radsAndCritPoints.get(radsAndCritPoints.size() - 1);
             for (int i = 0; i < radsAndCritPoints.size() - 1; i++) {
-                if (radCenter < radsAndCritPoints.get(i + 1) + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER  && radCenter >= radsAndCritPoints.get(i) + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER) {
+                if (radCenter < radsAndCritPoints.get(i + 1) && radCenter >= radsAndCritPoints.get(i)) {
                     r = radsAndCritPoints.get((i + 1) - i % 2);
                     break;
                 }
@@ -89,7 +86,7 @@ public class HexAlign extends GBCommand {
         SmartDashboard.putNumber("errRadCenter", errRadCenter);
         //can be done without all of this definitions, just so the code would be readable
 
-        if (errRadCenter < tolerance) {
+        if (errRadCenter < tolarance) {
             fucked = true;
             return;
         }
@@ -106,9 +103,7 @@ public class HexAlign extends GBCommand {
         double relAng = Math.atan(targetX / targetY);
         double absAng = Chassis.getInstance().getAngle();
 
-        Point hexPos = new Point(targetX, targetY).rotate(-absAng);
-
-        globHexPos = hexPos.translate(Chassis.getInstance().getLocation().getX(),Chassis.getInstance().getLocation().getY());
+        hexPos = new Point(targetX, targetY).rotate(-absAng);
 
         SmartDashboard.putString("hex", hexPos.toString());
         System.err.println("hex " + hexPos.toString());
@@ -136,7 +131,9 @@ public class HexAlign extends GBCommand {
 
         endAng = -endState.getAngle();
 
-        if(errRadCenter < driveTolerance) endState.setAngle(startState.getAngle());
+         if(errRadCenter < driveTolerance){
+         endState.setAngle(startState.getAngle());
+         }
 
         List<State> path = new ArrayList<>();
         path.add(startState);
@@ -147,7 +144,7 @@ public class HexAlign extends GBCommand {
 
         ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
 
-        boolean reverse = Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
+        boolean reverse  =   Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
 
         if(reverse){
             endState.setAngle(endState.getAngle() + Math.PI);
