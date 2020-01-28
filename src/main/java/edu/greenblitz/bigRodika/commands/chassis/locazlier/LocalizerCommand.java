@@ -2,7 +2,7 @@ package edu.greenblitz.bigRodika.commands.chassis.locazlier;
 
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.threading.IThreadable;
-import org.greenblitz.motion.app.Localizer;
+import org.greenblitz.motion.Localizer;
 
 public class LocalizerCommand implements IThreadable {
 

@@ -48,6 +48,8 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
     private boolean isOpp;
 
     private double mult;
+    private long latestProfile;
+    private double profileLifeSpan;
 
 
     public AdaptiveProfilingPursuitController(TargetSupplier supplier,
@@ -69,6 +71,34 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
         this.supplier = supplier;
         this.vEnd = vEnd;
         this.data = data;
+        this.latestProfile = System.currentTimeMillis();
+        this.profileLifeSpan = 200;
+        this.path = new ArrayList<>(2);
+        path.add(new State(0, 0, 0));
+        path.add(new State(0, 0, 0));
+    }
+
+    public AdaptiveProfilingPursuitController(TargetSupplier supplier,
+                                              TargetMode mode,
+                                              double vEnd, ProfilingData data,
+                                              double maxPower,
+                                              PIDObject perWheelPIDCosnts, double collapseConstaPerWheel,
+                                              PIDObject angularPIDConsts, double collapseConstAngular,
+                                              boolean isReverse, double profileLifeSpan) {
+        this.linKv = 1.0 / data.getMaxLinearVelocity();
+        this.linKa = 1.0 / data.getMaxLinearAccel();
+        this.mode = mode;
+        this.perWheelPIDConsts = perWheelPIDCosnts;
+        this.collapsingPerWheelPIDTol = collapseConstaPerWheel;
+        this.isOpp = isReverse;
+        this.angularPIDConsts = angularPIDConsts;
+        this.collapsingAngularPIDTol = collapseConstAngular;
+        this.maxPower = maxPower;
+        this.supplier = supplier;
+        this.vEnd = vEnd;
+        this.data = data;
+        this.latestProfile = System.currentTimeMillis();
+        this.profileLifeSpan = profileLifeSpan;
         this.path = new ArrayList<>(2);
         path.add(new State(0, 0, 0));
         path.add(new State(0, 0, 0));
@@ -87,7 +117,7 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
         finalStage = false;
     }
 
-    public void setSendData(boolean val){
+    public void setSendData(boolean val) {
         follower.setSendData(val);
     }
 
@@ -96,7 +126,7 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
 
         Vector2D vals;
 
-        if (finalStage){
+        if (finalStage) {
 
             try {
                 Thread.sleep(10);
@@ -109,66 +139,62 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
                     mult * Chassis.getInstance().getAngularVelocityByWheels());
 
         } else {
-            path.set(1, supplier.getTarget());
 
-            switch (mode){
-                case RELATIVE_TO_LOCALIZER:
-                    Position loc = Localizer.getInstance().getLocation();
-                    path.set(0, new State(loc.getX(), loc.getY(), -loc.getAngle()));
-                    break;
-                case RELETIVE_TO_ROBOT:
-                    path.set(0, new State(0, 0,0));
-                    break;
+            if (System.currentTimeMillis() - this.latestProfile >= this.profileLifeSpan) {
+                path.set(1, supplier.getTarget());
+
+                switch (mode) {
+                    case RELATIVE_TO_LOCALIZER:
+                        Position loc = Localizer.getInstance().getLocation();
+                        path.set(0, new State(loc.getX(), loc.getY(), -loc.getAngle()));
+                        break;
+                    case RELETIVE_TO_ROBOT:
+                        path.set(0, new State(0, 0, 0));
+                        break;
+                }
+
+                path.get(0).setLinearVelocity(Chassis.getInstance().getLinearVelocity());
+                path.get(0).setAngularVelocity(Chassis.getInstance().getAngularVelocityByWheels());
+
+                this.profile2D = ChassisProfiler2D.generateProfile(path,
+                        JUMP,
+                        Chassis.getInstance().getLinearVelocity(), vEnd,
+                        data, 0,
+                        1.0,
+                        TAIL);
+
+                follower.setProfile(profile2D);
+
+                this.latestProfile = System.currentTimeMillis();
+
+                if (Point.subtract(path.get(1), path.get(0)).norm() <= finalProfileThreshold) {
+
+                    System.out.println(profile2D.getTEnd());
+
+                    finalStage = true;
+                    follower.init();
+                }
             }
-
-            path.get(0).setLinearVelocity(Chassis.getInstance().getLinearVelocity());
-            path.get(0).setAngularVelocity(Chassis.getInstance().getAngularVelocityByWheels());
-
-            System.out.println(path.get(0));
-            System.out.println(path.get(1));
-            System.out.println("-----------------------");
-
-            this.profile2D = ChassisProfiler2D.generateProfile(path,
-                    JUMP,
-                    Chassis.getInstance().getLinearVelocity(), vEnd,
-                    data, 0,
-                    1.0,
-                    TAIL);
-
-            follower.setProfile(profile2D);
 
             vals = follower.forceRun(mult * Chassis.getInstance().getLeftRate(),
                     mult * Chassis.getInstance().getRightRate(),
-                    mult * Chassis.getInstance().getAngularVelocityByWheels(), 0.01);
-
-            if (Point.subtract(path.get(1), path.get(0)).norm() <= finalProfileThreshold){
-
-                System.out.println(profile2D.getTEnd());
-
-                finalStage = true;
-                follower.init();
-            }
+                    mult * Chassis.getInstance().getAngularVelocityByWheels(),
+                    (10 + System.currentTimeMillis() - this.latestProfile)/1000.0);
         }
 
-        if (isOpp){
+        if (isOpp) {
             vals = vals.scale(-1);
-        }
-
-        if (!isOpp) {
+            Chassis.getInstance().moveMotors(maxPower * clamp(vals.getY()),
+                    maxPower * clamp(vals.getX()));
+        } else {
             Chassis.getInstance().moveMotors(
                     maxPower * clamp(vals.getX()),
                     maxPower * clamp(vals.getY())
             );
-//            Chassis.getInstance().moveMotors(0,
-//                   0);
-        } else  {
-            Chassis.getInstance().moveMotors(maxPower * clamp(vals.getY()),
-                    maxPower * clamp(vals.getX()));
         }
-
     }
 
-    public double clamp(double in){
+    public double clamp(double in) {
         return Math.copySign(Math.min(Math.abs(in), 1), in);
     }
 
@@ -183,7 +209,7 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
     @Override
     public void atEnd() {
         Chassis.getInstance().toBrake();
-        Chassis.getInstance().moveMotors(0,0);
+        Chassis.getInstance().moveMotors(0, 0);
     }
 
 }
