@@ -8,12 +8,11 @@ import org.greenblitz.motion.base.Point;
 
 public class TurnToVision extends GBCommand {
     TurnToAngle turn;
-    boolean fuck = false;
+    boolean fucked = false;
     private VisionMaster.Algorithm algorithm;
     private double maxV;
     private double maxA;
     private double power;
-    private Double desAngle;
     private Point PosToTurnToByLocalizer;
     private HexAlign hexAlign;
 
@@ -23,12 +22,6 @@ public class TurnToVision extends GBCommand {
         this.maxA = maxA;
         this.maxV = maxV;
         this.power = power;
-    }
-
-    public TurnToVision(VisionMaster.Algorithm algorithm, double maxV, double maxA,
-                        double power, double desAngle){
-        this(algorithm,maxV,maxA,power);
-        this.desAngle = desAngle;
     }
 
     public TurnToVision(VisionMaster.Algorithm algorithm, double maxV, double maxA,
@@ -49,13 +42,15 @@ public class TurnToVision extends GBCommand {
 
         VisionMaster.getInstance().isLastDataValid();
         double[] diff = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
+
         if(!VisionMaster.getInstance().isLastDataValid()) {
-            if(this.desAngle == null && this.PosToTurnToByLocalizer == null) PosToTurnToByLocalizer = hexAlign.getHexPos();
+            if(hexAlign != null) PosToTurnToByLocalizer = hexAlign.getHexPos();
+            if(PosToTurnToByLocalizer  == null){
+                fucked = true;
+                return;
+            }
             diff[0] = PosToTurnToByLocalizer.getX() - Chassis.getInstance().getLocation().getX();
             diff[1] = PosToTurnToByLocalizer.getY() - Chassis.getInstance().getLocation().getY();
-
-            fuck = true;
-            return;
         }
         turn = new TurnToAngle(Math.toDegrees(Chassis.getInstance().getAngle() - Math.atan(diff[0]/diff[1])),3,1, maxV, maxA, power);
         turn.initialize();
@@ -73,7 +68,7 @@ public class TurnToVision extends GBCommand {
 
     @Override
     public void end(boolean interupted){
-        if(fuck) return;
+        if(fucked) return;
         turn.end(interupted);
     }
 }

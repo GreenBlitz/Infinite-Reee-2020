@@ -78,6 +78,10 @@ public class RobotMap {
 
             public static final double VISION_CAM_X_DIST_CENTER  = 0.0;
 
+            public static final double SHOOTER_X_DIST_CENTER = 0.0;
+
+            public static final double SHOOTER_Y_DIST_CENTER = 0.0;
+
 
         }
 

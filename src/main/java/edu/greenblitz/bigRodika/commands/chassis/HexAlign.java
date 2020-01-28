@@ -21,18 +21,21 @@ public class HexAlign extends GBCommand {
     private ThreadedCommand cmd;
     private double k = 0.2;
     private double r = 2; //radius
-    private Point hexPos;
+    private Point globHexPos;
     private boolean fucked = false;
     private double driveTolerance = 0.3;
-    private double tolarance = 0.05;
+    private double tolerance = 0.05;
     private List<Double> radsAndCritPoints;//crit point - radius - crit - radius - crit .... - radius
+    private double endAng;
 
     public HexAlign(double r, double k) {
+        super(Chassis.getInstance());
         this.k = k;
         this.r = r;
     }
 
     public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance) {
+        super(Chassis.getInstance());
         this.radsAndCritPoints = radsAndCritPoints;
         this.k = k;
         this.driveTolerance = driveTolerance;
@@ -43,7 +46,7 @@ public class HexAlign extends GBCommand {
     }
 
     public Point getHexPos() {
-        return hexPos;
+        return globHexPos;
     }
 
     @Override
@@ -61,6 +64,8 @@ public class HexAlign extends GBCommand {
         double radCenter = new Point(difference[0] + RobotMap.BigRodika.Chassis.VISION_CAM_X_DIST_CENTER,
                 difference[1] + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER).norm();
 
+        SmartDashboard.putNumber("radCenter" , radCenter);
+
         if (radsAndCritPoints != null) {
             if (radCenter < radsAndCritPoints.get(0)) {
                 fucked = true;
@@ -68,20 +73,23 @@ public class HexAlign extends GBCommand {
             }
             r = radsAndCritPoints.get(radsAndCritPoints.size() - 1);
             for (int i = 0; i < radsAndCritPoints.size() - 1; i++) {
-                if (radCenter < radsAndCritPoints.get(i + 1) && i >= radsAndCritPoints.get(i)) {
+                if (radCenter < radsAndCritPoints.get(i + 1) + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER  && radCenter >= radsAndCritPoints.get(i) + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER) {
                     r = radsAndCritPoints.get((i + 1) - i % 2);
                     break;
                 }
             }
         }
 
-        double desRadCenter = r + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER;//TODO This is inaccurate, if cam is not in the middle of the X dir of the robot we are screwed
+        SmartDashboard.putNumber("rds", r);
+
+        double desRadCenter = r + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER;
+        //TODO This is inaccurate, if cam is not in the middle of the X dir of the robot we are screwed
         double errRadCenter = Math.abs(radCenter - desRadCenter);
 
         SmartDashboard.putNumber("errRadCenter", errRadCenter);
         //can be done without all of this definitions, just so the code would be readable
 
-        if (errRadCenter < tolarance) {
+        if (errRadCenter < tolerance) {
             fucked = true;
             return;
         }
@@ -98,7 +106,9 @@ public class HexAlign extends GBCommand {
         double relAng = Math.atan(targetX / targetY);
         double absAng = Chassis.getInstance().getAngle();
 
-        hexPos = new Point(targetX, targetY).rotate(-absAng);
+        Point hexPos = new Point(targetX, targetY).rotate(-absAng);
+
+        globHexPos = hexPos.translate(Chassis.getInstance().getLocation().getX(),Chassis.getInstance().getLocation().getY());
 
         SmartDashboard.putString("hex", hexPos.toString());
         System.err.println("hex " + hexPos.toString());
@@ -124,10 +134,9 @@ public class HexAlign extends GBCommand {
                 hexPos.getY() - r * Math.sin(angle),
                 -(Math.PI / 2 - angle));
 
+        endAng = -endState.getAngle();
 
-         if(errRadCenter < driveTolerance){
-         endState.setAngle(startState.getAngle());
-         }
+        if(errRadCenter < driveTolerance) endState.setAngle(startState.getAngle());
 
         List<State> path = new ArrayList<>();
         path.add(startState);
@@ -138,7 +147,7 @@ public class HexAlign extends GBCommand {
 
         ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
 
-        boolean reverse  =   Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
+        boolean reverse = Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
 
         if(reverse){
             endState.setAngle(endState.getAngle() + Math.PI);
@@ -151,7 +160,7 @@ public class HexAlign extends GBCommand {
                 data,
                 0.7, 1, 1,
                 new PIDObject(0.8 / data.getMaxLinearVelocity(), 0, 6 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
-                new PIDObject(0*0.5 / data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
+                new PIDObject(0.5 / data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
                 reverse);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
@@ -164,9 +173,6 @@ public class HexAlign extends GBCommand {
     @Override
     public void end(boolean interupted) {
         if (!fucked) cmd.end(interupted);
-        long time = System.currentTimeMillis();
-        while (System.currentTimeMillis() < time + 500) {
-        }
     }
 
     @Override
