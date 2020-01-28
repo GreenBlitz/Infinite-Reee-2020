@@ -1,4 +1,4 @@
-package edu.greenblitz.bigRodika.commands.chassis;
+package edu.greenblitz.bigRodika.commands.chassis.locazlier;
 
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 
