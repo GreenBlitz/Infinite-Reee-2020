@@ -1,4 +1,4 @@
-package edu.greenblitz.bigRodika.commands.chassis;
+package edu.greenblitz.bigRodika.commands.chassis.driver;
 
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.command.GBCommand;

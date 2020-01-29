@@ -1,6 +1,8 @@
-package edu.greenblitz.bigRodika.commands.chassis;
+package edu.greenblitz.bigRodika.commands.chassis.turns;
 
-
+import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
+import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Position;
 import org.greenblitz.motion.profiling.ActuatorLocation;
@@ -79,12 +81,7 @@ public class TurnToAngle extends ChassisCommand {
         double err = Math.toDegrees(chassis.getAngle() - end.getX());
         SmartDashboard.putNumber("Final Error", err);
         if (Math.abs(err) > 2 && !interrupted) {
-            double normalize = 1.0;
-            double newLocP = locP * normalize;
-            double newVelP = velP * normalize;
-            double newMaxV = maxV * normalize;
-            double newMaxA = maxA * normalize;
-            new TurnToAngle(Math.toDegrees(end.getX()), newLocP, newVelP, newMaxV, newMaxA, power).schedule();
+            new ThreadedCommand(new DelicateTurn(end.getX()), Chassis.getInstance());
         }
     }
 

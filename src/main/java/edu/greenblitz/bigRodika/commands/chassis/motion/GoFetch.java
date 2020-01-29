@@ -2,12 +2,9 @@ package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
-import edu.greenblitz.bigRodika.commands.chassis.LocalizerCommand;
-import edu.greenblitz.bigRodika.commands.chassis.ThreadedCommandLocalizer;
+import edu.greenblitz.bigRodika.commands.chassis.locazlier.ThreadedCommandLocalizer;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
-import edu.greenblitz.gblib.command.GBCommand;
-import edu.greenblitz.gblib.threading.ThreadedCommand;
 import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
