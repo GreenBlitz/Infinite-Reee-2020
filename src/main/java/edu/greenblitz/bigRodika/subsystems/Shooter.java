@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.gblib.encoder.SparkEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.pid.PIDObject;
@@ -61,5 +62,6 @@ public class Shooter implements Subsystem {
 
     @Override
     public void periodic() {
+
     }
 }

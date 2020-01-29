@@ -5,7 +5,13 @@ import edu.greenblitz.bigRodika.commands.chassis.profiling.AdaptiveProfilingPurs
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
+import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
+import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
+import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
+import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
+import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
+import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Shifter;
 import edu.greenblitz.gblib.hid.SmartJoystick;
@@ -35,29 +41,15 @@ public class OI {
     }
 
     private void initTestButtons(){
-        mainJoystick.A.whenPressed(new CheckMaxRot(0.7));
-        mainJoystick.X.whenPressed(new CheckMaxLin(0.7));
 
-        ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
+        mainJoystick.A.whileHeld(new ShootByConstant(0.5));
+        mainJoystick.A.whenReleased(new StopShooter());
 
-        mainJoystick.Y.whenPressed(new ThreadedCommand(
-                new AdaptiveProfilingPursuitController(() -> {
-                    Point ref = new Point(0, 2);
-                    return new State(ref);
-                },
-                        AdaptiveProfilingPursuitController.TargetMode.RELATIVE_TO_LOCALIZER, 0, data,
-                        0.7,
-                        new PIDObject(0.8/data.getMaxLinearVelocity(), 0, 25/data.getMaxLinearAccel()),
-                        .01*data.getMaxLinearVelocity(),
-                        new PIDObject(0.5/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()),
-                        .01*data.getMaxAngularVelocity(),
-                        false),
+        mainJoystick.B.whileHeld(new PushByConstant(0.5));
+        mainJoystick.B.whenReleased(new StopPusher());
 
-                Chassis.getInstance())
-        );
-
-        mainJoystick.B.whenPressed(new HexAlign());
-        mainJoystick.L3.whenPressed(new ToggleShift());
+        mainJoystick.Y.whileHeld(new InsertByConstant(0.5));
+        mainJoystick.Y.whenReleased(new StopInserter());
 
     }
 
