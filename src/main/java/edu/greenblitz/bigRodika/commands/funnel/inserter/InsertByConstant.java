@@ -1,6 +1,6 @@
 package edu.greenblitz.bigRodika.commands.funnel.inserter;
 
-public class InsertByConstant extends InserterCommand {
+public class InsertByConstant extends shootingMethod {
 
     private double power;
 

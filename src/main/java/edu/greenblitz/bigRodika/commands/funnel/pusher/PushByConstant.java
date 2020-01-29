@@ -1,7 +1,5 @@
 package edu.greenblitz.bigRodika.commands.funnel.pusher;
 
-import edu.greenblitz.bigRodika.commands.funnel.inserter.InserterCommand;
-
 public class PushByConstant extends PusherCommand {
 
     private double power;

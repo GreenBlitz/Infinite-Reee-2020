@@ -1,9 +1,7 @@
 package edu.greenblitz.bigRodika.commands.shooter;
 
-import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
-import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
@@ -63,7 +61,7 @@ public class PIDShoot extends GBCommand {
         double sum = totalSum();
         double error = this.vel - Shooter.getInstance().getShooterSpeed();
         double out = error * Kp + sum * Ki + Ff;
-        Shooter.getInstance().setPower(out);
+        Shooter.getInstance().shoot(out);
         if (this.recentSum() < 0.2) {
             this.end2 = this.speeds.size() - 1;
         }
@@ -76,8 +74,8 @@ public class PIDShoot extends GBCommand {
         double error = this.vel - Shooter.getInstance().getShooterSpeed();
         double d = this.acc;
         double out = error * Kp + d * Kd + stage2Int() * Ki + Ff;
-        Shooter.getInstance().setPower(1);
-        Shooter.getInstance().setPower(out);
+        Shooter.getInstance().shoot(1);
+        Shooter.getInstance().shoot(out);
     }
 
     public double recentSum() {

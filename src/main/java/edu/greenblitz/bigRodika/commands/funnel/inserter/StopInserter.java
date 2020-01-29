@@ -1,6 +1,6 @@
 package edu.greenblitz.bigRodika.commands.funnel.inserter;
 
-public class StopInserter extends InserterCommand {
+public class StopInserter extends shootingMethod {
 
     @Override
     public void initialize() {

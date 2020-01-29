@@ -2,7 +2,7 @@ package edu.greenblitz.bigRodika.commands.funnel.inserter;
 
 import org.greenblitz.motion.pid.PIDObject;
 
-public class InsertByPID extends InserterCommand {
+public class InsertByPID extends shootingMethod {
 
     protected static final int PID_INDEX = 0;
     protected double target;

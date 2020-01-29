@@ -1,6 +1,7 @@
-package edu.greenblitz.bigRodika.commands.funnel.pusher;
+package edu.greenblitz.bigRodika.commands.shooter;
 
 import edu.greenblitz.bigRodika.commands.funnel.inserter.shootingMethod;
+import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -8,13 +9,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public class PushUntil extends SequentialCommandGroup {
+public class ShootUntil extends SequentialCommandGroup {
 
 
-    public PushUntil(@NotNull shootingMethod pushMethod, @NotNull Supplier<Boolean> endCondition){
+    public ShootUntil(@NotNull shootingMethod pushMethod, @NotNull Supplier<Boolean> endCondition){
 
         if (pushMethod.isFinished()){
-            throw new RuntimeException("Insertion method must never finish");
+            throw new RuntimeException("Shooting method must never finish");
         }
 
         GBCommand endConditionCommand = new GBCommand() {
@@ -24,7 +25,7 @@ public class PushUntil extends SequentialCommandGroup {
             }
         };
 
-        addCommands(new ParallelRaceGroup(pushMethod, endConditionCommand), new StopPusher());
+        addCommands(new ParallelRaceGroup(pushMethod, endConditionCommand), new StopShooter());
     }
 
 }
