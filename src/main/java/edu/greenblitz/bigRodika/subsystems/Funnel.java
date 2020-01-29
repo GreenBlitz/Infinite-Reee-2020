@@ -114,7 +114,7 @@ public class Funnel {
     }
 
     public Pusher getPusher() {
-        return getPusher();
+        return pusher;
     }
 
 }

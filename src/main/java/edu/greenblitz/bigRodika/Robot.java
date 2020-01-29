@@ -13,30 +13,30 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         CommandScheduler.getInstance().enable();
 
-        Pneumatics.init();
-        Shifter.init();
+//        Pneumatics.init();
+//        Shifter.init();
         Funnel.init();
         Shooter.init();
-        Chassis.init(); // Must be last!
+//        Chassis.init(); // Must be last!
 
         OI.getInstance();
 
 
-        VisionMaster.getInstance();
+//        VisionMaster.getInstance();
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        VisionMaster.getInstance().update();
+//        VisionMaster.getInstance().update();
     }
 
     @Override
     public void teleopInit() {
-        Chassis.getInstance().toBrake();
-        Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
+//        Chassis.getInstance().toBrake();
+//        Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
 
-        new LocalizerCommandRunner().schedule();
+//        new LocalizerCommandRunner().schedule();
 
     }
 }

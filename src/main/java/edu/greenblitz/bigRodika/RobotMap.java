@@ -78,17 +78,16 @@ public class RobotMap {
         }
 
         public static class Shooter {
-            public static final int PORT = 0;
+            public static final int PORT = 5;
             // This must be the same for power and speed cause they have no meaning here.
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
                                                                                                 1.0);
-            public static final boolean IS_INVERTED = false;
+            public static final boolean IS_INVERTED = true;
         }
 
         public static class Funnel {
 
             public static class Encoder {
-                public static final int PORT = 0;
                 // This must be the same for power and speed cause they have no meaning here.
                 public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
                                                                                                     1.0);
@@ -96,8 +95,8 @@ public class RobotMap {
 
             public static class Motors {
 
-                public static final int INSERTER_PORT = 0;
-                public static final int PUSHER_PORT = 0;
+                public static final int INSERTER_PORT = 10;
+                public static final int PUSHER_PORT = 12;
 
             }
 

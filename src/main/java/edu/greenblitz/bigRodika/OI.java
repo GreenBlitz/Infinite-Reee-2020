@@ -42,7 +42,7 @@ public class OI {
 
     private void initTestButtons(){
 
-        mainJoystick.A.whileHeld(new ShootByConstant(0.5));
+        mainJoystick.A.whileHeld(new ShootByConstant(0.2));
         mainJoystick.A.whenReleased(new StopShooter());
 
         mainJoystick.B.whileHeld(new PushByConstant(0.5));
