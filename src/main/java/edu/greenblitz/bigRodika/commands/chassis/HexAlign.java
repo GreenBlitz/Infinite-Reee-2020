@@ -15,7 +15,7 @@ import org.greenblitz.motion.profiling.ProfilingData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HexAlign extends GBCommand {
+public class HexAlign extends ChassisCommand {
 
     private Follow2DProfileCommand prof;
     private double k = 0.2;

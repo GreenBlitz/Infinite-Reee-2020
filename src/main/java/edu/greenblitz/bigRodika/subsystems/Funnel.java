@@ -1,58 +1,56 @@
 package edu.greenblitz.bigRodika.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.BaseTalonPIDSetConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.bigRodika.commands.PIDFeed;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
-import edu.greenblitz.gblib.gears.GearDependentValue;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Funnel implements Subsystem {
     private static Funnel instance;
 
-    private TalonSRX m_funnel, m_feed;
-    private TalonEncoder m_encoder;
-    private BaseTalonPIDSetConfiguration m_pid;
+    /**
+     * The pusher is the motor in the funnel that pulls the balls from the outer parts of the funnel to the
+     * inner parts of the funnel (This motor moves 3 "PVC" pipes and has no encoders).
+     * The inserter inserts the motors into the shooter. It powers a flywheel-like thingy and has an encoder.
+     */
+    private WPI_TalonSRX pusher, inserter;
+    private TalonEncoder inserterEncoder;
 
     private Funnel() {
-        this.m_funnel = new TalonSRX(RobotMap.BigRodika.Funnel.funnelPort);
-        this.m_feed = new TalonSRX(RobotMap.BigRodika.Funnel.feedPort);
-        GearDependentValue<Double> norm = new GearDependentValue<Double>(RobotMap.BigRodika.Funnel.Encoder.whenPower, RobotMap.BigRodika.Funnel.Encoder.whenSpeed);
-        this.m_encoder = new TalonEncoder(norm, this.m_feed);
-        //missing pid
+        pusher = new WPI_TalonSRX(RobotMap.BigRodika.Funnel.Motors.PUSHER_PORT);
+        inserter = new WPI_TalonSRX(RobotMap.BigRodika.Funnel.Motors.INSERTER_PORT);
+        inserterEncoder = new TalonEncoder(RobotMap.BigRodika.Funnel.Encoder.NORMALIZER, inserter);
+    }
+
+    public static void init(){
+        if (instance == null) {
+            instance = new Funnel();
+            CommandScheduler.getInstance().registerSubsystem(instance);
+        }
     }
 
     public static Funnel getInstance() {
-        if(instance == null) {
-            instance = new Funnel();
-            CommandScheduler.getInstance().registerSubsystem(instance);
-            instance.setDefaultCommand(
-                    new PIDFeed(instance, 0)
-            );
-
-        }
         return instance;
     }
 
-    public void setFeedVel(double vel) {
-        this.m_feed.set(ControlMode.Velocity, vel);
+    public void movePusher(double power) {
+        pusher.set(power);
     }
 
-    public void setFunnelVel(double vel) {
-        this.m_funnel.set(ControlMode.Velocity, vel);
-     }
-
-    public double getFunnelSpeed() {
-        return this.m_encoder.getNormalizedVelocity();
+    public void moveInserter(double power) {
+        inserter.set(power);
     }
 
+    public double getInserterSpeed() {
+        return inserterEncoder.getNormalizedVelocity();
+    }
+
+    public double getAbsoluteInserterSpeed(){
+        return Math.abs(getInserterSpeed());
+    }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Feed Speed:", this.m_encoder.getNormalizedVelocity());
     }
 }

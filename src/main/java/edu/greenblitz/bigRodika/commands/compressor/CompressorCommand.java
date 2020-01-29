@@ -7,9 +7,9 @@ public abstract class CompressorCommand extends GBCommand {
 
     protected Pneumatics compressor;
 
-    public CompressorCommand(Pneumatics cmprs){
-        super(cmprs);
-        compressor = cmprs;
+    public CompressorCommand(){
+        super(Pneumatics.getInstance());
+        compressor = Pneumatics.getInstance();
     }
 
 }

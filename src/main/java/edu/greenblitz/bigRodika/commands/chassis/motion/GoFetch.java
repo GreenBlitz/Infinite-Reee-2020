@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.commands.chassis.LocalizerCommand;
 import edu.greenblitz.bigRodika.commands.chassis.ThreadedCommandLocalizer;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
@@ -15,12 +16,11 @@ import org.greenblitz.motion.profiling.ProfilingData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoFetch extends GBCommand {
+public class GoFetch extends ChassisCommand {
 
     private Follow2DProfileCommand prof;
 
     public GoFetch(Point target, double angle) {
-        super(Chassis.getInstance());
         // should be gotten by the network tables
 
         List<State> locations = new ArrayList<>();
