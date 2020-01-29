@@ -1,7 +1,6 @@
 package edu.greenblitz.bigRodika.commands.chassis.driver;
 
-import edu.greenblitz.bigRodika.subsystems.Chassis;
-import edu.greenblitz.gblib.command.GBCommand;
+import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 
 public class ArcadeDrive extends ChassisCommand {

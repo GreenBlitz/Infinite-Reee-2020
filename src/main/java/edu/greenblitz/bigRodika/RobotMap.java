@@ -9,6 +9,7 @@ import java.util.HashMap;
 public class RobotMap {
 
     public static class BigRodika {
+
         public static class Joystick {
             public static final int MAIN = 0;
         }

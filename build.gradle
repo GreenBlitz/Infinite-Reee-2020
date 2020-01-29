@@ -49,6 +49,8 @@ dependencies {
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 
+    compile 'org.jetbrains:annotations:16.0.2'
+
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio) 
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
     // Optional lines, adds common robot code libraries to the project
@@ -79,8 +81,5 @@ test {
 
 wrapper{
     gradleVersion = '5.6'
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> dev
+

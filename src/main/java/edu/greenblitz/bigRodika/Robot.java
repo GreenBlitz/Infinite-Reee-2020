@@ -1,11 +1,11 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
-import edu.greenblitz.bigRodika.subsystems.Chassis;
-import edu.greenblitz.bigRodika.subsystems.Pneumatics;
-import edu.greenblitz.bigRodika.subsystems.Shifter;
+import edu.greenblitz.bigRodika.subsystems.*;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import org.greenblitz.motion.Localizer;
 
 public class Robot extends TimedRobot {
 
@@ -15,26 +15,28 @@ public class Robot extends TimedRobot {
 
         Pneumatics.init();
         Shifter.init();
+        Funnel.init();
+        Shooter.init();
         Chassis.init(); // Must be last!
 
         OI.getInstance();
 
 
-//        VisionMaster.getInstance();
+        VisionMaster.getInstance();
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-//        VisionMaster.getInstance().update();
+        VisionMaster.getInstance().update();
     }
 
     @Override
     public void teleopInit() {
         Chassis.getInstance().toBrake();
+        Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
 
         new LocalizerCommandRunner().schedule();
-//        new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()).schedule();
 
     }
 }

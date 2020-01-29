@@ -57,9 +57,8 @@ public class OI {
         );
 
         mainJoystick.B.whenPressed(new HexAlign());
-        mainJoystick.L3.whenPressed(new ToggleShift(Shifter.getInstance()));
-//        mainJoystick.B.whenPressed(new TurnToVision());
-//        mainJoystick.L3.whenPressed(new ToggleShift(Shifter.getInstance()));
+        mainJoystick.L3.whenPressed(new ToggleShift());
+
     }
 
     private void initOfficalButtons(){

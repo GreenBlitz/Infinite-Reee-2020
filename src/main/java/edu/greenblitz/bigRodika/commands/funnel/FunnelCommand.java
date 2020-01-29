@@ -8,7 +8,6 @@ public abstract class FunnelCommand extends GBCommand {
     protected Funnel funnel;
 
     public FunnelCommand(){
-        super(Funnel.getInstance());
         funnel = Funnel.getInstance();
     }
 
