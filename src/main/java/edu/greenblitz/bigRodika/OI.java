@@ -10,6 +10,7 @@ import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
+import edu.greenblitz.bigRodika.commands.shooter.FullShoot;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
@@ -41,6 +42,8 @@ public class OI {
     }
 
     private void initTestButtons(){
+
+        mainJoystick.X.whileHeld(new FullShoot(1000));
 
         mainJoystick.A.whileHeld(new ShootByConstant(0.2));
         mainJoystick.A.whenReleased(new StopShooter());

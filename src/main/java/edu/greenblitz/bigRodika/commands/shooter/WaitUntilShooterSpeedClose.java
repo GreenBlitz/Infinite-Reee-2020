@@ -6,15 +6,16 @@ import edu.greenblitz.gblib.command.GBCommand;
 
 public class WaitUntilShooterSpeedClose extends GBCommand {
     private double wantedVel;
-    private final double EPSILON = 0.15;
+    private double error;
 
 
-    public WaitUntilShooterSpeedClose(double vel){
+    public WaitUntilShooterSpeedClose(double vel, double error){
+        this.error = error;
         this.wantedVel = vel;
     }
 
     @Override
     public boolean isFinished() {
-        return (wantedVel - Shooter.getInstance().getShooterSpeed()<=EPSILON);
+        return (wantedVel - Shooter.getInstance().getShooterSpeed()<=error);
     }
 }
