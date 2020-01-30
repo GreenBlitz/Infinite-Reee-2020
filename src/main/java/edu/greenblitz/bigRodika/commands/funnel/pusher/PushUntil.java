@@ -1,6 +1,6 @@
 package edu.greenblitz.bigRodika.commands.funnel.pusher;
 
-import edu.greenblitz.bigRodika.commands.funnel.inserter.shootingMethod;
+import edu.greenblitz.bigRodika.commands.funnel.inserter.ShootingMethod;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 public class PushUntil extends SequentialCommandGroup {
 
 
-    public PushUntil(@NotNull shootingMethod pushMethod, @NotNull Supplier<Boolean> endCondition){
+    public PushUntil(@NotNull ShootingMethod pushMethod, @NotNull Supplier<Boolean> endCondition){
 
         if (pushMethod.isFinished()){
             throw new RuntimeException("Insertion method must never finish");

@@ -4,15 +4,17 @@ import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
 
-public class WaitUntilAchivedVel extends GBCommand {
+public class WaitUntilShooterSpeedClose extends GBCommand {
     private double wantedVel;
+    private final double EPSILON = 0.15;
 
-    public WaitUntilAchivedVel(double vel){
+
+    public WaitUntilShooterSpeedClose(double vel){
         this.wantedVel = vel;
     }
 
     @Override
     public boolean isFinished() {
-        return(Math.abs(wantedVel - Shooter.getInstance().getShooterSpeed())<=0.15);
+        return (wantedVel - Shooter.getInstance().getShooterSpeed()<=EPSILON);
     }
 }
