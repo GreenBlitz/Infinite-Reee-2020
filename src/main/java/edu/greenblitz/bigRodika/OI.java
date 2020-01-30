@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika;
 import edu.greenblitz.bigRodika.commands.chassis.motion.GoFetch;
 import edu.greenblitz.bigRodika.commands.chassis.HexAlign;
 import edu.greenblitz.bigRodika.commands.chassis.TurnToVision;
+import edu.greenblitz.bigRodika.commands.chassis.motion.GoFetchLMP;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 
@@ -40,8 +41,7 @@ public class OI {
     }
 
     private void initTestButtons(){
-        mainJoystick.R1.whenPressed(new GoFetch());
-
+        mainJoystick.R1.whenPressed(new GoFetchLMP());
         mainJoystick.A.whenPressed(new CheckMaxRot(0.7));
         mainJoystick.X.whenPressed(new CheckMaxLin(0.7));
         mainJoystick.Y.whenPressed(new HexAlign());
