@@ -14,15 +14,17 @@ import org.greenblitz.motion.pid.PIDObject;
 public class Shooter implements Subsystem {
     private static Shooter instance;
 
+    private static final double TICKS_PER_REVOLUTION = 1;
+
     private CANSparkMax flywheel;
-    private SparkEncoder encoder;
+//    private SparkEncoder encoder;
 
     private Shooter() {
         flywheel = new CANSparkMax(RobotMap.BigRodika.Shooter.PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         flywheel.setInverted(RobotMap.BigRodika.Shooter.IS_INVERTED);
         flywheel.setIdleMode(CANSparkMax.IdleMode.kCoast);
-
-        encoder = new SparkEncoder(RobotMap.BigRodika.Shooter.NORMALIZER, flywheel);
+        flywheel.getEncoder().setVelocityConversionFactor(TICKS_PER_REVOLUTION);
+//        encoder = new SparkEncoder(RobotMap.BigRodika.Shooter.NORMALIZER, flywheel);
     }
 
     public static void init(){
@@ -54,15 +56,23 @@ public class Shooter implements Subsystem {
 
 
     public double getShooterSpeed() {
-        return this.encoder.getNormalizedVelocity();
+        return flywheel.getEncoder().getVelocity();
     }
 
     public double getAbsoluteShooterSpeed(){
         return Math.abs(getShooterSpeed());
     }
 
+    public void resetEncoder(){
+        flywheel.getEncoder().setPosition(0);
+    }
+
     @Override
     public void periodic() {
 
+    }
+
+    public void update(){
+        SmartDashboard.putNumber("Shooter::Encoder", flywheel.getEncoder().getPosition());
     }
 }

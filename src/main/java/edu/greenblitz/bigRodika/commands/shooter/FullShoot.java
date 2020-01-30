@@ -11,9 +11,8 @@ public class FullShoot extends SequentialCommandGroup {
 
     public FullShoot(double targetSpeed) {
 
-        PIDObject stage2Pid = new PIDObject(0, 0, 0);
-        PIDObject stage3Pid = new PIDObject(0, 0, 0);
-
+        PIDObject stage2Pid = new PIDObject(0.01, 0, 0);
+        PIDObject stage3Pid = new PIDObject(0.01, 0, 0);
         addCommands(new ParallelRaceGroup(new ShootByConstant(1), new WaitUntilShooterSpeedClose(targetSpeed,MAX_ERROR_STAGE_1)),
                 new SetUpTargetSpeed(stage2Pid, targetSpeed, MAX_ERROR_STAGE_2, STABLE_TIME),
                 new ShootBySimplePid(stage3Pid, targetSpeed));
