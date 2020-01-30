@@ -52,6 +52,7 @@ public class Shooter implements Subsystem {
         controller.setFF(obj.getKf());
     }
 
+
     public double getShooterSpeed() {
         return this.encoder.getNormalizedVelocity();
     }
