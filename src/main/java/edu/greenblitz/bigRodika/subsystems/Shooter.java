@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.gblib.encoder.SparkEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -20,6 +19,7 @@ public class Shooter implements Subsystem {
 //    private SparkEncoder encoder;
 
     private Shooter() {
+        System.out.println("Created shooter!");
         flywheel = new CANSparkMax(RobotMap.BigRodika.Shooter.PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         flywheel.setInverted(RobotMap.BigRodika.Shooter.IS_INVERTED);
         flywheel.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -39,6 +39,7 @@ public class Shooter implements Subsystem {
     }
 
     public void shoot(double power) {
+        SmartDashboard.putNumber("Shooter::power", power);
         this.flywheel.set(power);
     }
 
@@ -69,7 +70,9 @@ public class Shooter implements Subsystem {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shooter::Encoder", flywheel.getEncoder().getPosition());
+        SmartDashboard.putNumber("Shooter::Position", flywheel.getEncoder().getPosition());
+        SmartDashboard.putNumber("Shooter::Velocity", flywheel.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Shooter::output", flywheel.getAppliedOutput());
     }
 
 }

@@ -17,6 +17,11 @@ public class SetUpTargetSpeed extends ShootBySimplePid {
         this.target = target;
     }
 
+    @Override
+    public void initialize() {
+        System.out.println("Started set up target speed");
+    }
+
     private boolean isOnTarget(){
         return Math.abs(Shooter.getInstance().getShooterSpeed() - target) <= maxError;
     }

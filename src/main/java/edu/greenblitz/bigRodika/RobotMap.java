@@ -78,7 +78,7 @@ public class RobotMap {
         }
 
         public static class Shooter {
-            public static final int PORT = 5;
+            public static final int PORT = 6;
             // This must be the same for power and speed cause they have no meaning here.
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
                                                                                                 1.0);

@@ -14,6 +14,7 @@ public class ShootBySimplePid extends ShooterCommand {
 
     @Override
     public void initialize() {
+        System.out.println("Started shoot by simple pid");
         shooter.setPIDConsts(obj);
     }
 

@@ -9,6 +9,11 @@ public class ShootByConstant extends ShooterCommand {
     }
 
     @Override
+    public void initialize() {
+        System.out.println("Started Shoot By Constant");
+    }
+
+    @Override
     public void execute() {
         shooter.shoot(power);
     }
