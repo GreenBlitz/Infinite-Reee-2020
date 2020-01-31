@@ -42,17 +42,28 @@ public class OI {
         /*
         mainJoystick.X.whileHeld(new FullShoot(3000));
         mainJoystick.X.whenReleased(new StopShooter());
-
+        /*
         mainJoystick.A.whileHeld(new ShootByConstant(0.8));
         mainJoystick.A.whenReleased(new StopShooter());
-
-        mainJoystick.B.whileHeld(new PushByConstant(0.5));
-        mainJoystick.B.whenReleased(new StopPusher());
+        */
+        mainJoystick.A.whileHeld(new PushByConstant(0.5));
+        mainJoystick.A.whenReleased(new StopPusher());
 
         mainJoystick.Y.whileHeld(new InsertByConstant(0.8));
         mainJoystick.Y.whenReleased(new StopInserter());
-        */
 
+
+        /*
+        mainJoystick.A.whenPressed(new CheckMaxRot(0.5));
+        mainJoystick.START.whenPressed(new CheckMaxLin(0.5));
+        mainJoystick.X.whenPressed(new PreShoot());
+        mainJoystick.Y.whenPressed(new HexAlign());
+        mainJoystick.R1.whenPressed(new TurnToAngle(90, 5, 1, 2.1, 10, 0.4, false));
+        */
+        mainJoystick.B.whenPressed(new TurnToVision(VisionMaster.Algorithm.HEXAGON,RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.4").getMaxAngularVelocity(),RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5").getMaxAngularAccel(),0.5));
+        mainJoystick.R1.whenPressed(new PreShoot());
+        //mainJoystick.B.whenPressed(new TurnToAngle(
+        //      0,5,1,2.1, 10, 0.4));
 
     }
 

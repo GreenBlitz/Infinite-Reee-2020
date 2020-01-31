@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.commands.chassis;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.utils.VisionLocation;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,7 +20,7 @@ public class HexAlign extends ChassisCommand {
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
     private double k = 0.2;
-    private double r = 3.7; //radius
+    private double r = 4.2; //radius
     private Point globHexPos;
     private boolean fucked = false;
     private double driveTolerance = 0.3;
@@ -50,8 +51,9 @@ public class HexAlign extends ChassisCommand {
     public void initialize() {
         State startState = new State(0, 0, -Chassis.getInstance().getAngle());
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
-
-        double[] difference = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
+        VisionLocation location = VisionMaster.getInstance().getVisionLocation();
+        System.out.println("Vision Location: " + location);
+        double[] difference = location.toDoubleArray();
 
         if (!VisionMaster.getInstance().isLastDataValid()) {
             fucked = true;
@@ -160,7 +162,7 @@ public class HexAlign extends ChassisCommand {
         prof = new Follow2DProfileCommand(path,
                 .001, 800,
                 data,
-                0.7, 1, 1,
+                0.5, 1, 1,
                 new PIDObject(0.8 / data.getMaxLinearVelocity(), 0, 6 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
                 new PIDObject(0.5 / data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
                 reverse);

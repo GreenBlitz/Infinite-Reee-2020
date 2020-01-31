@@ -18,12 +18,13 @@ public class TurnToAngle extends ChassisCommand {
     private double power, locP, velP, maxV, maxA;
     private long t0;
     private boolean allowRedo;
+    private double maxError;
 
     private int overCount;
 
     public TurnToAngle(double angleToTurnDeg, double locP, double velP,
                        double maxV, double maxA,
-                       double power, boolean allowRedo) {
+                       double power, boolean allowRedo, double maxError) {
         this.locP = locP;
         this.velP = velP;
         this.maxA = maxA;
@@ -31,6 +32,7 @@ public class TurnToAngle extends ChassisCommand {
         this.power = power;
         this.end = new ActuatorLocation(Math.toRadians(angleToTurnDeg), 0);
         this.allowRedo = allowRedo;
+        this.maxError = maxError;
     }
 
     @Override
@@ -83,7 +85,7 @@ public class TurnToAngle extends ChassisCommand {
     public void end(boolean interrupted) {
         double err = Math.toDegrees(chassis.getAngle() - end.getX());
         SmartDashboard.putNumber("Final Error", err);
-        if (Math.abs(err) > 2 && !interrupted && allowRedo) {
+        if (Math.abs(err) > maxError && !interrupted && allowRedo) {
             new ThreadedCommand(new DelicateTurn(end.getX()), Chassis.getInstance()).schedule();
         }
     }

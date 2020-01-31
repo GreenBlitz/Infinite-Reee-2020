@@ -76,6 +76,7 @@ public class Chassis implements Subsystem {
 //        rightEncoder.invert(true);
 
         gyroscope = new PigeonGyro(new PigeonIMU(rightTalon));   // chassis
+//        gyroscope.inverse();
 //        gyroscope = new NavxGyro(new AHRS(SerialPort.Port.kUSB));  //big-haim
 //        gyroscope.inverse();
 
@@ -199,6 +200,7 @@ public class Chassis implements Subsystem {
         SmartDashboard.putNumber("Chassis::rawEncoderRight", rightEncoder.getRawTicks());
         SmartDashboard.putNumber("Chassis::rawEncoderLeft", leftEncoder.getRawTicks());
         SmartDashboard.putString("Chassis::currentCommand", getCurrentCommand() == null? "null": getCurrentCommand().getName());
+        SmartDashboard.putNumber("Gyro::angle", gyroscope.getNormalizedYaw());
     }
 
     public void resetEncoders(){
