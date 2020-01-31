@@ -4,6 +4,7 @@ import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunne
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.greenblitz.motion.Localizer;
 
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         VisionMaster.getInstance().update();
+
     }
 
     @Override
@@ -36,7 +38,8 @@ public class Robot extends TimedRobot {
         Chassis.getInstance().toBrake();
         Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
 
-        new LocalizerCommandRunner().schedule();
+        Shooter.getInstance().resetEncoder();
 
+        new LocalizerCommandRunner().schedule();
     }
 }
