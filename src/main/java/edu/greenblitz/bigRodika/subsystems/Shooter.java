@@ -23,7 +23,7 @@ public class Shooter implements Subsystem {
         flywheel = new CANSparkMax(RobotMap.BigRodika.Shooter.PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         flywheel.setInverted(RobotMap.BigRodika.Shooter.IS_INVERTED);
         flywheel.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        flywheel.getEncoder().setVelocityConversionFactor(TICKS_PER_REVOLUTION);
+//        flywheel.getEncoder().setVelocityConversionFactor(TICKS_PER_REVOLUTION);
 //        encoder = new SparkEncoder(RobotMap.BigRodika.Shooter.NORMALIZER, flywheel);
     }
 
@@ -44,15 +44,15 @@ public class Shooter implements Subsystem {
     }
 
     public void setSpeedByPID(double target){
-        flywheel.getPIDController().setReference(target, ControlType.kVelocity);
+//        flywheel.getPIDController().setReference(target, ControlType.kVelocity);
     }
 
     public void setPIDConsts(PIDObject obj) {
-        CANPIDController controller = flywheel.getPIDController();
-        controller.setP(obj.getKp());
-        controller.setI(obj.getKi());
-        controller.setD(obj.getKd());
-        controller.setFF(obj.getKf());
+//        CANPIDController controller = flywheel.getPIDController();
+//        controller.setP(obj.getKp());
+//        controller.setI(obj.getKi());
+//        controller.setD(obj.getKd());
+//        controller.setFF(obj.getKf());
     }
 
 
@@ -75,4 +75,7 @@ public class Shooter implements Subsystem {
         SmartDashboard.putNumber("Shooter::output", flywheel.getAppliedOutput());
     }
 
+    public CANPIDController getPIDController() {
+        return flywheel.getPIDController();
+    }
 }
