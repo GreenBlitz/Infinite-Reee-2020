@@ -17,39 +17,128 @@ import java.util.List;
 public class HexAlign extends ChassisCommand {
 
     private Follow2DProfileCommand prof;
+    private ThreadedCommand cmd;
     private double k = 0.2;
-    private double r = 7; //radius
-    boolean fuck = false;
+    private double r = 3.7; //radius
+    private Point globHexPos;
+    private boolean fucked = false;
+    private double driveTolerance = 0.3;
+    private double tolerance = 0.05;
+    private List<Double> radsAndCritPoints;//crit point - radius - crit - radius - crit .... - radius
+    private double endAng;
 
-    public HexAlign(double r, double k){
+    public HexAlign(double r, double k) {
         this.k = k;
         this.r = r;
     }
-    public HexAlign(){
 
+    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance) {
+        this.radsAndCritPoints = radsAndCritPoints;
+        this.k = k;
+        this.driveTolerance = driveTolerance;
+    }
+
+    public HexAlign() {
+        super();
+    }
+
+    public Point getHexPos() {
+        return globHexPos;
     }
 
     @Override
-    public void initialize(){
-        State startState = new State(Chassis.getInstance().getLocation(), -Chassis.getInstance().getAngle());
+    public void initialize() {
+        State startState = new State(0, 0, -Chassis.getInstance().getAngle());
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
+
         double[] difference = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
-        if(!VisionMaster.getInstance().isLastDataValid()) {
-            fuck = true;
+
+        if (!VisionMaster.getInstance().isLastDataValid()) {
+            fucked = true;
             return;
         }
-        double targetX = difference[0];
+
+        double targetX = difference[0] + RobotMap.BigRodika.Chassis.VISION_CAM_X_DIST_CENTER;
         double targetY = difference[1];
+
+        double cam_y =  RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER;
+
+        double radCenter = new Point(targetX,
+                targetY + cam_y).norm();
+
+        if (radsAndCritPoints != null) {
+            if (radCenter < radsAndCritPoints.get(0) + cam_y) {
+                fucked = true;
+                return;
+            }
+            r = radsAndCritPoints.get(radsAndCritPoints.size() - 1);
+            for (int i = 0; i < radsAndCritPoints.size() - 1; i++) {
+                if (radCenter < radsAndCritPoints.get(i + 1) + cam_y && radCenter >= radsAndCritPoints.get(i) + cam_y) {
+                    r = radsAndCritPoints.get((i + 1) - i % 2);
+                    break;
+                }
+            }
+        }
+
+        SmartDashboard.putNumber("rds", r);
+
+        double desRadCenter = r + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER;
+        //TODO This is inaccurate, if cam is not in the middle of the X dir of the robot we are screwed
+        double errRadCenter = Math.abs(radCenter - desRadCenter);
+
+        SmartDashboard.putNumber("errRadCenter", errRadCenter);
+        //can be done without all of this definitions, just so the code would be readable
+
+        if (errRadCenter < tolerance) {
+            fucked = true;
+            return;
+        }
+
+        SmartDashboard.putBoolean("inDriveTol", errRadCenter < driveTolerance);
+
+        if (errRadCenter < driveTolerance) {
+            k = 1;
+        }
+
         //assume targetY != 0
-        double relAng = Math.atan(targetX/targetY);
+        double relAng = Math.atan(targetX / targetY);
         double absAng = Chassis.getInstance().getAngle();
 
-        Point hex = new Point(targetX*Math.cos(absAng) - targetY*Math.sin(absAng) + startState.getX(),targetY*Math.cos(absAng) + targetX*Math.sin(absAng) + startState.getY());
-        SmartDashboard.putString("hex", hex.toString());
-        System.err.println("hex " + hex.toString());
+        Point hexPos = new Point(targetX, targetY).rotate(-absAng);
 
-        double angle = (Math.abs(Math.sin(-relAng)*targetY/r) > 1) ? Math.PI/2 - absAng + relAng : Math.PI/2 - absAng + relAng - k*Math.asin(Math.sin(-relAng)*targetY/r);
-        State endState = new State(hex.getX() + r*Math.cos(angle), hex.getY() - r*Math.sin(angle), -(Math.PI / 2 - angle));
+        globHexPos = new Point(hexPos.getX() + Chassis.getInstance().getLocation().getX(),
+                hexPos.getY() + Chassis.getInstance().getLocation().getY());
+        SmartDashboard.putString("hex", hexPos.toString());
+        System.err.println("hex " + hexPos.toString());
+
+        double devConst = 1.5;
+        double angle;
+        if (Math.abs(targetX) > r) {
+            if (targetX < 0)
+                angle = (1 - k / devConst) * (Math.PI / 2 - absAng + relAng);
+            else
+                angle = (1 + k / devConst) * (Math.PI / 2 - absAng + relAng) - Math.PI * k / devConst;
+        } else {
+            angle = Math.PI / 2
+                    - absAng
+                    + relAng
+                    - k * Math.asin(
+                            Math.sin(-relAng) *
+                                    ((targetY - Math.sqrt(r * r - targetX * targetX)) / r)
+            );
+        }
+
+        State endState = new State(hexPos.getX() + r * Math.cos(angle),
+                hexPos.getY() - r * Math.sin(angle),
+                -(Math.PI / 2 - angle));
+
+        endState.translate(new Point(0, cam_y).rotate(-absAng)).translate(new Point (0,-cam_y).rotate(endState.getAngle()));
+
+        endAng = -endState.getAngle();
+
+         if(errRadCenter < driveTolerance){
+         endState.setAngle(startState.getAngle());
+         }
 
         List<State> path = new ArrayList<>();
         path.add(startState);
@@ -58,38 +147,39 @@ public class HexAlign extends ChassisCommand {
         SmartDashboard.putString("end", endState.toString());
         System.err.println("end" + endState.toString());
 
-        ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
+        ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5");
 
-/**
-        prof = new Follow2DProfileCommand(path,
-                .0002, 1000,
-                data,
-                0.7, 1, 1,
-                new PIDObject(0*data.getMaxLinearVelocity(), 0, 0*data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
-                new PIDObject(0*data.getMaxAngularVelocity(), 0, 0*data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
-                false);
-**/
+        boolean reverse  =   Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
+
+        if(reverse){
+            endState.setAngle(endState.getAngle() + Math.PI);
+            startState.setAngle(startState.getAngle() + Math.PI);
+        }
+
+
         prof = new Follow2DProfileCommand(path,
                 .001, 800,
                 data,
                 0.7, 1, 1,
-                new PIDObject(0.8/data.getMaxLinearVelocity(), 0, 25/data.getMaxLinearAccel()), .01*data.getMaxLinearVelocity(),
-                new PIDObject(0.5/data.getMaxAngularVelocity(), 0, 0/data.getMaxAngularAccel()), .01*data.getMaxAngularVelocity(),
-                false);
+                new PIDObject(0.8 / data.getMaxLinearVelocity(), 0, 6 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
+                new PIDObject(0.5 / data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
+                reverse);
+        cmd = new ThreadedCommand(prof);
+        cmd.initialize();
     }
 
     @Override
-    public void execute(){
+    public void execute() {
     }
 
     @Override
     public void end(boolean interupted) {
-        if(fuck) return;
-        new ThreadedCommand(prof, Chassis.getInstance()).schedule();
+        if (!fucked) cmd.end(interupted);
     }
 
     @Override
-    public boolean isFinished(){
-        return true;
+    public boolean isFinished() {
+        if (fucked) return true;
+        return cmd.isFinished();
     }
 }

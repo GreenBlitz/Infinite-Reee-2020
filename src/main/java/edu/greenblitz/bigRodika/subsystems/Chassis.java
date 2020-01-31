@@ -62,13 +62,14 @@ public class Chassis implements Subsystem {
 
 
         leftEncoder = new RoborioEncoder(
-                RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_TALON,
+                RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_LEFT,
                 RobotMap.BigRodika.Chassis.Encoder.LEFT_PORT_A,
                 RobotMap.BigRodika.Chassis.Encoder.LEFT_PORT_B);
         rightEncoder = new RoborioEncoder(
-                RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_TALON,
+                RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_RIGHT,
                 RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_A,
                 RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_B);   //chassis
+        leftEncoder.invert(true);
 //        leftEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
 //        leftEncoder.invert(true);
 //        rightEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
@@ -134,7 +135,7 @@ public class Chassis implements Subsystem {
     }
 
     public void arcadeDrive(double moveValue, double rotateValue) {
-        moveMotors(moveValue - rotateValue, moveValue + rotateValue);
+        moveMotors(moveValue + rotateValue, moveValue - rotateValue);
     }
 
     public double getLeftMeters(){
@@ -195,6 +196,14 @@ public class Chassis implements Subsystem {
         SmartDashboard.putNumber("Ang vel", gyroscope.getYawRate());
         SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
         SmartDashboard.putNumber("angle", Chassis.getInstance().getAngle());
+        SmartDashboard.putNumber("Chassis::rawEncoderRight", rightEncoder.getRawTicks());
+        SmartDashboard.putNumber("Chassis::rawEncoderLeft", leftEncoder.getRawTicks());
+        SmartDashboard.putString("Chassis::currentCommand", getCurrentCommand() == null? "null": getCurrentCommand().getName());
+    }
+
+    public void resetEncoders(){
+        rightEncoder.reset();
+        leftEncoder.reset();
     }
 
 }

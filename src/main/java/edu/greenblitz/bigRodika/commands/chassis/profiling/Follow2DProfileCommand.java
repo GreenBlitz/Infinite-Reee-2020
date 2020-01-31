@@ -90,7 +90,7 @@ public class Follow2DProfileCommand implements IThreadable {
 
         Vector2D vals = follower.run(mult * Chassis.getInstance().getLeftRate(),
                 mult * Chassis.getInstance().getRightRate(),
-                mult * Chassis.getInstance().getAngularVelocityByWheels()); // TODO test if this is mult or -mult
+                mult * Chassis.getInstance().getAngularVelocityByWheels());
 
         if (isOpp){
             vals = vals.scale(-1);
@@ -136,6 +136,7 @@ public class Follow2DProfileCommand implements IThreadable {
 
     @Override
     public void atEnd() {
+        System.out.println("Finished Course");
         Chassis.getInstance().toBrake();
         Chassis.getInstance().moveMotors(0,0);
     }

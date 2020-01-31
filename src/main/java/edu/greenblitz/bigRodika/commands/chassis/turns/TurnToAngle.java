@@ -17,18 +17,20 @@ public class TurnToAngle extends ChassisCommand {
     private MotionProfile1D motionProfile;
     private double power, locP, velP, maxV, maxA;
     private long t0;
+    private boolean allowRedo;
 
     private int overCount;
 
     public TurnToAngle(double angleToTurnDeg, double locP, double velP,
                        double maxV, double maxA,
-                       double power) {
+                       double power, boolean allowRedo) {
         this.locP = locP;
         this.velP = velP;
         this.maxA = maxA;
         this.maxV = maxV;
         this.power = power;
         this.end = new ActuatorLocation(Math.toRadians(angleToTurnDeg), 0);
+        this.allowRedo = allowRedo;
     }
 
     @Override
@@ -52,6 +54,7 @@ public class TurnToAngle extends ChassisCommand {
         double timePassed = (System.currentTimeMillis() - t0) / 1000.0;
 
         if (motionProfile.isOver(timePassed)) {
+            System.out.println("Finishing with TurnToAngle: " + overCount);
             chassis.moveMotors(0, 0);
             overCount++;
             return;
@@ -68,8 +71,8 @@ public class TurnToAngle extends ChassisCommand {
         double velPRight = velP * (-perWheelVel - chassis.getRightRate());
 
         chassis.moveMotors(
-                clamp(ff + locPVal + velPLeft),
-                -clamp(ff + locPVal + velPRight));
+                -clamp(ff + locPVal + velPLeft),
+                clamp(ff + locPVal + velPRight));
     }
 
     private double clamp(double inp) {
@@ -80,13 +83,13 @@ public class TurnToAngle extends ChassisCommand {
     public void end(boolean interrupted) {
         double err = Math.toDegrees(chassis.getAngle() - end.getX());
         SmartDashboard.putNumber("Final Error", err);
-        if (Math.abs(err) > 2 && !interrupted) {
-            new ThreadedCommand(new DelicateTurn(end.getX()), Chassis.getInstance());
+        if (Math.abs(err) > 2 && !interrupted && allowRedo) {
+            new ThreadedCommand(new DelicateTurn(end.getX()), Chassis.getInstance()).schedule();
         }
     }
 
     @Override
     public boolean isFinished() {
-        return overCount >= 3;
+        return overCount >= 10;
     }
 }
