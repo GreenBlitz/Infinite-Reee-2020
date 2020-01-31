@@ -1,6 +1,5 @@
 package edu.greenblitz.bigRodika.commands.shooter;
 
-import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
 

@@ -24,10 +24,10 @@ public class RobotMap {
 
         public static class Chassis {
             public static class Motor {
-                /*public static final int LEFT_VICTOR = 2,
+                public static final int LEFT_VICTOR = 2,
                                         RIGHT_VICTOR = 3,
                                         LEFT_TALON = 1,
-                                        RIGHT_TALON = 4; */
+                                        RIGHT_TALON = 4;
                 public static final int  RIGHT_LEADER = 4,
                 RIGHT_FOLLOWER_1 = 5,
                 RIGHT_FOLLOWER_2 = 6,
@@ -54,8 +54,8 @@ public class RobotMap {
                                         RIGHT_PORT_B = 1;
 
                 public static final GearDependentValue<Double>
-                        NORM_CONST_SPARK = new GearDependentValue<>
-                        (2300.0, 1234.0/2.0);
+                        NORM_CONST_SPARK = new GearDependentValue<>(2300.0, 1234.0/2.0),
+                        NORM_CONST_TALON = new GearDependentValue<>(1000.0, 1000.0);
             }
 
             public static class MotionData {
