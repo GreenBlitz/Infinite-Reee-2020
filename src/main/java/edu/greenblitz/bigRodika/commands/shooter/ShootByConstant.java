@@ -15,7 +15,7 @@ public class ShootByConstant extends ShooterCommand {
 
     @Override
     public void end(boolean interrupted) {
-        shooter.shoot(0);
+//        shooter.shoot(0);
     }
 
     @Override

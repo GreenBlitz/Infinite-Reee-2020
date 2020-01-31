@@ -30,16 +30,16 @@ public class OI {
 
     private void initTestButtons(){
 
-        mainJoystick.X.whileHeld(new FullShoot(300));
+        mainJoystick.X.whileHeld(new FullShoot(3000));
         mainJoystick.X.whenReleased(new StopShooter());
 
-        mainJoystick.A.whileHeld(new ShootByConstant(0.1));
+        mainJoystick.A.whileHeld(new ShootByConstant(0.8));
         mainJoystick.A.whenReleased(new StopShooter());
 
         mainJoystick.B.whileHeld(new PushByConstant(0.5));
         mainJoystick.B.whenReleased(new StopPusher());
 
-        mainJoystick.Y.whileHeld(new InsertByConstant(0.5));
+        mainJoystick.Y.whileHeld(new InsertByConstant(0.8));
         mainJoystick.Y.whenReleased(new StopInserter());
 
     }
