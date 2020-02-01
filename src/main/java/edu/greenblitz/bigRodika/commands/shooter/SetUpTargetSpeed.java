@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika.commands.shooter;
 
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import org.greenblitz.motion.pid.PIDObject;
 

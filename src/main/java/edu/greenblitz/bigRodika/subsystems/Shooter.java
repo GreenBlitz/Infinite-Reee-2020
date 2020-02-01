@@ -44,15 +44,15 @@ public class Shooter implements Subsystem {
     }
 
     public void setSpeedByPID(double target){
-//        flywheel.getPIDController().setReference(target, ControlType.kVelocity);
+        flywheel.getPIDController().setReference(target, ControlType.kVelocity);
     }
 
     public void setPIDConsts(PIDObject obj) {
-//        CANPIDController controller = flywheel.getPIDController();
-//        controller.setP(obj.getKp());
-//        controller.setI(obj.getKi());
-//        controller.setD(obj.getKd());
-//        controller.setFF(obj.getKf());
+        CANPIDController controller = flywheel.getPIDController();
+        controller.setP(obj.getKp());
+        controller.setI(obj.getKi());
+        controller.setD(obj.getKd());
+        controller.setFF(obj.getKf());
     }
 
 

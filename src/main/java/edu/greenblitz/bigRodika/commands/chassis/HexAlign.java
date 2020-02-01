@@ -52,7 +52,7 @@ public class HexAlign extends ChassisCommand {
         State startState = new State(0, 0, -Chassis.getInstance().getAngle());
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         VisionLocation location = VisionMaster.getInstance().getVisionLocation();
-        System.out.println("Vision Location: " + location);
+        SmartDashboard.putString("Vision Location", location.toString());
         double[] difference = location.toDoubleArray();
 
         if (!VisionMaster.getInstance().isLastDataValid()) {
@@ -139,7 +139,7 @@ public class HexAlign extends ChassisCommand {
         endAng = -endState.getAngle();
 
          if(errRadCenter < driveTolerance){
-         endState.setAngle(startState.getAngle());
+            endState.setAngle(startState.getAngle());
          }
 
         List<State> path = new ArrayList<>();
@@ -148,6 +148,7 @@ public class HexAlign extends ChassisCommand {
 
         SmartDashboard.putString("end", endState.toString());
         System.err.println("end" + endState.toString());
+
 
         ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5");
 
@@ -158,6 +159,9 @@ public class HexAlign extends ChassisCommand {
             startState.setAngle(startState.getAngle() + Math.PI);
         }
 
+        SmartDashboard.putString("start", startState.toString());
+        SmartDashboard.putString("end1", endState.toString());
+        System.err.println("end1" + endState.toString());
 
         prof = new Follow2DProfileCommand(path,
                 .001, 800,

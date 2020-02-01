@@ -9,6 +9,32 @@ public class RobotMap {
 
     public static class BigRodika {
 
+        public static class Funnel {
+
+            public static class Encoder {
+                // This must be the same for power and speed cause they have no meaning here.
+                public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
+                        1.0);
+            }
+
+            public static class Motors {
+
+                public static final int INSERTER_PORT = 10;
+                public static final int PUSHER_PORT = 12;
+
+            }
+
+        }
+
+        public static class Shooter {
+            public static final int PORT = 6;
+            // This must be the same for power and speed cause they have no meaning here.
+            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
+                    1.0);
+            public static final boolean IS_INVERTED = true;
+        }
+
+
         public static class Joystick {
             public static final int MAIN = 0;
         }
@@ -54,23 +80,8 @@ public class RobotMap {
 
                 public static final GearDependentValue<Double>
                         NORM_CONST_SPARK = new GearDependentValue<>(2300.0, 1234.0 / 2.0),
-                        NORM_CONST_LEFT = new GearDependentValue<>(2110.000000, 2110.000000),
-                        NORM_CONST_RIGHT = new GearDependentValue<>(1748.000000, 1748.000000);
-            }
-
-            public static class MotionData {
-
-                public static HashMap<String, ProfilingData> POWER;
-                public static HashMap<String, ProfilingData> SPEED;
-
-                static {
-
-                    POWER = new HashMap<>();
-                    POWER.put("0.4", new ProfilingData(0.7, 4.6, 2.1, 10));
-                    POWER.put("0.7", new ProfilingData(1.15, 10, 4, 15));
-                    POWER.put("0.5", new ProfilingData(0.4, 5.0, 3, 10));
-                }
-
+                        NORM_CONST_LEFT = new GearDependentValue<>(2100.0, 2100.0),
+                        NORM_CONST_RIGHT = new GearDependentValue<>(1721.0, 1721.0);
             }
 
             public static final double WHEEL_DIST = 0.595;
@@ -83,33 +94,27 @@ public class RobotMap {
 
             public static final double SHOOTER_Y_DIST_CENTER = 0.0;
 
+            public static class MotionData {
 
-        }
+                public static HashMap<String, ProfilingData> POWER;
+                public static HashMap<String, ProfilingData> SPEED;
 
-        public static class Shooter {
-            public static final int PORT = 6;
-            // This must be the same for power and speed cause they have no meaning here.
-            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
-                    1.0);
-            public static final boolean IS_INVERTED = true;
-        }
+                static {
 
-        public static class Funnel {
+                    POWER = new HashMap<>();
 
-            public static class Encoder {
-                // This must be the same for power and speed cause they have no meaning here.
-                public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
-                        1.0);
-            }
+                    POWER.put("0.4", new ProfilingData(0.7, 4.6, 2.1, 10));
+                    POWER.put("0.7", new ProfilingData(1.15, 10, 4, 15));
 
-            public static class Motors {
+                    POWER.put("0.5", new ProfilingData(1.38, 2.38, 2.6, 8));
 
-                public static final int INSERTER_PORT = 10;
-                public static final int PUSHER_PORT = 12;
+
+                }
+
+
 
             }
 
         }
-
     }
 }

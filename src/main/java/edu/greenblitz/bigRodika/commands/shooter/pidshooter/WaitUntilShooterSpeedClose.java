@@ -1,4 +1,4 @@
-package edu.greenblitz.bigRodika.commands.shooter;
+package edu.greenblitz.bigRodika.commands.shooter.pidshooter;
 
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;

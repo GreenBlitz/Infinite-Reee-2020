@@ -59,17 +59,19 @@ public class TurnToVision extends GBCommand {
 
     @Override
     public void execute(){
+        if (turn == null) return;
         turn.execute();
     }
 
     @Override
     public boolean isFinished() {
+        if (turn == null) return true;
         return turn.isFinished();
     }
 
     @Override
     public void end(boolean interupted){
-        if(fucked) return;
+        if(fucked || turn == null) return;
         turn.end(interupted);
     }
 }
