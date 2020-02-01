@@ -21,6 +21,8 @@ public class HexAlign extends ChassisCommand {
     private ThreadedCommand cmd;
     private double k = 0.2;
     private double r = 4.2; //radius
+    private int profileAngleVsGyroInverted = -1;
+    private int gyroInverted = 1;
     private Point globHexPos;
     private boolean fucked = false;
     private double driveTolerance = 0.3;
@@ -49,7 +51,9 @@ public class HexAlign extends ChassisCommand {
 
     @Override
     public void initialize() {
-        State startState = new State(0, 0, -Chassis.getInstance().getAngle());
+        double absAng = gyroInverted * Chassis.getInstance().getAngle();
+
+        State startState = new State(0, 0, profileAngleVsGyroInverted * absAng);
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         VisionLocation location = VisionMaster.getInstance().getVisionLocation();
         SmartDashboard.putString("Vision Location", location.toString());
@@ -104,7 +108,6 @@ public class HexAlign extends ChassisCommand {
 
         //assume targetY != 0
         double relAng = Math.atan(targetX / targetY);
-        double absAng = Chassis.getInstance().getAngle();
 
         Point hexPos = new Point(targetX, targetY).rotate(-absAng);
 
@@ -132,7 +135,7 @@ public class HexAlign extends ChassisCommand {
 
         State endState = new State(hexPos.getX() + r * Math.cos(angle),
                 hexPos.getY() - r * Math.sin(angle),
-                -(Math.PI / 2 - angle));
+                profileAngleVsGyroInverted * (Math.PI / 2 - angle));
 
         endState.translate(new Point(0, cam_y).rotate(-absAng)).translate(new Point (0,-cam_y).rotate(endState.getAngle()));
 
