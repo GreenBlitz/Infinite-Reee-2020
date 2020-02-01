@@ -73,8 +73,8 @@ public class TurnToAngle extends ChassisCommand {
         double velPRight = velP * (-perWheelVel - chassis.getRightRate());
 
         chassis.moveMotors(
-                -clamp(ff + locPVal + velPLeft),
-                clamp(ff + locPVal + velPRight));
+                clamp(ff + locPVal + velPLeft),
+                -clamp(ff + locPVal + velPRight));
     }
 
     private double clamp(double inp) {

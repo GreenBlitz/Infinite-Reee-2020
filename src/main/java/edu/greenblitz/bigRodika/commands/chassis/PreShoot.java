@@ -27,7 +27,7 @@ public class PreShoot extends SequentialCommandGroup {
                 new TurnToVision(VisionMaster.Algorithm.HEXAGON,
                         RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5").getMaxAngularVelocity(),
                         RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5").getMaxAngularAccel(),
-                        0.5,hexAlign));
+                        0.5, hexAlign));
     }
 }
 

@@ -39,7 +39,7 @@ public class OI {
     }
 
     private void initTestButtons(){
-        /*
+
         mainJoystick.X.whileHeld(new FullShoot(3000));
         mainJoystick.X.whenReleased(new StopShooter());
         /*

@@ -52,7 +52,8 @@ public class TurnToVision extends GBCommand {
             diff[0] = posToTurnToByLocalizer.getX() - Chassis.getInstance().getLocation().getX();
             diff[1] = posToTurnToByLocalizer.getY() - Chassis.getInstance().getLocation().getY();
         }
-        turn = new TurnToAngle(Math.toDegrees(Chassis.getInstance().getAngle() - Math.atan(diff[0]/diff[1])),3,1, maxV, maxA, power, false, 3);
+        turn = new TurnToAngle(Math.toDegrees(Chassis.getInstance().getAngle() - Math.atan(diff[0]/diff[1])),3,1
+                , maxV, maxA, power, true, 3);
         turn.initialize();
     }
 

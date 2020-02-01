@@ -101,8 +101,8 @@ public class Chassis implements Subsystem {
     }
 
     public void moveMotors(double left, double right){
-        leftTalon.set(ControlMode.PercentOutput, left);
-        rightTalon.set(ControlMode.PercentOutput, right);   //chassis
+        leftTalon.set(ControlMode.PercentOutput, right); // Don't ask this is right
+        rightTalon.set(ControlMode.PercentOutput, left);   //chassis
         SmartDashboard.putNumber("Left", left);
         SmartDashboard.putNumber("Right", right);
 //        rightLeader.set(-right);
@@ -136,7 +136,7 @@ public class Chassis implements Subsystem {
     }
 
     public void arcadeDrive(double moveValue, double rotateValue) {
-        moveMotors(moveValue + rotateValue, moveValue - rotateValue);
+        moveMotors(moveValue - rotateValue, moveValue + rotateValue);
     }
 
     public double getLeftMeters(){
