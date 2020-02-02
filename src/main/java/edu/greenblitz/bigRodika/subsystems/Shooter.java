@@ -19,7 +19,6 @@ public class Shooter implements Subsystem {
 //    private SparkEncoder encoder;
 
     private Shooter() {
-        System.out.println("Created shooter!");
         flywheel = new CANSparkMax(RobotMap.BigRodika.Shooter.PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         flywheel.setInverted(RobotMap.BigRodika.Shooter.IS_INVERTED);
         flywheel.setIdleMode(CANSparkMax.IdleMode.kCoast);

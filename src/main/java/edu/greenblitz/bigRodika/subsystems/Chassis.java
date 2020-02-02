@@ -80,6 +80,10 @@ public class Chassis implements Subsystem {
 //        gyroscope = new NavxGyro(new AHRS(SerialPort.Port.kUSB));  //big-haim
 //        gyroscope.inverse();
 
+        lastTime = System.currentTimeMillis();
+        lastLocationLeft = leftEncoder.getNormalizedTicks();
+        lastLocationRight = rightEncoder.getNormalizedTicks();
+
     }
 
     public void changeGear(){
@@ -187,22 +191,35 @@ public class Chassis implements Subsystem {
         return Localizer.getInstance().getLocation();
     }
 
+    private double lastLocationLeft;
+    private double lastLocationRight;
+    private double derivedLeftVel = 0;
+    private double derivedRightVel = 0;
+    private long lastTime;
+
+    public double getDerivedLeft(){
+        return derivedLeftVel;
+    }
+
+    public double getDerivedRight(){
+        return derivedRightVel;
+    }
+
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("Yaw", gyroscope.getRawYaw());
-        SmartDashboard.putNumber("Left Dist", leftEncoder.getNormalizedTicks());
-        SmartDashboard.putNumber("Right Dist", rightEncoder.getNormalizedTicks());
 
-        SmartDashboard.putNumber("Left Vel", leftEncoder.getNormalizedVelocity());
-        SmartDashboard.putNumber("Right Vel", rightEncoder.getNormalizedVelocity());
+        double dt = (System.currentTimeMillis() - lastTime) / 1000.0;
+        double deltaLocLeft = leftEncoder.getNormalizedTicks() - lastLocationLeft;
+        double deltaLocRight = rightEncoder.getNormalizedTicks() - lastLocationRight;
 
-        SmartDashboard.putNumber("Ang vel", gyroscope.getYawRate());
-        SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
-        SmartDashboard.putNumber("angle", Chassis.getInstance().getAngle());
-        SmartDashboard.putNumber("Chassis::rawEncoderRight", rightEncoder.getRawTicks());
-        SmartDashboard.putNumber("Chassis::rawEncoderLeft", leftEncoder.getRawTicks());
-        SmartDashboard.putString("Chassis::currentCommand", getCurrentCommand() == null? "null": getCurrentCommand().getName());
-        SmartDashboard.putNumber("Gyro::angle", gyroscope.getNormalizedYaw());
+        derivedLeftVel = deltaLocLeft / dt;
+        derivedRightVel = deltaLocRight / dt;
+
+        lastLocationRight = lastLocationRight + deltaLocRight;
+        lastLocationLeft = lastLocationLeft + deltaLocLeft;
+
+        lastTime = System.currentTimeMillis();
+
     }
 
     public void resetEncoders(){
