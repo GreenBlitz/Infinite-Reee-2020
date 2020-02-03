@@ -113,7 +113,7 @@ public class Follow2DProfileCommand implements IThreadable {
 
             double ratio = vals.getY() / vals.getX();
 
-            if (vals.getX() > vals.getY()) {
+            if (Math.abs(vals.getX()) > Math.abs(vals.getY())) {
                 vals.setX(maxPower * clamp(vals.getX()));
                 vals.setY(vals.getX() * ratio);
             } else {
