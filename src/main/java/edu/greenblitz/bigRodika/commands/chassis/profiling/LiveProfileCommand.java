@@ -8,13 +8,11 @@ import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.base.Vector2D;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ChassisProfiler2D;
-import org.greenblitz.motion.profiling.MotionProfile2D;
 import org.greenblitz.motion.profiling.ProfilingData;
 import org.greenblitz.motion.profiling.followers.PidFollower2D;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class LiveProfileCommand implements IThreadable {
 

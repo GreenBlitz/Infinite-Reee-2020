@@ -42,6 +42,8 @@ public class VisionMaster {
         return instance;
     }
 
+    private Algorithm currentAlgorithm;
+
     private NetworkTable visionTable;
     private NetworkTableEntry algorithm;
     private NetworkTableEntry output;
@@ -58,7 +60,12 @@ public class VisionMaster {
     }
 
     private void setCurrentAlgorithm(Algorithm algo) {
+        this.currentAlgorithm = algo;
         algorithm.setString(algo.getRawName());
+    }
+
+    public Algorithm getCurrentAlgorithm(){
+        return currentAlgorithm;
     }
 
     public boolean isLastDataValid(){

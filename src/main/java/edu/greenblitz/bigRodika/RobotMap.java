@@ -1,7 +1,6 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.gblib.gears.GearDependentValue;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.profiling.ProfilingData;
 
 import java.util.HashMap;
@@ -9,6 +8,33 @@ import java.util.HashMap;
 public class RobotMap {
 
     public static class BigRodika {
+
+        public static class Funnel {
+
+            public static class Encoder {
+                // This must be the same for power and speed cause they have no meaning here.
+                public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
+                        1.0);
+            }
+
+            public static class Motors {
+
+                public static final int INSERTER_PORT = 10;
+                public static final int PUSHER_PORT = 12;
+
+            }
+
+        }
+
+        public static class Shooter {
+            public static final int PORT = 6;
+            // This must be the same for power and speed cause they have no meaning here.
+            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
+                    1.0);
+            public static final boolean IS_INVERTED = true;
+        }
+
+
         public static class Joystick {
             public static final int MAIN = 0;
         }
@@ -23,16 +49,16 @@ public class RobotMap {
 
         public static class Chassis {
             public static class Motor {
-                /*public static final int LEFT_VICTOR = 2,
-                                        RIGHT_VICTOR = 3,
-                                        LEFT_TALON = 1,
-                                        RIGHT_TALON = 4; */
-                public static final int  RIGHT_LEADER = 4,
-                RIGHT_FOLLOWER_1 = 5,
-                RIGHT_FOLLOWER_2 = 6,
-                LEFT_LEADER = 1,
-                LEFT_FOLLOWER_1 = 2,
-                LEFT_FOLLOWER_2 = 3;
+                public static final int LEFT_VICTOR = 2,
+                        RIGHT_VICTOR = 3,
+                        LEFT_TALON = 1,
+                        RIGHT_TALON = 4;
+                public static final int RIGHT_LEADER = 4,
+                        RIGHT_FOLLOWER_1 = 5,
+                        RIGHT_FOLLOWER_2 = 6,
+                        LEFT_LEADER = 1,
+                        LEFT_FOLLOWER_1 = 2,
+                        LEFT_FOLLOWER_2 = 3;
 
 
             }
@@ -46,16 +72,27 @@ public class RobotMap {
                 public static final int PCM = 21;
             }
 
-            public static class Encoder{
+            public static class Encoder {
                 public static final int LEFT_PORT_A = 2,
-                                        LEFT_PORT_B = 3,
-                                        RIGHT_PORT_A = 0,
-                                        RIGHT_PORT_B = 1;
+                        LEFT_PORT_B = 3,
+                        RIGHT_PORT_A = 0,
+                        RIGHT_PORT_B = 1;
 
                 public static final GearDependentValue<Double>
-                        NORM_CONST_SPARK = new GearDependentValue<>
-                        (2300.0, 1234.0/2.0);
+                        NORM_CONST_SPARK = new GearDependentValue<>(2300.0, 1234.0 / 2.0),
+                        NORM_CONST_LEFT = new GearDependentValue<>(2100.0, 2100.0),
+                        NORM_CONST_RIGHT = new GearDependentValue<>(1721.0, 1721.0);
             }
+
+            public static final double WHEEL_DIST = 0.595;
+
+            public static final double VISION_CAM_Y_DIST_CENTER = 0.32;
+
+            public static final double VISION_CAM_X_DIST_CENTER = 0.03;
+
+            public static final double SHOOTER_X_DIST_CENTER = 0.0;
+
+            public static final double SHOOTER_Y_DIST_CENTER = 0.0;
 
             public static class MotionData {
 
@@ -65,18 +102,21 @@ public class RobotMap {
                 static {
 
                     POWER = new HashMap<>();
-                    POWER.put("0.4", new ProfilingData(0.7,4.6,2.1,10));
-                    POWER.put("0.7", new ProfilingData(1.15, 3.75, 4, 10));
+
+                    POWER.put("0.4", new ProfilingData(0.7, 4.6, 2.1, 10));
+                    POWER.put("0.7", new ProfilingData(1.15, 10, 4, 15));
+
+//                    POWER.put("0.5", new ProfilingData(1.5*0.9, 4, 2.6, 8));
+                    POWER.put("0.5", new ProfilingData(1.5*0.9, 3.8, 3.36, 12.2));
+
+
 
                 }
 
+
+
             }
 
-            public static final double WHEEL_DIST = 0.595;
-
         }
-
-
-
     }
 }

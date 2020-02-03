@@ -1,13 +1,14 @@
 package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.bigRodika.commands.chassis.ThreadedCommandLocalizer;
+import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionLocation;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
+import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ProfilingData;
@@ -15,13 +16,13 @@ import org.greenblitz.motion.profiling.ProfilingData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoFetch extends GBCommand {
+public class GoFetch extends ChassisCommand {
 
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
 
-    public GoFetch() {
-        super(Chassis.getInstance());
+    public GoFetch(Point target, double angle) {
+        // should be gotten by the network tables
     }
 
     @Override
