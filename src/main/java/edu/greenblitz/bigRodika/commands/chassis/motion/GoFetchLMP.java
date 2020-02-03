@@ -41,11 +41,11 @@ public class GoFetchLMP extends GBCommand {
                 ang = (Math.PI / 2) - Math.atan2( location.y * location.y - location.x * location.x, 2 * location.x * location.y);
             }
             locations.add(new State(location.x, location.y, ang));
-            ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
+            ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5");
             prof = new Follow2DProfileCommand(locations,
                     .001, 200,
                     data,
-                    0.7, 1, 1,
+                    0.5, 1, 1,
                     new PIDObject(0.8 / data.getMaxLinearVelocity(), 0, 25 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
                     new PIDObject(0.5 /
                             data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),

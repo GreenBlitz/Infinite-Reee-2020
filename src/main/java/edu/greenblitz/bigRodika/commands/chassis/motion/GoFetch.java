@@ -18,38 +18,42 @@ import java.util.List;
 
 public class GoFetch extends ChassisCommand {
 
+    private State target;
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
 
-    public GoFetch(Point target, double angle) {
+    public GoFetch(Point target, double angle ) {
+        this.target = new State(target.getX(), target.getY(), angle);
         // should be gotten by the network tables
     }
 
     @Override
     public void initialize() {
-        VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
+        //VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
         List<State> locations = new ArrayList<>();
-        locations.add(new State(0, 0, 0));
+        locations.add(new State(0,0,0));
+        locations.add(target);
 
-        VisionLocation location = VisionMaster.getInstance().getVisionLocation();
+        System.out.println(locations.get(0).toString());
+        System.out.println(locations.get(1).toString());
+//        VisionLocation location = VisionMaster.getInstance().getVisionLocation();
+//
+//        double ang;
+//        if (location.y == 0){
+//            ang = 0;
+//        } else if (location.x == 0) {
+//            ang = Math.PI / 2;
+//        } else {
+//            ang = (Math.PI / 2) - Math.atan2( location.y * location.y - location.x * location.x, 2 * location.x * location.y);
+//        }
 
-        double ang;
-        if (location.y == 0){
-            ang = 0;
-        } else if (location.x == 0) {
-            ang = Math.PI / 2;
-        } else {
-            ang = (Math.PI / 2) - Math.atan2( location.y * location.y - location.x * location.x, 2 * location.x * location.y);
-        }
-
-        locations.add(new State(location.x, location.y, ang));
 
 
-        ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
+        ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5");
         prof = new Follow2DProfileCommand(locations,
                 .001, 200,
                 data,
-                0.7, 1, 1,
+                0.5, 1, 1,
                 new PIDObject(0.8 / data.getMaxLinearVelocity(), 0, 25 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
                 new PIDObject(0.5 /
                         data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),

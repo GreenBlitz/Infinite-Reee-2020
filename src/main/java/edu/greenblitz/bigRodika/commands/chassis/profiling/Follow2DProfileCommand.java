@@ -104,7 +104,7 @@ public class Follow2DProfileCommand implements IThreadable {
         // This code clamps both values of the motors between -maxPower and maxPower
         // while still keeping the same ratio
 
-        if (vals.getX() == 0 || vals.getY() == 0) {
+        if (vals.getX() == 0 || vals.getY() == 0 || true) {
 
             vals.setX(maxPower*clamp(vals.getX()));
             vals.setY(maxPower*clamp(vals.getY()));

@@ -25,6 +25,7 @@ import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 
@@ -57,47 +58,8 @@ public class OI {
 
     private void initTestButtons() {
 
-        mainJoystick.R1.whenPressed(new GoFetchLMP());
-        mainJoystick.A.whenPressed(new CheckMaxRot(0.7));
-        mainJoystick.X.whenPressed(new CheckMaxLin(0.7));
-        mainJoystick.Y.whenPressed(new HexAlign());
-//        mainJoystick.B.whenPressed(new TurnToVision());
-        mainJoystick.L3.whenPressed(new ToggleShift());
-//        mainJoystick.B.whenPressed(new TurnToVision());
-//        mainJoystick.L3.whenPressed(new ToggleShift(Shifter.getInstance()));
+        mainJoystick.A.whenPressed(new GoFetch(new Point(0,1),0));
+        mainJoystick.B.whenPressed(new GoFetchLMP());
 
-
-        // 0.6 = 3100 rpm
-
-//        secondStick.R1.whenPressed(new ShootByConstant(0.6));
-//        secondStick.R1.whenPressed(new SequentialCommandGroup(new ParallelRaceGroup(new WaitUntilShooterSpeedClose(3100, 100),
-//                new ShootByConstant(1.0)),
-//
-//                new ShootByDashboard(3100)));
-        secondStick.R1.whenPressed(new ShootBalls());
-        secondStick.R1.whenReleased(new StopShooter());
-        /*
-        mainJoystick.A.whileHeld(new ShootByConstant(0.8));
-        mainJoystick.A.whenReleased(new StopShooter());
-        */
-        secondStick.L1.whileHeld(new ParallelCommandGroup(new PushByConstant(1.0), new InsertByConstant(0.8)));
-        secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
-
-        mainJoystick.R3.whileHeld(new WeakArcadeDrive(secondStick, 0.2));
-
-        List<State> test = new ArrayList<>();
-        test.add(new State(0, 0));
-        test.add(new State(1, 1, Math.PI / 2));
-
-        mainJoystick.L3.whenPressed(new ThreadedCommand(new Follow2DProfileCommand(test, 0.001, 1000,
-                RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5"),
-                0.5, 1, 1,
-                new PIDObject(0.1, 0, 0), 0, new PIDObject(1, 0, 0.1), 0, false), Chassis.getInstance()));
-
-        secondStick.Y.whileHeld(new ParallelCommandGroup(new PushByConstant(-0.5), new InsertByConstant(-0.6)));
-        secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
-
-        mainJoystick.A.whenPressed(new PreShoot());
-        mainJoystick.B.whenPressed(new CheckMaxRot(0.5));
     }
 }
