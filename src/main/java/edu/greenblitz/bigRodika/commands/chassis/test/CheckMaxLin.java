@@ -30,22 +30,14 @@ public class CheckMaxLin extends ChassisCommand {
     public void execute() {
         count++;
 
-        while (System.currentTimeMillis() - tStart < 5000) {
-            Chassis.getInstance().moveMotors(power, power);
+        Chassis.getInstance().moveMotors(power, power);
 
-            double time = System.currentTimeMillis() / 1000.0;
-            double V = (Chassis.getInstance().getDerivedLeft() + Chassis.getInstance().getDerivedRight()) / 2.0;
-            target.report(time - tStart/1000.0, V, (V - previousVel) / (time - previousTime));
-            previousTime = time;
-            previousVel = V;
+        double time = System.currentTimeMillis() / 1000.0;
+        double V = (Chassis.getInstance().getDerivedLeft() + Chassis.getInstance().getDerivedRight()) / 2.0;
+        target.report(time - tStart / 1000.0, V, (V - previousVel) / (time - previousTime));
+        previousTime = time;
+        previousVel = V;
 
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 
     @Override

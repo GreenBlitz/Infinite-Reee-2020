@@ -11,8 +11,6 @@ import org.greenblitz.motion.profiling.Profiler1D;
 
 public class TurnToAngle extends ChassisCommand {
 
-    private static int ERROR_NORMALIZE;
-
     private ActuatorLocation end;
     private MotionProfile1D motionProfile;
     private double power, locP, velP, maxV, maxA;

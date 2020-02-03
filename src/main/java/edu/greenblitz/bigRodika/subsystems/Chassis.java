@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
@@ -29,7 +30,7 @@ public class Chassis implements Subsystem {
     private static Chassis instance;
 
     private VictorSPX leftVictor, rightVictor;
-    private TalonSRX leftTalon, rightTalon;   //chassis
+    private WPI_TalonSRX leftTalon, rightTalon;   //chassis
 //    private CANSparkMax rightLeader, rightFollower1, rightFollower2, leftLeader, leftFollower1, leftFollower2;
     private IEncoder leftEncoder, rightEncoder;
     private IGyroscope gyroscope;
@@ -38,13 +39,18 @@ public class Chassis implements Subsystem {
 
         leftVictor = new VictorSPX(RobotMap.BigRodika.Chassis.Motor.LEFT_VICTOR);
         rightVictor = new VictorSPX(RobotMap.BigRodika.Chassis.Motor.RIGHT_VICTOR);
-        leftTalon = new TalonSRX(RobotMap.BigRodika.Chassis.Motor.LEFT_TALON);
-        rightTalon = new TalonSRX(RobotMap.BigRodika.Chassis.Motor.RIGHT_TALON);
+        leftTalon = new WPI_TalonSRX(RobotMap.BigRodika.Chassis.Motor.LEFT_TALON);
+        rightTalon = new WPI_TalonSRX(RobotMap.BigRodika.Chassis.Motor.RIGHT_TALON);
 
         rightVictor.setInverted(true);
         rightVictor.follow(rightTalon);
         leftVictor.follow(leftTalon);
         leftVictor.follow(leftTalon);   //chassis
+
+//        leftTalon.configOpenloopRamp(0.2);
+//        rightVictor.configOpenloopRamp(0.2);
+//        rightTalon.configOpenloopRamp(0.2);
+//        leftVictor.configOpenloopRamp(0.2);
 
 //        rightLeader = new CANSparkMax(RobotMap.BigRodika.Chassis.Motor.RIGHT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
 //        rightFollower1 = new CANSparkMax(RobotMap.BigRodika.Chassis.Motor.RIGHT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -164,7 +170,7 @@ public class Chassis implements Subsystem {
     }
 
     public double getAngularVelocityByWheels(){
-        return getWheelDistance() * (getLeftRate() - getRightRate());
+        return getWheelDistance() * (getDerivedLeft() - getDerivedRight());
     }
 
     public double getAngle(){
@@ -219,6 +225,10 @@ public class Chassis implements Subsystem {
         lastLocationLeft = lastLocationLeft + deltaLocLeft;
 
         lastTime = System.currentTimeMillis();
+
+        SmartDashboard.putNumber("left derv", derivedLeftVel);
+        SmartDashboard.putNumber("right derv", derivedRightVel);
+        SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
 
     }
 

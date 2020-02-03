@@ -88,8 +88,8 @@ public class Follow2DProfileCommand implements IThreadable {
     public void run() {
         runTStart = System.currentTimeMillis();
 
-        Vector2D vals = follower.run(mult * Chassis.getInstance().getLeftRate(),
-                mult * Chassis.getInstance().getRightRate(),
+        Vector2D vals = follower.run(mult * Chassis.getInstance().getDerivedLeft(),
+                mult * Chassis.getInstance().getDerivedRight(),
                 mult * Chassis.getInstance().getAngularVelocityByWheels());
 
         if (isOpp){
@@ -100,16 +100,41 @@ public class Follow2DProfileCommand implements IThreadable {
             throw new RuntimeException("Profile returned NaN");
         }
 
+        // --------------------
+        // This code clamps both values of the motors between -maxPower and maxPower
+        // while still keeping the same ratio
+
+        if (vals.getX() == 0 || vals.getY() == 0) {
+
+            vals.setX(maxPower*clamp(vals.getX()));
+            vals.setY(maxPower*clamp(vals.getY()));
+
+        } else {
+
+            double ratio = vals.getY() / vals.getX();
+
+            if (vals.getX() > vals.getY()) {
+                vals.setX(maxPower * clamp(vals.getX()));
+                vals.setY(vals.getX() * ratio);
+            } else {
+                vals.setY(maxPower * clamp(vals.getY()));
+                vals.setX(vals.getX() * (1.0 / ratio));
+            }
+
+        }
+
+        // ---------------------
+
         if (!isOpp) {
             Chassis.getInstance().moveMotors(
-                    maxPower * clamp(vals.getX()),
-                    maxPower * clamp(vals.getY())
+                    vals.getX(),
+                    vals.getY()
             );
 //            Chassis.getInstance().moveMotors(0,
 //                   0);
         } else  {
-            Chassis.getInstance().moveMotors(maxPower * clamp(vals.getY()),
-                    maxPower * clamp(vals.getX()));
+            Chassis.getInstance().moveMotors(vals.getY(),
+                    vals.getX());
         }
 
         if (minRuntime != 0) {

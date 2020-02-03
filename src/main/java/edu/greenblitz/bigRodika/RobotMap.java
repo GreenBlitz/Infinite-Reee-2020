@@ -106,7 +106,9 @@ public class RobotMap {
                     POWER.put("0.4", new ProfilingData(0.7, 4.6, 2.1, 10));
                     POWER.put("0.7", new ProfilingData(1.15, 10, 4, 15));
 
-                    POWER.put("0.5", new ProfilingData(1.38, 2.38, 2.6, 8));
+//                    POWER.put("0.5", new ProfilingData(1.5*0.9, 4, 2.6, 8));
+                    POWER.put("0.5", new ProfilingData(1.5*0.9, 3.8, 3.36, 12.2));
+
 
 
                 }

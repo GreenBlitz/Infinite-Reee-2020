@@ -1,10 +1,13 @@
 package edu.greenblitz.bigRodika.commands.chassis.turns;
 
-import edu.greenblitz.bigRodika.commands.chassis.HexAlign;
+import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Point;
+
+import java.util.logging.ConsoleHandler;
 
 public class TurnToVision extends GBCommand {
     TurnToAngle turn;
@@ -14,6 +17,7 @@ public class TurnToVision extends GBCommand {
     private double maxA;
     private double power;
     private Point posToTurnToByLocalizer;
+    private double target;
     private HexAlign hexAlign;
 
     public TurnToVision(VisionMaster.Algorithm algorithm, double maxV, double maxA,
@@ -52,8 +56,9 @@ public class TurnToVision extends GBCommand {
             diff[0] = posToTurnToByLocalizer.getX() - Chassis.getInstance().getLocation().getX();
             diff[1] = posToTurnToByLocalizer.getY() - Chassis.getInstance().getLocation().getY();
         }
-        turn = new TurnToAngle(Math.toDegrees(Chassis.getInstance().getAngle() - Math.atan(diff[0]/diff[1])),3,1
-                , maxV, maxA, power, true, 3);
+        target = Chassis.getInstance().getAngle() - Math.atan(diff[0]/diff[1]);
+        turn = new TurnToAngle(Math.toDegrees(target),3,1
+                , maxV, maxA, power, true, 2);
         turn.initialize();
     }
 
@@ -71,6 +76,7 @@ public class TurnToVision extends GBCommand {
 
     @Override
     public void end(boolean interupted){
+        SmartDashboard.putNumber("Angle Error =", Math.toDegrees(target - Chassis.getInstance().getAngle()));
         if(fucked || turn == null) return;
         turn.end(interupted);
     }

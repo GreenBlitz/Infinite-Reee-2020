@@ -1,8 +1,5 @@
 package edu.greenblitz.bigRodika;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.SparkMax;
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
 import edu.greenblitz.bigRodika.subsystems.*;
 
@@ -41,6 +38,11 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         VisionMaster.getInstance().update();
+    }
+
+    @Override
+    public void disabledInit() {
+//        CommandScheduler.getInstance().cancelAll();
     }
 
     @Override

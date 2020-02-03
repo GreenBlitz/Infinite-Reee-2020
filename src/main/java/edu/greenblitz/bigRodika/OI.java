@@ -2,28 +2,19 @@ package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.driver.WeakArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
-import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
-import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBalls;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootByDashboard;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.WaitUntilShooterSpeedClose;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.hid.SmartJoystick;
-import edu.greenblitz.bigRodika.commands.chassis.PreShoot;
+import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
-import edu.greenblitz.bigRodika.commands.chassis.turns.TurnToVision;
-import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 
@@ -65,34 +56,37 @@ public class OI {
         mainJoystick.A.whileHeld(new ShootByConstant(0.8));
         mainJoystick.A.whenReleased(new StopShooter());
         */
-        secondStick.L1.whileHeld(new ParallelCommandGroup(new PushByConstant(0.9), new InsertByConstant(0.8)));
+        secondStick.L1.whileHeld(new ParallelCommandGroup(new PushByConstant(1.0), new InsertByConstant(0.8)));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
 
         mainJoystick.R3.whileHeld(new WeakArcadeDrive(secondStick, 0.2));
 
         List<State> test = new ArrayList<>();
         test.add(new State(0,0));
-        test.add(new State(0, 1));
+        test.add(new State(1, 1, Math.PI/2));
 
-        mainJoystick.L3.whenPressed(new ThreadedCommand(new Follow2DProfileCommand(test, 0.001 ,200 ,
+        mainJoystick.L3.whenPressed(new ThreadedCommand(new Follow2DProfileCommand(test, 0.001 ,1000,
                 RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5"),
                 0.5,1, 1,
-        new PIDObject(0),0,new PIDObject(0),0,false), Chassis.getInstance()));
+        new PIDObject(0.1, 0, 0),0,new PIDObject(1, 0, 0.1),0,false), Chassis.getInstance()));
 
         secondStick.Y.whileHeld(new ParallelCommandGroup(new PushByConstant(-0.5), new InsertByConstant(-0.6)));
         secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
 
         mainJoystick.A.whenPressed(new PreShoot());
-        mainJoystick.B.whenPressed(new TurnToVision(VisionMaster.Algorithm.HEXAGON,
-                RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5").getMaxAngularVelocity(),
-                RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5").getMaxAngularAccel(), 0.5));
-
-        secondStick.A.whenPressed(new CheckMaxLin(0.5));
-        secondStick.B.whenPressed(new CheckMaxRot(0.5));
+        mainJoystick.B.whenPressed(new CheckMaxRot(0.5));
 
     }
 
     private void initOfficalButtons(){
+
+        mainJoystick.A.whenPressed(new PreShoot());
+
+        secondStick.R1.whenPressed(new ShootBalls());
+        secondStick.R1.whenReleased(new StopShooter());
+
+        secondStick.L1.whileHeld(new ParallelCommandGroup(new PushByConstant(0.9), new InsertByConstant(0.8)));
+        secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
 
     }
 
