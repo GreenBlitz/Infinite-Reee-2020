@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class PreShoot extends SequentialCommandGroup {
 
     public PreShoot() {
-        HexAlign hexAlign = new HexAlign(4.0, 0.2);
+        HexAlign hexAlign = new HexAlign(5, 0.2);
         //HexAlign hexAlign = new HexAlign();
         addCommands(hexAlign,
 

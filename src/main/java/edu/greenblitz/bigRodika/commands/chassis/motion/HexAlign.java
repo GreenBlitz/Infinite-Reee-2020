@@ -31,6 +31,8 @@ public class HexAlign extends ChassisCommand {
     private List<Double> radsAndCritPoints;//crit point - radius - crit - radius - crit .... - radius
     private double endAng;
 
+    private static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(-0.5);
+
     public HexAlign(double r, double k) {
         this.k = k;
         this.r = r;
@@ -52,7 +54,7 @@ public class HexAlign extends ChassisCommand {
 
     @Override
     public void initialize() {
-        double absAng = gyroInverted * Chassis.getInstance().getAngle();
+        double absAng = gyroInverted * (Chassis.getInstance().getAngle() + SHOOTER_ANGLE_OFFSET);
 
         State startState = new State(0, 0, profileAngleVsGyroInverted * absAng);
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();

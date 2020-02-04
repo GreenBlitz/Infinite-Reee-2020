@@ -56,7 +56,7 @@ public class OI {
         mainJoystick.A.whileHeld(new ShootByConstant(0.8));
         mainJoystick.A.whenReleased(new StopShooter());
         */
-        secondStick.L1.whileHeld(new ParallelCommandGroup(new PushByConstant(1.0), new InsertByConstant(0.8)));
+        secondStick.L1.whileHeld(new ParallelCommandGroup(new PushByConstant(0.6), new InsertByConstant(0.6)));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
 
         mainJoystick.R3.whileHeld(new WeakArcadeDrive(secondStick, 0.2));

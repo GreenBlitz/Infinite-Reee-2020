@@ -47,10 +47,10 @@ public class Chassis implements Subsystem {
         leftVictor.follow(leftTalon);
         leftVictor.follow(leftTalon);   //chassis
 
-//        leftTalon.configOpenloopRamp(0.2);
-//        rightVictor.configOpenloopRamp(0.2);
-//        rightTalon.configOpenloopRamp(0.2);
-//        leftVictor.configOpenloopRamp(0.2);
+        leftTalon.configOpenloopRamp(0);
+        rightVictor.configOpenloopRamp(0);
+        rightTalon.configOpenloopRamp(0);
+        leftVictor.configOpenloopRamp(0);
 
 //        rightLeader = new CANSparkMax(RobotMap.BigRodika.Chassis.Motor.RIGHT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
 //        rightFollower1 = new CANSparkMax(RobotMap.BigRodika.Chassis.Motor.RIGHT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);

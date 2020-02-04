@@ -7,8 +7,6 @@ import edu.greenblitz.gblib.command.GBCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Point;
 
-import java.util.logging.ConsoleHandler;
-
 public class TurnToVision extends GBCommand {
     TurnToAngle turn;
     boolean fucked = false;
@@ -76,7 +74,7 @@ public class TurnToVision extends GBCommand {
 
     @Override
     public void end(boolean interupted){
-        SmartDashboard.putNumber("Angle Error =", Math.toDegrees(target - Chassis.getInstance().getAngle()));
+        SmartDashboard.putNumber("Angle Error =", target - Chassis.getInstance().getAngle());
         if(fucked || turn == null) return;
         turn.end(interupted);
     }

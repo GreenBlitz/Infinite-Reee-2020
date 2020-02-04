@@ -12,10 +12,10 @@ public class ShootBalls extends SequentialCommandGroup {
 
         addCommands(
 
-                new ParallelRaceGroup(new WaitUntilShooterSpeedClose(2900, 100),
+                new ParallelRaceGroup(new WaitUntilShooterSpeedClose(2675, 100),
                                       new ShootByConstant(1.0)),
 
-                new ShootBySimplePid(new PIDObject(0.002,0.00001*0,0.0001,0.55), 2900)
+                new ShootBySimplePid(new PIDObject(0.002,0.00001*0,0.00015,0.48), 2675)
         );
     }
 
