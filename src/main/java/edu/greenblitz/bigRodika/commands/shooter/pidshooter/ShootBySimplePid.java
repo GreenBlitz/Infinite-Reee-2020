@@ -6,10 +6,10 @@ import org.greenblitz.motion.pid.PIDObject;
 
 public class ShootBySimplePid extends ShooterCommand {
 
-    private PIDObject obj;
-    private RemoteCSVTarget logger;
-    private double target;
-    private long tStart;
+    protected PIDObject obj;
+    protected RemoteCSVTarget logger;
+    protected double target;
+    protected long tStart;
 
     public ShootBySimplePid(PIDObject obj, double target){
         this.obj = obj;

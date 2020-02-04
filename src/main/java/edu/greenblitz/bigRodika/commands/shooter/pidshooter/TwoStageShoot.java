@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import org.greenblitz.motion.pid.PIDObject;
 
-public class ShootBalls extends SequentialCommandGroup {
+public class TwoStageShoot extends SequentialCommandGroup {
 
-    public ShootBalls(){
+    public TwoStageShoot(){
 
 
         addCommands(
