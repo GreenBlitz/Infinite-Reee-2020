@@ -95,6 +95,7 @@ public class VisionMaster {
         SmartDashboard.putNumber("Vision::planery distance", current.getPlaneDistance());
         SmartDashboard.putNumber("Vision::derived angle", current.getRelativeAngle());
         SmartDashboard.putBoolean("Vision::valid", isLastDataValid());
+        SmartDashboard.putNumber("Vision::full distance", current.getFullDistance());
 
     }
 }

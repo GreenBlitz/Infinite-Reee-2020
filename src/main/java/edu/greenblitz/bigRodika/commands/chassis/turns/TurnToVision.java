@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika.commands.chassis.turns;
 
+import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
@@ -55,7 +56,8 @@ public class TurnToVision extends GBCommand {
             diff[1] = posToTurnToByLocalizer.getY() - Chassis.getInstance().getLocation().getY();
         }
         target = Chassis.getInstance().getAngle() - Math.atan(diff[0]/diff[1]);
-        turn = new TurnToAngle(Math.toDegrees(target),3,1
+//        target = target + RobotMap.BigRodika.Shooter.SHOOTER_ANGLE_OFFSET;
+        turn = new TurnToAngle(Math.toDegrees(target) + Math.toDegrees(RobotMap.BigRodika.Shooter.SHOOTER_ANGLE_OFFSET),3,1
                 , maxV, maxA, power, true, 2);
         turn.initialize();
     }

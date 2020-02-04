@@ -32,6 +32,8 @@ public class RobotMap {
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
                     1.0);
             public static final boolean IS_INVERTED = true;
+            public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(-3.0);
+
         }
 
 

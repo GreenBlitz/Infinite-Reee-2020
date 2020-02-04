@@ -45,9 +45,11 @@ public class OI {
 
     private void initTestButtons(){
 
-        mainJoystick.R1.whenPressed(new FullyAutoThreeStage(3100, 0.6));
+        mainJoystick.R1.whenPressed(new FullyAutoThreeStage(2800, 0.48));
         mainJoystick.R1.whenReleased(new ParallelCommandGroup(
                 new StopShooter(), new StopInserter(), new StopPusher()));
+
+        mainJoystick.A.whenPressed(new PreShoot());
 
     }
 

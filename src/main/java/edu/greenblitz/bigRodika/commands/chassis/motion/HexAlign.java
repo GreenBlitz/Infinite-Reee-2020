@@ -9,6 +9,7 @@ import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Point;
+import org.greenblitz.motion.base.Position;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ProfilingData;
@@ -30,8 +31,7 @@ public class HexAlign extends ChassisCommand {
     private double tolerance = 0.05;
     private List<Double> radsAndCritPoints;//crit point - radius - crit - radius - crit .... - radius
     private double endAng;
-
-    private static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(-0.5);
+    private Position globalEnd;
 
     public HexAlign(double r, double k) {
         this.k = k;
@@ -54,7 +54,7 @@ public class HexAlign extends ChassisCommand {
 
     @Override
     public void initialize() {
-        double absAng = gyroInverted * (Chassis.getInstance().getAngle() + SHOOTER_ANGLE_OFFSET);
+        double absAng = gyroInverted * (Chassis.getInstance().getAngle() + RobotMap.BigRodika.Shooter.SHOOTER_ANGLE_OFFSET);
 
         State startState = new State(0, 0, profileAngleVsGyroInverted * absAng);
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
@@ -169,12 +169,14 @@ public class HexAlign extends ChassisCommand {
         SmartDashboard.putString("end1", endState.toString());
         System.err.println("end1" + endState.toString());
 
+        globalEnd = new Position(endState.getX() + Chassis.getInstance().getLocation().getX(),
+                endState.getY() + Chassis.getInstance().getLocation().getY(), endState.getAngle());
         prof = new Follow2DProfileCommand(path,
                 .001, 1000,
                 data,
                 0.5, 1, 1,
-                new PIDObject(0.8 / data.getMaxLinearVelocity(), 0, 6 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
-                new PIDObject(0.5 / data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
+                new PIDObject(1.2 / data.getMaxLinearVelocity(), 0, 6 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
+                new PIDObject(0.6 / data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
                 reverse);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
@@ -187,6 +189,8 @@ public class HexAlign extends ChassisCommand {
     @Override
     public void end(boolean interupted) {
         if (!fucked) cmd.end(interupted);
+        SmartDashboard.putString("HexAlign error",
+                Point.subtract(Chassis.getInstance().getLocation(), globalEnd).toString());
     }
 
     @Override

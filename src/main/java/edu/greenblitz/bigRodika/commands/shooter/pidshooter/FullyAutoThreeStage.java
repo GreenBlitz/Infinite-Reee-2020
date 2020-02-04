@@ -15,6 +15,8 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
 
     public FullyAutoThreeStage(double target, double ff){
 
+        // 0.6 = 3100
+        // 0.48 = 2800
 
         addCommands(
 
@@ -32,7 +34,7 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
 
                 new ParallelCommandGroup(
                         new StageThreePID(
-                                new PIDObject(0.002,0.000004,0.00015, ff), target
+                                new PIDObject(0.002,0.000004,0.0001, ff), target
                         ),
                         new InsertByConstant(0.6),
                         new PushByConstant(0.7)
