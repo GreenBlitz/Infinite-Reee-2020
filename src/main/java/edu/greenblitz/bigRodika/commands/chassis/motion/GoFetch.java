@@ -22,8 +22,8 @@ public class GoFetch extends ChassisCommand {
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
 
-    public GoFetch(Point target, double angle ) {
-        this.target = new State(target.getX(), target.getY(), angle);
+    public GoFetch(State target) {
+        this.target = target.clone();
         // should be gotten by the network tables
     }
 
@@ -34,8 +34,6 @@ public class GoFetch extends ChassisCommand {
         locations.add(new State(0,0,0));
         locations.add(target);
 
-        System.out.println(locations.get(0).toString());
-        System.out.println(locations.get(1).toString());
 //        VisionLocation location = VisionMaster.getInstance().getVisionLocation();
 //
 //        double ang;
@@ -54,9 +52,8 @@ public class GoFetch extends ChassisCommand {
                 .001, 200,
                 data,
                 0.5, 1, 1,
-                new PIDObject(0.8 / data.getMaxLinearVelocity(), 0, 25 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
-                new PIDObject(0.5 /
-                        data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
+                new PIDObject(0.1, 0, 0), .01 * data.getMaxLinearVelocity(),
+                new PIDObject(0, 0, 0), .01 * data.getMaxAngularVelocity(),
                 false);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();

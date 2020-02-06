@@ -18,6 +18,7 @@ import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.gblib.encoder.SparkEncoder;
 import edu.greenblitz.gblib.gyroscope.NavxGyro;
 import edu.greenblitz.gblib.gyroscope.PigeonGyro;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -34,8 +35,11 @@ public class Chassis implements Subsystem {
 //    private CANSparkMax rightLeader, rightFollower1, rightFollower2, leftLeader, leftFollower1, leftFollower2;
     private IEncoder leftEncoder, rightEncoder;
     private IGyroscope gyroscope;
+    private PowerDistributionPanel robotPDP;
 
     private Chassis() {
+
+        robotPDP = new PowerDistributionPanel(0); // Shooter is 13
 
         leftVictor = new VictorSPX(RobotMap.BigRodika.Chassis.Motor.LEFT_VICTOR);
         rightVictor = new VictorSPX(RobotMap.BigRodika.Chassis.Motor.RIGHT_VICTOR);
@@ -147,6 +151,14 @@ public class Chassis implements Subsystem {
 
     public void arcadeDrive(double moveValue, double rotateValue) {
         moveMotors(moveValue - rotateValue, moveValue + rotateValue);
+    }
+
+    public double getCurrnet(int port){
+         return robotPDP.getCurrent(port);
+    }
+
+    public double getVoltage(int port){
+        return robotPDP.getVoltage();
     }
 
     public double getLeftMeters(){

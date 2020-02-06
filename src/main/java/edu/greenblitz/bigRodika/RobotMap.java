@@ -117,6 +117,11 @@ public class RobotMap {
 
             }
 
+
+        }
+
+        public static class PDPPorts{
+            public static final int SHOOTER = 13;
         }
     }
 }
