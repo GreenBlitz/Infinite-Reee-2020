@@ -59,11 +59,13 @@ public class OI {
         path.add(new State(0, 0, 0));
         path.add(new State(1, 1, Math.PI/2));
         ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5");
+        double vN = data.getMaxLinearVelocity();
+        double aN = data.getMaxLinearAccel();
         mainJoystick.B.whenPressed(new ThreadedCommand(
-                new Follow2DProfileCommand(path, 0.001, 400, data, 1.0,
-                        0.575, 0.575, // 0.575
-                        new PIDObject(0.02,0,0.000007),0,
-                        new PIDObject(0.0,0,0),0,
+                new Follow2DProfileCommand(path, 0.001, 400, data, 0.5,
+                        1.0, 1.0, // 0.575
+                        new PIDObject(0,0,0),0,
+                        new PIDObject(0,0,0),0,
                         false)
                 ,
                 Chassis.getInstance()));
