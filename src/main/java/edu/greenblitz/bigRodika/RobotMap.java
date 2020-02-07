@@ -32,7 +32,7 @@ public class RobotMap {
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
                     1.0);
             public static final boolean IS_INVERTED = true;
-            public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(-3.0);
+            public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(-8.0);
 
         }
 
@@ -86,7 +86,7 @@ public class RobotMap {
                         NORM_CONST_RIGHT = new GearDependentValue<>(1721.0, 1721.0);
             }
 
-            public static final double WHEEL_DIST = 0.595;
+            public static final double WHEEL_DIST = 0.57;
 
             public static final double VISION_CAM_Y_DIST_CENTER = 0.32;
 
@@ -98,6 +98,7 @@ public class RobotMap {
 
             public static class MotionData {
 
+                public static final double HEXAGON_CAMERA_H_DIFF = 1.4;
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
 
@@ -109,7 +110,7 @@ public class RobotMap {
                     POWER.put("0.7", new ProfilingData(1.15, 10, 4, 15));
 
 //                    POWER.put("0.5", new ProfilingData(1.5*0.9, 4, 2.6, 8));
-                    POWER.put("0.5", new ProfilingData(1.5*0.9, 3.8, 3.36, 12.2));
+                    POWER.put("0.5", new ProfilingData(1.35, 5.1, 2.8, 7.9));
 
 
 
