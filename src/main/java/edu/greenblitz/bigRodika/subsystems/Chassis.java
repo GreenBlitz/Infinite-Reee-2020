@@ -170,7 +170,7 @@ public class Chassis implements Subsystem {
     }
 
     public double getAngularVelocityByWheels(){
-        return getWheelDistance() * (getDerivedLeft() - getDerivedRight());
+        return getWheelDistance() * (getDerivedRight() - getDerivedLeft());
     }
 
     public double getAngle(){
@@ -228,6 +228,7 @@ public class Chassis implements Subsystem {
 
         SmartDashboard.putNumber("left derv", derivedLeftVel);
         SmartDashboard.putNumber("right derv", derivedRightVel);
+        SmartDashboard.putNumber("Angle", getAngularVelocityByWheels());
         SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
 
     }

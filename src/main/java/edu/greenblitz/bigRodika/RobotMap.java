@@ -51,10 +51,10 @@ public class RobotMap {
 
         public static class Chassis {
             public static class Motor {
-                public static final int LEFT_VICTOR = 2,
-                        RIGHT_VICTOR = 3,
-                        LEFT_TALON = 1,
-                        RIGHT_TALON = 4;
+                public static final int LEFT_VICTOR = 2, // 2
+                        RIGHT_VICTOR = 3, // 3
+                        LEFT_TALON = 1, // 1
+                        RIGHT_TALON = 4; // 4
                 public static final int RIGHT_LEADER = 4,
                         RIGHT_FOLLOWER_1 = 5,
                         RIGHT_FOLLOWER_2 = 6,
@@ -110,7 +110,7 @@ public class RobotMap {
                     POWER.put("0.7", new ProfilingData(1.15, 10, 4, 15));
 
 //                    POWER.put("0.5", new ProfilingData(1.5*0.9, 4, 2.6, 8));
-                    POWER.put("0.5", new ProfilingData(1.35, 5.1, 2.8, 7.9));
+                    POWER.put("0.5", new ProfilingData(1.35, 5.1, 3.7, 7.9));
 
 
 
