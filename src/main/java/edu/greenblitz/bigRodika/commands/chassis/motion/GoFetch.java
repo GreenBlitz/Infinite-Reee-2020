@@ -18,22 +18,19 @@ import java.util.List;
 
 public class GoFetch extends ChassisCommand {
 
-    private State target;
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
 
-    public GoFetch(State target) {
-        this.target = target.clone();
+    public GoFetch() {
         // should be gotten by the network tables
     }
 
     @Override
     public void initialize() {
-        //VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
+//        VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
         List<State> locations = new ArrayList<>();
         locations.add(new State(0,0,0));
-        locations.add(target);
-
+//
 //        VisionLocation location = VisionMaster.getInstance().getVisionLocation();
 //
 //        double ang;
@@ -45,6 +42,7 @@ public class GoFetch extends ChassisCommand {
 //            ang = (Math.PI / 2) - Math.atan2( location.y * location.y - location.x * location.x, 2 * location.x * location.y);
 //        }
 
+        locations.add(new State(1,1,0));
 
 
         ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5");

@@ -69,8 +69,8 @@ public class Shooter implements Subsystem {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shooter::Current", Chassis.getInstance().getCurrnet(RobotMap.BigRodika.PDPPorts.SHOOTER));
-        SmartDashboard.putNumber("Shooter::Voltage", Chassis.getInstance().getVoltage(RobotMap.BigRodika.PDPPorts.SHOOTER));
+//        SmartDashboard.putNumber("Shooter::Current", Chassis.getInstance().getCurrnet(RobotMap.BigRodika.PDPPorts.SHOOTER));
+//        SmartDashboard.putNumber("Shooter::Voltage", Chassis.getInstance().getVoltage(RobotMap.BigRodika.PDPPorts.SHOOTER));
         SmartDashboard.putNumber("Shooter::Position", flywheel.getEncoder().getPosition());
         SmartDashboard.putNumber("Shooter::Velocity", flywheel.getEncoder().getVelocity());
         SmartDashboard.putNumber("Shooter::output", flywheel.getAppliedOutput());

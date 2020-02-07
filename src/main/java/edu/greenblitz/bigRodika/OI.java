@@ -58,10 +58,6 @@ public class OI {
 
     private void initTestButtons() {
 
-        mainJoystick.A.whenPressed(new GoFetch(new State(1,0,0)));
-        mainJoystick.X.whenPressed(new GoFetch(new State(1,1,Math.PI/2)));
-        mainJoystick.Y.whenPressed(new GoFetch(new State(0,1, 0)));
-        mainJoystick.B.whenPressed(new GoFetch(new State(1,0,0)));
-
+        mainJoystick.A.whenPressed(new GoFetch());
     }
 }
