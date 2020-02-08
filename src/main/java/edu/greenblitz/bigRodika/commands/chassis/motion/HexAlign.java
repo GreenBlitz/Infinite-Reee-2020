@@ -171,12 +171,17 @@ public class HexAlign extends ChassisCommand {
 
         globalEnd = new Position(endState.getX() + Chassis.getInstance().getLocation().getX(),
                 endState.getY() + Chassis.getInstance().getLocation().getY(), endState.getAngle());
+        double vN = data.getMaxLinearVelocity();
+        double aN = data.getMaxLinearAccel();
+        double vNr = data.getMaxAngularVelocity();
+        double aNr = data.getMaxAngularAccel();
         prof = new Follow2DProfileCommand(path,
-                .001, 1000,
+                .001, 400,
                 data,
-                0.5, 1, 1,
-                new PIDObject(1.2 / data.getMaxLinearVelocity(), 0, 6 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
-                new PIDObject(0.6 / data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
+                1.0,
+                0.47, 0.4,
+                new PIDObject(0.8/vN,0.004/vN,10.0/aN, 1),0.01*vN,
+                new PIDObject(0.5/vNr,0,10.0/aNr, 1),0.01*vNr,
                 reverse);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
