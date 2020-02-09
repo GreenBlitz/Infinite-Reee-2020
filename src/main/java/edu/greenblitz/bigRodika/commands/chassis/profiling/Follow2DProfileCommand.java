@@ -72,9 +72,9 @@ public class Follow2DProfileCommand implements IThreadable {
         follower = new PidFollower2D(linKv, linKa, linKv, linKa,
                 perWheelPIDConsts,
                 collapsingPerWheelPIDTol, Double.NaN, angularPIDConsts, collapsingAngularPIDTol,
-                RobotMap.BigRodika.Chassis.WHEEL_DIST,
+                RobotMap.Limbo2.Chassis.WHEEL_DIST,
                 profile2D);
-        follower.setConverter(new CurvatureConverter(RobotMap.BigRodika.Chassis.WHEEL_DIST));
+        follower.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
         follower.setSendData(true);
         Chassis.getInstance().toCoast();
         mult = isOpp ? -1 : 1;

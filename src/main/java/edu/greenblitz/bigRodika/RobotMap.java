@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class RobotMap {
 
-    public static class BigRodika {
+    public static class Limbo2 {
 
         public static class Funnel {
 
@@ -44,7 +44,7 @@ public class RobotMap {
         public static class Pneumatics {
             public static final int PCM = 21;
 
-            public static class Sensor {
+            public static class PressureSensor {
                 public static final int PRESSURE = 3;
             }
         }
@@ -115,8 +115,6 @@ public class RobotMap {
 
 
                 }
-
-
 
             }
 

@@ -1,8 +1,10 @@
-package edu.greenblitz.bigRodika.commands.shooter.pidshooter;
+package edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage;
 
 import com.revrobotics.CANPIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import org.greenblitz.motion.pid.PIDObject;
+
+import javax.sound.midi.Track;
 
 public class StageThreePID extends ShootBySimplePid {
 
@@ -13,19 +15,20 @@ public class StageThreePID extends ShootBySimplePid {
 
     @Override
     public void initialize() {
-        SmartDashboard.putNumber("Stage3 start", shooter.getShooterSpeed());
         CANPIDController controller = shooter.getPIDController();
         double ISum = controller.getIAccum();
-        obj.setKf(obj.getKf() + ISum/target);
-        SmartDashboard.putString("I addtion", Double.toString(ISum/target));
+        obj.setKf(obj.getKf() + ISum / target);
         obj.setKi(0);
+        shooter.setPreparedToShoot(true);
+        shooter.putBoolean("RunningStage3", true);
         super.initialize();
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        SmartDashboard.putNumber("Stage3 start", 0);
+        shooter.putBoolean("RunningStage3", false);
+        shooter.setPreparedToShoot(false);
     }
 
 

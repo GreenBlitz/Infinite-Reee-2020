@@ -1,16 +1,15 @@
-package edu.greenblitz.bigRodika.commands.shooter.pidshooter;
+package edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage;
 
-import com.revrobotics.CANPIDController;
-import edu.greenblitz.bigRodika.commands.generic.WaitMiliSeconds;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.greenblitz.bigRodika.commands.shooter.WaitUntilShooterSpeedClose;
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import org.greenblitz.motion.pid.PIDObject;
 
 public class ThreeStageShoot extends SequentialCommandGroup {
 
-    public ThreeStageShoot(double target, double ff){
+    public ThreeStageShoot(double target, double ff) {
 
 
         addCommands(
@@ -22,16 +21,15 @@ public class ThreeStageShoot extends SequentialCommandGroup {
 
                 new ParallelRaceGroup(
                         new ShootBySimplePid(
-                                new PIDObject(0.0015,0.000004,0.0, ff), target
+                                new PIDObject(0.0015, 0.000004, 0.0, ff), target
                         ),
                         new WaitUntilShooterSpeedClose(target, 8, 8) // Temp, replace by something better
                 ),
 
                 new StageThreePID(
-                        new PIDObject(0.002,0.000004,0.00015, ff), target
+                        new PIDObject(0.002, 0.000004, 0.00015, ff), target
                 )
         );
-
 
 
     }

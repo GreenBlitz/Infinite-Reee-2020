@@ -54,7 +54,7 @@ public class HexAlign extends ChassisCommand {
 
     @Override
     public void initialize() {
-        double absAng = gyroInverted * (Chassis.getInstance().getAngle() + RobotMap.BigRodika.Shooter.SHOOTER_ANGLE_OFFSET);
+        double absAng = gyroInverted * (Chassis.getInstance().getAngle() + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET);
 
         State startState = new State(0, 0, profileAngleVsGyroInverted * absAng);
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
@@ -67,10 +67,10 @@ public class HexAlign extends ChassisCommand {
             return;
         }
 
-        double targetX = difference[0] + RobotMap.BigRodika.Chassis.VISION_CAM_X_DIST_CENTER;
+        double targetX = difference[0] + RobotMap.Limbo2.Chassis.VISION_CAM_X_DIST_CENTER;
         double targetY = difference[1];
 
-        double cam_y =  RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER;
+        double cam_y =  RobotMap.Limbo2.Chassis.VISION_CAM_Y_DIST_CENTER;
 
         double radCenter = new Point(targetX,
                 targetY + cam_y).norm();
@@ -91,7 +91,7 @@ public class HexAlign extends ChassisCommand {
 
         SmartDashboard.putNumber("rds", r);
 
-        double desRadCenter = r + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER;
+        double desRadCenter = r + RobotMap.Limbo2.Chassis.VISION_CAM_Y_DIST_CENTER;
         //TODO This is inaccurate, if cam is not in the middle of the X dir of the robot we are screwed
         double errRadCenter = Math.abs(radCenter - desRadCenter);
 
@@ -156,7 +156,7 @@ public class HexAlign extends ChassisCommand {
         System.err.println("end" + endState.toString());
 
 
-        ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5");
+        ProfilingData data = RobotMap.Limbo2.Chassis.MotionData.POWER.get("0.5");
 
         boolean reverse  =   Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
 
