@@ -12,11 +12,6 @@ import edu.greenblitz.gblib.gears.Gear;
 
 public class ToggleShift extends ShifterCommand {
 
-    public ToggleShift(Shifter shifter){
-        super(shifter);
-        this.shifter = shifter;
-    }
-
     @Override
     public void execute() {
         shifter.setShift(shifter.getCurrentGear() == Gear.POWER ? Gear.SPEED : Gear.POWER);

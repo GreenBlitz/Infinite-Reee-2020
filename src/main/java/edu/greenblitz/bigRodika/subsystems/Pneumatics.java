@@ -40,7 +40,7 @@ public class Pneumatics implements Subsystem {
     public static void init() {
         if (instance == null) {
             instance = new Pneumatics();
-            instance.setDefaultCommand(new HandleCompressor(instance));
+            instance.setDefaultCommand(new HandleCompressor());
         }
     }
 
