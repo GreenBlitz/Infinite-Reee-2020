@@ -26,6 +26,19 @@ public class RobotMap {
 
         }
 
+        public static class Intake {
+            public static class Motors {
+                public static final int ROLLER_PORT = 8;
+            }
+
+            public static class Solenoid {
+                public static final int FORWARD = 4;
+                public static final int REVERSE = 5;
+            }
+
+            public static final int PCM = 21;
+        }
+
         public static class Shooter {
             public static final int PORT = 6;
             // This must be the same for power and speed cause they have no meaning here.
