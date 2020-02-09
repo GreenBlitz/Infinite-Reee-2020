@@ -131,7 +131,7 @@ public class Follow2DProfileCommand implements IThreadable {
         SmartDashboard.putString("Prof vals", vals.toString());
         SmartDashboard.putBoolean("opp", isOpp);
 
-        if (isOpp) { // Change later to !isOpp. prototype rob is dumb
+        if (isOpp && false) { // Change later to !isOpp. prototype rob is dumb
             Chassis.getInstance().moveMotors(
                     vals.getX(),
                     vals.getY()

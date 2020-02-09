@@ -179,9 +179,9 @@ public class HexAlign extends ChassisCommand {
                 .001, 400,
                 data,
                 1.0,
-                0.47, 0.4,
-                new PIDObject(0.8/vN,0.004/vN,10.0/aN, 1),0.01*vN,
-                new PIDObject(0.5/vNr,0,10.0/aNr, 1),0.01*vNr,
+                1.2*0.5, 1.0*0.5,
+                new PIDObject(0.6/vN,0.002/vN,12.0/aN, 1),0.01*vN,
+                new PIDObject(0.5/vNr,0,12.0/aNr, 1),0.01*vNr,
                 reverse);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();

@@ -13,7 +13,7 @@ public class PreShoot extends SequentialCommandGroup {
         //HexAlign hexAlign = new HexAlign();
         addCommands(hexAlign,
 
-                new WaitMiliSeconds(1000),
+                new WaitMiliSeconds(500),
 
                 new TurnToVision(VisionMaster.Algorithm.HEXAGON,
                         RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5").getMaxAngularVelocity(),
