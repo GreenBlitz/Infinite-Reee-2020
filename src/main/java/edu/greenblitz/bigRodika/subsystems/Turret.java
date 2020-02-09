@@ -30,18 +30,13 @@ public class Turret implements Subsystem {
         motor = new WPI_TalonSRX(RobotMap.BigRodika.Turret.MOTOR_PORT);
         encoder = new TalonEncoder(RobotMap.BigRodika.Turret.NORMALIZER, motor);
         microSwitch = new DigitalInput(RobotMap.BigRodika.Turret.SWITCH_PORT);
-        new Thread(()->{
-            while (true){
-                if (isSwitchPressed()){
-                    encoder.reset();
-                }
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    }
+
+    @Override
+    public void periodic() {
+        if (isSwitchPressed()){
+            encoder.reset();
+        }
     }
 
     public void moveTurret(double power){
