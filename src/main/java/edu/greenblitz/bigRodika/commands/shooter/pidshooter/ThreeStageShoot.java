@@ -36,27 +36,4 @@ public class ThreeStageShoot extends SequentialCommandGroup {
 
     }
 
-    public class StageThreePID extends ShootBySimplePid {
-
-        public StageThreePID(PIDObject obj, double target) {
-            super(obj, target);
-        }
-
-        @Override
-        public void initialize() {
-            SmartDashboard.putNumber("Stage3 start", shooter.getShooterSpeed());
-            CANPIDController controller = shooter.getPIDController();
-            double ISum = controller.getIAccum();
-            obj.setKf(obj.getKf() + ISum * obj.getKi());
-            obj.setKi(0);
-            super.initialize();
-        }
-
-        @Override
-        public void end(boolean interrupted) {
-            super.end(interrupted);
-            SmartDashboard.putNumber("Stage3 start", 0);
-        }
-    }
-
 }
