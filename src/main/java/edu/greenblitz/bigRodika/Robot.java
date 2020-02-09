@@ -6,6 +6,7 @@ import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Pneumatics;
 import edu.greenblitz.bigRodika.subsystems.Shifter;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
+import edu.greenblitz.gblib.RS232.RS232;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -33,10 +34,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        Chassis.getInstance().toBrake();
+        //Chassis.getInstance().toBrake();
 
-        new LocalizerCommandRunner().schedule();
-        new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()).schedule();
-
+        //new LocalizerCommandRunner().schedule();
+        //new ArcadeDrive(Chassis.getInstance(), OI.getInstance().getMainJoystick()).schedule();
+        RS232 rs_232 = new RS232();
+        rs_232.testsend();
     }
 }
