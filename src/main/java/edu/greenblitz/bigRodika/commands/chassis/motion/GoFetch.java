@@ -34,19 +34,9 @@ public class GoFetch extends ChassisCommand {
         locations.add(new State(0, 0, 0));
         locations.add(target);
 
-//        VisionLocation location = VisionMaster.getInstance().getVisionLocation();
-//
-//        double ang;
-//        if (location.y == 0){
-//            ang = 0;
-//        } else if (location.x == 0) {
-//            ang = Math.PI / 2;
-//        } else {
-//            ang = (Math.PI / 2) - Math.atan2( location.y * location.y - location.x * location.x, 2 * location.x * location.y);
-//        }
 
+        ProfilingData data = RobotMap.Limbo2.Chassis.MotionData.POWER.get("0.5");
 
-        ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5");
         prof = new Follow2DProfileCommand(locations,
                 .001, 200,
                 data,
@@ -83,13 +73,7 @@ public class GoFetch extends ChassisCommand {
                 .01 * data.getMaxAngularVelocity(),
                 false);
 
-        setThreadable(th);
-    }
-
-    @Override
-    public void initialize() {
-        VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
-        super.initialize();
+        cmd.setThreadable(th);
     }
 
 }

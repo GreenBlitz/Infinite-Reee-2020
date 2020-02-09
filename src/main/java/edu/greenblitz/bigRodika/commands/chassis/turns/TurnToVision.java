@@ -1,13 +1,12 @@
 package edu.greenblitz.bigRodika.commands.chassis.turns;
 
+import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Point;
-
-import java.util.logging.ConsoleHandler;
 
 public class TurnToVision extends GBCommand {
     TurnToAngle turn;
@@ -57,7 +56,8 @@ public class TurnToVision extends GBCommand {
             diff[1] = posToTurnToByLocalizer.getY() - Chassis.getInstance().getLocation().getY();
         }
         target = Chassis.getInstance().getAngle() - Math.atan(diff[0]/diff[1]);
-        turn = new TurnToAngle(Math.toDegrees(target),3,1
+//        target = target + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET;
+        turn = new TurnToAngle(Math.toDegrees(target) + Math.toDegrees(RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET),3,1
                 , maxV, maxA, power, true, 2);
         turn.initialize();
     }
@@ -76,7 +76,7 @@ public class TurnToVision extends GBCommand {
 
     @Override
     public void end(boolean interupted){
-        SmartDashboard.putNumber("Angle Error =", Math.toDegrees(target - Chassis.getInstance().getAngle()));
+        SmartDashboard.putNumber("Angle Error =", target - Chassis.getInstance().getAngle());
         if(fucked || turn == null) return;
         turn.end(interupted);
     }

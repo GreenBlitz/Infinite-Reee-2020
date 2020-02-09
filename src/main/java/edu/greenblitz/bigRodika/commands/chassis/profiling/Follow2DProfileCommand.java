@@ -11,6 +11,7 @@ import org.greenblitz.motion.profiling.ChassisProfiler2D;
 import org.greenblitz.motion.profiling.MotionProfile2D;
 import org.greenblitz.motion.profiling.ProfilingData;
 import org.greenblitz.motion.profiling.followers.PidFollower2D;
+import org.greenblitz.motion.profiling.kinematics.CurvatureConverter;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class Follow2DProfileCommand implements IThreadable {
     private double mult;
 
     private long runTStart;
-    private long minRuntime = 10;
+    private long minRuntime = 5;
 
 
     /**
@@ -70,9 +71,10 @@ public class Follow2DProfileCommand implements IThreadable {
     public void atInit() {
         follower = new PidFollower2D(linKv, linKa, linKv, linKa,
                 perWheelPIDConsts,
-                collapsingPerWheelPIDTol, 1.0, angularPIDConsts, collapsingAngularPIDTol,
-                RobotMap.BigRodika.Chassis.WHEEL_DIST,
+                collapsingPerWheelPIDTol, Double.NaN, angularPIDConsts, collapsingAngularPIDTol,
+                RobotMap.Limbo2.Chassis.WHEEL_DIST,
                 profile2D);
+        follower.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
         follower.setSendData(true);
         Chassis.getInstance().toCoast();
         mult = isOpp ? -1 : 1;
@@ -104,6 +106,8 @@ public class Follow2DProfileCommand implements IThreadable {
         // This code clamps both values of the motors between -maxPower and maxPower
         // while still keeping the same ratio
 
+
+        // I think keeping the same ratio is bad, using old clamping.
         if (vals.getX() == 0 || vals.getY() == 0 || true) {
 
             vals.setX(maxPower*clamp(vals.getX()));
@@ -125,7 +129,10 @@ public class Follow2DProfileCommand implements IThreadable {
 
         // ---------------------
 
-        if (!isOpp) {
+        SmartDashboard.putString("Prof vals", vals.toString());
+        SmartDashboard.putBoolean("opp", isOpp);
+
+        if (isOpp && false) { // Change later to !isOpp. prototype rob is dumb
             Chassis.getInstance().moveMotors(
                     vals.getX(),
                     vals.getY()
@@ -134,7 +141,7 @@ public class Follow2DProfileCommand implements IThreadable {
 //                   0);
         } else  {
             Chassis.getInstance().moveMotors(vals.getY(),
-                    vals.getX());
+                                            vals.getX());
         }
 
         if (minRuntime != 0) {
@@ -148,7 +155,9 @@ public class Follow2DProfileCommand implements IThreadable {
     }
 
     public double clamp(double in){
-        return Math.copySign(Math.min(Math.abs(in), 1), in);
+        return Math.copySign(
+                Math.min(Math.abs(in), 1),
+                                            in);
     }
 
     /**

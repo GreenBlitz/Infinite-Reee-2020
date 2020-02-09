@@ -4,13 +4,8 @@ public class ShootByConstant extends ShooterCommand {
 
     protected double power;
 
-    public ShootByConstant(double power){
+    public ShootByConstant(double power) {
         this.power = power;
-    }
-
-    @Override
-    public void initialize() {
-        System.out.println("Started Shoot By Constant");
     }
 
     @Override

@@ -10,20 +10,20 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.pid.PIDObject;
 
-public class Shooter implements Subsystem {
+public class Shooter extends GBSubsystem {
+
     private static Shooter instance;
 
-    private static final double TICKS_PER_REVOLUTION = 1;
-
     private CANSparkMax flywheel;
-//    private SparkEncoder encoder;
+    private boolean preparedToShoot;
 
     private Shooter() {
-        flywheel = new CANSparkMax(RobotMap.BigRodika.Shooter.PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
-        flywheel.setInverted(RobotMap.BigRodika.Shooter.IS_INVERTED);
+        flywheel = new CANSparkMax(RobotMap.Limbo2.Shooter.PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
+        flywheel.setInverted(RobotMap.Limbo2.Shooter.IS_INVERTED);
         flywheel.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        preparedToShoot = false;
 //        flywheel.getEncoder().setVelocityConversionFactor(TICKS_PER_REVOLUTION);
-//        encoder = new SparkEncoder(RobotMap.BigRodika.Shooter.NORMALIZER, flywheel);
+//        encoder = new SparkEncoder(RobotMap.Limbo2.Shooter.NORMALIZER, flywheel);
     }
 
     public static void init(){
@@ -67,13 +67,22 @@ public class Shooter implements Subsystem {
         flywheel.getEncoder().setPosition(0);
     }
 
+    public boolean isPreparedToShoot() {
+        return preparedToShoot;
+    }
+
+    public void setPreparedToShoot(boolean preparedToShoot) {
+        this.preparedToShoot = preparedToShoot;
+    }
+
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shooter::Current", Chassis.getInstance().getCurrnet(RobotMap.BigRodika.PDPPorts.SHOOTER));
-        SmartDashboard.putNumber("Shooter::Voltage", Chassis.getInstance().getVoltage(RobotMap.BigRodika.PDPPorts.SHOOTER));
-        SmartDashboard.putNumber("Shooter::Position", flywheel.getEncoder().getPosition());
-        SmartDashboard.putNumber("Shooter::Velocity", flywheel.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Shooter::output", flywheel.getAppliedOutput());
+        super.periodic();
+
+        putNumber("Position", flywheel.getEncoder().getPosition());
+        putNumber("Velocity", flywheel.getEncoder().getVelocity());
+        putNumber("Output", flywheel.getAppliedOutput());
+        putBoolean("ReadyToShoot", preparedToShoot);
     }
 
     public CANPIDController getPIDController() {
