@@ -38,7 +38,7 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
     private double vEnd;
     private double collapsingPerWheelPIDTol;
     private double collapsingAngularPIDTol;
-    private double finalProfileThreshold = 0.65;
+    private double finalProfileThreshold = 0.5;
     private boolean finalStage;
 
     private List<State> path;
@@ -124,9 +124,6 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
             path.get(0).setLinearVelocity(Chassis.getInstance().getLinearVelocity());
             path.get(0).setAngularVelocity(Chassis.getInstance().getAngularVelocityByWheels());
 
-            System.out.println(path.get(0));
-            System.out.println(path.get(1));
-            System.out.println("-----------------------");
 
             this.profile2D = ChassisProfiler2D.generateProfile(path,
                     JUMP,
@@ -142,9 +139,6 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
                     mult * Chassis.getInstance().getAngularVelocityByWheels(), 0.01);
 
             if (Point.subtract(path.get(1), path.get(0)).norm() <= finalProfileThreshold){
-
-                System.out.println(profile2D.getTEnd());
-
                 finalStage = true;
                 follower.init();
             }
