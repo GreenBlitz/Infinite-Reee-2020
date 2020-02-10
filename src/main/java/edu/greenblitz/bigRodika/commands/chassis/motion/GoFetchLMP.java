@@ -14,6 +14,7 @@ import org.greenblitz.motion.profiling.ProfilingData;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class GoFetchLMP extends GBCommand {
     private final double JMP = 0.001;
     private double t0;

@@ -2,67 +2,63 @@ package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
-import edu.greenblitz.bigRodika.commands.chassis.profiling.APPC;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
+import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionLocation;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
-import edu.greenblitz.gblib.threading.IThreadable;
+import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
+import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ProfilingData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GoFetch extends ChassisCommand {
 
-    public static final double Y_OFFSET = -0.3;
-
+    private State target;
+    private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
 
-    public GoFetch() {
-//        this.target = target.clone();
+    public GoFetch(State target) {
+        this.target = target.clone();
         // should be gotten by the network tables
     }
 
     @Override
     public void initialize() {
-        VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
+        //VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
+        List<State> locations = new ArrayList<>();
+        locations.add(new State(0,0,0));
+        locations.add(target);
+
+//        VisionLocation location = VisionMaster.getInstance().getVisionLocation();
+//
+//        double ang;
+//        if (location.y == 0){
+//            ang = 0;
+//        } else if (location.x == 0) {
+//            ang = Math.PI / 2;
+//        } else {
+//            ang = (Math.PI / 2) - Math.atan2( location.y * location.y - location.x * location.x, 2 * location.x * location.y);
+//        }
+
+
 
         ProfilingData data = RobotMap.Limbo2.Chassis.MotionData.POWER.get("0.5");
-
-        double vN = data.getMaxLinearVelocity();
-        double aN = data.getMaxLinearAccel();
-        double vNr = data.getMaxAngularVelocity();
-        double aNr = data.getMaxAngularAccel();
-
-        IThreadable th = new APPC(
-
-                () -> {
-                    //VisionLocation location = VisionMaster.getInstance().getVisionLocation();
-
-//                    double x = location.x;
-//                    double y = location.y + Y_OFFSET;
-//
-//                    double ang;
-//                    if (y == 0) {
-//                        ang = 0;
-//                    } else if (x == 0) {
-//                        ang = Math.PI / 2;
-//                    } else {
-//                        ang = (Math.PI / 2) - Math.atan2(y * y - x * x, 2 * x * y);
-//                    }
-//
-//                    return new State(location.x, location.y, ang);
-                    return new State(0, 1, 0);
-                },
-
-                APPC.TargetMode.RELATIVE_TO_LOCALIZER, 0, data,
-                0.5, 1.0, 1.0,
-                new PIDObject(0*0.4/vN,0*0.001/vN,0*10.0/aN, 1),0.01*vN,
-                new PIDObject(0*0.2/vNr,0,0*10.0/aNr, 1),0.01*vNr,
+        prof = new Follow2DProfileCommand(locations,
+                .001, 200,
+                data,
+                0.5, 1, 1,
+                new PIDObject(0.1, 0, 0), .01 * data.getMaxLinearVelocity(),
+                new PIDObject(0, 0, 0), .01 * data.getMaxAngularVelocity(),
                 false);
-
-        cmd = new ThreadedCommand(th);
+        cmd = new ThreadedCommand(prof);
         cmd.initialize();
+        prof.setSendData(true);
+
     }
 
     @Override
@@ -74,4 +70,5 @@ public class GoFetch extends ChassisCommand {
     public boolean isFinished() {
         return cmd.isFinished();
     }
+
 }

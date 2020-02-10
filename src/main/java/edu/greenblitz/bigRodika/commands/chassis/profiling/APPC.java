@@ -19,7 +19,7 @@ import java.awt.event.PaintEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Deprecated
 public class APPC implements IThreadable {
 
     private static final double JUMP = 0.001;
