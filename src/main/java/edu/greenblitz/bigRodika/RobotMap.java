@@ -9,6 +9,15 @@ public class RobotMap {
 
     public static class Limbo2 {
 
+        public static class Dome {
+
+            public static final int MOTOR_PORT = 0;
+            public static final int POTENTIOMETER_PORT = 0;
+            public static final boolean IS_MOTOR_REVERS = false;
+            public static final boolean IS_POTENTIOMETER_REVERSE = false;
+
+        }
+
         public static class Funnel {
 
             public static class Encoder {
