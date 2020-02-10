@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
+import edu.greenblitz.bigRodika.commands.chassis.motion.GoFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
@@ -32,8 +33,8 @@ public class OI {
     private OI() {
         mainJoystick = new SmartJoystick(RobotMap.Limbo2.Joystick.MAIN, 0.08);
         secondStick = new SmartJoystick(1, 0.05);
-//        initTestButtons();
-        initOfficalButtons();
+        initTestButtons();
+//        initOfficalButtons();
     }
 
     public static OI getInstance() {
@@ -51,7 +52,7 @@ public class OI {
 
         mainJoystick.A.whenPressed(new PreShoot());
 
-        mainJoystick.Y.whenPressed(new CheckMaxRot(0.5));
+        mainJoystick.Y.whenPressed(new GoFetch());
 
         List<State> path = new ArrayList<>();
         path.add(new State(0, 0, 0));
@@ -74,7 +75,7 @@ public class OI {
 
     private void initOfficalButtons() {
 
-        mainJoystick.A.whenPressed(new PreShoot());
+        mainJoystick.A.whenPressed(new GoFetch());
         mainJoystick.A.whenReleased(new ArcadeDrive(mainJoystick));
 
         secondStick.R1.whenPressed(new FullyAutoThreeStage(2950, 0.49));
@@ -87,7 +88,7 @@ public class OI {
                 ParallelCommandGroup(new PushByConstant(-0.7), new InsertByConstant(-0.6)));
         secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
 
-        mainJoystick.START.whenPressed(new CheckMaxRot(0.5));
+        mainJoystick.START.whenPressed(new GoFetch());
 
     }
 

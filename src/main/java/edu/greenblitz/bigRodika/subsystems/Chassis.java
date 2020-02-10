@@ -169,7 +169,7 @@ public class Chassis extends GBSubsystem {
     }
 
     public double getLinearVelocity(){
-        return 0.5*(getLeftRate() + getRightRate());
+        return 0.5*(getDerivedLeft() + getDerivedRight());
     }
 
     public double getAngularVelocityByWheels(){

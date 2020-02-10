@@ -5,10 +5,11 @@ import org.greenblitz.motion.base.Vector2D;
 public class ProfilingUtils {
 
 
-    public static Vector2D flipToBackwards(Vector2D input, boolean isOpp){
+    public static Vector2D flipToBackwards(Vector2D input, boolean isReverse){
 
-        if (isOpp){
+        if (isReverse){
             input = input.scale(-1);
+        } else {
             input = new Vector2D(input.getY(), input.getX());
         }
 
@@ -17,8 +18,8 @@ public class ProfilingUtils {
     }
 
     public static Vector2D Clamp(Vector2D vals, double maxPower){
-        vals.setX(clamp(vals.getX()));
-        vals.setY(clamp(vals.getY()));
+        vals.setX(maxPower*clamp(vals.getX()));
+        vals.setY(maxPower*clamp(vals.getY()));
         return vals;
     }
 
