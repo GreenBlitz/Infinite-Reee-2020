@@ -16,6 +16,9 @@ import org.greenblitz.motion.pid.PIDObject;
 public class Turret implements Subsystem {
     private static Turret instance;
 
+    private static final double MAX_TICKS = 10000;
+    private static final double MIN_TICKS = -10000;
+
     public static void init(){
         if(instance == null) {
             instance = new Turret();
@@ -46,7 +49,8 @@ public class Turret implements Subsystem {
 
     public void moveTurret(double power){
         SmartDashboard.putNumber("Turret::power", power);
-        motor.set(power);
+        if (inRange(MIN_TICKS, MAX_TICKS))
+            motor.set(power);
     }
 
     public double getSpeed(){
@@ -58,7 +62,8 @@ public class Turret implements Subsystem {
     }
 
     public void moveInserterByPID(double target){
-        motor.set(ControlMode.Velocity, target);
+        if (inRange(MIN_TICKS, MAX_TICKS))
+            motor.set(ControlMode.Velocity, target);
     }
 
     public double getInserterSpeed() {
@@ -80,5 +85,7 @@ public class Turret implements Subsystem {
         motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, pidIndex, 20);
     }
 
-
+    public boolean inRange(double min, double max) {
+        return encoder.getNormalizedTicks() < max && encoder.getNormalizedTicks() > min;
+    }
 }
