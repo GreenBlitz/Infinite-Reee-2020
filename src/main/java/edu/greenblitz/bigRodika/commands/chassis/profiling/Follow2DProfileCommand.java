@@ -94,55 +94,9 @@ public class Follow2DProfileCommand implements IThreadable {
                 mult * Chassis.getInstance().getDerivedRight(),
                 mult * Chassis.getInstance().getAngularVelocityByWheels());
 
-        if (isOpp){
-            vals = vals.scale(-1);
-        }
+        vals = ProfilingUtils.Clamp(ProfilingUtils.flipToBackwards(vals, isOpp), maxPower);
 
-        if (Double.isNaN(vals.getX() + vals.getY())) {
-            throw new RuntimeException("Profile returned NaN");
-        }
-
-        // --------------------
-        // This code clamps both values of the motors between -maxPower and maxPower
-        // while still keeping the same ratio
-
-
-        // I think keeping the same ratio is bad, using old clamping.
-        if (vals.getX() == 0 || vals.getY() == 0 || true) {
-
-            vals.setX(maxPower*clamp(vals.getX()));
-            vals.setY(maxPower*clamp(vals.getY()));
-
-        } else {
-
-            double ratio = vals.getY() / vals.getX();
-
-            if (Math.abs(vals.getX()) > Math.abs(vals.getY())) {
-                vals.setX(maxPower * clamp(vals.getX()));
-                vals.setY(vals.getX() * ratio);
-            } else {
-                vals.setY(maxPower * clamp(vals.getY()));
-                vals.setX(vals.getX() * (1.0 / ratio));
-            }
-
-        }
-
-        // ---------------------
-
-        SmartDashboard.putString("Prof vals", vals.toString());
-        SmartDashboard.putBoolean("opp", isOpp);
-
-        if (isOpp && false) { // Change later to !isOpp. prototype rob is dumb
-            Chassis.getInstance().moveMotors(
-                    vals.getX(),
-                    vals.getY()
-            );
-//            Chassis.getInstance().moveMotors(0,
-//                   0);
-        } else  {
-            Chassis.getInstance().moveMotors(vals.getY(),
-                                            vals.getX());
-        }
+        Chassis.getInstance().moveMotors(vals.getX(), vals.getY());
 
         if (minRuntime != 0) {
             try {
@@ -154,11 +108,6 @@ public class Follow2DProfileCommand implements IThreadable {
         }
     }
 
-    public double clamp(double in){
-        return Math.copySign(
-                Math.min(Math.abs(in), 1),
-                                            in);
-    }
 
     /**
      * @return if follower finished

@@ -18,10 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AdaptiveProfilingPursuitController implements IThreadable {
+public class APPC implements IThreadable {
 
-    private static final double JUMP = 0.004;
-    private static final int TAIL = 200;
+    private static final double JUMP = 0.001;
+    private static final int TAIL = 400;
 
     public enum TargetMode {
         RELETIVE_TO_ROBOT,
@@ -50,7 +50,7 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
     private double mult;
 
 
-    public AdaptiveProfilingPursuitController(TargetSupplier supplier,
+    public APPC(TargetSupplier supplier,
                                               TargetMode mode,
                                               double vEnd, ProfilingData data,
                                               double maxPower,
@@ -144,21 +144,9 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
             }
         }
 
-        if (isOpp){
-            vals = vals.scale(-1);
-        }
+        vals = ProfilingUtils.Clamp(ProfilingUtils.flipToBackwards(vals, isOpp), maxPower);
 
-        if (!isOpp) {
-            Chassis.getInstance().moveMotors(
-                    maxPower * clamp(vals.getX()),
-                    maxPower * clamp(vals.getY())
-            );
-//            Chassis.getInstance().moveMotors(0,
-//                   0);
-        } else  {
-            Chassis.getInstance().moveMotors(maxPower * clamp(vals.getY()),
-                    maxPower * clamp(vals.getX()));
-        }
+        Chassis.getInstance().moveMotors(vals.getX(), vals.getY());
 
     }
 
