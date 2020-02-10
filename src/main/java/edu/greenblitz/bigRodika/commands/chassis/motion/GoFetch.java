@@ -18,42 +18,40 @@ import java.util.List;
 
 public class GoFetch extends ChassisCommand {
 
-    private State target;
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
 
-    public GoFetch(State target) {
-        this.target = target.clone();
-        // should be gotten by the network tables
-    }
-
     @Override
     public void initialize() {
-        //VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
+        VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
         List<State> locations = new ArrayList<>();
         locations.add(new State(0,0,0));
-        locations.add(target);
 
-//        VisionLocation location = VisionMaster.getInstance().getVisionLocation();
-//
-//        double ang;
-//        if (location.y == 0){
-//            ang = 0;
-//        } else if (location.x == 0) {
-//            ang = Math.PI / 2;
-//        } else {
-//            ang = (Math.PI / 2) - Math.atan2( location.y * location.y - location.x * location.x, 2 * location.x * location.y);
-//        }
+        VisionLocation location = VisionMaster.getInstance().getVisionLocation();
 
+        double ang;
+        if (location.y == 0){
+            ang = 0;
+        } else if (location.x == 0) {
+            ang = Math.PI / 2;
+        } else {
+            ang = (Math.PI / 2) - Math.atan2( location.y * location.y - location.x * location.x, 2 * location.x * location.y);
+        }
 
+        locations.add(new State(location.x, location.y, ang));
 
         ProfilingData data = RobotMap.Limbo2.Chassis.MotionData.POWER.get("0.5");
+        double vN = data.getMaxLinearVelocity();
+        double aN = data.getMaxLinearAccel();
+        double vNr = data.getMaxAngularVelocity();
+        double aNr = data.getMaxAngularAccel();
         prof = new Follow2DProfileCommand(locations,
                 .001, 200,
                 data,
-                0.5, 1, 1,
-                new PIDObject(0.1, 0, 0), .01 * data.getMaxLinearVelocity(),
-                new PIDObject(0, 0, 0), .01 * data.getMaxAngularVelocity(),
+                1.0,
+                1.2*0.5, 1.0*0.5,
+                new PIDObject(0.4/vN,0.002/vN,12.0/aN, 1),0.01*vN,
+                new PIDObject(0.4/vNr,0,12.0/aNr, 1),0.01*vNr,
                 false);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
