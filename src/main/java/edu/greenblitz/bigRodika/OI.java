@@ -1,27 +1,16 @@
 package edu.greenblitz.bigRodika;
 
-import edu.greenblitz.bigRodika.commands.chassis.driver.WeakArcadeDrive;
-import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
+import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.FullyAutoThreeStage;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ThreeStageShoot;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.TwoStageShoot;
+import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
+import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
-import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.TwoStageShoot;
 import edu.greenblitz.gblib.hid.SmartJoystick;
-import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
-
-import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
-import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import org.greenblitz.motion.base.State;
-import org.greenblitz.motion.pid.PIDObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OI {
     private static OI instance;
@@ -43,17 +32,22 @@ public class OI {
         return instance;
     }
 
-    private void initTestButtons(){
+    private void initTestButtons() {
 
-        mainJoystick.R1.whenPressed(new FullyAutoThreeStage(2800, 0.48));
-        mainJoystick.R1.whenReleased(new ParallelCommandGroup(
-                new StopShooter(), new StopInserter(), new StopPusher()));
+//        mainJoystick.R1.whenPressed(new FullyAutoThreeStage(2800, 0.48));
+//        mainJoystick.R1.whenReleased(new ParallelCommandGroup(
+//                new StopShooter(), new StopInserter(), new StopPusher()));
+//
+//        mainJoystick.A.whenPressed(new PreShoot());
 
-        mainJoystick.A.whenPressed(new PreShoot());
-
+        mainJoystick.B.whenPressed(new ToggleExtender());
+        mainJoystick.A.whileHeld(new RollByConstant(0.5));
+//        mainJoystick.R1.whenPressed(new StopRoller());
+//        mainJoystick.A.whenPressed(new ExtendRoller());
+//        mainJoystick.B.whenPressed(new RetractRoller());
     }
 
-    private void initOfficalButtons(){
+    private void initOfficalButtons() {
 
         mainJoystick.A.whenPressed(new PreShoot());
 

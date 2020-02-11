@@ -28,15 +28,16 @@ public class RobotMap {
 
         public static class Intake {
             public static class Motors {
-                public static final int ROLLER_PORT = 8;
+                public static final int ROLLER_PORT = 13;
+                public static final boolean IS_REVERSED = false;
             }
 
             public static class Solenoid {
-                public static final int FORWARD = 4;
-                public static final int REVERSE = 5;
+                public static final int FORWARD = 5;
+                public static final int REVERSE = 7;
             }
 
-            public static final int PCM = 21;
+            public static final int PCM = 22;
         }
 
         public static class Shooter {

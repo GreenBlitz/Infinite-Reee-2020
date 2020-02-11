@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -24,6 +25,8 @@ public class Intake {
 
         private Roller() {
             roller = new WPI_TalonSRX(RobotMap.BigRodika.Intake.Motors.ROLLER_PORT);
+            roller.setInverted(RobotMap.BigRodika.Intake.Motors.IS_REVERSED);
+            roller.setNeutralMode(NeutralMode.Coast);
         }
 
         @Override
@@ -71,6 +74,18 @@ public class Intake {
 
     public void retract() {
         extender.extender.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public boolean isExtended(){
+        return extender.extender.get().equals(DoubleSolenoid.Value.kForward);
+    }
+
+    public void toggleExtender(){
+        if (isExtended()) {
+            retract();
+        } else {
+            extend();
+        }
     }
 
     public Roller getRoller() {
