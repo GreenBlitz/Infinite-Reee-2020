@@ -52,7 +52,7 @@ public class GoFetch extends ChassisCommand {
                 1.2*0.5, 1.0*0.5,
                 new PIDObject(0.4/vN,0.002/vN,12.0/aN, 1),0.01*vN,
                 new PIDObject(0.4/vNr,0,12.0/aNr, 1),0.01*vNr,
-                false);
+                false, 0, Double.POSITIVE_INFINITY);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
         prof.setSendData(true);
@@ -62,6 +62,7 @@ public class GoFetch extends ChassisCommand {
     @Override
     public void end(boolean interrupted) {
         cmd.end(interrupted);
+        new GoFetch();
     }
 
     @Override

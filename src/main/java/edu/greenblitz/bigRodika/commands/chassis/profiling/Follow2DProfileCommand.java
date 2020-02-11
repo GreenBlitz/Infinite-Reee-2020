@@ -34,6 +34,8 @@ public class Follow2DProfileCommand implements IThreadable {
     private long runTStart;
     private long minRuntime = 5;
 
+    private double startV = 0;
+    private double endV = Double.POSITIVE_INFINITY;
 
     /**
      *
@@ -55,6 +57,26 @@ public class Follow2DProfileCommand implements IThreadable {
                                   PIDObject perWheelPIDCosnts, double collapseConstaPerWheel, PIDObject angularPIDConsts,
                                   double collapseConstAngular, boolean isReverse) {
         this.profile2D = ChassisProfiler2D.generateProfile(path, jump, data,
+                0, 1.0, smoothingTail);
+        SmartDashboard.putString("Data for profile", data.toString());
+        this.linKv = velMultLin / data.getMaxLinearVelocity();
+        this.linKa = accMultLin / data.getMaxLinearAccel();
+        this.perWheelPIDConsts = perWheelPIDCosnts;
+        this.collapsingPerWheelPIDTol = collapseConstaPerWheel;
+        this.isOpp = isReverse;
+        this.angularPIDConsts = angularPIDConsts;
+        this.collapsingAngularPIDTol = collapseConstAngular;
+        this.maxPower = maxPower;
+    }
+
+    public Follow2DProfileCommand(List<State> path, double jump, int smoothingTail, ProfilingData data,
+                                  double maxPower, double velMultLin, double accMultLin,
+                                  PIDObject perWheelPIDCosnts, double collapseConstaPerWheel, PIDObject angularPIDConsts,
+                                  double collapseConstAngular, boolean isReverse,
+                                  double startV, double endV) {
+        this.startV = startV;
+        this.endV = endV;
+        this.profile2D = ChassisProfiler2D.generateProfile(path, jump,this.startV,this.endV, data,
                 0, 1.0, smoothingTail);
         SmartDashboard.putString("Data for profile", data.toString());
         this.linKv = velMultLin / data.getMaxLinearVelocity();
@@ -120,8 +142,8 @@ public class Follow2DProfileCommand implements IThreadable {
     @Override
     public void atEnd() {
         System.out.println("Finished Course");
-        Chassis.getInstance().toBrake();
-        Chassis.getInstance().moveMotors(0,0);
+//        Chassis.getInstance().toBrake();
+//        Chassis.getInstance().moveMotors(0,0);
     }
 
 }
