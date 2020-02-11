@@ -61,17 +61,17 @@ public class Turret implements Subsystem {
         return microSwitch.get();
     }
 
-    public void moveInserterByPID(double target){
+    public void moveTurretByPID(double target){
         if (inRange(MIN_TICKS, MAX_TICKS))
             motor.set(ControlMode.Velocity, target);
     }
 
-    public double getInserterSpeed() {
+    public double getTurretSpeed() {
         return encoder.getNormalizedVelocity();
     }
 
-    public double getAbsoluteInserterSpeed(){
-        return Math.abs(getInserterSpeed());
+    public double getAbsoluteTurretSpeed(){
+        return Math.abs(getTurretSpeed());
     }
 
     public void configurePID(int pidIndex, PIDObject obj){
