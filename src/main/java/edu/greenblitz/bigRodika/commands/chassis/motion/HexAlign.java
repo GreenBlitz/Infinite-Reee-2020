@@ -194,8 +194,8 @@ public class HexAlign extends ChassisCommand {
     @Override
     public void end(boolean interupted) {
         if (!fucked) cmd.end(interupted);
-        SmartDashboard.putString("HexAlign error",
-                Point.subtract(Chassis.getInstance().getLocation(), globalEnd).toString());
+        //SmartDashboard.putString("HexAlign error",
+                //Point.subtract(Chassis.getInstance().getLocation(), globalEnd).toString());
     }
 
     @Override

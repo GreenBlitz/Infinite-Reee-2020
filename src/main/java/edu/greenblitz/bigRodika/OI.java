@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.driver.WeakArcadeDrive;
+import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
@@ -76,7 +77,7 @@ public class OI {
 
     private void initOfficalButtons(){
 
-        mainJoystick.A.whenPressed(new PreShoot());
+        mainJoystick.A.whenPressed(new HexAlign(4,0.2));
 
         secondStick.R1.whenPressed(new TwoStageShoot());
         secondStick.R1.whenReleased(new StopShooter());
