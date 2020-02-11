@@ -34,8 +34,8 @@ public class OI {
     private OI() {
         mainJoystick = new SmartJoystick(RobotMap.BigRodika.Joystick.MAIN, 0.08);
         secondStick = new SmartJoystick(1, 0.05);
-        initTestButtons();
-//        initOfficalButtons();
+//        initTestButtons();
+        initOfficalButtons();
     }
 
     public static OI getInstance() {

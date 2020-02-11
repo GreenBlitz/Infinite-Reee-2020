@@ -7,7 +7,7 @@ import org.greenblitz.motion.base.Position;
 
 public class DelicateTurn implements IThreadable {
 
-    private double POWER = 0.2;
+    private double POWER = 0.25;
     private double TOL = Math.toRadians(1);
     private double goal;
     private double rightMult;
