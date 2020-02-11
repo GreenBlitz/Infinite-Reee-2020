@@ -141,9 +141,10 @@ public class Follow2DProfileCommand implements IThreadable {
 
     @Override
     public void atEnd() {
-        System.out.println("Finished Course");
-//        Chassis.getInstance().toBrake();
-//        Chassis.getInstance().moveMotors(0,0);
+        if (this.endV == 0) {
+            Chassis.getInstance().toBrake();
+        }
+        Chassis.getInstance().moveMotors(0,0);
     }
 
 }
