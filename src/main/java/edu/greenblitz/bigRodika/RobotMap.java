@@ -58,6 +58,20 @@ public class RobotMap {
             }
         }
 
+        public static class Climber {
+            public static class Motor {
+                public static final int HOOK = 9;
+                public static final int ELEVATOR = 10;
+            }
+
+            public static class Solenoid {
+                public static final int FORWARD = 3;
+                public static final int REVERSE = 4;
+            }
+
+            public static final int PCM = 21;
+        }
+
         public static class Chassis {
             public static class Motor {
                 public static final int LEFT_VICTOR = 2, // 2
