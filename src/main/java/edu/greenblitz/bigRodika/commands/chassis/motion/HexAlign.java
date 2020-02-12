@@ -54,7 +54,7 @@ public class HexAlign extends ChassisCommand {
 
     @Override
     public void initialize() {
-        double absAng = gyroInverted * (Chassis.getInstance().getAngle() + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET);
+        double absAng = gyroInverted * Chassis.getInstance().getAngle();
 
         State startState = new State(0, 0, profileAngleVsGyroInverted * absAng);
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
