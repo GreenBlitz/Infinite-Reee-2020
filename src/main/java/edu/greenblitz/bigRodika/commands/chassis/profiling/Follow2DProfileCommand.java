@@ -144,7 +144,6 @@ public class Follow2DProfileCommand implements IThreadable {
         if (this.endV == 0) {
             Chassis.getInstance().toBrake();
         }
-        Chassis.getInstance().moveMotors(0,0);
     }
 
 }
