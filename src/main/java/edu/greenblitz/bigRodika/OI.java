@@ -48,7 +48,7 @@ public class OI {
 
     private void initTestButtons(){
 
-        mainJoystick.A.whenReleased(new ApproachSwiftly(0.5, new AbsoluteTolerance(0.01)));
+        mainJoystick.A.whenReleased(new ApproachSwiftly(0.5, new AbsoluteTolerance(-0.01)));
 
     }
 

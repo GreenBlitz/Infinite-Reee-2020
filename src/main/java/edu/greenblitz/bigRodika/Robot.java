@@ -20,10 +20,10 @@ public class Robot extends TimedRobot {
 
 //        Pneumatics.init();
 //        Shifter.init();
-//        Funnel.init();
-//        Shooter.init();
+        Funnel.init();
+        Shooter.init();
         Dome.init();
-//        Chassis.init(); // Must be last!
+        Chassis.init(); // Must be last!
 
         OI.getInstance();
 
