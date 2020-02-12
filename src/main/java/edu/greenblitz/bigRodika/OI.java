@@ -5,6 +5,9 @@ import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.driver.DriveUntilVision;
 import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.GoFetch;
+import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
+import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
+import edu.greenblitz.bigRodika.commands.complex.autonomous.Trench8BallAuto;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
@@ -48,6 +51,12 @@ public class OI {
 
         mainJoystick.R1.whenPressed(new ThreeStageTesting.Starter());
         mainJoystick.R1.whenReleased(new StopShooter());
+
+        mainJoystick.A.whenPressed(new Trench8BallAuto());
+        mainJoystick.B.whenPressed(new StopShooter());
+
+        mainJoystick.START.whenPressed(new CheckMaxLin(0.5));
+        mainJoystick.BACK.whenPressed(new CheckMaxRot(0.5));
 
         mainJoystick.L1.whileHeld(new InsertIntoShooter(0.5, 0.7));
         mainJoystick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));

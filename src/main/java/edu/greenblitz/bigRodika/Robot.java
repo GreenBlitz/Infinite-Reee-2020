@@ -51,11 +51,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-//        Chassis.getInstance().toBrake();
-//        Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
-//        Chassis.getInstance().resetEncoders();
-//        Shooter.getInstance().resetEncoder();
+        Chassis.getInstance().toBrake();
+        Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
+        Chassis.getInstance().resetEncoders();
+        Shooter.getInstance().resetEncoder();
 
-//        new LocalizerCommandRunner().schedule();
+        new LocalizerCommandRunner().schedule();
     }
 }

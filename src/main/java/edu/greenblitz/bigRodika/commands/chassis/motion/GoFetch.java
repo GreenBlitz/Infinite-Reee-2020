@@ -66,10 +66,10 @@ public class GoFetch extends ChassisCommand {
                 .001, 200,
                 data,
                 1.0,
-                1.2*0.5, 1.0*0.5,
-                new PIDObject(0.4/vN,0.002/vN,12.0/aN, 1),0.01*vN,
-                new PIDObject(0.4/vNr,0,12.0/aNr, 1),0.01*vNr,
-                false, 0, Double.POSITIVE_INFINITY);
+                1.0*0.5, 1.0*0.5,
+                new PIDObject(1.0/vN,0.002/vN,4.0/aN, 1),0.01*vN,
+                new PIDObject(0.6/vNr,0,4.0/aNr, 1),0.01*vNr,
+                true, 0, Double.POSITIVE_INFINITY);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
         prof.setSendData(true);

@@ -76,6 +76,11 @@ public class Follow2DProfileCommand implements IThreadable {
                                   double startV, double endV) {
         this.startV = startV;
         this.endV = endV;
+        if (isReverse){
+            for (State s : path){
+                s.setAngle(s.getAngle() + Math.PI);
+            }
+        }
         this.profile2D = ChassisProfiler2D.generateProfile(path, jump,this.startV,this.endV, data,
                 0, 1.0, smoothingTail);
         SmartDashboard.putString("Data for profile", data.toString());
@@ -112,9 +117,11 @@ public class Follow2DProfileCommand implements IThreadable {
     public void run() {
         runTStart = System.currentTimeMillis();
 
-        Vector2D vals = follower.run(mult * Chassis.getInstance().getDerivedLeft(),
-                mult * Chassis.getInstance().getDerivedRight(),
-                mult * Chassis.getInstance().getAngularVelocityByWheels());
+        double[] inp = ProfilingUtils.trasnformInputs(Chassis.getInstance().getDerivedLeft(),
+                Chassis.getInstance().getDerivedRight(),
+                Chassis.getInstance().getAngularVelocityByWheels(),
+                mult);
+        Vector2D vals = follower.run(inp[0], inp[1], inp[2]);
 
         vals = ProfilingUtils.Clamp(ProfilingUtils.flipToBackwards(vals, isOpp), maxPower);
 

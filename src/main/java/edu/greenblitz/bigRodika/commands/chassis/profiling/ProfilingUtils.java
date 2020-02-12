@@ -4,14 +4,17 @@ import org.greenblitz.motion.base.Vector2D;
 
 public class ProfilingUtils {
 
+    public static double[] trasnformInputs(double leftVel, double rightVel, double angle, double mult){
+        return new double[] {leftVel*mult, rightVel*mult, angle*mult};
+    }
 
     public static Vector2D flipToBackwards(Vector2D input, boolean isReverse){
 
         if (isReverse){
             input = input.scale(-1);
-        } else {
-            input = new Vector2D(input.getY(), input.getX());
         }
+        input = new Vector2D(input.getY(), input.getX());
+
 
         return input;
 

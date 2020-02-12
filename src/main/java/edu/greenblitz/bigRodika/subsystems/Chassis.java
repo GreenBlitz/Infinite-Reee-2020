@@ -108,8 +108,8 @@ public class Chassis extends GBSubsystem {
     public void moveMotors(double left, double right){
         leftTalon.set(ControlMode.PercentOutput, right); // Don't ask this is right
         rightTalon.set(ControlMode.PercentOutput, left);   //chassis
-        SmartDashboard.putNumber("Left", left);
-        SmartDashboard.putNumber("Right", right);
+        putNumber("Left Power", left);
+        putNumber("Right Power", right);
 //        rightLeader.set(-right);
 //        leftLeader.set(-left);   //big-haim
     }
