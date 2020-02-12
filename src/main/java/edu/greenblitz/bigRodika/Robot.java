@@ -18,18 +18,15 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         CommandScheduler.getInstance().enable();
 
-//        Pneumatics.init();
+        Pneumatics.init();
+        Intake.init();
 //        Shifter.init();
-        Funnel.init();
-        Shooter.init();
-        Chassis.init(); // Must be last!
+//        Funnel.init();
+//        Shooter.init();
+        Dome.init();
+//        Chassis.init(); // Must be last!
 
         OI.getInstance();
-
-        SmartDashboard.putNumber("p", 0);
-        SmartDashboard.putNumber("i", 0);
-        SmartDashboard.putNumber("d", 0);
-        SmartDashboard.putNumber("f", 0);
 
         VisionMaster.getInstance();
     }
@@ -46,19 +43,19 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        Command shooterCommand = Shooter.getInstance().getCurrentCommand();
-        SmartDashboard.putString("Shooter::currentCommand", shooterCommand == null ? "" : shooterCommand.getName());
-        Command chassisCommand = Chassis.getInstance().getCurrentCommand();
-        SmartDashboard.putString("Chassis::currentCommand", chassisCommand == null ? "" : chassisCommand.getName());
+//        Command shooterCommand = Shooter.getInstance().getCurrentCommand();
+//        SmartDashboard.putString("Shooter::currentCommand", shooterCommand == null ? "" : shooterCommand.getName());
+//        Command chassisCommand = Chassis.getInstance().getCurrentCommand();
+//        SmartDashboard.putString("Chassis::currentCommand", chassisCommand == null ? "" : chassisCommand.getName());
     }
 
     @Override
     public void teleopInit() {
-        Chassis.getInstance().toBrake();
-        Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
-        Chassis.getInstance().resetEncoders();
-        Shooter.getInstance().resetEncoder();
+//        Chassis.getInstance().toBrake();
+//        Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
+//        Chassis.getInstance().resetEncoders();
+//        Shooter.getInstance().resetEncoder();
 
-        new LocalizerCommandRunner().schedule();
+//        new LocalizerCommandRunner().schedule();
     }
 }

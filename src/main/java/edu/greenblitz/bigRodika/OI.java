@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika;
 
+import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.driver.DriveUntilVision;
 import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
@@ -14,6 +15,13 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAuto
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
+import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
+import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
+
+import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
+import edu.greenblitz.gblib.hid.SmartJoystick;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 public class OI {
     private static OI instance;
@@ -63,7 +71,6 @@ public class OI {
 //                        false)
 //                ,
 //                Chassis.getInstance()));
-
     }
 
     private void initOfficalButtons() {
@@ -80,8 +87,6 @@ public class OI {
         secondStick.Y.whileHeld(new
                 ParallelCommandGroup(new PushByConstant(-0.7), new InsertByConstant(-0.6)));
         secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
-
-        mainJoystick.START.whenPressed(new GoFetch());
 
     }
 
