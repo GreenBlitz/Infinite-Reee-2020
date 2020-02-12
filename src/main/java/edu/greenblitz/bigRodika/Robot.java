@@ -18,13 +18,13 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         CommandScheduler.getInstance().enable();
 
-        Pneumatics.init();
-        Intake.init();
+//        Pneumatics.init();
+//        Intake.init();
 //        Shifter.init();
-//        Funnel.init();
-//        Shooter.init();
+        Funnel.init();
+        Shooter.init();
         Dome.init();
-//        Chassis.init(); // Must be last!
+        Chassis.init(); // Must be last!
 
         OI.getInstance();
 

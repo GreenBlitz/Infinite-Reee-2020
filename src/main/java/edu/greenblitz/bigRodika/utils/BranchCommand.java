@@ -16,8 +16,8 @@ public class BranchCommand extends GBCommand {
         trueOp = ifTrue;
         falseOp = ifFalse;
 
-        systems.addAll(ifFalse.getRequirements());
-        systems.addAll(ifTrue.getRequirements());
+//        systems.addAll(ifFalse.getRequirements());
+//        systems.addAll(ifTrue.getRequirements());
 
         condition = cond;
     }

@@ -3,10 +3,10 @@ package edu.greenblitz.bigRodika.commands.chassis.motion;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
-import edu.greenblitz.bigRodika.commands.generic.WaitMiliSeconds;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionLocation;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
+import edu.greenblitz.bigRodika.utils.WaitMiliSeconds;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -70,10 +70,6 @@ public class GoFetch extends ChassisCommand {
     @Override
     public void end(boolean interrupted) {
         cmd.end(interrupted);
-        new SequentialCommandGroup(
-                new WaitMiliSeconds(5000),
-                new GoFetch()
-        ).schedule();
     }
 
     @Override

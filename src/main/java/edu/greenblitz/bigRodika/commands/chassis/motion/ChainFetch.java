@@ -13,7 +13,7 @@ public class ChainFetch extends SequentialCommandGroup {
     public ChainFetch(int count, SmartJoystick stick){
         addCommands(
                 new ArcadeDriveUntilVision(stick),
-                new GoFetch(),
+//                new GoFetch(),
                 new GBCommand() {
 
                     @Override

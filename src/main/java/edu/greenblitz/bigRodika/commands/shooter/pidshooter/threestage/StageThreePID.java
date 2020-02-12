@@ -20,14 +20,13 @@ public class StageThreePID extends ShootBySimplePid {
         obj.setKf(obj.getKf() + ISum / target);
         obj.setKi(0);
         shooter.setPreparedToShoot(true);
-        shooter.putBoolean("RunningStage3", true);
+        shooter.putNumber("I addition", ISum);
         super.initialize();
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        shooter.putBoolean("RunningStage3", false);
         shooter.setPreparedToShoot(false);
     }
 

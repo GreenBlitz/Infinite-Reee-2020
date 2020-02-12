@@ -22,6 +22,10 @@ public class Shooter extends GBSubsystem {
         flywheel.setInverted(RobotMap.Limbo2.Shooter.IS_INVERTED);
         flywheel.setIdleMode(CANSparkMax.IdleMode.kCoast);
         preparedToShoot = false;
+
+        putNumber("testing_target", 0);
+        putNumber("testing_ff", 0);
+
 //        flywheel.getEncoder().setVelocityConversionFactor(TICKS_PER_REVOLUTION);
 //        encoder = new SparkEncoder(RobotMap.Limbo2.Shooter.NORMALIZER, flywheel);
     }
@@ -38,7 +42,7 @@ public class Shooter extends GBSubsystem {
     }
 
     public void shoot(double power) {
-        SmartDashboard.putNumber("Shooter::power", power);
+        putNumber("power", power);
         this.flywheel.set(power);
     }
 
