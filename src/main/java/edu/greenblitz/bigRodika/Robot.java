@@ -20,16 +20,12 @@ public class Robot extends TimedRobot {
 
 //        Pneumatics.init();
 //        Shifter.init();
-        Funnel.init();
-        Shooter.init();
-        Chassis.init(); // Must be last!
+//        Funnel.init();
+//        Shooter.init();
+        Dome.init();
+//        Chassis.init(); // Must be last!
 
         OI.getInstance();
-
-        SmartDashboard.putNumber("p", 0);
-        SmartDashboard.putNumber("i", 0);
-        SmartDashboard.putNumber("d", 0);
-        SmartDashboard.putNumber("f", 0);
 
         VisionMaster.getInstance();
     }
@@ -37,7 +33,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        VisionMaster.getInstance().update();
     }
 
     @Override

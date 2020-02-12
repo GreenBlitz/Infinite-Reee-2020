@@ -24,7 +24,7 @@ public class GoFetch extends ChassisCommand {
         locations.add(new State(0, 0, 0));
         locations.add(new State(target.getX(), target.getY(), angle, 0, 0));
 
-        ProfilingData data =  RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.7");
+        ProfilingData data =  RobotMap.Limbo2.Chassis.MotionData.POWER.get("0.7");
         prof = new Follow2DProfileCommand(locations,
                 .001, 200,
                 data,
