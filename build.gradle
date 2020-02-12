@@ -57,7 +57,6 @@ dependencies {
     // The jitpack line in repositories is required for these libraries.
     compile 'com.github.GreenBlitz.MotionControl:motion:16bee347470211e2d92e935493acaf396ebfb19f'
     compile 'com.github.GreenBlitz:GBLib:4af82caef63aa79e950fd183fa8c2acdde68b161'
-
     compile group: 'com.google.guava', name: 'guava', version: '11.0.2'
 
     // Optional lines, used for writing tests
