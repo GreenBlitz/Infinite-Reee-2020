@@ -56,7 +56,7 @@ public class OI {
 
     private void initOfficalButtons() {
 
-//        mainJoystick.A.whileHeld(new GoFetch());
+        mainJoystick.A.whileHeld(new GoFetch());
         mainJoystick.A.whenReleased(new ArcadeDrive(mainJoystick));
 
         secondStick.R1.whenPressed(new FullyAutoThreeStage(2950, 0.49));
