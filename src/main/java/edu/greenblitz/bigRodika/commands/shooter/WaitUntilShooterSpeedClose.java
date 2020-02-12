@@ -1,4 +1,4 @@
-package edu.greenblitz.bigRodika.commands.shooter.pidshooter;
+package edu.greenblitz.bigRodika.commands.shooter;
 
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
@@ -10,11 +10,11 @@ public class WaitUntilShooterSpeedClose extends GBCommand {
     private int insuranceCount;
     private int count;
 
-    public WaitUntilShooterSpeedClose(double vel, double error){
+    public WaitUntilShooterSpeedClose(double vel, double error) {
         this(vel, error, 1);
     }
 
-    public WaitUntilShooterSpeedClose(double vel, double error, int ins){
+    public WaitUntilShooterSpeedClose(double vel, double error, int ins) {
         this.error = error;
         this.wantedVel = vel;
         this.insuranceCount = ins;
@@ -27,7 +27,7 @@ public class WaitUntilShooterSpeedClose extends GBCommand {
 
     @Override
     public void execute() {
-        if (Math.abs(wantedVel - Shooter.getInstance().getShooterSpeed()) <= error){
+        if (Math.abs(wantedVel - Shooter.getInstance().getShooterSpeed()) <= error) {
             count += 1;
         } else {
             count = 0;

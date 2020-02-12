@@ -54,7 +54,7 @@ public class HexAlign extends ChassisCommand {
 
     @Override
     public void initialize() {
-        double absAng = gyroInverted * (Chassis.getInstance().getAngle() + RobotMap.BigRodika.Shooter.SHOOTER_ANGLE_OFFSET);
+        double absAng = gyroInverted * (Chassis.getInstance().getAngle() + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET);
 
         State startState = new State(0, 0, profileAngleVsGyroInverted * absAng);
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
@@ -67,10 +67,10 @@ public class HexAlign extends ChassisCommand {
             return;
         }
 
-        double targetX = difference[0] + RobotMap.BigRodika.Chassis.VISION_CAM_X_DIST_CENTER;
+        double targetX = difference[0] + RobotMap.Limbo2.Chassis.VISION_CAM_X_DIST_CENTER;
         double targetY = difference[1];
 
-        double cam_y =  RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER;
+        double cam_y =  RobotMap.Limbo2.Chassis.VISION_CAM_Y_DIST_CENTER;
 
         double radCenter = new Point(targetX,
                 targetY + cam_y).norm();
@@ -91,7 +91,7 @@ public class HexAlign extends ChassisCommand {
 
         SmartDashboard.putNumber("rds", r);
 
-        double desRadCenter = r + RobotMap.BigRodika.Chassis.VISION_CAM_Y_DIST_CENTER;
+        double desRadCenter = r + RobotMap.Limbo2.Chassis.VISION_CAM_Y_DIST_CENTER;
         //TODO This is inaccurate, if cam is not in the middle of the X dir of the robot we are screwed
         double errRadCenter = Math.abs(radCenter - desRadCenter);
 
@@ -156,7 +156,7 @@ public class HexAlign extends ChassisCommand {
         System.err.println("end" + endState.toString());
 
 
-        ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5");
+        ProfilingData data = RobotMap.Limbo2.Chassis.MotionData.POWER.get("0.5");
 
         boolean reverse  =   Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
 
@@ -171,12 +171,17 @@ public class HexAlign extends ChassisCommand {
 
         globalEnd = new Position(endState.getX() + Chassis.getInstance().getLocation().getX(),
                 endState.getY() + Chassis.getInstance().getLocation().getY(), endState.getAngle());
+        double vN = data.getMaxLinearVelocity();
+        double aN = data.getMaxLinearAccel();
+        double vNr = data.getMaxAngularVelocity();
+        double aNr = data.getMaxAngularAccel();
         prof = new Follow2DProfileCommand(path,
-                .001, 1000,
+                .001, 400,
                 data,
-                0.5, 1, 1,
-                new PIDObject(1.2 / data.getMaxLinearVelocity(), 0, 6 / data.getMaxLinearAccel()), .01 * data.getMaxLinearVelocity(),
-                new PIDObject(0.6 / data.getMaxAngularVelocity(), 0, 0 / data.getMaxAngularAccel()), .01 * data.getMaxAngularVelocity(),
+                1.0,
+                1.2*0.5, 1.0*0.5,
+                new PIDObject(0.6/vN,0.002/vN,12.0/aN, 1),0.01*vN,
+                new PIDObject(0.5/vNr,0,12.0/aNr, 1),0.01*vNr,
                 reverse);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();

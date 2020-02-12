@@ -7,7 +7,7 @@ public abstract class ShooterCommand extends GBCommand {
 
     protected Shooter shooter;
 
-    public ShooterCommand(){
+    public ShooterCommand() {
         super(Shooter.getInstance());
         shooter = Shooter.getInstance();
     }
