@@ -8,13 +8,11 @@ import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.base.Vector2D;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ChassisProfiler2D;
-import org.greenblitz.motion.profiling.MotionProfile2D;
 import org.greenblitz.motion.profiling.ProfilingData;
 import org.greenblitz.motion.profiling.followers.PidFollower2D;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class LiveProfileCommand implements IThreadable {
 
@@ -82,7 +80,7 @@ public class LiveProfileCommand implements IThreadable {
         follower = new PidFollower2D(linKv, linKa, linKv, linKa,
                 perWheelPIDConsts,
                 collapsingPerWheelPIDTol, 1.0, angularPIDConsts, collapsingAngularPIDTol,
-                RobotMap.BigRodika.Chassis.WHEEL_DIST,
+                RobotMap.Limbo2.Chassis.WHEEL_DIST,
                 ChassisProfiler2D.generateProfile(path, jump, data,
                         0, 1.0, smoothingTail));
 

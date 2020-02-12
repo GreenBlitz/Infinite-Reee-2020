@@ -1,8 +1,12 @@
 package edu.greenblitz.bigRodika.subsystems;
 
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.gblib.gears.Gear;
+import edu.greenblitz.gblib.gears.GearDependentValue;
+import edu.greenblitz.gblib.gears.GlobalGearContainer;
 import edu.greenblitz.gblib.sendables.SendableDoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /**
@@ -14,21 +18,26 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
  * @see DoubleSolenoid
  */
 
-public class Shifter implements Subsystem {
+public class Shifter extends GBSubsystem {
 
     private static Shifter instance;
 
     private SendableDoubleSolenoid m_piston;
     private Gear m_currentShift = Gear.POWER;
+    private GearDependentValue<DoubleSolenoid.Value> shiftValue =
+            new GearDependentValue<>(DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kReverse);
+//    POWER(DoubleSolenoid.Value.kForward),
+//    SPEED(DoubleSolenoid.Value.kReverse);
+
 
     /**
      * This constructor constructs the piston.
      */
     private Shifter() {
 
-        m_piston = new SendableDoubleSolenoid(RobotMap.BigRodika.Chassis.Shifter.PCM,
-                RobotMap.BigRodika.Chassis.Shifter.Solenoid.FORWARD,
-                RobotMap.BigRodika.Chassis.Shifter.Solenoid.REVERSE);
+        m_piston = new SendableDoubleSolenoid(RobotMap.Limbo2.Chassis.Shifter.PCM,
+                RobotMap.Limbo2.Chassis.Shifter.Solenoid.FORWARD,
+                RobotMap.Limbo2.Chassis.Shifter.Solenoid.REVERSE);
 
 
     }
@@ -37,7 +46,10 @@ public class Shifter implements Subsystem {
      * This function creates a new instance of this class.
      */
     public static void init() {
-        if (instance == null) instance = new Shifter();
+        if (instance == null) {
+            instance = new Shifter();
+            CommandScheduler.getInstance().registerSubsystem(instance);
+        }
     }
 
     /**
@@ -50,43 +62,15 @@ public class Shifter implements Subsystem {
     }
 
     /**
-     * This is an enum that works based on the state of piston.
-     * POWER - Piston is in a forward state.
-     * SPEED - Piston is in a reverse state.
-     */
-    public enum Gear {
-        POWER(DoubleSolenoid.Value.kForward),
-        SPEED(DoubleSolenoid.Value.kReverse);
-
-        private DoubleSolenoid.Value m_value;
-
-        Gear(DoubleSolenoid.Value value) {
-            m_value = value;
-        }
-
-        /**
-         * This function returns the current value of the piston
-         *
-         * @return The current state of the piston (off/forward/reverse)
-         */
-        public DoubleSolenoid.Value getValue() {
-            return m_value;
-        }
-
-        public boolean isSpeed() {
-            return this == SPEED;
-        }
-    }
-
-    /**
      * This function sets the state of the piston based on the value received.
      *
      * @param state A value based off of the Gear enum. This value is then set as the state the piston is in.
      */
     public void setShift(Gear state) {
         m_currentShift = state;
-        m_piston.set(state.getValue());
-//        Chassis.getInstance().setTickPerMeter(state);
+        Chassis.getInstance().changeGear();
+        GlobalGearContainer.getInstance().setGear(state);
+        m_piston.set(shiftValue.getValue());
     }
 
     public void toggleShift() {
@@ -99,6 +83,6 @@ public class Shifter implements Subsystem {
      * @return The state of the piston through the Gear enum
      */
     public Gear getCurrentGear() {
-        return m_currentShift;
+        return GlobalGearContainer.getInstance().getGear();
     }
 }

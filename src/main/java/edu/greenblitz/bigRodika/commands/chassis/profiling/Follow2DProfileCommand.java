@@ -1,6 +1,5 @@
 package edu.greenblitz.bigRodika.commands.chassis.profiling;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.greenblitz.gblib.threading.IThreadable;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
@@ -12,6 +11,7 @@ import org.greenblitz.motion.profiling.ChassisProfiler2D;
 import org.greenblitz.motion.profiling.MotionProfile2D;
 import org.greenblitz.motion.profiling.ProfilingData;
 import org.greenblitz.motion.profiling.followers.PidFollower2D;
+import org.greenblitz.motion.profiling.kinematics.CurvatureConverter;
 
 import java.util.List;
 
@@ -25,14 +25,14 @@ public class Follow2DProfileCommand implements IThreadable {
     private double collapsingPerWheelPIDTol;
     private double collapsingAngularPIDTol;
 
-    private double maxPower = 1.0;
+    private double maxPower;
     private boolean died;
     private boolean isOpp;
 
     private double mult;
 
     private long runTStart;
-    private long minRuntime = 10;
+    private long minRuntime = 5;
 
 
     /**
@@ -71,9 +71,10 @@ public class Follow2DProfileCommand implements IThreadable {
     public void atInit() {
         follower = new PidFollower2D(linKv, linKa, linKv, linKa,
                 perWheelPIDConsts,
-                collapsingPerWheelPIDTol, 1.0, angularPIDConsts, collapsingAngularPIDTol,
-                RobotMap.BigRodika.Chassis.WHEEL_DIST,
+                collapsingPerWheelPIDTol, Double.NaN, angularPIDConsts, collapsingAngularPIDTol,
+                RobotMap.Limbo2.Chassis.WHEEL_DIST,
                 profile2D);
+        follower.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
         follower.setSendData(true);
         Chassis.getInstance().toCoast();
         mult = isOpp ? -1 : 1;
@@ -89,29 +90,13 @@ public class Follow2DProfileCommand implements IThreadable {
     public void run() {
         runTStart = System.currentTimeMillis();
 
-        Vector2D vals = follower.run(mult * Chassis.getInstance().getLeftRate(),
-                mult * Chassis.getInstance().getRightRate(),
-                mult * Chassis.getInstance().getAngularVelocityByWheels()); // TODO test if this is mult or -mult
+        Vector2D vals = follower.run(mult * Chassis.getInstance().getDerivedLeft(),
+                mult * Chassis.getInstance().getDerivedRight(),
+                mult * Chassis.getInstance().getAngularVelocityByWheels());
 
-        if (isOpp){
-            vals = vals.scale(-1);
-        }
+        vals = ProfilingUtils.Clamp(ProfilingUtils.flipToBackwards(vals, isOpp), maxPower);
 
-        if (Double.isNaN(vals.getX() + vals.getY())) {
-            throw new RuntimeException("Profile returned NaN");
-        }
-
-        if (!isOpp) {
-            Chassis.getInstance().moveMotors(
-                    maxPower * clamp(vals.getX()),
-                    maxPower * clamp(vals.getY())
-            );
-//            Chassis.getInstance().moveMotors(0,
-//                   0);
-        } else  {
-            Chassis.getInstance().moveMotors(maxPower * clamp(vals.getY()),
-                    maxPower * clamp(vals.getX()));
-        }
+        Chassis.getInstance().moveMotors(vals.getX(), vals.getY());
 
         if (minRuntime != 0) {
             try {
@@ -123,20 +108,18 @@ public class Follow2DProfileCommand implements IThreadable {
         }
     }
 
-    public double clamp(double in){
-        return Math.copySign(Math.min(Math.abs(in), 1), in);
-    }
 
     /**
      * @return if follower finished
      */
     @Override
     public boolean isFinished() {
-        return follower.isFinished() || died;
+        return follower.isFinished();// || died;
     }
 
     @Override
     public void atEnd() {
+        System.out.println("Finished Course");
         Chassis.getInstance().toBrake();
         Chassis.getInstance().moveMotors(0,0);
     }

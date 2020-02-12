@@ -1,10 +1,10 @@
 package edu.greenblitz.bigRodika.commands.chassis.test;
 
+import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
-import edu.greenblitz.gblib.command.GBCommand;
 import org.greenblitz.debug.RemoteCSVTarget;
 
-public class CheckMaxLin extends GBCommand {
+public class CheckMaxLin extends ChassisCommand {
 
     private double power;
     private double previousVel;
@@ -14,7 +14,6 @@ public class CheckMaxLin extends GBCommand {
     int count;
 
     public CheckMaxLin(double power) {
-        requires(Chassis.getInstance());
         this.power = power;
     }
 
@@ -31,22 +30,14 @@ public class CheckMaxLin extends GBCommand {
     public void execute() {
         count++;
 
-        while (System.currentTimeMillis() - tStart < 5000) {
-            Chassis.getInstance().moveMotors(power, power);
+        Chassis.getInstance().moveMotors(power, power);
 
-            double time = System.currentTimeMillis() / 1000.0;
-            double V = Chassis.getInstance().getLinearVelocity();
-            target.report(time - tStart/1000.0, V, (V - previousVel) / (time - previousTime));
-            previousTime = time;
-            previousVel = V;
+        double time = System.currentTimeMillis() / 1000.0;
+        double V = (Chassis.getInstance().getDerivedLeft() + Chassis.getInstance().getDerivedRight()) / 2.0;
+        target.report(time - tStart / 1000.0, V, (V - previousVel) / (time - previousTime));
+        previousTime = time;
+        previousVel = V;
 
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 
     @Override

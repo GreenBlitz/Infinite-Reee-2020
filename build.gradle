@@ -49,12 +49,19 @@ dependencies {
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 
+    compile 'org.jetbrains:annotations:16.0.2'
+
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio) 
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
     // Optional lines, adds common robot code libraries to the project
     // The jitpack line in repositories is required for these libraries.
+<<<<<<< HEAD
     compile 'com.github.GreenBlitz.MotionControl:motion:v1.0.0'
     compile 'com.github.GreenBlitz:GBLib:b37c8df83e8f96597ed8f9cb0941263b202ae47e'
+=======
+    compile 'com.github.GreenBlitz.MotionControl:motion:a8fac89aa58e20b941f51e0d2fc8da8c98561aac'
+    compile 'com.github.GreenBlitz:GBLib:5d05c745bd81ef33c833ad312e8933c1d0d2896f'
+>>>>>>> 3d3e135caebf448e16a53f301b366c9a3cd9d3c3
 
     compile group: 'com.google.guava', name: 'guava', version: '11.0.2'
 
@@ -80,3 +87,4 @@ test {
 wrapper{
     gradleVersion = '5.6'
 }
+

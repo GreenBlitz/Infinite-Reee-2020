@@ -1,39 +1,41 @@
-package edu.greenblitz.bigRodika.commands.chassis;
+package edu.greenblitz.bigRodika.commands.chassis.turns;
 
+import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
-import edu.greenblitz.gblib.command.GBCommand;
+import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Position;
 import org.greenblitz.motion.profiling.ActuatorLocation;
 import org.greenblitz.motion.profiling.MotionProfile1D;
 import org.greenblitz.motion.profiling.Profiler1D;
 
-public class TurnToAngle extends GBCommand {
-
-    private static int ERROR_NORMALIZE;
+public class TurnToAngle extends ChassisCommand {
 
     private ActuatorLocation end;
     private MotionProfile1D motionProfile;
     private double power, locP, velP, maxV, maxA;
     private long t0;
+    private boolean allowRedo;
+    private double maxError;
 
     private int overCount;
 
     public TurnToAngle(double angleToTurnDeg, double locP, double velP,
                        double maxV, double maxA,
-                       double power) {
-        super(Chassis.getInstance());
+                       double power, boolean allowRedo, double maxError) {
         this.locP = locP;
         this.velP = velP;
         this.maxA = maxA;
         this.maxV = maxV;
         this.power = power;
         this.end = new ActuatorLocation(Math.toRadians(angleToTurnDeg), 0);
+        this.allowRedo = allowRedo;
+        this.maxError = maxError;
     }
 
     @Override
     public void initialize() {
-        ActuatorLocation start = new ActuatorLocation(Chassis.getInstance().getAngle(),
+        ActuatorLocation start = new ActuatorLocation(chassis.getAngle(),
                 0);
 
         this.motionProfile = Profiler1D.generateProfile(
@@ -52,22 +54,23 @@ public class TurnToAngle extends GBCommand {
         double timePassed = (System.currentTimeMillis() - t0) / 1000.0;
 
         if (motionProfile.isOver(timePassed)) {
-            Chassis.getInstance().moveMotors(0, 0);
+            System.out.println("Finishing with TurnToAngle: " + overCount);
+            chassis.moveMotors(0, 0);
             overCount++;
             return;
         }
 
         double velocity = motionProfile.getVelocity(timePassed);
-        double perWheelVel = velocity * Chassis.getInstance().getWheelDistance() / 2.0;
+        double perWheelVel = velocity * chassis.getWheelDistance() / 2.0;
         double accel = motionProfile.getAcceleration(timePassed);
         double location = motionProfile.getLocation(timePassed);
 
         double ff = velocity / maxV + accel / maxA;
-        double locPVal = locP * Position.normalizeAngle(location - Chassis.getInstance().getAngle());
-        double velPLeft = velP * (perWheelVel - Chassis.getInstance().getLeftRate());
-        double velPRight = velP * (-perWheelVel - Chassis.getInstance().getRightRate());
+        double locPVal = locP * Position.normalizeAngle(location - chassis.getAngle());
+        double velPLeft = velP * (perWheelVel - chassis.getLeftRate());
+        double velPRight = velP * (-perWheelVel - chassis.getRightRate());
 
-        Chassis.getInstance().moveMotors(
+        chassis.moveMotors(
                 clamp(ff + locPVal + velPLeft),
                 -clamp(ff + locPVal + velPRight));
     }
@@ -78,20 +81,15 @@ public class TurnToAngle extends GBCommand {
 
     @Override
     public void end(boolean interrupted) {
-        double err = Math.toDegrees(Chassis.getInstance().getAngle() - end.getX());
+        double err = Math.toDegrees(Position.normalizeAngle(chassis.getAngle() - end.getX()));
         SmartDashboard.putNumber("Final Error", err);
-        if (Math.abs(err) > 2 && !interrupted) {
-            double normalize = 1.0;
-            double newLocP = locP * normalize;
-            double newVelP = velP * normalize;
-            double newMaxV = maxV * normalize;
-            double newMaxA = maxA * normalize;
-            new TurnToAngle(Math.toDegrees(end.getX()), newLocP, newVelP, newMaxV, newMaxA, power).schedule();
+        if (Math.abs(err) > maxError && !interrupted && allowRedo) {
+            new ThreadedCommand(new DelicateTurn(end.getX()), Chassis.getInstance()).schedule();
         }
     }
 
     @Override
     public boolean isFinished() {
-        return overCount >= 3;
+        return overCount >= 10;
     }
 }
