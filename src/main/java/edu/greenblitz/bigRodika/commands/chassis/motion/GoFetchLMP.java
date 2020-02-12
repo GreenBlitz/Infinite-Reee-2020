@@ -14,6 +14,7 @@ import org.greenblitz.motion.profiling.ProfilingData;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class GoFetchLMP extends GBCommand {
     private final double JMP = 0.001;
     private double t0;
@@ -41,7 +42,7 @@ public class GoFetchLMP extends GBCommand {
                 ang = (Math.PI / 2) - Math.atan2( location.y * location.y - location.x * location.x, 2 * location.x * location.y);
             }
             locations.add(new State(location.x, location.y, ang));
-            ProfilingData data = RobotMap.BigRodika.Chassis.MotionData.POWER.get("0.5");
+            ProfilingData data = RobotMap.Limbo2.Chassis.MotionData.POWER.get("0.5");
             prof = new Follow2DProfileCommand(locations,
                     .001, 200,
                     data,

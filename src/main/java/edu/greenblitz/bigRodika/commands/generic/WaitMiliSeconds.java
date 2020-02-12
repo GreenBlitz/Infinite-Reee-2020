@@ -1,27 +1,11 @@
 package edu.greenblitz.bigRodika.commands.generic;
 
-import edu.greenblitz.gblib.command.GBCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class WaitMiliSeconds extends GBCommand {
-    private long stime;
-    private long wtime;
+public class WaitMiliSeconds extends WaitCommand {
 
     public WaitMiliSeconds(long time){
-        wtime = time;
+        super(time / 1000.0);
     }
 
-    @Override
-    public void initialize(){
-        stime = System.currentTimeMillis();
-    }
-
-    @Override
-    public boolean isFinished(){
-        return stime + wtime >= System.currentTimeMillis();
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        System.out.println("Finished waiting");
-    }
 }

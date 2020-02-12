@@ -11,6 +11,7 @@ import org.greenblitz.motion.profiling.ChassisProfiler2D;
 import org.greenblitz.motion.profiling.MotionProfile2D;
 import org.greenblitz.motion.profiling.ProfilingData;
 import org.greenblitz.motion.profiling.followers.PidFollower2D;
+import org.greenblitz.motion.profiling.kinematics.CurvatureConverter;
 
 import java.util.List;
 
@@ -31,8 +32,10 @@ public class Follow2DProfileCommand implements IThreadable {
     private double mult;
 
     private long runTStart;
-    private long minRuntime = 10;
+    private long minRuntime = 5;
 
+    private double startV = 0;
+    private double endV = Double.POSITIVE_INFINITY;
 
     /**
      *
@@ -66,13 +69,34 @@ public class Follow2DProfileCommand implements IThreadable {
         this.maxPower = maxPower;
     }
 
+    public Follow2DProfileCommand(List<State> path, double jump, int smoothingTail, ProfilingData data,
+                                  double maxPower, double velMultLin, double accMultLin,
+                                  PIDObject perWheelPIDCosnts, double collapseConstaPerWheel, PIDObject angularPIDConsts,
+                                  double collapseConstAngular, boolean isReverse,
+                                  double startV, double endV) {
+        this.startV = startV;
+        this.endV = endV;
+        this.profile2D = ChassisProfiler2D.generateProfile(path, jump,this.startV,this.endV, data,
+                0, 1.0, smoothingTail);
+        SmartDashboard.putString("Data for profile", data.toString());
+        this.linKv = velMultLin / data.getMaxLinearVelocity();
+        this.linKa = accMultLin / data.getMaxLinearAccel();
+        this.perWheelPIDConsts = perWheelPIDCosnts;
+        this.collapsingPerWheelPIDTol = collapseConstaPerWheel;
+        this.isOpp = isReverse;
+        this.angularPIDConsts = angularPIDConsts;
+        this.collapsingAngularPIDTol = collapseConstAngular;
+        this.maxPower = maxPower;
+    }
+
     @Override
     public void atInit() {
         follower = new PidFollower2D(linKv, linKa, linKv, linKa,
                 perWheelPIDConsts,
-                collapsingPerWheelPIDTol, 1.0, angularPIDConsts, collapsingAngularPIDTol,
-                RobotMap.BigRodika.Chassis.WHEEL_DIST,
+                collapsingPerWheelPIDTol, Double.NaN, angularPIDConsts, collapsingAngularPIDTol,
+                RobotMap.Limbo2.Chassis.WHEEL_DIST,
                 profile2D);
+        follower.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
         follower.setSendData(true);
         Chassis.getInstance().toCoast();
         mult = isOpp ? -1 : 1;
@@ -92,50 +116,9 @@ public class Follow2DProfileCommand implements IThreadable {
                 mult * Chassis.getInstance().getDerivedRight(),
                 mult * Chassis.getInstance().getAngularVelocityByWheels());
 
-        if (isOpp){
-            vals = vals.scale(-1);
-        }
+        vals = ProfilingUtils.Clamp(ProfilingUtils.flipToBackwards(vals, isOpp), maxPower);
 
-        if (Double.isNaN(vals.getX() + vals.getY())) {
-            throw new RuntimeException("Profile returned NaN");
-        }
-
-        // --------------------
-        // This code clamps both values of the motors between -maxPower and maxPower
-        // while still keeping the same ratio
-
-        if (vals.getX() == 0 || vals.getY() == 0 || true) {
-
-            vals.setX(maxPower*clamp(vals.getX()));
-            vals.setY(maxPower*clamp(vals.getY()));
-
-        } else {
-
-            double ratio = vals.getY() / vals.getX();
-
-            if (Math.abs(vals.getX()) > Math.abs(vals.getY())) {
-                vals.setX(maxPower * clamp(vals.getX()));
-                vals.setY(vals.getX() * ratio);
-            } else {
-                vals.setY(maxPower * clamp(vals.getY()));
-                vals.setX(vals.getX() * (1.0 / ratio));
-            }
-
-        }
-
-        // ---------------------
-
-        if (!isOpp) {
-            Chassis.getInstance().moveMotors(
-                    vals.getX(),
-                    vals.getY()
-            );
-//            Chassis.getInstance().moveMotors(0,
-//                   0);
-        } else  {
-            Chassis.getInstance().moveMotors(vals.getY(),
-                    vals.getX());
-        }
+        Chassis.getInstance().moveMotors(vals.getX(), vals.getY());
 
         if (minRuntime != 0) {
             try {
@@ -147,9 +130,6 @@ public class Follow2DProfileCommand implements IThreadable {
         }
     }
 
-    public double clamp(double in){
-        return Math.copySign(Math.min(Math.abs(in), 1), in);
-    }
 
     /**
      * @return if follower finished
@@ -162,8 +142,8 @@ public class Follow2DProfileCommand implements IThreadable {
     @Override
     public void atEnd() {
         System.out.println("Finished Course");
-        Chassis.getInstance().toBrake();
-        Chassis.getInstance().moveMotors(0,0);
+//        Chassis.getInstance().toBrake();
+//        Chassis.getInstance().moveMotors(0,0);
     }
 
 }

@@ -81,7 +81,7 @@ public class TurnToAngle extends ChassisCommand {
 
     @Override
     public void end(boolean interrupted) {
-        double err = Math.toDegrees(chassis.getAngle() - end.getX());
+        double err = Math.toDegrees(Position.normalizeAngle(chassis.getAngle() - end.getX()));
         SmartDashboard.putNumber("Final Error", err);
         if (Math.abs(err) > maxError && !interrupted && allowRedo) {
             new ThreadedCommand(new DelicateTurn(end.getX()), Chassis.getInstance()).schedule();

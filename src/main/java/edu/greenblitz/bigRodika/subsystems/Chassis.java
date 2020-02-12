@@ -2,7 +2,6 @@ package edu.greenblitz.bigRodika.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -11,15 +10,9 @@ import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.RoborioEncoder;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
-import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
-import edu.greenblitz.gblib.encoder.SparkEncoder;
-import edu.greenblitz.gblib.gyroscope.NavxGyro;
 import edu.greenblitz.gblib.gyroscope.PigeonGyro;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.Localizer;
@@ -27,7 +20,7 @@ import org.greenblitz.motion.base.Position;
 
 
 
-public class Chassis implements Subsystem {
+public class Chassis extends GBSubsystem {
     private static Chassis instance;
 
     private VictorSPX leftVictor, rightVictor;
@@ -39,29 +32,27 @@ public class Chassis implements Subsystem {
 
     private Chassis() {
 
-        //robotPDP = new PowerDistributionPanel(); // Shooter is 13
-
-        leftVictor = new VictorSPX(RobotMap.BigRodika.Chassis.Motor.LEFT_VICTOR);
-        rightVictor = new VictorSPX(RobotMap.BigRodika.Chassis.Motor.RIGHT_VICTOR);
-        leftTalon = new WPI_TalonSRX(RobotMap.BigRodika.Chassis.Motor.LEFT_TALON);
-        rightTalon = new WPI_TalonSRX(RobotMap.BigRodika.Chassis.Motor.RIGHT_TALON);
+        leftVictor = new VictorSPX(RobotMap.Limbo2.Chassis.Motor.LEFT_VICTOR);
+        rightVictor = new VictorSPX(RobotMap.Limbo2.Chassis.Motor.RIGHT_VICTOR);
+        leftTalon = new WPI_TalonSRX(RobotMap.Limbo2.Chassis.Motor.LEFT_TALON);
+        rightTalon = new WPI_TalonSRX(RobotMap.Limbo2.Chassis.Motor.RIGHT_TALON);
 
         rightVictor.setInverted(true);
         rightVictor.follow(rightTalon);
         leftVictor.follow(leftTalon);
         leftVictor.follow(leftTalon);   //chassis
 
-//        leftTalon.configOpenloopRamp(0.2);
-//        rightVictor.configOpenloopRamp(0.2);
-//        rightTalon.configOpenloopRamp(0.2);
-//        leftVictor.configOpenloopRamp(0.2);
+        leftTalon.configOpenloopRamp(0);
+        rightVictor.configOpenloopRamp(0);
+        rightTalon.configOpenloopRamp(0);
+        leftVictor.configOpenloopRamp(0);
 
-//        rightLeader = new CANSparkMax(RobotMap.BigRodika.Chassis.Motor.RIGHT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
-//        rightFollower1 = new CANSparkMax(RobotMap.BigRodika.Chassis.Motor.RIGHT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
-//        rightFollower2 = new CANSparkMax(RobotMap.BigRodika.Chassis.Motor.RIGHT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);
-//        leftLeader = new CANSparkMax(RobotMap.BigRodika.Chassis.Motor.LEFT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
-//        leftFollower1 = new CANSparkMax(RobotMap.BigRodika.Chassis.Motor.LEFT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
-//        leftFollower2 = new CANSparkMax(RobotMap.BigRodika.Chassis.Motor.LEFT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);   //big-haim
+//        rightLeader = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
+//        rightFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
+//        rightFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);
+//        leftLeader = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
+//        leftFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
+//        leftFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);   //big-haim
 //
 //        leftLeader.setInverted(true);
 //        leftFollower1.follow(leftLeader);
@@ -72,17 +63,17 @@ public class Chassis implements Subsystem {
 
 
         leftEncoder = new RoborioEncoder(
-                RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_LEFT,
-                RobotMap.BigRodika.Chassis.Encoder.LEFT_PORT_A,
-                RobotMap.BigRodika.Chassis.Encoder.LEFT_PORT_B);
+                RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_LEFT,
+                RobotMap.Limbo2.Chassis.Encoder.LEFT_PORT_A,
+                RobotMap.Limbo2.Chassis.Encoder.LEFT_PORT_B);
         rightEncoder = new RoborioEncoder(
-                RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_RIGHT,
-                RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_A,
-                RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_B);   //chassis
+                RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_RIGHT,
+                RobotMap.Limbo2.Chassis.Encoder.RIGHT_PORT_A,
+                RobotMap.Limbo2.Chassis.Encoder.RIGHT_PORT_B);   //chassis
         leftEncoder.invert(true);
-//        leftEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
+//        leftEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
 //        leftEncoder.invert(true);
-//        rightEncoder = new SparkEncoder(RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
+//        rightEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
 //        rightEncoder.invert(true);
 
         gyroscope = new PigeonGyro(new PigeonIMU(rightTalon));   // chassis
@@ -171,11 +162,11 @@ public class Chassis implements Subsystem {
     }
 
     public double getLinearVelocity(){
-        return 0.5*(getLeftRate() + getRightRate());
+        return 0.5*(getDerivedLeft() + getDerivedRight());
     }
 
     public double getAngularVelocityByWheels(){
-        return getWheelDistance() * (getDerivedLeft() - getDerivedRight());
+        return getWheelDistance() * (getDerivedRight() - getDerivedLeft());
     }
 
     public double getAngle(){
@@ -195,7 +186,7 @@ public class Chassis implements Subsystem {
     }
 
     public double getWheelDistance(){
-        return RobotMap.BigRodika.Chassis.WHEEL_DIST;
+        return RobotMap.Limbo2.Chassis.WHEEL_DIST;
     }
 
     public Position getLocation(){
@@ -219,6 +210,8 @@ public class Chassis implements Subsystem {
     @Override
     public void periodic(){
 
+        super.periodic();
+
         double dt = (System.currentTimeMillis() - lastTime) / 1000.0;
         double deltaLocLeft = leftEncoder.getNormalizedTicks() - lastLocationLeft;
         double deltaLocRight = rightEncoder.getNormalizedTicks() - lastLocationRight;
@@ -231,9 +224,10 @@ public class Chassis implements Subsystem {
 
         lastTime = System.currentTimeMillis();
 
-        SmartDashboard.putNumber("left derv", derivedLeftVel);
-        SmartDashboard.putNumber("right derv", derivedRightVel);
-        SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
+        putNumber("left derv", derivedLeftVel);
+        putNumber("right derv", derivedRightVel);
+        putNumber("Angle", getAngularVelocityByWheels());
+        putString("Location", Localizer.getInstance().getLocation().toString());
 
     }
 

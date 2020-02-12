@@ -12,7 +12,8 @@ public class ShootByDashboard extends ShooterCommand {
     private double target;
     private long tStart;
 
-    public ShootByDashboard(double target){ ;
+    public ShootByDashboard(double target) {
+        ;
         this.target = target;
         this.logger = RemoteCSVTarget.initTarget("FlyWheelVel", "time", "vel");
     }
@@ -34,7 +35,7 @@ public class ShootByDashboard extends ShooterCommand {
     @Override
     public void execute() {
         shooter.setSpeedByPID(target);
-        logger.report((System.currentTimeMillis() - tStart)/1000.0, shooter.getShooterSpeed());
+        logger.report((System.currentTimeMillis() - tStart) / 1000.0, shooter.getShooterSpeed());
     }
 
     @Override

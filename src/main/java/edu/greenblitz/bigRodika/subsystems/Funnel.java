@@ -20,7 +20,7 @@ public class Funnel {
     private Inserter inserter;
     private Pusher pusher;
 
-    public class Inserter implements Subsystem {
+    public class Inserter extends GBSubsystem {
         private WPI_TalonSRX inserter;
         private TalonEncoder inserterEncoder;
 
@@ -32,17 +32,20 @@ public class Funnel {
 
         private Inserter(Funnel parent){
             this.parent = parent;
-            inserter = new WPI_TalonSRX(RobotMap.BigRodika.Funnel.Motors.INSERTER_PORT);
-            inserterEncoder = new TalonEncoder(RobotMap.BigRodika.Funnel.Encoder.NORMALIZER, inserter);
+            inserter = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.INSERTER_PORT);
+            inserterEncoder = new TalonEncoder(RobotMap.Limbo2.Funnel.Encoder.NORMALIZER, inserter);
         }
 
         @Override
         public void periodic() {
+
+            super.periodic();
+
         }
 
     }
 
-    public class Pusher implements Subsystem{
+    public class Pusher extends GBSubsystem{
         private WPI_TalonSRX pusher;
 
         private Funnel parent;
@@ -53,11 +56,14 @@ public class Funnel {
 
         private Pusher(Funnel parent){
             this.parent = parent;
-            pusher = new WPI_TalonSRX(RobotMap.BigRodika.Funnel.Motors.PUSHER_PORT);
+            pusher = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.PUSHER_PORT);
         }
 
         @Override
         public void periodic() {
+
+            super.periodic();
+
         }
     }
 
