@@ -62,7 +62,6 @@ public class GoFetch extends ChassisCommand {
     @Override
     public void end(boolean interrupted) {
         cmd.end(interrupted);
-        new GoFetch();
     }
 
     @Override
