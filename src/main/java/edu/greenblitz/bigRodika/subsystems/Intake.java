@@ -24,8 +24,8 @@ public class Intake {
         private WPI_TalonSRX roller;
 
         private Roller() {
-            roller = new WPI_TalonSRX(RobotMap.BigRodika.Intake.Motors.ROLLER_PORT);
-            roller.setInverted(RobotMap.BigRodika.Intake.Motors.IS_REVERSED);
+            roller = new WPI_TalonSRX(RobotMap.Limbo2.Intake.Motors.ROLLER_PORT);
+            roller.setInverted(RobotMap.Limbo2.Intake.Motors.IS_REVERSED);
             roller.setNeutralMode(NeutralMode.Coast);
         }
 
@@ -39,7 +39,7 @@ public class Intake {
         private DoubleSolenoid extender;
 
         private Extender() {
-            extender = new DoubleSolenoid(RobotMap.BigRodika.Intake.PCM, RobotMap.BigRodika.Intake.Solenoid.FORWARD, RobotMap.BigRodika.Intake.Solenoid.REVERSE);
+            extender = new DoubleSolenoid(RobotMap.Limbo2.Intake.PCM, RobotMap.Limbo2.Intake.Solenoid.FORWARD, RobotMap.Limbo2.Intake.Solenoid.REVERSE);
         }
 
         @Override
