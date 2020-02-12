@@ -77,7 +77,6 @@ public class Shooter extends GBSubsystem {
 
     @Override
     public void periodic() {
-        super.periodic();
 
         putNumber("Position", flywheel.getEncoder().getPosition());
         putNumber("Velocity", flywheel.getEncoder().getVelocity());

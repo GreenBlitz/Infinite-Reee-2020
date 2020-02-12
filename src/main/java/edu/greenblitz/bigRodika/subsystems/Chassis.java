@@ -28,7 +28,7 @@ public class Chassis extends GBSubsystem {
 //    private CANSparkMax rightLeader, rightFollower1, rightFollower2, leftLeader, leftFollower1, leftFollower2;
     private IEncoder leftEncoder, rightEncoder;
     private IGyroscope gyroscope;
-    private PowerDistributionPanel robotPDP;
+//    private PowerDistributionPanel robotPDP;
 
     private Chassis() {
 
@@ -144,13 +144,6 @@ public class Chassis extends GBSubsystem {
         moveMotors(moveValue - rotateValue, moveValue + rotateValue);
     }
 
-    public double getCurrnet(int port){
-         return robotPDP.getCurrent(port);
-    }
-
-    public double getVoltage(int port){
-        return robotPDP.getVoltage();
-    }
 
     public double getLeftMeters(){
         return leftEncoder.getNormalizedTicks();
