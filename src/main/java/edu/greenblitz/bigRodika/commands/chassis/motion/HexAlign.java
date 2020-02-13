@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.Position;
 import org.greenblitz.motion.base.State;
+import org.greenblitz.motion.profiling.ProfilingConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class HexAlign extends ChassisCommand {
 
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
+    private ProfilingConfiguration config;
     private double k = 0.2;
     private double r = 4.2; //radius
     private int profileAngleVsGyroInverted = -1;
@@ -28,23 +30,35 @@ public class HexAlign extends ChassisCommand {
     private double driveTolerance = 0.3;
     private double tolerance = 0.05;
     private List<Double> radsAndCritPoints;//crit point - radius - crit - radius - crit .... - radius
-    private double endAng;
     private Position globalEnd;
     private double maxPower = 0.5;
 
 
-    public HexAlign(double r, double k, double driveTolerance, double tolerance) {
+    public HexAlign(double r, double k, double driveTolerance, double tolerance, double maxPower, ProfilingConfiguration config) {
+        super();
         this.k = k;
         this.r = r;
         this.driveTolerance = driveTolerance;
         this.tolerance = tolerance;
+        this.maxPower = maxPower;
+        this.config = config;
     }
 
-    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance) {
+    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance, double maxPower, ProfilingConfiguration config) {
+        super();
         this.radsAndCritPoints = radsAndCritPoints;
         this.k = k;
         this.driveTolerance = driveTolerance;
-        this.tolerance = tolerance;
+        this.maxPower = maxPower;
+        this.config = config;
+    }
+
+    public HexAlign(double r, double k, double driveTolerance, double tolerance, double maxPower) {
+        this(r,k,driveTolerance,tolerance,maxPower, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
+    }
+
+    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance, double maxPower) {
+        this(radsAndCritPoints,k,driveTolerance,tolerance,maxPower, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
     }
 
     public HexAlign() {
@@ -57,7 +71,7 @@ public class HexAlign extends ChassisCommand {
 
     @Override
     public void initialize() {
-        double absAng = gyroInverted * (Chassis.getInstance().getAngle() + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET);
+        double absAng = gyroInverted * (Chassis.getInstance().getAngle());// + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET);
 
         State startState = new State(0, 0, profileAngleVsGyroInverted * absAng);
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
@@ -78,6 +92,8 @@ public class HexAlign extends ChassisCommand {
         double radCenter = new Point(targetX,
                 targetY + cam_y).norm();
 
+
+        //find best radius
         if (radsAndCritPoints != null) {
             if (radCenter < radsAndCritPoints.get(0) + cam_y) {
                 fucked = true;
@@ -99,8 +115,8 @@ public class HexAlign extends ChassisCommand {
         double errRadCenter = Math.abs(radCenter - desRadCenter);
 
         SmartDashboard.putNumber("errRadCenter", errRadCenter);
-        //can be done without all of this definitions, just so the code would be readable
 
+        //if robot is very very close - do nothing
         if (errRadCenter < tolerance) {
             fucked = true;
             return;
@@ -108,6 +124,7 @@ public class HexAlign extends ChassisCommand {
 
         SmartDashboard.putBoolean("inDriveTol", errRadCenter < driveTolerance);
 
+        //if robot is close - drives straight
         if (errRadCenter < driveTolerance) {
             k = 1;
         }
@@ -119,9 +136,10 @@ public class HexAlign extends ChassisCommand {
 
         globHexPos = new Point(hexPos.getX() + Chassis.getInstance().getLocation().getX(),
                 hexPos.getY() + Chassis.getInstance().getLocation().getY());
-        SmartDashboard.putString("hex", hexPos.toString());
-        System.err.println("hex " + hexPos.toString());
 
+        SmartDashboard.putString("hex", hexPos.toString());
+
+        //calculates the best point to get to, deals with exceptional cases
         double devConst = 1.5;
         double angle;
         if (Math.abs(targetX) > r) {
@@ -139,18 +157,21 @@ public class HexAlign extends ChassisCommand {
             );
         }
 
-        State endState = new State(hexPos.getX() + r * Math.cos(angle),
+        //calculates the end point
+        State endState = new State(
+                hexPos.getX() + r * Math.cos(angle),
                 hexPos.getY() - r * Math.sin(angle),
                 profileAngleVsGyroInverted * (Math.PI / 2 - angle));
 
+        //translates the profile from mid front to mid mid
         endState.translate(new Point(0, cam_y).rotate(-absAng)).translate(new Point(0, -cam_y).rotate(endState.getAngle()));
 
-        endAng = -endState.getAngle();
-
+        //if robot is close - drives straight
         if (errRadCenter < driveTolerance) {
             endState.setAngle(startState.getAngle());
         }
 
+        //creates path
         List<State> path = new ArrayList<>();
         path.add(startState);
         path.add(endState);
@@ -158,17 +179,16 @@ public class HexAlign extends ChassisCommand {
         SmartDashboard.putString("end", endState.toString());
         System.err.println("end" + endState.toString());
 
+        //determines if reversed
         boolean reverse = Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
 
         SmartDashboard.putString("start", startState.toString());
         SmartDashboard.putString("end1", endState.toString());
         System.err.println("end1" + endState.toString());
 
-        globalEnd = new Position(endState.getX() + Chassis.getInstance().getLocation().getX(),
-                endState.getY() + Chassis.getInstance().getLocation().getY(), endState.getAngle());
+        globalEnd = new Position(Chassis.getInstance().getLocation()).translate(endState);
 
-        prof = new Follow2DProfileCommand(path, RobotMap.Limbo2.Chassis.MotionData.CONFIG, maxPower, reverse);
-
+        prof = new Follow2DProfileCommand(path, config, maxPower, reverse);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
     }
@@ -188,5 +208,9 @@ public class HexAlign extends ChassisCommand {
     public boolean isFinished() {
         if (fucked) return true;
         return cmd.isFinished();
+    }
+
+    public Position getGlobalEnd(){
+        return globalEnd;
     }
 }
