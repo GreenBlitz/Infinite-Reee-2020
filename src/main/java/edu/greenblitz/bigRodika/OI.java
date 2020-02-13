@@ -29,6 +29,7 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAuto
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.MotionProfile2D;
@@ -68,19 +69,21 @@ public class OI {
         List<State> path = new ArrayList<>();
         path.add(new State(0,0,0));
         path.add(new State(0,-1,0));
-//        Follow2DProfileCommand prof = new Follow2DProfileCommand(path,
-//                .001, 400,
-//                data,
-//                1.0,
-//                1.2*0.5, 1.0*0.5,
-//                new PIDObject(0*0.6/vN,0*0.002/vN,0*12.0/aN, 1),0.01*vN,
-//                new PIDObject(0*0.5/vNr,0,0*12.0/aNr, 1),0.01*vNr,
-//                true);
-//
-//        mainJoystick.X.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
+        Follow2DProfileCommand prof = new Follow2DProfileCommand(path,
+                .001, 400,
+                data,
+                1.0,
+                1.2*0.5, 1.0*0.5,
+                new PIDObject(0*0.6/vN,0*0.002/vN,0*12.0/aN, 1),0.01*vN,
+                new PIDObject(0*0.5/vNr,0,0*12.0/aNr, 1),0.01*vNr,
+                true);
 
-        path.get(1).setY(1);
-        Follow2DProfileCommand profi = new Follow2DProfileCommand(path,
+        mainJoystick.X.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
+
+        List<State> pathi = new ArrayList<>();
+        pathi.add(new State(0, 0, 0));
+        pathi.add(new State(0, 1, 0));
+        Follow2DProfileCommand profi = new Follow2DProfileCommand(pathi,
                 .001, 400,
                 data,
                 1.0,
