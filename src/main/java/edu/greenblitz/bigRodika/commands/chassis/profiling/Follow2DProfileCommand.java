@@ -52,28 +52,36 @@ public class Follow2DProfileCommand implements IThreadable {
      * @param collapseConstAngular
      * @param isReverse
      */
-    public Follow2DProfileCommand(List<State> path, double jump, int smoothingTail, ProfilingData data,
-                                  double maxPower, double velMultLin, double accMultLin,
-                                  PIDObject perWheelPIDCosnts, double collapseConstaPerWheel, PIDObject angularPIDConsts,
-                                  double collapseConstAngular, boolean isReverse) {
-        this.profile2D = ChassisProfiler2D.generateProfile(path, jump, data,
-                0, 1.0, smoothingTail);
-        SmartDashboard.putString("Data for profile", data.toString());
-        this.linKv = velMultLin / data.getMaxLinearVelocity();
-        this.linKa = accMultLin / data.getMaxLinearAccel();
-        this.perWheelPIDConsts = perWheelPIDCosnts;
-        this.collapsingPerWheelPIDTol = collapseConstaPerWheel;
-        this.isOpp = isReverse;
-        this.angularPIDConsts = angularPIDConsts;
-        this.collapsingAngularPIDTol = collapseConstAngular;
-        this.maxPower = maxPower;
+    public Follow2DProfileCommand(List<State> path,
+                                  double jump,
+                                  int smoothingTail,
+                                  ProfilingData data,
+                                  double maxPower,
+                                  double velMultLin,
+                                  double accMultLin,
+                                  PIDObject perWheelPIDCosnts,
+                                  double collapseConstaPerWheel,
+                                  PIDObject angularPIDConsts,
+                                  double collapseConstAngular,
+                                  boolean isReverse) {
+        this(path, jump, smoothingTail, data, maxPower, velMultLin, accMultLin, perWheelPIDCosnts, collapseConstaPerWheel,
+                angularPIDConsts, collapseConstAngular, isReverse, 0, 0);
     }
 
-    public Follow2DProfileCommand(List<State> path, double jump, int smoothingTail, ProfilingData data,
-                                  double maxPower, double velMultLin, double accMultLin,
-                                  PIDObject perWheelPIDCosnts, double collapseConstaPerWheel, PIDObject angularPIDConsts,
-                                  double collapseConstAngular, boolean isReverse,
-                                  double startV, double endV) {
+    public Follow2DProfileCommand(List<State> path,
+                                  double jump,
+                                  int smoothingTail,
+                                  ProfilingData data,
+                                  double maxPower,
+                                  double velMultLin,
+                                  double accMultLin,
+                                  PIDObject perWheelPIDCosnts,
+                                  double collapseConstaPerWheel,
+                                  PIDObject angularPIDConsts,
+                                  double collapseConstAngular,
+                                  boolean isReverse,
+                                  double startV,
+                                  double endV) {
         this.startV = startV;
         this.endV = endV;
         if (isReverse){
@@ -81,8 +89,16 @@ public class Follow2DProfileCommand implements IThreadable {
                 s.setAngle(s.getAngle() + Math.PI);
             }
         }
-        this.profile2D = ChassisProfiler2D.generateProfile(path, jump,this.startV,this.endV, data,
-                0, 1.0, smoothingTail);
+        this.profile2D = ChassisProfiler2D.generateProfile(
+                path,
+                jump,
+                this.startV,
+                this.endV,
+                data,
+                0.0,
+                1.0,
+                smoothingTail);
+        SmartDashboard.putNumber("Profile Tend", this.profile2D.getTEnd());
         SmartDashboard.putString("Data for profile", data.toString());
         this.linKv = velMultLin / data.getMaxLinearVelocity();
         this.linKa = accMultLin / data.getMaxLinearAccel();

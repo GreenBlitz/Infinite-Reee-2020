@@ -160,11 +160,6 @@ public class HexAlign extends ChassisCommand {
 
         boolean reverse  =   Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
 
-        if(reverse){
-            endState.setAngle(endState.getAngle() + Math.PI);
-            startState.setAngle(startState.getAngle() + Math.PI);
-        }
-
         SmartDashboard.putString("start", startState.toString());
         SmartDashboard.putString("end1", endState.toString());
         System.err.println("end1" + endState.toString());
