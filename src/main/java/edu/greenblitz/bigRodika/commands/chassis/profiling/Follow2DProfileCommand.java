@@ -1,14 +1,15 @@
 package edu.greenblitz.bigRodika.commands.chassis.profiling;
 
-import edu.greenblitz.gblib.threading.IThreadable;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.gblib.threading.IThreadable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.base.Vector2D;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ChassisProfiler2D;
 import org.greenblitz.motion.profiling.MotionProfile2D;
+import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import org.greenblitz.motion.profiling.ProfilingData;
 import org.greenblitz.motion.profiling.followers.PidFollower2D;
 import org.greenblitz.motion.profiling.kinematics.CurvatureConverter;
@@ -37,8 +38,42 @@ public class Follow2DProfileCommand implements IThreadable {
     private double startV = 0;
     private double endV = Double.POSITIVE_INFINITY;
 
+
+
+    public Follow2DProfileCommand(
+            List<State> path,
+            ProfilingConfiguration config,
+            double maxPower,
+            boolean isReverse){
+        this(path,config,RobotMap.Limbo2.Chassis.MotionData.POWER.get("" + maxPower),maxPower,isReverse);
+    }
+
+    public Follow2DProfileCommand(List<State> path,
+                                  ProfilingConfiguration config,
+                                  ProfilingData data,
+                                  double maxPower,
+                                  boolean isReverse) {
+        this(path,
+                config.getJump(),
+                config.getSmoothingTale(),
+                data,
+                1.0,
+                maxPower * config.getVelMultLin(),
+                maxPower * config.getAccMultLin(),
+                new PIDObject(
+                        config.getWheelPidKp() / data.getMaxLinearVelocity(),
+                        config.getWheelPidKi() / data.getMaxLinearVelocity(),
+                        config.getWheelPidKd() / data.getMaxAngularAccel()),
+                config.getCollapseConstaPerWheel() * data.getMaxLinearVelocity(),
+                new PIDObject(
+                        config.getAngPidKp() / data.getMaxAngularVelocity(),
+                        config.getAngPidKi() / data.getMaxAngularVelocity(),
+                        config.getAngPidKd() / data.getMaxAngularAccel()),
+                config.getCollapseConstAngular() * data.getMaxAngularVelocity(),
+                isReverse);
+    }
+
     /**
-     *
      * @param path
      * @param jump
      * @param smoothingTail
@@ -84,8 +119,8 @@ public class Follow2DProfileCommand implements IThreadable {
                                   double endV) {
         this.startV = startV;
         this.endV = endV;
-        if (isReverse){
-            for (State s : path){
+        if (isReverse) {
+            for (State s : path) {
                 s.setAngle(s.getAngle() + Math.PI);
             }
         }
@@ -125,7 +160,7 @@ public class Follow2DProfileCommand implements IThreadable {
         follower.init();
     }
 
-    public void setSendData(boolean val){
+    public void setSendData(boolean val) {
         follower.setSendData(val);
     }
 

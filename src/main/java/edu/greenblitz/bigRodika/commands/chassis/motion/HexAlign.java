@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.Position;
 import org.greenblitz.motion.base.State;
-import org.greenblitz.motion.pid.PIDObject;
-import org.greenblitz.motion.profiling.ProfilingData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +31,7 @@ public class HexAlign extends ChassisCommand {
     private double endAng;
     private Position globalEnd;
     private double maxPower = 0.5;
-    private double velMultLin = 1.2;
-    private double accMultLin = 1.0;
+
 
     public HexAlign(double r, double k, double driveTolerance, double tolerance) {
         this.k = k;
@@ -76,7 +73,7 @@ public class HexAlign extends ChassisCommand {
         double targetX = difference[0] + RobotMap.Limbo2.Chassis.VISION_CAM_X_DIST_CENTER;
         double targetY = difference[1];
 
-        double cam_y =  RobotMap.Limbo2.Chassis.VISION_CAM_Y_DIST_CENTER;
+        double cam_y = RobotMap.Limbo2.Chassis.VISION_CAM_Y_DIST_CENTER;
 
         double radCenter = new Point(targetX,
                 targetY + cam_y).norm();
@@ -137,8 +134,8 @@ public class HexAlign extends ChassisCommand {
                     - absAng
                     + relAng
                     - k * Math.asin(
-                            Math.sin(-relAng) *
-                                    ((targetY - Math.sqrt(r * r - targetX * targetX)) / r)
+                    Math.sin(-relAng) *
+                            ((targetY - Math.sqrt(r * r - targetX * targetX)) / r)
             );
         }
 
@@ -146,13 +143,13 @@ public class HexAlign extends ChassisCommand {
                 hexPos.getY() - r * Math.sin(angle),
                 profileAngleVsGyroInverted * (Math.PI / 2 - angle));
 
-        endState.translate(new Point(0, cam_y).rotate(-absAng)).translate(new Point (0,-cam_y).rotate(endState.getAngle()));
+        endState.translate(new Point(0, cam_y).rotate(-absAng)).translate(new Point(0, -cam_y).rotate(endState.getAngle()));
 
         endAng = -endState.getAngle();
 
-         if(errRadCenter < driveTolerance){
+        if (errRadCenter < driveTolerance) {
             endState.setAngle(startState.getAngle());
-         }
+        }
 
         List<State> path = new ArrayList<>();
         path.add(startState);
@@ -161,10 +158,7 @@ public class HexAlign extends ChassisCommand {
         SmartDashboard.putString("end", endState.toString());
         System.err.println("end" + endState.toString());
 
-
-        ProfilingData data = RobotMap.Limbo2.Chassis.MotionData.POWER.get("0.5");
-
-        boolean reverse  =   Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
+        boolean reverse = Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
 
         SmartDashboard.putString("start", startState.toString());
         SmartDashboard.putString("end1", endState.toString());
@@ -173,18 +167,8 @@ public class HexAlign extends ChassisCommand {
         globalEnd = new Position(endState.getX() + Chassis.getInstance().getLocation().getX(),
                 endState.getY() + Chassis.getInstance().getLocation().getY(), endState.getAngle());
 
-        double vN = data.getMaxLinearVelocity();
-        double aN = data.getMaxLinearAccel();
-        double vNr = data.getMaxAngularVelocity();
-        double aNr = data.getMaxAngularAccel();
-        prof = new Follow2DProfileCommand(path,
-                .001, 400,
-                data,
-                1.0,
-                velMultLin*maxPower, accMultLin*maxPower,
-                new PIDObject(0.6/vN,0.002/vN,12.0/aN, 1),0.01*vN,
-                new PIDObject(0.5/vNr,0,12.0/aNr, 1),0.01*vNr,
-                reverse);
+        prof = new Follow2DProfileCommand(path, RobotMap.Limbo2.Chassis.MotionData.CONFIG, maxPower, reverse);
+
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
     }
@@ -197,7 +181,7 @@ public class HexAlign extends ChassisCommand {
     public void end(boolean interupted) {
         if (!fucked) cmd.end(interupted);
         //SmartDashboard.putString("HexAlign error",
-                //Point.subtract(Chassis.getInstance().getLocation(), globalEnd).toString());
+        //Point.subtract(Chassis.getInstance().getLocation(), globalEnd).toString());
     }
 
     @Override

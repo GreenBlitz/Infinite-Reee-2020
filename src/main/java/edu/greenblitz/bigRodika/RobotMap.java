@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.gblib.gears.GearDependentValue;
+import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import org.greenblitz.motion.profiling.ProfilingData;
 
 import java.util.HashMap;
@@ -122,6 +123,11 @@ public class RobotMap {
             public static class MotionData {
 
                 public static final double HEXAGON_CAMERA_H_DIFF = 1.4;
+
+                public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
+                        1.2,1.0,.001,
+                        0.6,.002,12, .01,
+                        0.5,0,12,.01,400);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
 
