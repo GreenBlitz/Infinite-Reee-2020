@@ -13,7 +13,7 @@ public class PreShoot extends SequentialCommandGroup {
     }
 
     public PreShoot(double radius) {
-        HexAlign hexAlign = new HexAlign(radius, 0.2);
+        HexAlign hexAlign = new HexAlign(radius, 0.2,0.3,0.1);
         //HexAlign hexAlign = new HexAlign();
         addCommands(hexAlign,
 

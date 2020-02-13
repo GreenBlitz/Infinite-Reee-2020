@@ -32,16 +32,22 @@ public class HexAlign extends ChassisCommand {
     private List<Double> radsAndCritPoints;//crit point - radius - crit - radius - crit .... - radius
     private double endAng;
     private Position globalEnd;
+    private double maxPower = 0.5;
+    private double velMultLin = 1.2;
+    private double accMultLin = 1.0;
 
-    public HexAlign(double r, double k) {
+    public HexAlign(double r, double k, double driveTolerance, double tolerance) {
         this.k = k;
         this.r = r;
+        this.driveTolerance = driveTolerance;
+        this.tolerance = tolerance;
     }
 
-    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance) {
+    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance) {
         this.radsAndCritPoints = radsAndCritPoints;
         this.k = k;
         this.driveTolerance = driveTolerance;
+        this.tolerance = tolerance;
     }
 
     public HexAlign() {
@@ -166,6 +172,7 @@ public class HexAlign extends ChassisCommand {
 
         globalEnd = new Position(endState.getX() + Chassis.getInstance().getLocation().getX(),
                 endState.getY() + Chassis.getInstance().getLocation().getY(), endState.getAngle());
+
         double vN = data.getMaxLinearVelocity();
         double aN = data.getMaxLinearAccel();
         double vNr = data.getMaxAngularVelocity();
@@ -174,7 +181,7 @@ public class HexAlign extends ChassisCommand {
                 .001, 400,
                 data,
                 1.0,
-                1.2*0.5, 1.0*0.5,
+                velMultLin*maxPower, accMultLin*maxPower,
                 new PIDObject(0.6/vN,0.002/vN,12.0/aN, 1),0.01*vN,
                 new PIDObject(0.5/vNr,0,12.0/aNr, 1),0.01*vNr,
                 reverse);
@@ -189,8 +196,8 @@ public class HexAlign extends ChassisCommand {
     @Override
     public void end(boolean interupted) {
         if (!fucked) cmd.end(interupted);
-        SmartDashboard.putString("HexAlign error",
-                Point.subtract(Chassis.getInstance().getLocation(), globalEnd).toString());
+        //SmartDashboard.putString("HexAlign error",
+                //Point.subtract(Chassis.getInstance().getLocation(), globalEnd).toString());
     }
 
     @Override
