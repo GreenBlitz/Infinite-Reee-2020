@@ -39,13 +39,18 @@ public class Follow2DProfileCommand implements IThreadable {
     private double endV = Double.POSITIVE_INFINITY;
 
 
+    private static ProfilingData retNullandThrow(){
+        throw new RuntimeException("You are really really dumb, the key does not exists in robot map");
+    }
+
 
     public Follow2DProfileCommand(
             List<State> path,
             ProfilingConfiguration config,
             double maxPower,
             boolean isReverse){
-        this(path,config,RobotMap.Limbo2.Chassis.MotionData.POWER.get("" + maxPower),maxPower,isReverse);
+        this(path,config,(RobotMap.Limbo2.Chassis.MotionData.POWER.containsKey(Double.toString(maxPower))) ?
+                RobotMap.Limbo2.Chassis.MotionData.POWER.get(Double.toString(maxPower)): retNullandThrow() ,maxPower,isReverse);
     }
 
     public Follow2DProfileCommand(List<State> path,

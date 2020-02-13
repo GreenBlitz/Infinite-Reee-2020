@@ -89,12 +89,12 @@ public class VisionMaster extends GBSubsystem {
         if (input == null) return new VisionLocation(new double[]{Double.NaN, Double.NaN, Double.NaN});
 
         // TODO Temp because vision is dumb
-        if (algorithm.getString("Bruh").equals("hexagon")) {
-            double full_dist_squared = input[0] * input[0] + input[1] * input[1] + input[2] * input[2];
-            input[1] = RobotMap.Limbo2.Chassis.MotionData.HEXAGON_CAMERA_H_DIFF;
-            input[2] = Math.sqrt(full_dist_squared
-                    - Math.pow(input[0], 2) - Math.pow(input[1], 2));
-        }
+        //if (algorithm.getString("Bruh").equals("hexagon")) {
+        //    double full_dist_squared = input[0] * input[0] + input[1] * input[1] + input[2] * input[2];
+        //    input[1] = RobotMap.Limbo2.Chassis.MotionData.HEXAGON_CAMERA_H_DIFF;
+        //    input[2] = Math.sqrt(full_dist_squared
+        //            - Math.pow(input[0], 2) - Math.pow(input[1], 2));
+        //}
         // Bruh moment
 
         return new VisionLocation(input);

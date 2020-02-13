@@ -111,7 +111,6 @@ public class HexAlign extends ChassisCommand {
         SmartDashboard.putNumber("rds", r);
 
         double desRadCenter = r + RobotMap.Limbo2.Chassis.VISION_CAM_Y_DIST_CENTER;
-        //TODO This is inaccurate, if cam is not in the middle of the X dir of the robot we are screwed
         double errRadCenter = Math.abs(radCenter - desRadCenter);
 
         SmartDashboard.putNumber("errRadCenter", errRadCenter);
@@ -186,7 +185,7 @@ public class HexAlign extends ChassisCommand {
         SmartDashboard.putString("end1", endState.toString());
         System.err.println("end1" + endState.toString());
 
-        globalEnd = new Position(Chassis.getInstance().getLocation()).translate(endState);
+        //globalEnd = new Position(Chassis.getInstance().getLocation()).translate(endState);
 
         prof = new Follow2DProfileCommand(path, config, maxPower, reverse);
         cmd = new ThreadedCommand(prof);
@@ -208,9 +207,5 @@ public class HexAlign extends ChassisCommand {
     public boolean isFinished() {
         if (fucked) return true;
         return cmd.isFinished();
-    }
-
-    public Position getGlobalEnd(){
-        return globalEnd;
     }
 }
