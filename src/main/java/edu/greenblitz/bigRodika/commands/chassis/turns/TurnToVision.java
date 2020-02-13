@@ -56,8 +56,8 @@ public class TurnToVision extends GBCommand {
             diff[1] = posToTurnToByLocalizer.getY() - Chassis.getInstance().getLocation().getY();
         }
         target = Chassis.getInstance().getAngle() - Math.atan(diff[0]/diff[1]);
-//        target = target + RobotMap.BigRodika.Shooter.SHOOTER_ANGLE_OFFSET;
-        turn = new TurnToAngle(Math.toDegrees(target) + Math.toDegrees(RobotMap.BigRodika.Shooter.SHOOTER_ANGLE_OFFSET),3,1
+//        target = target + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET;
+        turn = new TurnToAngle(Math.toDegrees(target) + Math.toDegrees(RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET),3,1
                 , maxV, maxA, power, true, 2);
         turn.initialize();
     }

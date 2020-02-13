@@ -11,7 +11,7 @@ public class ShootBySimplePid extends ShooterCommand {
     protected double target;
     protected long tStart;
 
-    public ShootBySimplePid(PIDObject obj, double target){
+    public ShootBySimplePid(PIDObject obj, double target) {
         this.obj = obj;
         this.obj.setKf(this.obj.getKf() / target);
         this.target = target;
@@ -28,7 +28,7 @@ public class ShootBySimplePid extends ShooterCommand {
     @Override
     public void execute() {
         shooter.setSpeedByPID(target);
-        logger.report((System.currentTimeMillis() - tStart)/1000.0, shooter.getShooterSpeed());
+        logger.report((System.currentTimeMillis() - tStart) / 1000.0, shooter.getShooterSpeed());
     }
 
     @Override

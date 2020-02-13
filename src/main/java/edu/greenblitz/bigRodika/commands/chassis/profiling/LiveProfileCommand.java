@@ -80,7 +80,7 @@ public class LiveProfileCommand implements IThreadable {
         follower = new PidFollower2D(linKv, linKa, linKv, linKa,
                 perWheelPIDConsts,
                 collapsingPerWheelPIDTol, 1.0, angularPIDConsts, collapsingAngularPIDTol,
-                RobotMap.BigRodika.Chassis.WHEEL_DIST,
+                RobotMap.Limbo2.Chassis.WHEEL_DIST,
                 ChassisProfiler2D.generateProfile(path, jump, data,
                         0, 1.0, smoothingTail));
 

@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
  * @see DoubleSolenoid
  */
 
-public class Shifter implements Subsystem {
+public class Shifter extends GBSubsystem {
 
     private static Shifter instance;
 
@@ -35,9 +35,9 @@ public class Shifter implements Subsystem {
      */
     private Shifter() {
 
-        m_piston = new SendableDoubleSolenoid(RobotMap.BigRodika.Chassis.Shifter.PCM,
-                RobotMap.BigRodika.Chassis.Shifter.Solenoid.FORWARD,
-                RobotMap.BigRodika.Chassis.Shifter.Solenoid.REVERSE);
+        m_piston = new SendableDoubleSolenoid(RobotMap.Limbo2.Chassis.Shifter.PCM,
+                RobotMap.Limbo2.Chassis.Shifter.Solenoid.FORWARD,
+                RobotMap.Limbo2.Chassis.Shifter.Solenoid.REVERSE);
 
 
     }
@@ -46,10 +46,7 @@ public class Shifter implements Subsystem {
      * This function creates a new instance of this class.
      */
     public static void init() {
-        if (instance == null) {
-            instance = new Shifter();
-            CommandScheduler.getInstance().registerSubsystem(instance);
-        }
+        if (instance == null) instance = new Shifter();
     }
 
     /**
@@ -58,6 +55,7 @@ public class Shifter implements Subsystem {
      * @return The current instance of the class
      */
     public static Shifter getInstance() {
+        init();
         return instance;
     }
 

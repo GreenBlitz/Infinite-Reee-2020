@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class RobotMap {
 
-    public static class BigRodika {
+    public static class Limbo2 {
 
         public static class Funnel {
 
@@ -44,7 +44,7 @@ public class RobotMap {
         public static class Pneumatics {
             public static final int PCM = 21;
 
-            public static class Sensor {
+            public static class PressureSensor {
                 public static final int PRESSURE = 3;
             }
         }
@@ -110,16 +110,19 @@ public class RobotMap {
                     POWER.put("0.7", new ProfilingData(1.15, 10, 4, 15));
 
 //                    POWER.put("0.5", new ProfilingData(1.5*0.9, 4, 2.6, 8));
-                    POWER.put("0.5", new ProfilingData(1.35, 5.1, 3.7, 7.9));
+                    POWER.put("0.5", new ProfilingData(1.35, 5.1, 2.3, 7.9));
 
 
 
                 }
 
-
-
             }
 
+
+        }
+
+        public static class PDPPorts{
+            public static final int SHOOTER = 13;
         }
     }
 }
