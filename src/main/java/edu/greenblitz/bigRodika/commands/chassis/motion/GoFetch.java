@@ -30,6 +30,7 @@ public class GoFetch extends ChassisCommand {
     }
 
     public GoFetch(State endP){
+        System.out.println("Ctor");
         this.end = endP;
     }
 
@@ -69,7 +70,7 @@ public class GoFetch extends ChassisCommand {
                 1.0*0.5, 1.0*0.5,
                 new PIDObject(1.0/vN,0.002/vN,4.0/aN, 1),0.01*vN,
                 new PIDObject(0.6/vNr,0,4.0/aNr, 1),0.01*vNr,
-                true, 0, Double.POSITIVE_INFINITY);
+                false, 0, Double.POSITIVE_INFINITY);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
         prof.setSendData(true);
