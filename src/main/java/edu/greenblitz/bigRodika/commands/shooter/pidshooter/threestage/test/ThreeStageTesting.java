@@ -18,8 +18,8 @@ public class ThreeStageTesting extends SequentialCommandGroup {
         // 0.6 = 3100
         // 0.48 = 2800
 
-        double target = Shooter.getInstance().getNumber("testing_target", 0);
-        double ff = Shooter.getInstance().getNumber("testing_ff", 0);
+        double target = 2800;//Shooter.getInstance().getNumber("testing_target", 0);
+        double ff = 0.48;//Shooter.getInstance().getNumber("testing_ff", 0);
 
         addCommands(
 

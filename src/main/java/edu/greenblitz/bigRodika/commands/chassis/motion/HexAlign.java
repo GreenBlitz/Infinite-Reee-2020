@@ -54,11 +54,11 @@ public class HexAlign extends ChassisCommand {
     }
 
     public HexAlign(double r, double k, double driveTolerance, double tolerance, double maxPower) {
-        this(r,k,driveTolerance,tolerance,maxPower, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
+        this(r, k, driveTolerance, tolerance, maxPower, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
     }
 
     public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance, double maxPower) {
-        this(radsAndCritPoints,k,driveTolerance,tolerance,maxPower, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
+        this(radsAndCritPoints, k, driveTolerance, tolerance, maxPower, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
     }
 
     public HexAlign() {
@@ -185,7 +185,7 @@ public class HexAlign extends ChassisCommand {
         SmartDashboard.putString("end1", endState.toString());
         System.err.println("end1" + endState.toString());
 
-        //globalEnd = new Position(Chassis.getInstance().getLocation()).translate(endState);
+        globalEnd = new Position(Chassis.getInstance().getLocation()).translate(endState);
 
         prof = new Follow2DProfileCommand(path, config, maxPower, reverse);
         cmd = new ThreadedCommand(prof);
@@ -199,8 +199,8 @@ public class HexAlign extends ChassisCommand {
     @Override
     public void end(boolean interupted) {
         if (!fucked) cmd.end(interupted);
-        //SmartDashboard.putString("HexAlign error",
-        //Point.subtract(Chassis.getInstance().getLocation(), globalEnd).toString());
+        SmartDashboard.putString("HexAlign error",
+                Point.subtract(Chassis.getInstance().getLocation(), globalEnd).toString());
     }
 
     @Override
