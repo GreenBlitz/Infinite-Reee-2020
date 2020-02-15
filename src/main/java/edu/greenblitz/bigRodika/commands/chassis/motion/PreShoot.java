@@ -2,15 +2,18 @@ package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.turns.TurnToVision;
-import edu.greenblitz.bigRodika.commands.generic.WaitMiliSeconds;
+import edu.greenblitz.bigRodika.utils.WaitMiliSeconds;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class PreShoot extends SequentialCommandGroup {
 
-    public PreShoot() {
-        HexAlign hexAlign = new HexAlign(6.0, 0.2);
-        //HexAlign hexAlign = new HexAlign();
+    public PreShoot(){
+        this(6.0);
+    }
+
+    public PreShoot(double radius) {
+        HexAlign hexAlign = new HexAlign(radius, 0.2, 0.5, 0.1, 0.5);
         addCommands(hexAlign,
 
                 new WaitMiliSeconds(500),

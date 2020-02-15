@@ -12,6 +12,7 @@ import edu.greenblitz.gblib.encoder.RoborioEncoder;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
 import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.gblib.gyroscope.PigeonGyro;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.Localizer;
@@ -27,6 +28,7 @@ public class Chassis extends GBSubsystem {
 //    private CANSparkMax rightLeader, rightFollower1, rightFollower2, leftLeader, leftFollower1, leftFollower2;
     private IEncoder leftEncoder, rightEncoder;
     private IGyroscope gyroscope;
+//    private PowerDistributionPanel robotPDP;
 
     private Chassis() {
 
@@ -106,8 +108,8 @@ public class Chassis extends GBSubsystem {
     public void moveMotors(double left, double right){
         leftTalon.set(ControlMode.PercentOutput, right); // Don't ask this is right
         rightTalon.set(ControlMode.PercentOutput, left);   //chassis
-        SmartDashboard.putNumber("Left", left);
-        SmartDashboard.putNumber("Right", right);
+        putNumber("Left Power", left);
+        putNumber("Right Power", right);
 //        rightLeader.set(-right);
 //        leftLeader.set(-left);   //big-haim
     }
@@ -142,6 +144,7 @@ public class Chassis extends GBSubsystem {
         moveMotors(moveValue - rotateValue, moveValue + rotateValue);
     }
 
+
     public double getLeftMeters(){
         return leftEncoder.getNormalizedTicks();
     }
@@ -159,7 +162,7 @@ public class Chassis extends GBSubsystem {
     }
 
     public double getLinearVelocity(){
-        return 0.5*(getLeftRate() + getRightRate());
+        return 0.5*(getDerivedLeft() + getDerivedRight());
     }
 
     public double getAngularVelocityByWheels(){

@@ -4,10 +4,10 @@ import org.greenblitz.motion.tolerance.ITolerance;
 
 public class ApproachSwiftly extends DomeCommand {
 
-    public final double SLOW_DOWN_BEGIN = 0.1;
-    public final double SLOW_DOWN_END = 0.02;
-    public final double MINIMUM_SPEED = 0.03;
-    public final double MAXIMUM_SPEED = 0.1;
+    public double SLOW_DOWN_BEGIN = 0.1;
+    public double SLOW_DOWN_END = 0.01;
+    public double MINIMUM_SPEED = 0.12;
+    public double MAXIMUM_SPEED = 1.0;
 
     private double target;
     private ITolerance tolerance;
@@ -16,10 +16,28 @@ public class ApproachSwiftly extends DomeCommand {
         super();
         this.target = target;
         this.tolerance = tol;
+        dome.putNumber("SLOW_DOWN_BEGIN", SLOW_DOWN_BEGIN);
+        dome.putNumber("SLOW_DOWN_END", SLOW_DOWN_END);
+        dome.putNumber("MINIMUM_SPEED", MINIMUM_SPEED);
+        dome.putNumber("MAXIMUM_SPEED", MAXIMUM_SPEED);
+        dome.putNumber("TARGET", target);
+    }
+
+    @Override
+    public void initialize() {
+        SLOW_DOWN_BEGIN = dome.getNumber("SLOW_DOWN_BEGIN", SLOW_DOWN_BEGIN);
+        SLOW_DOWN_END = dome.getNumber("SLOW_DOWN_END", SLOW_DOWN_END);
+        MINIMUM_SPEED = dome.getNumber("MINIMUM_SPEED", MINIMUM_SPEED);
+        MAXIMUM_SPEED = dome.getNumber("MAXIMUM_SPEED", MAXIMUM_SPEED);
     }
 
     @Override
     public void execute() {
+        SLOW_DOWN_BEGIN = dome.getNumber("SLOW_DOWN_BEGIN", SLOW_DOWN_BEGIN);
+        SLOW_DOWN_END = dome.getNumber("SLOW_DOWN_END", SLOW_DOWN_END);
+        MINIMUM_SPEED = dome.getNumber("MINIMUM_SPEED", MINIMUM_SPEED);
+        MAXIMUM_SPEED = dome.getNumber("MAXIMUM_SPEED", MAXIMUM_SPEED);
+        target = dome.getNumber("TARGET", target);
         dome.safeMove(calculateVelocity(target - dome.getPotentiometerValue()));
     }
 
@@ -33,11 +51,17 @@ public class ApproachSwiftly extends DomeCommand {
         dome.moveMotor(0);
     }
 
-    private final double SLOPE = (MAXIMUM_SPEED - MINIMUM_SPEED)/(SLOW_DOWN_BEGIN - SLOW_DOWN_END);
-    private final double X_OFFSET = SLOW_DOWN_END;
-    private final double Y_OFFSET = MINIMUM_SPEED;
+    private double SLOPE = (MAXIMUM_SPEED - MINIMUM_SPEED)/(SLOW_DOWN_BEGIN - SLOW_DOWN_END);
+    private double X_OFFSET = SLOW_DOWN_END;
+    private double Y_OFFSET = MINIMUM_SPEED;
 
     public double calculateVelocity(double error){
+
+        SLOPE = (MAXIMUM_SPEED - MINIMUM_SPEED)/(SLOW_DOWN_BEGIN - SLOW_DOWN_END);
+        X_OFFSET = SLOW_DOWN_END;
+        Y_OFFSET = MINIMUM_SPEED;
+
+        dome.putNumber("Error", error);
 
         double absError = Math.abs(error);
         double errorSign = Math.signum(error);

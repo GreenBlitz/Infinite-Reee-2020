@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.gblib.gears.GearDependentValue;
+import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import org.greenblitz.motion.profiling.ProfilingData;
 
 import java.util.HashMap;
@@ -11,7 +12,7 @@ public class RobotMap {
 
         public static class Dome {
 
-            public static final int MOTOR_PORT = 0;
+            public static final int MOTOR_PORT = 11;
             public static final int POTENTIOMETER_PORT = 0;
             public static final boolean IS_MOTOR_REVERS = false;
             public static final boolean IS_POTENTIOMETER_REVERSE = false;
@@ -33,6 +34,20 @@ public class RobotMap {
 
             }
 
+        }
+
+        public static class Intake {
+            public static class Motors {
+                public static final int ROLLER_PORT = 13;
+                public static final boolean IS_REVERSED = false;
+            }
+
+            public static class Solenoid {
+                public static final int FORWARD = 5;
+                public static final int REVERSE = 7;
+            }
+
+            public static final int PCM = 22;
         }
 
         public static class Shooter {
@@ -122,6 +137,11 @@ public class RobotMap {
             public static class MotionData {
 
                 public static final double HEXAGON_CAMERA_H_DIFF = 1.4;
+
+                public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
+                        1.2,1.0,.001,
+                        0.6,.002,12, .01,
+                        0.5,0,12,.01,400);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
 
@@ -133,14 +153,19 @@ public class RobotMap {
                     POWER.put("0.7", new ProfilingData(1.15, 10, 4, 15));
 
 //                    POWER.put("0.5", new ProfilingData(1.5*0.9, 4, 2.6, 8));
-                    POWER.put("0.5", new ProfilingData(1.35, 5.1, 2.3, 7.9));
+                    POWER.put("0.5", new ProfilingData(1.6, 6, 3, 12.5));
 
-
+                    // 3.6
 
                 }
 
             }
 
+
+        }
+
+        public static class PDPPorts{
+            public static final int SHOOTER = 13;
         }
     }
 }

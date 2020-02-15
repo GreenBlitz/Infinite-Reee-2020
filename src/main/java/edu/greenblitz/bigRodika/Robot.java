@@ -19,11 +19,12 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().enable();
 
 //        Pneumatics.init();
+//        Intake.init();
 //        Shifter.init();
-//        Funnel.init();
-//        Shooter.init();
+        Funnel.init();
+        Shooter.init();
         Dome.init();
-//        Chassis.init(); // Must be last!
+        Chassis.init(); // Must be last!
 
         OI.getInstance();
 
@@ -37,19 +38,26 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        VisionMaster.GameState.DISABLED.setAsCurrent();
 //        CommandScheduler.getInstance().cancelAll();
     }
 
     @Override
     public void teleopPeriodic() {
-        Command shooterCommand = Shooter.getInstance().getCurrentCommand();
-        SmartDashboard.putString("Shooter::currentCommand", shooterCommand == null ? "" : shooterCommand.getName());
-        Command chassisCommand = Chassis.getInstance().getCurrentCommand();
-        SmartDashboard.putString("Chassis::currentCommand", chassisCommand == null ? "" : chassisCommand.getName());
+//        Command shooterCommand = Shooter.getInstance().getCurrentCommand();
+//        SmartDashboard.putString("Shooter::currentCommand", shooterCommand == null ? "" : shooterCommand.getName());
+//        Command chassisCommand = Chassis.getInstance().getCurrentCommand();
+//        SmartDashboard.putString("Chassis::currentCommand", chassisCommand == null ? "" : chassisCommand.getName());
+    }
+
+    @Override
+    public void autonomousInit() {
+        VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
     }
 
     @Override
     public void teleopInit() {
+        VisionMaster.GameState.TELEOP.setAsCurrent();
         Chassis.getInstance().toBrake();
         Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         Chassis.getInstance().resetEncoders();
