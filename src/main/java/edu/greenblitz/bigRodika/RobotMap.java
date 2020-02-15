@@ -23,6 +23,7 @@ public class RobotMap {
             public static final boolean IS_INVERTED = false; // TODO: check this for real
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
                     1.0);
+        }
 
         public static class Funnel {
 

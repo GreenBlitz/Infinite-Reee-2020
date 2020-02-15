@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.pid.PIDObject;
 
-public class Turret implements Subsystem {
+public class Turret extends GBSubsystem {
     private static Turret instance;
 
     private static final double MAX_TICKS = 10000;
@@ -35,22 +35,30 @@ public class Turret implements Subsystem {
     private DigitalInput microSwitch;
 
     private Turret(){
-        motor = new WPI_TalonSRX(RobotMap.BigRodika.Turret.MOTOR_PORT);
-        encoder = new TalonEncoder(RobotMap.BigRodika.Turret.NORMALIZER, motor);
-        microSwitch = new DigitalInput(RobotMap.BigRodika.Turret.SWITCH_PORT);
+        motor = new WPI_TalonSRX(RobotMap.Limbo2.Turret.MOTOR_PORT);
+        encoder = new TalonEncoder(RobotMap.Limbo2.Turret.NORMALIZER, motor);
+        microSwitch = new DigitalInput(RobotMap.Limbo2.Turret.SWITCH_PORT);
     }
 
     @Override
     public void periodic() {
+        super.periodic();
         if (isSwitchPressed()){
             encoder.reset();
         }
+
+        if (getTurretLocation() < MIN_TICKS && lastPower < 0) motor.set(0);
+        if (getTurretLocation() > MAX_TICKS && lastPower > 0) motor.set(0);
     }
 
+    private double lastPower = 0;
+
     public void moveTurret(double power){
-        SmartDashboard.putNumber("Turret::power", power);
-        if (inRange(MIN_TICKS, MAX_TICKS))
-            motor.set(power);
+        putNumber("Turret::power", power);
+        if (getTurretLocation() < MIN_TICKS && power < 0) return;
+        if (getTurretLocation() > MAX_TICKS && power > 0) return;
+        motor.set(power);
+        lastPower = power;
     }
 
     public double getSpeed(){
@@ -66,6 +74,10 @@ public class Turret implements Subsystem {
             motor.set(ControlMode.Velocity, target);
     }
 
+    public double getTurretLocation(){
+        return encoder.getNormalizedTicks();
+    }
+
     public double getTurretSpeed() {
         return encoder.getNormalizedVelocity();
     }
@@ -75,10 +87,10 @@ public class Turret implements Subsystem {
     }
 
     public void configurePID(int pidIndex, PIDObject obj){
-        motor.config_kP(pidIndex, obj.getKp(), 20);
-        motor.config_kI(pidIndex, obj.getKi(), 20);
-        motor.config_kD(pidIndex, obj.getKd(), 20);
-        motor.config_kF(pidIndex, obj.getKf(), 20);
+        motor.config_kP(pidIndex, obj.getKp());
+        motor.config_kI(pidIndex, obj.getKi());
+        motor.config_kD(pidIndex, obj.getKd());
+        motor.config_kF(pidIndex, obj.getKf());
     }
 
     public void selectPIDLoop(int pidIndex){
