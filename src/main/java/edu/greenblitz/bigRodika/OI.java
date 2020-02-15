@@ -68,8 +68,10 @@ public class OI {
 
     private void initOfficalButtons() {
 
-        mainJoystick.A.whileHeld(new GoFetch());
-        mainJoystick.A.whenReleased(new ArcadeDrive(mainJoystick));
+        mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
+        mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
+
+        mainJoystick.L1.whileHeld(new PreShoot());
 
         secondStick.R1.whenPressed(new FullyAutoThreeStage(2950, 0.49));
         secondStick.R1.whenReleased(new StopShooter());
@@ -80,6 +82,9 @@ public class OI {
         secondStick.Y.whileHeld(new
                 ParallelCommandGroup(new PushByConstant(-0.7), new InsertByConstant(-0.6)));
         secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
+
+        secondStick.B.whenPressed(new ToggleExtender());
+        secondStick.A.whileHeld(new RollByConstant(0.5));
 
     }
 
