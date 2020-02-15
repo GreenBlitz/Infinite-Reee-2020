@@ -1,8 +1,8 @@
-package edu.greenblitz.bigRodika.commands.dome;
+package edu.greenblitz.bigRodika.commands.turret;
 
 import org.greenblitz.motion.tolerance.ITolerance;
 
-public class ApproachSwiftly extends DomeCommand {
+public class TurrentApproachSwiftly extends TurretCommand {
 
     public double SLOW_DOWN_BEGIN = 0.1;
     public double SLOW_DOWN_END = 0.01;
@@ -12,25 +12,26 @@ public class ApproachSwiftly extends DomeCommand {
     private double target;
     private ITolerance tolerance;
 
-    public ApproachSwiftly(double target, ITolerance tol){
+    public TurrentApproachSwiftly(double target, ITolerance tol){
         super();
         this.target = target;
         this.tolerance = tol;
     }
 
+
     @Override
     public void execute() {
-        dome.safeMove(calculateVelocity(target - dome.getPotentiometerValue()));
+        turret.moveTurret(calculateVelocity(target - turret.getTurretLocation()));
     }
 
     @Override
     public boolean isFinished() {
-        return tolerance.onTarget(target, dome.getPotentiometerValue());
+        return tolerance.onTarget(target, turret.getTurretLocation());
     }
 
     @Override
     public void end(boolean interrupted) {
-        dome.moveMotor(0);
+        turret.moveTurret(0);
     }
 
     private double SLOPE = (MAXIMUM_SPEED - MINIMUM_SPEED)/(SLOW_DOWN_BEGIN - SLOW_DOWN_END);
@@ -39,7 +40,7 @@ public class ApproachSwiftly extends DomeCommand {
 
     public double calculateVelocity(double error){
 
-        dome.putNumber("Error", error);
+        turret.putNumber("Error", error);
 
         double absError = Math.abs(error);
         double errorSign = Math.signum(error);
