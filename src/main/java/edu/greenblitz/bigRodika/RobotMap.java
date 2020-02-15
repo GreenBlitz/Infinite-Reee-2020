@@ -16,7 +16,14 @@ public class RobotMap {
             public static final int POTENTIOMETER_PORT = 0;
             public static final boolean IS_MOTOR_REVERS = false;
             public static final boolean IS_POTENTIOMETER_REVERSE = false;
-
+        }
+      
+        public static class Turret {
+            public static final int MOTOR_PORT = 0; // TODO: check real ports and use it
+            public static final int SWITCH_PORT = 0;
+            public static final boolean IS_INVERTED = false; // TODO: check this for real
+            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
+                    1.0);
         }
 
         public static class Funnel {
@@ -140,8 +147,6 @@ public class RobotMap {
 
 //                    POWER.put("0.5", new ProfilingData(1.5*0.9, 4, 2.6, 8));
                     POWER.put("0.5", new ProfilingData(1.6, 6, 3, 12.5));
-
-                    // 3.6
 
                 }
 
