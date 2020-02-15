@@ -1,4 +1,4 @@
-package edu.greenblitz.bigRodika.commands.generic;
+package edu.greenblitz.bigRodika.utils;
 
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 

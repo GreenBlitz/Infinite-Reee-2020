@@ -1,14 +1,15 @@
 package edu.greenblitz.bigRodika.commands.chassis.profiling;
 
-import edu.greenblitz.gblib.threading.IThreadable;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.gblib.threading.IThreadable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.base.Vector2D;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ChassisProfiler2D;
 import org.greenblitz.motion.profiling.MotionProfile2D;
+import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import org.greenblitz.motion.profiling.ProfilingData;
 import org.greenblitz.motion.profiling.followers.PidFollower2D;
 import org.greenblitz.motion.profiling.kinematics.CurvatureConverter;
@@ -34,9 +35,50 @@ public class Follow2DProfileCommand implements IThreadable {
     private long runTStart;
     private long minRuntime = 5;
 
+    private double startV = 0;
+    private double endV = Double.POSITIVE_INFINITY;
+
+
+    private static ProfilingData retNullandThrow(){
+        throw new RuntimeException("You are really really dumb, the key does not exists in robot map");
+    }
+
+
+    public Follow2DProfileCommand(
+            List<State> path,
+            ProfilingConfiguration config,
+            double maxPower,
+            boolean isReverse){
+        this(path,config,(RobotMap.Limbo2.Chassis.MotionData.POWER.containsKey(Double.toString(maxPower))) ?
+                RobotMap.Limbo2.Chassis.MotionData.POWER.get(Double.toString(maxPower)): retNullandThrow() ,maxPower,isReverse);
+    }
+
+    public Follow2DProfileCommand(List<State> path,
+                                  ProfilingConfiguration config,
+                                  ProfilingData data,
+                                  double maxPower,
+                                  boolean isReverse) {
+        this(path,
+                config.getJump(),
+                config.getSmoothingTale(),
+                data,
+                1.0,
+                maxPower * config.getVelMultLin(),
+                maxPower * config.getAccMultLin(),
+                new PIDObject(
+                        config.getWheelPidKp() / data.getMaxLinearVelocity(),
+                        config.getWheelPidKi() / data.getMaxLinearVelocity(),
+                        config.getWheelPidKd() / data.getMaxAngularAccel()),
+                config.getCollapseConstaPerWheel() * data.getMaxLinearVelocity(),
+                new PIDObject(
+                        config.getAngPidKp() / data.getMaxAngularVelocity(),
+                        config.getAngPidKi() / data.getMaxAngularVelocity(),
+                        config.getAngPidKd() / data.getMaxAngularAccel()),
+                config.getCollapseConstAngular() * data.getMaxAngularVelocity(),
+                isReverse);
+    }
 
     /**
-     *
      * @param path
      * @param jump
      * @param smoothingTail
@@ -50,12 +92,53 @@ public class Follow2DProfileCommand implements IThreadable {
      * @param collapseConstAngular
      * @param isReverse
      */
-    public Follow2DProfileCommand(List<State> path, double jump, int smoothingTail, ProfilingData data,
-                                  double maxPower, double velMultLin, double accMultLin,
-                                  PIDObject perWheelPIDCosnts, double collapseConstaPerWheel, PIDObject angularPIDConsts,
-                                  double collapseConstAngular, boolean isReverse) {
-        this.profile2D = ChassisProfiler2D.generateProfile(path, jump, data,
-                0, 1.0, smoothingTail);
+    public Follow2DProfileCommand(List<State> path,
+                                  double jump,
+                                  int smoothingTail,
+                                  ProfilingData data,
+                                  double maxPower,
+                                  double velMultLin,
+                                  double accMultLin,
+                                  PIDObject perWheelPIDCosnts,
+                                  double collapseConstaPerWheel,
+                                  PIDObject angularPIDConsts,
+                                  double collapseConstAngular,
+                                  boolean isReverse) {
+        this(path, jump, smoothingTail, data, maxPower, velMultLin, accMultLin, perWheelPIDCosnts, collapseConstaPerWheel,
+                angularPIDConsts, collapseConstAngular, isReverse, 0, 0);
+    }
+
+    public Follow2DProfileCommand(List<State> path,
+                                  double jump,
+                                  int smoothingTail,
+                                  ProfilingData data,
+                                  double maxPower,
+                                  double velMultLin,
+                                  double accMultLin,
+                                  PIDObject perWheelPIDCosnts,
+                                  double collapseConstaPerWheel,
+                                  PIDObject angularPIDConsts,
+                                  double collapseConstAngular,
+                                  boolean isReverse,
+                                  double startV,
+                                  double endV) {
+        this.startV = startV;
+        this.endV = endV;
+        if (isReverse) {
+            for (State s : path) {
+                s.setAngle(s.getAngle() + Math.PI);
+            }
+        }
+        this.profile2D = ChassisProfiler2D.generateProfile(
+                path,
+                jump,
+                this.startV,
+                this.endV,
+                data,
+                0.0,
+                1.0,
+                smoothingTail);
+        SmartDashboard.putNumber("Profile Tend", this.profile2D.getTEnd());
         SmartDashboard.putString("Data for profile", data.toString());
         this.linKv = velMultLin / data.getMaxLinearVelocity();
         this.linKa = accMultLin / data.getMaxLinearAccel();
@@ -82,7 +165,7 @@ public class Follow2DProfileCommand implements IThreadable {
         follower.init();
     }
 
-    public void setSendData(boolean val){
+    public void setSendData(boolean val) {
         follower.setSendData(val);
     }
 
@@ -90,9 +173,11 @@ public class Follow2DProfileCommand implements IThreadable {
     public void run() {
         runTStart = System.currentTimeMillis();
 
-        Vector2D vals = follower.run(mult * Chassis.getInstance().getDerivedLeft(),
-                mult * Chassis.getInstance().getDerivedRight(),
-                mult * Chassis.getInstance().getAngularVelocityByWheels());
+        double[] inp = ProfilingUtils.trasnformInputs(Chassis.getInstance().getDerivedLeft(),
+                Chassis.getInstance().getDerivedRight(),
+                Chassis.getInstance().getAngularVelocityByWheels(),
+                mult);
+        Vector2D vals = follower.run(inp[0], inp[1], inp[2]);
 
         vals = ProfilingUtils.Clamp(ProfilingUtils.flipToBackwards(vals, isOpp), maxPower);
 
@@ -119,9 +204,10 @@ public class Follow2DProfileCommand implements IThreadable {
 
     @Override
     public void atEnd() {
-        System.out.println("Finished Course");
-        Chassis.getInstance().toBrake();
-        Chassis.getInstance().moveMotors(0,0);
+        if (this.endV == 0) {
+            Chassis.getInstance().toBrake();
+            Chassis.getInstance().moveMotors(0, 0);
+        }
     }
 
 }

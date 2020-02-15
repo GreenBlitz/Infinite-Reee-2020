@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 import java.util.function.Supplier;
 
-public class main {
+public class    main {
     private static class RobotSupplier implements Supplier<Robot> {
         private Robot currentRobot;
 
