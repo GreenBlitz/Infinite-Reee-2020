@@ -9,6 +9,7 @@ import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileComman
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.Trench8BallAuto;
+import edu.greenblitz.bigRodika.commands.dome.ApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
@@ -34,6 +35,7 @@ import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.MotionProfile2D;
 import org.greenblitz.motion.profiling.ProfilingData;
+import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,56 +60,9 @@ public class OI {
         return instance;
     }
 
-    private void initTestButtons() {
+    private void initTestButtons(){
 
-    mainJoystick.X.whenPressed( new ChainFetch(2,mainJoystick));
-    mainJoystick.A.whenPressed(new CheckMaxRot(0.3));
-
-    //        ProfilingData data = RobotMap.Limbo2.Chassis.MotionData.POWER.get("0.5");
-//
-//        double vN = data.getMaxLinearVelocity();
-//        double aN = data.getMaxLinearAccel();
-//        double vNr = data.getMaxAngularVelocity();
-//        double aNr = data.getMaxAngularAccel();
-//        List<State> path = new ArrayList<>();
-//        path.add(new State(0,0,0));
-//        path.add(new State(0,-1,0));
-//        Follow2DProfileCommand prof = new Follow2DProfileCommand(path,
-//                .001, 400,
-//                data,
-//                1.0,
-//                1.2*0.5, 1.0*0.5,
-//                new PIDObject(0*0.6/vN,0*0.002/vN,0*12.0/aN, 1),0.01*vN,
-//                new PIDObject(0*0.5/vNr,0,0*12.0/aNr, 1),0.01*vNr,
-//                true);
-//
-//        mainJoystick.X.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
-//
-//        List<State> pathi = new ArrayList<>();
-//        pathi.add(new State(0, 0, 0));
-//        pathi.add(new State(0, 1, 0));
-//        Follow2DProfileCommand profi = new Follow2DProfileCommand(pathi,
-//                .001, 400,
-//                data,
-//                1.0,
-//                1.2*0.5, 1.0*0.5,
-//                new PIDObject(0.6/vN,0.002/vN,12.0/aN, 1),0.01*vN,
-//                new PIDObject(0.5/vNr,0,12.0/aNr, 1),0.01*vNr,
-//                false);
-//
-//        mainJoystick.Y.whenPressed(new ThreadedCommand(profi, Chassis.getInstance()));
-//
-//        mainJoystick.R1.whenPressed(new ThreeStageTesting.Starter());
-//        mainJoystick.R1.whenReleased(new StopShooter());
-//
-//        mainJoystick.A.whenPressed(new Trench8BallAuto());
-//        mainJoystick.B.whenPressed(new StopShooter());
-//
-//        mainJoystick.START.whenPressed(new CheckMaxLin(-0.5));
-//        mainJoystick.BACK.whenPressed(new CheckMaxRot(0.5));
-//
-//        mainJoystick.L1.whileHeld(new InsertIntoShooter(0.5, 0.7));
-//        mainJoystick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
+        mainJoystick.A.whenReleased(new ApproachSwiftly(0.5, new AbsoluteTolerance(-0.01)));
 
     }
 
