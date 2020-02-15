@@ -7,7 +7,7 @@ import edu.greenblitz.bigRodika.RobotMap;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public class Climber implements Subsystem {
+public class Climber extends GBSubsystem {
     private static Climber instance;
     private WPI_TalonSRX hook;
     private CANSparkMax elevator;
