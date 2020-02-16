@@ -146,6 +146,12 @@ public class Follow2DProfileCommand implements IThreadable {
         this.angularPIDConsts = angularPIDConsts;
         this.collapsingAngularPIDTol = collapseConstAngular;
         this.maxPower = maxPower;
+        follower = new PidFollower2D(linKv, linKa, linKv, linKa,
+                perWheelPIDConsts,
+                collapsingPerWheelPIDTol, Double.NaN, angularPIDConsts, collapsingAngularPIDTol,
+                RobotMap.Limbo2.Chassis.WHEEL_DIST,
+                profile2D);
+        follower.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
     }
 
     private static ProfilingData retNullandThrow() {
@@ -154,12 +160,6 @@ public class Follow2DProfileCommand implements IThreadable {
 
     @Override
     public void atInit() {
-        follower = new PidFollower2D(linKv, linKa, linKv, linKa,
-                perWheelPIDConsts,
-                collapsingPerWheelPIDTol, Double.NaN, angularPIDConsts, collapsingAngularPIDTol,
-                RobotMap.Limbo2.Chassis.WHEEL_DIST,
-                profile2D);
-        follower.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
         if(sendData != null){
             follower.setSendData(sendData);
         }

@@ -7,6 +7,7 @@ import edu.greenblitz.bigRodika.subsystems.Funnel;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.greenblitz.motion.Localizer;
 

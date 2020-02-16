@@ -67,6 +67,7 @@ public class HexAlign extends ChassisCommand {
 
     @Override
     public void initialize() {
+
         double absAng = gyroInverted * (Chassis.getInstance().getAngle());// + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET);
 
         State startState = new State(0, 0, profileAngleVsGyroInverted * absAng);
@@ -185,6 +186,7 @@ public class HexAlign extends ChassisCommand {
                 Chassis.getInstance().getLocation().getY() + endState.getY(), - endState.getAngle());
 
         prof = new Follow2DProfileCommand(path, config, maxPower, reverse);
+        prof.setSendData(false);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();
     }
@@ -198,9 +200,12 @@ public class HexAlign extends ChassisCommand {
         if (!fucked) {
             cmd.stop();
             cmd.end(interupted);
+            SmartDashboard.putString("HexAlign error",
+                    new Position (Point.subtract(Chassis.getInstance().getLocation(), globalEnd),Chassis.getInstance().getAngle() - globalEnd.getAngle()).toString());
+
         }
-        SmartDashboard.putString("HexAlign error",
-                new Position (Point.subtract(Chassis.getInstance().getLocation(), globalEnd),Chassis.getInstance().getAngle() - globalEnd.getAngle()).toString());
+        cmd = null;
+        prof = null;
     }
 
     @Override
