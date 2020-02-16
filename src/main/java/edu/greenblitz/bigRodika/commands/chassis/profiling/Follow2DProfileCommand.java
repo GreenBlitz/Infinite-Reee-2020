@@ -33,7 +33,7 @@ public class Follow2DProfileCommand implements IThreadable {
     private double mult;
 
     private long runTStart;
-    private long minRuntime = 5;
+    private long minRuntime = 8;
 
     private double startV = 0;
     private double endV = Double.POSITIVE_INFINITY;
@@ -56,7 +56,7 @@ public class Follow2DProfileCommand implements IThreadable {
                                   boolean isReverse) {
         this(path,
                 config.getJump(),
-                config.getSmoothingTale(),
+                config.getSmoothingTail(),
                 data,
                 1.0,
                 maxPower * config.getVelMultLin(),
@@ -65,7 +65,7 @@ public class Follow2DProfileCommand implements IThreadable {
                         config.getWheelPidKp() / data.getMaxLinearVelocity(),
                         config.getWheelPidKi() / data.getMaxLinearVelocity(),
                         config.getWheelPidKd() / data.getMaxAngularAccel()),
-                config.getCollapseConstaPerWheel() * data.getMaxLinearVelocity(),
+                config.getCollapseConstPerWheel() * data.getMaxLinearVelocity(),
                 new PIDObject(
                         config.getAngPidKp() / data.getMaxAngularVelocity(),
                         config.getAngPidKi() / data.getMaxAngularVelocity(),

@@ -145,9 +145,9 @@ public class RobotMap {
             public static class MotionData {
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
-                        1.2, 1.0, .001,
-                        0.6, .002, 12, .01,
-                        0.5, 0, 12, .01, 400);
+                        1.2, 1.0, .0005,
+                        0.6, .002, 8, .01,
+                        0.5, 0, 12, .01, 500);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
 

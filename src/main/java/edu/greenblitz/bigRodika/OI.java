@@ -2,8 +2,8 @@ package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
+import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
-import edu.greenblitz.bigRodika.commands.dome.ApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
@@ -15,7 +15,6 @@ import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
 public class OI {
     private static OI instance;
@@ -42,7 +41,11 @@ public class OI {
 
     private void initTestButtons() {
 
-        mainJoystick.A.whenReleased(new ApproachSwiftly(0.5, new AbsoluteTolerance(-0.01)));
+        mainJoystick.Y.whenPressed(new HexAlign(4.5, 0.5, 0.5
+                , 0.1, 0.5));
+
+
+        // mainJoystick.A.whenReleased(new ApproachSwiftly(0.5, new AbsoluteTolerance(-0.01)));
 
     }
 

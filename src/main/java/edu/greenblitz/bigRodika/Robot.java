@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
 //        Shifter.init();
         Funnel.init();
         Shooter.init();
-        Dome.init();
+        // Dome.init();
         Chassis.init(); // Must be last!
 
         OI.getInstance();
