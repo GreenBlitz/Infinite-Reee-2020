@@ -4,6 +4,7 @@ import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
+import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
@@ -13,8 +14,14 @@ import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
+import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.hid.SmartJoystick;
+import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import org.greenblitz.motion.base.State;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OI {
     private static OI instance;
@@ -43,6 +50,19 @@ public class OI {
 
         mainJoystick.Y.whenPressed(new HexAlign(4.5, 0.5, 0.5
                 , 0.1, 0.5));
+
+        List<State> path = new ArrayList<>();
+        path.add(new State(0,0));
+        path.add(new State(0,1));
+        Follow2DProfileCommand prof = new Follow2DProfileCommand(path, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5,false);
+        mainJoystick.X.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
+
+
+        List<State> pathi = new ArrayList<>();
+        pathi.add(new State(0,0));
+        pathi.add(new State(1,1, Math.PI/2));
+        Follow2DProfileCommand profi = new Follow2DProfileCommand(pathi, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5,false);
+        mainJoystick.A.whenPressed(new ThreadedCommand(profi, Chassis.getInstance()));
 
 
         // mainJoystick.A.whenReleased(new ApproachSwiftly(0.5, new AbsoluteTolerance(-0.01)));

@@ -6,6 +6,7 @@ import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileComman
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionLocation;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
+import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Point;
@@ -16,7 +17,7 @@ import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HexAlign extends ChassisCommand {
+public class HexAlign extends GBCommand {
 
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
@@ -187,7 +188,7 @@ public class HexAlign extends ChassisCommand {
 
         prof = new Follow2DProfileCommand(path, config, maxPower, reverse);
         prof.setSendData(false);
-        cmd = new ThreadedCommand(prof);
+        cmd = new ThreadedCommand(prof, Chassis.getInstance());
         cmd.initialize();
     }
 
