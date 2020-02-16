@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class GBSubsystem implements Subsystem {
+public abstract class GBSubsystem implements Subsystem {
 
     private final Map<String, Sendable> tablesToData = new HashMap<>();
     protected NetworkTable table;
