@@ -38,6 +38,8 @@ public class Follow2DProfileCommand implements IThreadable {
     private double startV = 0;
     private double endV = Double.POSITIVE_INFINITY;
 
+    private Boolean sendData;
+
 
     public Follow2DProfileCommand(
             List<State> path,
@@ -158,7 +160,12 @@ public class Follow2DProfileCommand implements IThreadable {
                 RobotMap.Limbo2.Chassis.WHEEL_DIST,
                 profile2D);
         follower.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
-        follower.setSendData(true);
+        if(sendData != null){
+            follower.setSendData(sendData);
+        }
+        else {
+            follower.setSendData(false);
+        }
         Chassis.getInstance().toCoast();
         mult = isOpp ? -1 : 1;
         died = false;
@@ -166,7 +173,12 @@ public class Follow2DProfileCommand implements IThreadable {
     }
 
     public void setSendData(boolean val) {
-        follower.setSendData(val);
+        if(follower != null) {
+            follower.setSendData(val);
+        }
+        else{
+            sendData = val;
+        }
     }
 
     @Override
