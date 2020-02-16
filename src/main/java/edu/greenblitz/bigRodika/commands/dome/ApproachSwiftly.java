@@ -11,8 +11,11 @@ public class ApproachSwiftly extends DomeCommand {
 
     private double target;
     private ITolerance tolerance;
+    private double SLOPE = (MAXIMUM_SPEED - MINIMUM_SPEED) / (SLOW_DOWN_BEGIN - SLOW_DOWN_END);
+    private double X_OFFSET = SLOW_DOWN_END;
+    private double Y_OFFSET = MINIMUM_SPEED;
 
-    public ApproachSwiftly(double target, ITolerance tol){
+    public ApproachSwiftly(double target, ITolerance tol) {
         super();
         this.target = target;
         this.tolerance = tol;
@@ -33,25 +36,21 @@ public class ApproachSwiftly extends DomeCommand {
         dome.moveMotor(0);
     }
 
-    private double SLOPE = (MAXIMUM_SPEED - MINIMUM_SPEED)/(SLOW_DOWN_BEGIN - SLOW_DOWN_END);
-    private double X_OFFSET = SLOW_DOWN_END;
-    private double Y_OFFSET = MINIMUM_SPEED;
-
-    public double calculateVelocity(double error){
+    public double calculateVelocity(double error) {
 
         dome.putNumber("Error", error);
 
         double absError = Math.abs(error);
         double errorSign = Math.signum(error);
 
-        if (absError <= SLOW_DOWN_END){
+        if (absError <= SLOW_DOWN_END) {
             return MINIMUM_SPEED * errorSign;
         }
-        if (absError >= SLOW_DOWN_BEGIN){
+        if (absError >= SLOW_DOWN_BEGIN) {
             return MAXIMUM_SPEED * errorSign;
         }
 
-        return ((absError - X_OFFSET)*SLOPE + Y_OFFSET) * errorSign;
+        return ((absError - X_OFFSET) * SLOPE + Y_OFFSET) * errorSign;
 
     }
 

@@ -12,7 +12,7 @@ public class DelicateTurn implements IThreadable {
     private double goal;
     private double rightMult;
 
-    public DelicateTurn(double goal){
+    public DelicateTurn(double goal) {
         this.goal = goal;
     }
 

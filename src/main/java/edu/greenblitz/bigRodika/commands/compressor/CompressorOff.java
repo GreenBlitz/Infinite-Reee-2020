@@ -1,7 +1,5 @@
 package edu.greenblitz.bigRodika.commands.compressor;
 
-import edu.greenblitz.bigRodika.subsystems.Pneumatics;
-
 public class CompressorOff extends CompressorCommand {
 
     @Override

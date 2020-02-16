@@ -5,7 +5,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -17,10 +16,10 @@ import java.util.Set;
 
 public class GBSubsystem implements Subsystem {
 
-    protected NetworkTable table;
     private final Map<String, Sendable> tablesToData = new HashMap<>();
+    protected NetworkTable table;
 
-    public GBSubsystem(){
+    public GBSubsystem() {
         table = NetworkTableInstance.getDefault().getTable(this.getClass().getSimpleName());
         CommandScheduler.getInstance().registerSubsystem(this);
     }

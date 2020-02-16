@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.pid.PIDObject;
 
 /**
@@ -20,59 +19,12 @@ public class Funnel {
     private Inserter inserter;
     private Pusher pusher;
 
-    public class Inserter extends GBSubsystem {
-        private WPI_TalonSRX inserter;
-        private TalonEncoder inserterEncoder;
-
-        private Funnel parent;
-
-        public Funnel getFunnel() {
-            return parent;
-        }
-
-        private Inserter(Funnel parent){
-            this.parent = parent;
-            inserter = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.INSERTER_PORT);
-            inserterEncoder = new TalonEncoder(RobotMap.Limbo2.Funnel.Encoder.NORMALIZER, inserter);
-        }
-
-        @Override
-        public void periodic() {
-
-            super.periodic();
-
-        }
-
-    }
-
-    public class Pusher extends GBSubsystem{
-        private WPI_TalonSRX pusher;
-
-        private Funnel parent;
-
-        public Funnel getFunnel() {
-            return parent;
-        }
-
-        private Pusher(Funnel parent){
-            this.parent = parent;
-            pusher = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.PUSHER_PORT);
-        }
-
-        @Override
-        public void periodic() {
-
-            super.periodic();
-
-        }
-    }
-
     private Funnel() {
         inserter = new Inserter(this);
         pusher = new Pusher(this);
     }
 
-    public static void init(){
+    public static void init() {
         if (instance == null) {
             instance = new Funnel();
             CommandScheduler.getInstance().registerSubsystem(instance.inserter);
@@ -92,7 +44,7 @@ public class Funnel {
         inserter.inserter.set(power);
     }
 
-    public void moveInserterByPID(double target){
+    public void moveInserterByPID(double target) {
         inserter.inserter.set(ControlMode.Velocity, target);
     }
 
@@ -100,27 +52,74 @@ public class Funnel {
         return inserter.inserterEncoder.getNormalizedVelocity();
     }
 
-    public double getAbsoluteInserterSpeed(){
+    public double getAbsoluteInserterSpeed() {
         return Math.abs(getInserterSpeed());
     }
 
-    public void configurePID(int pidIndex, PIDObject obj){
+    public void configurePID(int pidIndex, PIDObject obj) {
         inserter.inserter.config_kP(pidIndex, obj.getKp(), 20);
         inserter.inserter.config_kI(pidIndex, obj.getKi(), 20);
         inserter.inserter.config_kD(pidIndex, obj.getKd(), 20);
         inserter.inserter.config_kF(pidIndex, obj.getKf(), 20);
     }
 
-    public void selectPIDLoop(int pidIndex){
+    public void selectPIDLoop(int pidIndex) {
         inserter.inserter.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, pidIndex, 20);
     }
 
-    public Inserter getInserter(){
+    public Inserter getInserter() {
         return inserter;
     }
 
     public Pusher getPusher() {
         return pusher;
+    }
+
+    public class Inserter extends GBSubsystem {
+        private WPI_TalonSRX inserter;
+        private TalonEncoder inserterEncoder;
+
+        private Funnel parent;
+
+        private Inserter(Funnel parent) {
+            this.parent = parent;
+            inserter = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.INSERTER_PORT);
+            inserterEncoder = new TalonEncoder(RobotMap.Limbo2.Funnel.Encoder.NORMALIZER, inserter);
+        }
+
+        public Funnel getFunnel() {
+            return parent;
+        }
+
+        @Override
+        public void periodic() {
+
+            super.periodic();
+
+        }
+
+    }
+
+    public class Pusher extends GBSubsystem {
+        private WPI_TalonSRX pusher;
+
+        private Funnel parent;
+
+        private Pusher(Funnel parent) {
+            this.parent = parent;
+            pusher = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.PUSHER_PORT);
+        }
+
+        public Funnel getFunnel() {
+            return parent;
+        }
+
+        @Override
+        public void periodic() {
+
+            super.periodic();
+
+        }
     }
 
 }

@@ -1,14 +1,12 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
-import edu.greenblitz.bigRodika.subsystems.*;
-
 import edu.greenblitz.bigRodika.subsystems.Chassis;
-
+import edu.greenblitz.bigRodika.subsystems.Dome;
+import edu.greenblitz.bigRodika.subsystems.Funnel;
+import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.greenblitz.motion.Localizer;
 

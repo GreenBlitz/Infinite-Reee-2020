@@ -9,10 +9,19 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Turret extends GBSubsystem {
-    private static Turret instance;
-
     private static final double MAX_TICKS = 10000;
     private static final double MIN_TICKS = 0;
+    private static Turret instance;
+    private WPI_TalonSRX motor;
+    private IEncoder encoder;
+    private DigitalInput microSwitch;
+    private double lastPower = 0;
+    private Turret() {
+        motor = new WPI_TalonSRX(RobotMap.Limbo2.Turret.MOTOR_PORT);
+        motor.setInverted(RobotMap.Limbo2.Turret.IS_INVERTED);
+        encoder = new TalonEncoder(RobotMap.Limbo2.Turret.NORMALIZER, motor);
+        microSwitch = new DigitalInput(RobotMap.Limbo2.Turret.SWITCH_PORT);
+    }
 
     public static void init() {
         if (instance == null) {
@@ -25,16 +34,6 @@ public class Turret extends GBSubsystem {
         return instance;
     }
 
-    private WPI_TalonSRX motor;
-    private IEncoder encoder;
-    private DigitalInput microSwitch;
-
-    private Turret() {
-        motor = new WPI_TalonSRX(RobotMap.Limbo2.Turret.MOTOR_PORT);
-        encoder = new TalonEncoder(RobotMap.Limbo2.Turret.NORMALIZER, motor);
-        microSwitch = new DigitalInput(RobotMap.Limbo2.Turret.SWITCH_PORT);
-    }
-
     @Override
     public void periodic() {
         super.periodic();
@@ -44,8 +43,6 @@ public class Turret extends GBSubsystem {
 
         moveTurret(lastPower);
     }
-
-    private double lastPower = 0;
 
     public void moveTurret(double power) {
         if (getTurretLocation() < MIN_TICKS && power < 0) {

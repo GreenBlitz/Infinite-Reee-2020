@@ -4,7 +4,21 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 import java.util.function.Supplier;
 
-public class    main {
+public class main {
+    private static RobotSupplier robotFactory = new RobotSupplier();
+
+    public static void main(String... args) {
+//        try {
+        RobotBase.startRobot(robotFactory);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+    }
+
+    public static Robot getInstance() {
+        return robotFactory.currentRobot;
+    }
+
     private static class RobotSupplier implements Supplier<Robot> {
         private Robot currentRobot;
 
@@ -13,19 +27,5 @@ public class    main {
             currentRobot = new Robot();
             return currentRobot;
         }
-    }
-
-    private static RobotSupplier robotFactory = new RobotSupplier();
-
-    public static void main(String... args) {
-//        try {
-            RobotBase.startRobot(robotFactory);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-    }
-
-    public static Robot getInstance() {
-        return robotFactory.currentRobot;
     }
 }

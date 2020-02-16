@@ -3,14 +3,9 @@ package edu.greenblitz.bigRodika.commands.chassis.motion;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
-import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionLocation;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
-import edu.greenblitz.bigRodika.utils.WaitMiliSeconds;
-import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.profiling.ProfilingData;
@@ -25,12 +20,11 @@ public class GoFetch extends ChassisCommand {
 
     private State end;
 
-    public GoFetch(){
+    public GoFetch() {
         this(null);
     }
 
-    public GoFetch(State endP){
-        System.out.println("Ctor");
+    public GoFetch(State endP) {
         this.end = endP;
     }
 
@@ -38,7 +32,7 @@ public class GoFetch extends ChassisCommand {
     public void initialize() {
         VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
         List<State> locations = new ArrayList<>();
-        locations.add(new State(0,0,0));
+        locations.add(new State(0, 0, 0));
 //
 
         if (end == null) {
@@ -67,9 +61,9 @@ public class GoFetch extends ChassisCommand {
                 .001, 200,
                 data,
                 1.0,
-                1.0*0.5, 1.0*0.5,
-                new PIDObject(1.0/vN,0.002/vN,4.0/aN, 1),0.01*vN,
-                new PIDObject(0.6/vNr,0,4.0/aNr, 1),0.01*vNr,
+                1.0 * 0.5, 1.0 * 0.5,
+                new PIDObject(1.0 / vN, 0.002 / vN, 4.0 / aN, 1), 0.01 * vN,
+                new PIDObject(0.6 / vNr, 0, 4.0 / aNr, 1), 0.01 * vNr,
                 false, 0, Double.POSITIVE_INFINITY);
         cmd = new ThreadedCommand(prof);
         cmd.initialize();

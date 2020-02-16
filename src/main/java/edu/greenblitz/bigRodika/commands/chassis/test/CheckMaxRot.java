@@ -6,13 +6,13 @@ import org.greenblitz.debug.RemoteCSVTarget;
 
 public class CheckMaxRot extends ChassisCommand {
 
+    int count;
     private double power;
     private double previousAngle;
     private double previousVel;
     private double previousTime;
     private long tStart;
     private RemoteCSVTarget target;
-    int count;
 
     public CheckMaxRot(double power) {
         this.power = power;
@@ -44,7 +44,7 @@ public class CheckMaxRot extends ChassisCommand {
             double time = System.currentTimeMillis() / 1000.0;
             double angle = Chassis.getInstance().getRawAngle();
             double V = (angle - previousAngle) / (time - previousTime);
-            target.report(time - tStart/1000.0, V, (V - previousVel) / (time - previousTime));
+            target.report(time - tStart / 1000.0, V, (V - previousVel) / (time - previousTime));
             previousAngle = angle;
             previousTime = time;
             previousVel = V;
@@ -54,7 +54,7 @@ public class CheckMaxRot extends ChassisCommand {
     }
 
     @Override
-    public void end(boolean inter){
+    public void end(boolean inter) {
         System.out.println(System.currentTimeMillis() - tStart);
     }
 

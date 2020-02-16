@@ -4,7 +4,7 @@ public class MoveByConstant extends DomeCommand {
 
     private double power;
 
-    public MoveByConstant(double p){
+    public MoveByConstant(double p) {
         super();
         power = p;
     }

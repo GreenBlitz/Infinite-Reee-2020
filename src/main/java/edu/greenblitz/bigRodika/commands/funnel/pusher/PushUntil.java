@@ -11,9 +11,9 @@ import java.util.function.Supplier;
 public class PushUntil extends SequentialCommandGroup {
 
 
-    public PushUntil(@NotNull ShootingMethod pushMethod, @NotNull Supplier<Boolean> endCondition){
+    public PushUntil(@NotNull ShootingMethod pushMethod, @NotNull Supplier<Boolean> endCondition) {
 
-        if (pushMethod.isFinished()){
+        if (pushMethod.isFinished()) {
             throw new RuntimeException("Insertion method must never finish");
         }
 

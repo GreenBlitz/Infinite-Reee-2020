@@ -19,6 +19,6 @@ public class ArcadeDrive extends ChassisCommand {
     @Override
     public void execute() {
         chassis.arcadeDrive(joystick.getAxisValue(SmartJoystick.Axis.LEFT_Y),
-                                          joystick.getAxisValue(SmartJoystick.Axis.RIGHT_X));
+                joystick.getAxisValue(SmartJoystick.Axis.RIGHT_X));
     }
 }

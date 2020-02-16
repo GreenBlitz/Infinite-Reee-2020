@@ -4,11 +4,9 @@ import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.WaitUntilShooterSpeedClose;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.StageThreePID;
-import edu.greenblitz.bigRodika.subsystems.Funnel;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import org.greenblitz.motion.pid.PIDObject;
 
 public class ThreeStageForAutonomous extends SequentialCommandGroup {

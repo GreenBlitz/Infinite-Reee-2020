@@ -5,9 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.pid.PIDObject;
 
 public class Shooter extends GBSubsystem {
@@ -30,8 +28,8 @@ public class Shooter extends GBSubsystem {
 //        encoder = new SparkEncoder(RobotMap.Limbo2.Shooter.NORMALIZER, flywheel);
     }
 
-    public static void init(){
-        if(instance == null) {
+    public static void init() {
+        if (instance == null) {
             instance = new Shooter();
             CommandScheduler.getInstance().registerSubsystem(instance);
         }
@@ -46,7 +44,7 @@ public class Shooter extends GBSubsystem {
         this.flywheel.set(power);
     }
 
-    public void setSpeedByPID(double target){
+    public void setSpeedByPID(double target) {
         flywheel.getPIDController().setReference(target, ControlType.kVelocity);
     }
 
@@ -63,11 +61,11 @@ public class Shooter extends GBSubsystem {
         return flywheel.getEncoder().getVelocity();
     }
 
-    public double getAbsoluteShooterSpeed(){
+    public double getAbsoluteShooterSpeed() {
         return Math.abs(getShooterSpeed());
     }
 
-    public void resetEncoder(){
+    public void resetEncoder() {
         flywheel.getEncoder().setPosition(0);
     }
 

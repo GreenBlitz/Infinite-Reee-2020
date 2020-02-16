@@ -4,8 +4,6 @@ import com.revrobotics.CANPIDController;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import org.greenblitz.motion.pid.PIDObject;
 
-import javax.sound.midi.Track;
-
 public class StageThreePID extends ShootBySimplePid {
 
 

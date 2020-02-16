@@ -1,7 +1,5 @@
 package edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage;
 
-import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
-import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.WaitUntilShooterSpeedClose;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;

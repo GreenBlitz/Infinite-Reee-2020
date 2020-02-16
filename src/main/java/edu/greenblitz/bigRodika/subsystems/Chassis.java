@@ -7,17 +7,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.RoborioEncoder;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
-import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.gblib.gyroscope.PigeonGyro;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.base.Position;
-
 
 
 public class Chassis extends GBSubsystem {
@@ -25,10 +21,15 @@ public class Chassis extends GBSubsystem {
 
     private VictorSPX leftVictor, rightVictor;
     private WPI_TalonSRX leftTalon, rightTalon;   //chassis
-//    private CANSparkMax rightLeader, rightFollower1, rightFollower2, leftLeader, leftFollower1, leftFollower2;
+    //    private CANSparkMax rightLeader, rightFollower1, rightFollower2, leftLeader, leftFollower1, leftFollower2;
     private IEncoder leftEncoder, rightEncoder;
     private IGyroscope gyroscope;
 //    private PowerDistributionPanel robotPDP;
+    private double lastLocationLeft;
+    private double lastLocationRight;
+    private double derivedLeftVel = 0;
+    private double derivedRightVel = 0;
+    private long lastTime;
 
     private Chassis() {
 
@@ -61,7 +62,6 @@ public class Chassis extends GBSubsystem {
 //        rightFollower2.follow(rightLeader);
 
 
-
         leftEncoder = new RoborioEncoder(
                 RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_LEFT,
                 RobotMap.Limbo2.Chassis.Encoder.LEFT_PORT_A,
@@ -87,11 +87,6 @@ public class Chassis extends GBSubsystem {
 
     }
 
-    public void changeGear(){
-        leftEncoder.switchGear();
-        rightEncoder.switchGear();
-    }
-
     public static void init() {
         if (instance == null) {
             instance = new Chassis();
@@ -105,7 +100,12 @@ public class Chassis extends GBSubsystem {
         return instance;
     }
 
-    public void moveMotors(double left, double right){
+    public void changeGear() {
+        leftEncoder.switchGear();
+        rightEncoder.switchGear();
+    }
+
+    public void moveMotors(double left, double right) {
         leftTalon.set(ControlMode.PercentOutput, right); // Don't ask this is right
         rightTalon.set(ControlMode.PercentOutput, left);   //chassis
         putNumber("Left Power", left);
@@ -114,7 +114,7 @@ public class Chassis extends GBSubsystem {
 //        leftLeader.set(-left);   //big-haim
     }
 
-    public void toBrake(){
+    public void toBrake() {
         leftTalon.setNeutralMode(NeutralMode.Brake);
         leftVictor.setNeutralMode(NeutralMode.Brake);
         rightTalon.setNeutralMode(NeutralMode.Brake);
@@ -127,7 +127,7 @@ public class Chassis extends GBSubsystem {
 //        leftFollower2.setIdleMode(CANSparkMax.IdleMode.kBrake);   //big-haim
     }
 
-    public void toCoast(){
+    public void toCoast() {
         leftTalon.setNeutralMode(NeutralMode.Coast);
         leftVictor.setNeutralMode(NeutralMode.Coast);
         rightTalon.setNeutralMode(NeutralMode.Coast);
@@ -144,12 +144,11 @@ public class Chassis extends GBSubsystem {
         moveMotors(moveValue - rotateValue, moveValue + rotateValue);
     }
 
-
-    public double getLeftMeters(){
+    public double getLeftMeters() {
         return leftEncoder.getNormalizedTicks();
     }
 
-    public double getRightMeters(){
+    public double getRightMeters() {
         return rightEncoder.getNormalizedTicks();
     }
 
@@ -157,19 +156,19 @@ public class Chassis extends GBSubsystem {
         return leftEncoder.getNormalizedVelocity();
     }
 
-    public double getRightRate(){
+    public double getRightRate() {
         return rightEncoder.getNormalizedVelocity();
     }
 
-    public double getLinearVelocity(){
-        return 0.5*(getDerivedLeft() + getDerivedRight());
+    public double getLinearVelocity() {
+        return 0.5 * (getDerivedLeft() + getDerivedRight());
     }
 
-    public double getAngularVelocityByWheels(){
+    public double getAngularVelocityByWheels() {
         return getWheelDistance() * (getDerivedRight() - getDerivedLeft());
     }
 
-    public double getAngle(){
+    public double getAngle() {
         return gyroscope.getNormalizedYaw();
     }
 
@@ -177,38 +176,32 @@ public class Chassis extends GBSubsystem {
         return gyroscope.getRawYaw();
     }
 
-    public double getAngularVelocityByGyro(){
+    public double getAngularVelocityByGyro() {
         return gyroscope.getYawRate();
     }
 
-    public void resetGyro(){
+    public void resetGyro() {
         gyroscope.reset();
     }
 
-    public double getWheelDistance(){
+    public double getWheelDistance() {
         return RobotMap.Limbo2.Chassis.WHEEL_DIST;
     }
 
-    public Position getLocation(){
+    public Position getLocation() {
         return Localizer.getInstance().getLocation();
     }
 
-    private double lastLocationLeft;
-    private double lastLocationRight;
-    private double derivedLeftVel = 0;
-    private double derivedRightVel = 0;
-    private long lastTime;
-
-    public double getDerivedLeft(){
+    public double getDerivedLeft() {
         return derivedLeftVel;
     }
 
-    public double getDerivedRight(){
+    public double getDerivedRight() {
         return derivedRightVel;
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
 
         super.periodic();
 
@@ -231,7 +224,7 @@ public class Chassis extends GBSubsystem {
 
     }
 
-    public void resetEncoders(){
+    public void resetEncoders() {
         rightEncoder.reset();
         leftEncoder.reset();
     }

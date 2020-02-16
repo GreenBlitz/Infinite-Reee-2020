@@ -4,7 +4,7 @@ public class PushByConstant extends PusherCommand {
 
     private double power;
 
-    public PushByConstant(double power){
+    public PushByConstant(double power) {
         super();
         this.power = power;
     }

@@ -6,7 +6,7 @@ import edu.greenblitz.gblib.command.GBCommand;
 public class SwitchVisionAlgorithm extends GBCommand {
     private final VisionMaster.Algorithm algorithm;
 
-    public SwitchVisionAlgorithm(VisionMaster.Algorithm algo){
+    public SwitchVisionAlgorithm(VisionMaster.Algorithm algo) {
         this.algorithm = algo;
     }
 

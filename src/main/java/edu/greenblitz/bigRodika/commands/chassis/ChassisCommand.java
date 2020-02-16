@@ -7,7 +7,7 @@ public abstract class ChassisCommand extends GBCommand {
 
     protected Chassis chassis;
 
-    public ChassisCommand(){
+    public ChassisCommand() {
         super(Chassis.getInstance());
         chassis = Chassis.getInstance();
     }

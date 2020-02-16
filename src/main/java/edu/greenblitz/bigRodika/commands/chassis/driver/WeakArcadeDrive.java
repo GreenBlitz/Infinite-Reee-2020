@@ -15,7 +15,7 @@ public class WeakArcadeDrive extends ChassisCommand {
 
     @Override
     public void execute() {
-        chassis.arcadeDrive(power*joystick.getAxisValue(SmartJoystick.Axis.LEFT_Y),
-                power*joystick.getAxisValue(SmartJoystick.Axis.RIGHT_X));
+        chassis.arcadeDrive(power * joystick.getAxisValue(SmartJoystick.Axis.LEFT_Y),
+                power * joystick.getAxisValue(SmartJoystick.Axis.RIGHT_X));
     }
 }

@@ -13,82 +13,10 @@ import org.apache.logging.log4j.Logger;
  */
 public class VisionMaster extends GBSubsystem {
 
-    public enum Algorithm {
-        POWER_CELLS("power_cells"),
-        HEXAGON("hexagon"),
-        FEEDING_STATION("feeding_station"),
-        ROULETTE("roulette");
-
-        public final String rawAlgorithmName;
-
-        Algorithm(String rawAlgorithmName) {
-            this.rawAlgorithmName = rawAlgorithmName;
-        }
-
-        public String getRawName() {
-            return rawAlgorithmName;
-        }
-
-        public void setAsCurrent() {
-            VisionMaster.getInstance().setCurrentAlgorithm(this);
-        }
-    }
-
-    public enum GameState {
-        DISABLED("disabled"),
-        AUTONOMOUS("auto"),
-        TELEOP("teleop");
-
-
-        public final String rawStateName;
-
-        GameState(String rawStateName) {
-            this.rawStateName = rawStateName;
-        }
-
-        public void setAsCurrent(){
-            VisionMaster.getInstance().setCurrentGameState(this);
-        }
-
-        public String getRawName(){
-            return rawStateName;
-        }
-    }
-
-    public enum ShifterState {
-        POWER("power"),
-        SPEED("speed");
-
-
-        public final String rawStateName;
-
-        ShifterState(String rawStateName) {
-            this.rawStateName = rawStateName;
-        }
-
-        public void setAsCurrent(){
-            VisionMaster.getInstance().setCurrentShifterState(this);
-        }
-
-        public String getRawName(){
-            return rawStateName;
-        }
-    }
-
-
     private static VisionMaster instance;
-
-    public static VisionMaster getInstance() {
-        if (instance == null) {
-            instance = new VisionMaster();
-        }
-        return instance;
-    }
-
     private Algorithm currentAlgorithm;
     private GameState currentGameState;
     private ShifterState currentShifterState;
-
     private NetworkTable visionTable;
     private NetworkTableEntry algorithm;
     private NetworkTableEntry output;
@@ -96,7 +24,6 @@ public class VisionMaster extends GBSubsystem {
     private NetworkTableEntry gameState;
     private NetworkTableEntry shifterState;
     private Logger logger;
-
     private VisionMaster() {
         logger = LogManager.getLogger(getClass());
         visionTable = NetworkTableInstance.getDefault().getTable("vision"); // table
@@ -108,7 +35,14 @@ public class VisionMaster extends GBSubsystem {
         shifterState = visionTable.getEntry("shifter_state");
     }
 
-    private void setCurrentShifterState(ShifterState state){
+    public static VisionMaster getInstance() {
+        if (instance == null) {
+            instance = new VisionMaster();
+        }
+        return instance;
+    }
+
+    private void setCurrentShifterState(ShifterState state) {
         this.currentShifterState = state;
         this.shifterState.setString(state.getRawName());
     }
@@ -118,13 +52,13 @@ public class VisionMaster extends GBSubsystem {
         gameState.setString(state.getRawName());
     }
 
+    public Algorithm getCurrentAlgorithm() {
+        return currentAlgorithm;
+    }
+
     private void setCurrentAlgorithm(Algorithm algo) {
         this.currentAlgorithm = algo;
         algorithm.setString(algo.getRawName());
-    }
-
-    public Algorithm getCurrentAlgorithm() {
-        return currentAlgorithm;
     }
 
     public boolean isLastDataValid() {
@@ -166,5 +100,67 @@ public class VisionMaster extends GBSubsystem {
         putNumber("derived angle", current.getRelativeAngle());
         putBoolean("valid", isLastDataValid());
         putNumber("full distance", current.getFullDistance());
+    }
+
+    public enum Algorithm {
+        POWER_CELLS("power_cells"),
+        HEXAGON("hexagon"),
+        FEEDING_STATION("feeding_station"),
+        ROULETTE("roulette");
+
+        public final String rawAlgorithmName;
+
+        Algorithm(String rawAlgorithmName) {
+            this.rawAlgorithmName = rawAlgorithmName;
+        }
+
+        public String getRawName() {
+            return rawAlgorithmName;
+        }
+
+        public void setAsCurrent() {
+            VisionMaster.getInstance().setCurrentAlgorithm(this);
+        }
+    }
+
+    public enum GameState {
+        DISABLED("disabled"),
+        AUTONOMOUS("auto"),
+        TELEOP("teleop");
+
+
+        public final String rawStateName;
+
+        GameState(String rawStateName) {
+            this.rawStateName = rawStateName;
+        }
+
+        public void setAsCurrent() {
+            VisionMaster.getInstance().setCurrentGameState(this);
+        }
+
+        public String getRawName() {
+            return rawStateName;
+        }
+    }
+
+    public enum ShifterState {
+        POWER("power"),
+        SPEED("speed");
+
+
+        public final String rawStateName;
+
+        ShifterState(String rawStateName) {
+            this.rawStateName = rawStateName;
+        }
+
+        public void setAsCurrent() {
+            VisionMaster.getInstance().setCurrentShifterState(this);
+        }
+
+        public String getRawName() {
+            return rawStateName;
+        }
     }
 }

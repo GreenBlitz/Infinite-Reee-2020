@@ -13,8 +13,57 @@ public class Intake {
     private Roller roller;
     private Extender extender;
 
-    private class IntakeSubsystem implements Subsystem{
-        public Intake getIntake(){
+    private Intake() {
+        roller = new Intake.Roller();
+        extender = new Intake.Extender();
+    }
+
+    public static void init() {
+        if (instance == null) {
+            instance = new Intake();
+            CommandScheduler.getInstance().registerSubsystem(instance.roller);
+            CommandScheduler.getInstance().registerSubsystem(instance.extender);
+        }
+    }
+
+    public static Intake getInstance() {
+        return instance;
+    }
+
+    public void moveRoller(double power) {
+        roller.roller.set(power);
+    }
+
+    public void extend() {
+        extender.extender.set(DoubleSolenoid.Value.kForward);
+    }
+
+    public void retract() {
+        extender.extender.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public boolean isExtended() {
+        return extender.extender.get().equals(DoubleSolenoid.Value.kForward);
+    }
+
+    public void toggleExtender() {
+        if (isExtended()) {
+            retract();
+        } else {
+            extend();
+        }
+    }
+
+    public Roller getRoller() {
+        return roller;
+    }
+
+    public Extender getExtender() {
+        return extender;
+    }
+
+    private class IntakeSubsystem implements Subsystem {
+        public Intake getIntake() {
             return Intake.this;
         }
     }
@@ -45,54 +94,5 @@ public class Intake {
         @Override
         public void periodic() {
         }
-    }
-
-    private Intake() {
-        roller = new Intake.Roller();
-        extender = new Intake.Extender();
-    }
-
-    public static void init(){
-        if (instance == null) {
-            instance = new Intake();
-            CommandScheduler.getInstance().registerSubsystem(instance.roller);
-            CommandScheduler.getInstance().registerSubsystem(instance.extender);
-        }
-    }
-
-    public static Intake getInstance() {
-        return instance;
-    }
-
-    public void moveRoller(double power) {
-        roller.roller.set(power);
-    }
-
-    public void extend() {
-        extender.extender.set(DoubleSolenoid.Value.kForward);
-    }
-
-    public void retract() {
-        extender.extender.set(DoubleSolenoid.Value.kReverse);
-    }
-
-    public boolean isExtended(){
-        return extender.extender.get().equals(DoubleSolenoid.Value.kForward);
-    }
-
-    public void toggleExtender(){
-        if (isExtended()) {
-            retract();
-        } else {
-            extend();
-        }
-    }
-
-    public Roller getRoller() {
-        return roller;
-    }
-
-    public Extender getExtender() {
-        return extender;
     }
 }

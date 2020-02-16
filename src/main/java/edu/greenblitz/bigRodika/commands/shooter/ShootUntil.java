@@ -11,9 +11,9 @@ import java.util.function.Supplier;
 public class ShootUntil extends SequentialCommandGroup {
 
 
-    public ShootUntil(@NotNull ShootingMethod pushMethod, @NotNull Supplier<Boolean> endCondition){
+    public ShootUntil(@NotNull ShootingMethod pushMethod, @NotNull Supplier<Boolean> endCondition) {
 
-        if (pushMethod.isFinished()){
+        if (pushMethod.isFinished()) {
             throw new RuntimeException("Shooting method must never finish");
         }
 

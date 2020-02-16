@@ -20,50 +20,50 @@ public class TurnToVision extends GBCommand {
     private HexAlign hexAlign;
 
     public TurnToVision(VisionMaster.Algorithm algorithm, double maxV, double maxA,
-                        double power){
-        this.algorithm  = algorithm;
+                        double power) {
+        this.algorithm = algorithm;
         this.maxA = maxA;
         this.maxV = maxV;
         this.power = power;
     }
 
     public TurnToVision(VisionMaster.Algorithm algorithm, double maxV, double maxA,
-                        double power, Point PosToTurnToByLocalizer){
-        this(algorithm,maxV,maxA,power);
+                        double power, Point PosToTurnToByLocalizer) {
+        this(algorithm, maxV, maxA, power);
         this.posToTurnToByLocalizer = PosToTurnToByLocalizer;
     }
 
     public TurnToVision(VisionMaster.Algorithm algorithm, double maxV, double maxA,
-                        double power, HexAlign hexAlign){
-        this(algorithm,maxV,maxA,power);
+                        double power, HexAlign hexAlign) {
+        this(algorithm, maxV, maxA, power);
         this.hexAlign = hexAlign;
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
         algorithm.setAsCurrent();
 
         VisionMaster.getInstance().isLastDataValid();
         double[] diff = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
 
-        if(!VisionMaster.getInstance().isLastDataValid()) {
-            if(hexAlign != null) posToTurnToByLocalizer = hexAlign.getHexPos();
-            if(posToTurnToByLocalizer == null){
+        if (!VisionMaster.getInstance().isLastDataValid()) {
+            if (hexAlign != null) posToTurnToByLocalizer = hexAlign.getHexPos();
+            if (posToTurnToByLocalizer == null) {
                 fucked = true;
                 return;
             }
             diff[0] = posToTurnToByLocalizer.getX() - Chassis.getInstance().getLocation().getX();
             diff[1] = posToTurnToByLocalizer.getY() - Chassis.getInstance().getLocation().getY();
         }
-        target = Chassis.getInstance().getAngle() - Math.atan(diff[0]/diff[1]);
+        target = Chassis.getInstance().getAngle() - Math.atan(diff[0] / diff[1]);
 //        target = target + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET;
-        turn = new TurnToAngle(Math.toDegrees(target) + Math.toDegrees(RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET),3,1
+        turn = new TurnToAngle(Math.toDegrees(target) + Math.toDegrees(RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET), 3, 1
                 , maxV, maxA, power, true, 2);
         turn.initialize();
     }
 
     @Override
-    public void execute(){
+    public void execute() {
         if (turn == null) return;
         turn.execute();
     }
@@ -75,9 +75,9 @@ public class TurnToVision extends GBCommand {
     }
 
     @Override
-    public void end(boolean interupted){
+    public void end(boolean interupted) {
         SmartDashboard.putNumber("Angle Error =", target - Chassis.getInstance().getAngle());
-        if(fucked || turn == null) return;
+        if (fucked || turn == null) return;
         turn.end(interupted);
     }
 }

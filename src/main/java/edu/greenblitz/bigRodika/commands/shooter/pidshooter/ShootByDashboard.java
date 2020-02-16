@@ -13,7 +13,6 @@ public class ShootByDashboard extends ShooterCommand {
     private long tStart;
 
     public ShootByDashboard(double target) {
-        ;
         this.target = target;
         this.logger = RemoteCSVTarget.initTarget("FlyWheelVel", "time", "vel");
     }

@@ -30,9 +30,10 @@ public class LiveProfileCommand implements IThreadable {
     private double maxPower;
     private boolean died;
     private boolean isOpp;
-
+    private double mult;
+    private long runTStart;
+    private long minRuntime = 10;
     /**
-     *
      * @param end
      * @param jump
      * @param smoothingTail
@@ -63,11 +64,6 @@ public class LiveProfileCommand implements IThreadable {
         this.collapsingAngularPIDTol = collapseConstAngular;
         this.maxPower = maxPower;
     }
-
-    private double mult;
-
-    private long runTStart;
-    private long minRuntime = 10;
 
     @Override
     public void atInit() {
@@ -101,14 +97,14 @@ public class LiveProfileCommand implements IThreadable {
                 mult * Chassis.getInstance().getRightRate(),
                 mult * Chassis.getInstance().getAngularVelocityByGyro()); // TODO test if this is mult or -mult
 
-        if (isOpp){
+        if (isOpp) {
             vals = vals.scale(-1);
         }
 
         if (!isOpp) {
             Chassis.getInstance().moveMotors(maxPower * clamp(vals.getX()),
                     maxPower * clamp(vals.getY()));
-        } else  {
+        } else {
             Chassis.getInstance().moveMotors(maxPower * clamp(vals.getY()),
                     maxPower * clamp(vals.getX()));
         }
@@ -124,7 +120,7 @@ public class LiveProfileCommand implements IThreadable {
         }
     }
 
-    public double clamp(double in){
+    public double clamp(double in) {
         return Math.copySign(Math.min(Math.abs(in), 1), in);
     }
 
@@ -139,7 +135,7 @@ public class LiveProfileCommand implements IThreadable {
     @Override
     public void atEnd() {
         Chassis.getInstance().toBrake();
-        Chassis.getInstance().moveMotors(0,0);
+        Chassis.getInstance().moveMotors(0, 0);
     }
 
 }

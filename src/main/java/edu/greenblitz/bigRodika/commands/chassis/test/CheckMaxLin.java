@@ -6,12 +6,12 @@ import org.greenblitz.debug.RemoteCSVTarget;
 
 public class CheckMaxLin extends ChassisCommand {
 
+    int count;
     private double power;
     private double previousVel;
     private double previousTime;
     private RemoteCSVTarget target;
     private long tStart;
-    int count;
 
     public CheckMaxLin(double power) {
         this.power = power;

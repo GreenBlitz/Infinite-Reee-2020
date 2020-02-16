@@ -7,7 +7,7 @@ public abstract class DomeCommand extends GBCommand {
 
     protected Dome dome;
 
-    public DomeCommand(){
+    public DomeCommand() {
         require(Dome.getInstance());
         dome = Dome.getInstance();
     }

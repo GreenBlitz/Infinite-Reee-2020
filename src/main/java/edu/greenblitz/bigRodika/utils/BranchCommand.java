@@ -2,7 +2,6 @@ package edu.greenblitz.bigRodika.utils;
 
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import java.util.function.Supplier;
 
@@ -12,7 +11,7 @@ public class BranchCommand extends GBCommand {
     private Command chosen;
     private Supplier<Boolean> condition;
 
-    public BranchCommand(Command ifTrue, Command ifFalse, Supplier<Boolean> cond){
+    public BranchCommand(Command ifTrue, Command ifFalse, Supplier<Boolean> cond) {
         trueOp = ifTrue;
         falseOp = ifFalse;
 
@@ -24,7 +23,7 @@ public class BranchCommand extends GBCommand {
 
     @Override
     public void initialize() {
-        if (condition.get()){
+        if (condition.get()) {
             chosen = trueOp;
         } else {
             chosen = falseOp;

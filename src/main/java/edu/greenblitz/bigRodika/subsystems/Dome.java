@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 public class Dome extends GBSubsystem {
 
     private static Dome instance;
-    private WPI_TalonSRX domeMotor;
-    private Potentiometer potentiometer;
-
     private final double POT_LOWER_LIMIT = 0.08,
             POT_HIGHER_LIMIT = 0.92;
+    protected double lastPower = 0;
+    private WPI_TalonSRX domeMotor;
+    private Potentiometer potentiometer;
 
     private Dome() {
 
@@ -33,15 +33,13 @@ public class Dome extends GBSubsystem {
     }
 
     public double getPotentiometerValue() {
-        return RobotMap.Limbo2.Dome.IS_MOTOR_REVERS ? 1 - potentiometer.get() : potentiometer.get();
+        return RobotMap.Limbo2.Dome.IS_POTENTIOMETER_REVERSE ? 1 - potentiometer.get() : potentiometer.get();
     }
 
     public void moveMotor(double power) {
         lastPower = power;
         domeMotor.set(power);
     }
-
-    protected double lastPower = 0;
 
     public void safeMove(double power) {
         if (getPotentiometerValue() < POT_LOWER_LIMIT && power < 0) {

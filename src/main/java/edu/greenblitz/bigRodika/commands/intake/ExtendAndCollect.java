@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 public class ExtendAndCollect extends ParallelCommandGroup {
 
-    public ExtendAndCollect(double power){
+    public ExtendAndCollect(double power) {
 
         addCommands(new ExtendRoller(), new RollByConstant(power));
 

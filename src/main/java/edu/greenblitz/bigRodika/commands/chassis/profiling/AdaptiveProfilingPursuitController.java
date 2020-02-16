@@ -1,8 +1,8 @@
 package edu.greenblitz.bigRodika.commands.chassis.profiling;
 
-import edu.greenblitz.gblib.threading.IThreadable;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.gblib.threading.IThreadable;
 import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.Position;
@@ -23,12 +23,6 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
 
     private static final double JUMP = 0.004;
     private static final int TAIL = 200;
-
-    public enum TargetMode {
-        RELETIVE_TO_ROBOT,
-        RELATIVE_TO_LOCALIZER
-    }
-
     private MotionProfile2D profile2D;
     private ProfilingData data;
     private PidFollower2D follower;
@@ -41,18 +35,13 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
     private double collapsingAngularPIDTol;
     private double finalProfileThreshold = 0.5;
     private boolean finalStage;
-
     private List<State> path;
     private TargetMode mode;
-
     private double maxPower;
     private boolean isOpp;
-
     private double mult;
     private long latestProfile;
     private long profileLifeSpan;
-
-
     public AdaptiveProfilingPursuitController(Supplier<State> supplier,
                                               TargetMode mode,
                                               double vEnd, ProfilingData data,
@@ -78,6 +67,7 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
         path.add(new State(0, 0, 0));
         path.add(new State(0, 0, 0));
     }
+
 
     public AdaptiveProfilingPursuitController(Supplier<State> supplier,
                                               TargetMode mode,
@@ -180,7 +170,7 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
             vals = follower.forceRun(mult * Chassis.getInstance().getLeftRate(),
                     mult * Chassis.getInstance().getRightRate(),
                     mult * Chassis.getInstance().getAngularVelocityByWheels(),
-                    (10 + System.currentTimeMillis() - this.latestProfile)/1000.0);
+                    (10 + System.currentTimeMillis() - this.latestProfile) / 1000.0);
         }
 
         if (isOpp) {
@@ -211,6 +201,11 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
     public void atEnd() {
         Chassis.getInstance().toBrake();
         Chassis.getInstance().moveMotors(0, 0);
+    }
+
+    public enum TargetMode {
+        RELETIVE_TO_ROBOT,
+        RELATIVE_TO_LOCALIZER
     }
 
 }

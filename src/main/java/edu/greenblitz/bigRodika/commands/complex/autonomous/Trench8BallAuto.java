@@ -1,7 +1,6 @@
 package edu.greenblitz.bigRodika.commands.complex.autonomous;
 
 import edu.greenblitz.bigRodika.commands.chassis.motion.GoFetch;
-import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
@@ -16,8 +15,7 @@ import org.greenblitz.motion.base.State;
 public class Trench8BallAuto extends ParallelCommandGroup {
 
 
-
-    public Trench8BallAuto(){
+    public Trench8BallAuto() {
 
         addCommands(
 
@@ -32,8 +30,8 @@ public class Trench8BallAuto extends ParallelCommandGroup {
                         new StopRoller(),
                         new StopPusher(),
 
-                        new GoFetch(new State(-Chassis.getInstance().getLocation().getX(), 4.6-Chassis.getInstance().getLocation().getY(),0)),
-                        new GoFetch(new State (0,1.6,0)),
+                        new GoFetch(new State(-Chassis.getInstance().getLocation().getX(), 4.6 - Chassis.getInstance().getLocation().getY(), 0)),
+                        new GoFetch(new State(0, 1.6, 0)),
                         new PreShoot(6.4),
                         new InsertIntoShooter(0.5, 0.7),
                         new WaitCommand(5),
@@ -42,7 +40,6 @@ public class Trench8BallAuto extends ParallelCommandGroup {
                 )
 
         );
-
 
 
     }

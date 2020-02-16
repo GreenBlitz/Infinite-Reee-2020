@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class InsertIntoShooter extends SequentialCommandGroup {
 
-    public InsertIntoShooter(double insertionConst, double pushConst){
+    public InsertIntoShooter(double insertionConst, double pushConst) {
 
         addCommands(
 

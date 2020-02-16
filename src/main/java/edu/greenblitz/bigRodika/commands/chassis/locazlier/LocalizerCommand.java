@@ -6,19 +6,18 @@ import org.greenblitz.motion.Localizer;
 
 public class LocalizerCommand implements IThreadable {
 
+    private static final long DEFAULT_MINIMUM_LOOP_TIME = 0;
     private Chassis chassis;
     private Localizer localizer;
     private long minimumLoopTime;
     private long tPrev;
     private boolean died;
 
-    private static final long DEFAULT_MINIMUM_LOOP_TIME = 0;
-
-    public LocalizerCommand(){
+    public LocalizerCommand() {
         this(DEFAULT_MINIMUM_LOOP_TIME);
     }
 
-    public LocalizerCommand(long t){
+    public LocalizerCommand(long t) {
         minimumLoopTime = t;
     }
 
@@ -42,7 +41,8 @@ public class LocalizerCommand implements IThreadable {
     }
 
     @Override
-    public void atEnd() { }
+    public void atEnd() {
+    }
 
     @Override
     public void atInit() {

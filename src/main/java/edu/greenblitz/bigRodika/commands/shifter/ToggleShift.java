@@ -1,7 +1,6 @@
 package edu.greenblitz.bigRodika.commands.shifter;
 
 
-import edu.greenblitz.bigRodika.subsystems.Shifter;
 import edu.greenblitz.gblib.gears.Gear;
 
 /**

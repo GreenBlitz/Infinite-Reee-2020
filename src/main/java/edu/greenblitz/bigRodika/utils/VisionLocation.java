@@ -1,7 +1,5 @@
 package edu.greenblitz.bigRodika.utils;
 
-import java.text.DecimalFormat;
-
 public class VisionLocation {
     /**
      * X coordinate of the target (horizontal distance)
@@ -28,8 +26,12 @@ public class VisionLocation {
         this.z = z;
     }
 
+    public VisionLocation(double[] rawData) {
+        this(rawData[0], rawData[2], rawData[1]);
+    }
+
     public static double calculateRelativeAngle(double x, double z) {
-        if(x / z == 90) {
+        if (x / z == 90) {
             return Math.toRadians(361);
         }
         return Math.atan2(x, z);
@@ -48,10 +50,6 @@ public class VisionLocation {
 
     public double getRelativeAngle() {
         return Math.toDegrees(calculateRelativeAngle(this.x, this.y));
-    }
-
-    public VisionLocation(double[] rawData) {
-        this(rawData[0], rawData[2], rawData[1]);
     }
 
     public boolean isValid() {

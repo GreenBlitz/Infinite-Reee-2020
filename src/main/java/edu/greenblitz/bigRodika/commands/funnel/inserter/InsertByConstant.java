@@ -4,7 +4,7 @@ public class InsertByConstant extends ShootingMethod {
 
     private double power;
 
-    public InsertByConstant(double power){
+    public InsertByConstant(double power) {
         super();
         this.power = power;
     }

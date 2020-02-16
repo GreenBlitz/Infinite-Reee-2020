@@ -17,7 +17,7 @@ public class RobotMap {
             public static final boolean IS_MOTOR_REVERS = false;
             public static final boolean IS_POTENTIOMETER_REVERSE = false;
         }
-      
+
         public static class Turret {
             public static final int MOTOR_PORT = 0; // TODO: check real ports and use it
             public static final int SWITCH_PORT = 0;
@@ -44,6 +44,8 @@ public class RobotMap {
         }
 
         public static class Intake {
+            public static final int PCM = 22;
+
             public static class Motors {
                 public static final int ROLLER_PORT = 13;
                 public static final boolean IS_REVERSED = false;
@@ -53,8 +55,6 @@ public class RobotMap {
                 public static final int FORWARD = 5;
                 public static final int REVERSE = 7;
             }
-
-            public static final int PCM = 22;
         }
 
         public static class Shooter {
@@ -70,6 +70,9 @@ public class RobotMap {
 
         public static class Joystick {
             public static final int MAIN = 0;
+            public static final double MAIN_DEADZONE = 0.05;
+            public static final int SIDE = 1;
+            public static final double SIDE_DEADZONE = 0.05;
         }
 
         public static class Pneumatics {
@@ -83,18 +86,26 @@ public class RobotMap {
         public static class Climber {
             public static class Motor {
                 public static final int HOOK = 9;
+                public static final boolean HOOK_REVERSE = false;
                 public static final int ELEVATOR = 10;
+                public static final boolean ELEVATOR_REVERSE = false;
             }
 
-            public static class Solenoid {
+            public static class Break {
                 public static final int FORWARD = 3;
                 public static final int REVERSE = 4;
+                public static final int PCM = 21;
             }
 
-            public static final int PCM = 21;
         }
 
         public static class Chassis {
+            public static final double WHEEL_DIST = 0.57;
+            public static final double VISION_CAM_Y_DIST_CENTER = 0.32;
+            public static final double VISION_CAM_X_DIST_CENTER = 0.03;
+            public static final double SHOOTER_X_DIST_CENTER = 0.0;
+            public static final double SHOOTER_Y_DIST_CENTER = 0.0;
+
             public static class Motor {
                 public static final int LEFT_VICTOR = 2, // 2
                         RIGHT_VICTOR = 3, // 3
@@ -111,12 +122,12 @@ public class RobotMap {
             }
 
             public static class Shifter {
+                public static final int PCM = 21;
+
                 public static class Solenoid {
                     public static final int FORWARD = 3;
                     public static final int REVERSE = 6;
                 }
-
-                public static final int PCM = 21;
             }
 
             public static class Encoder {
@@ -131,24 +142,12 @@ public class RobotMap {
                         NORM_CONST_RIGHT = new GearDependentValue<>(1721.0, 1721.0);
             }
 
-            public static final double WHEEL_DIST = 0.57;
-
-            public static final double VISION_CAM_Y_DIST_CENTER = 0.32;
-
-            public static final double VISION_CAM_X_DIST_CENTER = 0.03;
-
-            public static final double SHOOTER_X_DIST_CENTER = 0.0;
-
-            public static final double SHOOTER_Y_DIST_CENTER = 0.0;
-
             public static class MotionData {
 
-                public static final double HEXAGON_CAMERA_H_DIFF = 1.4;
-
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
-                        1.2,1.0,.001,
-                        0.6,.002,12, .01,
-                        0.5,0,12,.01,400);
+                        1.2, 1.0, .001,
+                        0.6, .002, 12, .01,
+                        0.5, 0, 12, .01, 400);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
 
@@ -169,7 +168,7 @@ public class RobotMap {
 
         }
 
-        public static class PDPPorts{
+        public static class PDPPorts {
             public static final int SHOOTER = 13;
         }
     }

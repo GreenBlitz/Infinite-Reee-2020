@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Climber extends GBSubsystem {
     private static Climber instance;
@@ -15,15 +14,19 @@ public class Climber extends GBSubsystem {
 
     public Climber() {
         hook = new WPI_TalonSRX(RobotMap.Limbo2.Climber.Motor.HOOK);
+        hook.setInverted(RobotMap.Limbo2.Climber.Motor.HOOK_REVERSE);
         elevator = new CANSparkMax(RobotMap.Limbo2.Climber.Motor.ELEVATOR, CANSparkMaxLowLevel.MotorType.kBrushless);
-        stopper = new DoubleSolenoid(RobotMap.Limbo2.Climber.PCM, RobotMap.Limbo2.Climber.Solenoid.FORWARD, RobotMap.Limbo2.Climber.Solenoid.REVERSE);
+        elevator.setInverted(RobotMap.Limbo2.Climber.Motor.ELEVATOR_REVERSE);
+        stopper = new DoubleSolenoid(RobotMap.Limbo2.Climber.Break.PCM,
+                RobotMap.Limbo2.Climber.Break.FORWARD,
+                RobotMap.Limbo2.Climber.Break.REVERSE);
     }
 
-    public static void init(){
+    public static void init() {
         instance = new Climber();
     }
 
-    public static Climber getInstance(){
+    public static Climber getInstance() {
         return instance;
     }
 

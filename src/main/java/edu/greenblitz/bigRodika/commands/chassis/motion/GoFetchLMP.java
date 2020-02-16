@@ -22,24 +22,24 @@ public class GoFetchLMP extends GBCommand {
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
 
-    public GoFetchLMP(){
+    public GoFetchLMP() {
         super(Chassis.getInstance());
         t0 = System.currentTimeMillis();
     }
 
-    private boolean initLocationByVision(){
+    private boolean initLocationByVision() {
         VisionLocation location = VisionMaster.getInstance().getVisionLocation();
-        if(location.isValid()){
+        if (location.isValid()) {
             List<State> locations = new ArrayList<>();
             locations.add(new State(0, 0, 0));
             hasInitByVision = true;
             double ang;
-            if (location.y == 0){
+            if (location.y == 0) {
                 ang = 0;
             } else if (location.x == 0) {
                 ang = Math.PI / 2;
             } else {
-                ang = (Math.PI / 2) - Math.atan2( location.y * location.y - location.x * location.x, 2 * location.x * location.y);
+                ang = (Math.PI / 2) - Math.atan2(location.y * location.y - location.x * location.x, 2 * location.x * location.y);
             }
             locations.add(new State(location.x, location.y, ang));
             ProfilingData data = RobotMap.Limbo2.Chassis.MotionData.POWER.get("0.5");
@@ -66,12 +66,12 @@ public class GoFetchLMP extends GBCommand {
 
     @Override
     public void execute() {
-        if(!hasInitByVision){
-            if(!initLocationByVision()){
+        if (!hasInitByVision) {
+            if (!initLocationByVision()) {
                 return;
             }
         }
-        if(JMP == System.currentTimeMillis() - t0){
+        if (JMP == System.currentTimeMillis() - t0) {
             initLocationByVision();
         }
         prof.run();

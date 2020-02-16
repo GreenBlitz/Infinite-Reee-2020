@@ -1,8 +1,5 @@
 package edu.greenblitz.bigRodika.commands.compressor;
 
-import edu.greenblitz.bigRodika.subsystems.Pneumatics;
-import edu.greenblitz.gblib.command.GBCommand;
-
 public class HandleCompressor extends CompressorCommand {
 
     private static final int TURN_ON_THRESHOLD = 30, TURN_OFF_THRESHOLD = 40;

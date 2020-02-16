@@ -3,7 +3,6 @@ package edu.greenblitz.bigRodika.commands.chassis.profiling;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.threading.IThreadable;
-import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.Position;
 import org.greenblitz.motion.base.State;
@@ -15,7 +14,6 @@ import org.greenblitz.motion.profiling.ProfilingData;
 import org.greenblitz.motion.profiling.followers.PidFollower2D;
 import org.greenblitz.motion.profiling.kinematics.CurvatureConverter;
 
-import java.awt.event.PaintEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +22,6 @@ public class APPC implements IThreadable {
 
     private static final double JUMP = 0.001;
     private static final int TAIL = 1000;
-
-    public enum TargetMode {
-        RELETIVE_TO_ROBOT,
-        RELATIVE_TO_LOCALIZER
-    }
-
     private MotionProfile2D profile2D;
     private ProfilingData data;
     private PidFollower2D follower;
@@ -45,14 +37,10 @@ public class APPC implements IThreadable {
     private long followTime = 150;
     private long delay = 0;
     private boolean finalStage;
-
     private List<State> path;
     private TargetMode mode;
-
     private double maxPower;
     private boolean isOpp;
-
-
     private double mult;
 
 
@@ -121,7 +109,8 @@ public class APPC implements IThreadable {
 
         } else {
 
-            if(lastCalculationTime == 0) Chassis.getInstance().putNumber("trash", Point.subtract(path.get(1), path.get(0)).norm());
+            if (lastCalculationTime == 0)
+                Chassis.getInstance().putNumber("trash", Point.subtract(path.get(1), path.get(0)).norm());
 
             boolean weDone = false;
 
@@ -176,7 +165,7 @@ public class APPC implements IThreadable {
             vals = follower.forceRun(mult * Chassis.getInstance().getDerivedLeft(),
                     mult * Chassis.getInstance().getDerivedRight(),
                     mult * Chassis.getInstance().getAngularVelocityByWheels(),
-                    (System.currentTimeMillis() - lastCalculationTime)/1000.0 + 0.01);
+                    (System.currentTimeMillis() - lastCalculationTime) / 1000.0 + 0.01);
 
             if (weDone) {
                 finalStage = true;
@@ -218,6 +207,11 @@ public class APPC implements IThreadable {
         }
 
         return ang;
+    }
+
+    public enum TargetMode {
+        RELETIVE_TO_ROBOT,
+        RELATIVE_TO_LOCALIZER
     }
 
 }
