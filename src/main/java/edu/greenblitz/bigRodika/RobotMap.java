@@ -168,6 +168,8 @@ public class RobotMap {
 
         }
 
+        public static final double angleForShootingToInnerDegrees = 18;
+
         public static class PDPPorts {
             public static final int SHOOTER = 13;
         }
@@ -175,5 +177,7 @@ public class RobotMap {
 
     public static class FieldData{
         public static final double HexDistFromInnerHole = 0.74295;
+        public static final double anglePhysicalLimitForShootingToInnerDegrees = 25;
+
     }
 }

@@ -31,4 +31,12 @@ public class MotionUtils {
         return planeryVisionDataToInnerHole(Chassis.getInstance().getAngle());
     }
 
+    public static boolean isAngleGoodForShootingToInnerRads(double angle){
+        return angle <= Math.toRadians(RobotMap.FieldData.anglePhysicalLimitForShootingToInnerDegrees) && angle <= Math.toRadians(RobotMap.Limbo2.angleForShootingToInnerDegrees);
+    }
+
+    public static boolean isAngleGoodForShootingToInnerRads(){
+        return isAngleGoodForShootingToInnerRads(Chassis.getInstance().getAngle());
+    }
+
 }
