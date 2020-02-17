@@ -172,4 +172,8 @@ public class RobotMap {
             public static final int SHOOTER = 13;
         }
     }
+
+    public static class FieldData{
+        public static final double HexDistFromInnerHole = 0.74295;
+    }
 }
