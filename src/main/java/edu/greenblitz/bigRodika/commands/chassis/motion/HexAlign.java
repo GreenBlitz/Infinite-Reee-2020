@@ -1,7 +1,6 @@
 package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionLocation;
@@ -33,9 +32,10 @@ public class HexAlign extends GBCommand {
     private List<Double> radsAndCritPoints;//crit point - radius - crit - radius - crit .... - radius
     private Position globalEnd;
     private double maxPower;
+    private boolean autoInnerHole = false;
 
 
-    public HexAlign(double r, double k, double driveTolerance, double tolerance, double maxPower, ProfilingConfiguration config) {
+    public HexAlign(double r, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole, ProfilingConfiguration config) {
         super();
         this.k = k;
         this.r = r;
@@ -45,7 +45,7 @@ public class HexAlign extends GBCommand {
         this.config = config;
     }
 
-    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance, double maxPower, ProfilingConfiguration config) {
+    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole, ProfilingConfiguration config) {
         super();
         this.radsAndCritPoints = radsAndCritPoints;
         this.k = k;
@@ -55,12 +55,12 @@ public class HexAlign extends GBCommand {
         this.config = config;
     }
 
-    public HexAlign(double r, double k, double driveTolerance, double tolerance, double maxPower) {
-        this(r, k, driveTolerance, tolerance, maxPower, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
+    public HexAlign(double r, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole) {
+        this(r, k, driveTolerance, tolerance, maxPower, autoInnerHole, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
     }
 
-    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance, double maxPower) {
-        this(radsAndCritPoints, k, driveTolerance, tolerance, maxPower, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
+    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole) {
+        this(radsAndCritPoints, k, driveTolerance, tolerance, maxPower, autoInnerHole, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
     }
 
     public Point getHexPos() {
@@ -77,6 +77,7 @@ public class HexAlign extends GBCommand {
         VisionLocation location = VisionMaster.getInstance().getVisionLocation();
         SmartDashboard.putString("Vision Location", location.toString());
         double[] difference = location.toDoubleArray();
+        if(autoInnerHole) difference = MotionUtils.planeryVisionDataToInnerHole(difference,absAng);
 
         if (!VisionMaster.getInstance().isLastDataValid()) {
             fucked = true;
@@ -114,16 +115,18 @@ public class HexAlign extends GBCommand {
 
         SmartDashboard.putNumber("errRadCenter", errRadCenter);
 
+        boolean inDriveTolerance = errRadCenter < driveTolerance;
+
         //if robot is very very close - do nothing
         if (errRadCenter < tolerance) {
             fucked = true;
             return;
         }
 
-        SmartDashboard.putBoolean("inDriveTol", errRadCenter < driveTolerance);
+        SmartDashboard.putBoolean("inDriveTol", inDriveTolerance);
 
         //if robot is close - drives straight
-        if (errRadCenter < driveTolerance) {
+        if (inDriveTolerance) {
             k = 1;
         }
 
@@ -139,21 +142,30 @@ public class HexAlign extends GBCommand {
 
         //calculates the best point to get to, deals with exceptional cases
         double devConst = 1.5;
+        double angle0 = Math.PI / 2 - absAng + relAng;
         double angle;
         if (Math.abs(targetX) > r) {
             if (targetX < 0)
-                angle = (1 - k / devConst) * (Math.PI / 2 - absAng + relAng);
+                angle = (1 - k / devConst) * angle0;
             else
-                angle = (1 + k / devConst) * (Math.PI / 2 - absAng + relAng) - Math.PI * k / devConst;
+                angle = (1 + k / devConst) * angle0 - Math.PI * k / devConst;
         } else {
-            angle = Math.PI / 2
-                    - absAng
-                    + relAng
+            angle = angle0
                     - k * Math.asin(
                     Math.sin(-relAng) *
                             ((targetY - Math.sqrt(r * r - targetX * targetX)) / r)
             );
         }
+
+        double deservedAngle = Math.toRadians(RobotMap.Limbo2.angleForShootingToInnerDegrees - 5);
+        if(autoInnerHole && !inDriveTolerance &&
+                Math.abs(Math.PI/2 - angle0) < deservedAngle &&
+                Math.abs(Math.PI/2 - angle) > deservedAngle &&
+                Math.abs(Math.PI/2 - angle) - deservedAngle < Math.toRadians(10)
+                        ) {
+            angle = Math.PI/2 + Math.signum(angle - Math.PI/2) * deservedAngle;
+        }
+
 
         //calculates the end point
         State endState = new State(
@@ -162,7 +174,7 @@ public class HexAlign extends GBCommand {
                 profileAngleVsGyroInverted * (Math.PI / 2 - angle));
 
         //if robot is close - drives straight
-        if (errRadCenter < driveTolerance) {
+        if (inDriveTolerance) {
             endState.setAngle(startState.getAngle());
         }
         else   {

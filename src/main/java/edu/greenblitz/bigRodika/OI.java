@@ -49,7 +49,7 @@ public class OI {
     private void initTestButtons() {
 
         mainJoystick.Y.whenPressed(new HexAlign(4.5, 0.5, 0.5
-                , 0.1, 0.5));
+                , 0.1, 0.5, false));
 
         List<State> path = new ArrayList<>();
         path.add(new State(0,0));

@@ -8,12 +8,14 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class PreShoot extends SequentialCommandGroup {
 
+    private boolean autoInnerHole = false;
+
     public PreShoot() {
         this(6.0);
     }
 
     public PreShoot(double radius) {
-        HexAlign hexAlign = new HexAlign(radius, 0.2, 0.5, 0.1, 0.5);
+        HexAlign hexAlign = new HexAlign(radius, 0.2, 0.5, 0.1, 0.5, false);
         addCommands(hexAlign,
 
                 new WaitMiliSeconds(500),
