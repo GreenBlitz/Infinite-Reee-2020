@@ -49,6 +49,7 @@ public class HexAlign extends GBCommand {
         super();
         this.radsAndCritPoints = radsAndCritPoints;
         this.k = k;
+        this.tolerance = tolerance;
         this.driveTolerance = driveTolerance;
         this.maxPower = maxPower;
         this.config = config;
