@@ -24,6 +24,9 @@ public class RobotMap {
             public static final boolean IS_INVERTED = false; // TODO: check this for real
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
                     1.0);
+
+            public static final double CAMERADISTFROMTURRETCENTER = 0.2;// TODO: CHECK THIS FOR REAL
+            public static final double TICKSPERROUND = 2000;//TODO: CHECK THIS FOR REAL
         }
 
         public static class Funnel {

@@ -76,12 +76,14 @@ public class HexAlign extends GBCommand {
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         VisionLocation location = VisionMaster.getInstance().getVisionLocation();
         SmartDashboard.putString("Vision Location", location.toString());
-        double[] difference = location.toDoubleArray();
+        double[] difference = MotionUtils.getSimulatedVisionLocation(location.toDoubleArray());
 
         if (!VisionMaster.getInstance().isLastDataValid()) {
             fucked = true;
             return;
         }
+
+
 
         double targetX = difference[0] + RobotMap.Limbo2.Chassis.VISION_CAM_X_DIST_CENTER;
         double targetY = difference[1];

@@ -69,6 +69,10 @@ public class Turret extends GBSubsystem {
         return encoder.getNormalizedTicks();
     }
 
+    public double getAngleRads(){
+        return 2* Math.PI * getTurretLocation()/RobotMap.Limbo2.Turret.TICKSPERROUND;
+    }
+
     public double getTurretSpeed() {
         return encoder.getNormalizedVelocity();
     }
