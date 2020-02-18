@@ -2,6 +2,7 @@ package edu.greenblitz.bigRodika.commands.chassis.turns;
 
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
+import edu.greenblitz.bigRodika.commands.chassis.motion.MotionUtils;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
@@ -18,24 +19,26 @@ public class TurnToVision extends GBCommand {
     private Point posToTurnToByLocalizer;
     private double target;
     private HexAlign hexAlign;
+    boolean autoInnerHole;
 
     public TurnToVision(VisionMaster.Algorithm algorithm, double maxV, double maxA,
-                        double power) {
+                        double power, boolean autoInnerHole) {
         this.algorithm = algorithm;
         this.maxA = maxA;
         this.maxV = maxV;
         this.power = power;
+        this.autoInnerHole = autoInnerHole;
     }
 
     public TurnToVision(VisionMaster.Algorithm algorithm, double maxV, double maxA,
-                        double power, Point PosToTurnToByLocalizer) {
-        this(algorithm, maxV, maxA, power);
+                        double power, boolean autoInnerHole, Point PosToTurnToByLocalizer) {
+        this(algorithm, maxV, maxA, power, autoInnerHole);
         this.posToTurnToByLocalizer = PosToTurnToByLocalizer;
     }
 
     public TurnToVision(VisionMaster.Algorithm algorithm, double maxV, double maxA,
-                        double power, HexAlign hexAlign) {
-        this(algorithm, maxV, maxA, power);
+                        double power, boolean autoInnerHole, HexAlign hexAlign) {
+        this(algorithm, maxV, maxA, power, autoInnerHole);
         this.hexAlign = hexAlign;
     }
 
@@ -55,6 +58,11 @@ public class TurnToVision extends GBCommand {
             diff[0] = posToTurnToByLocalizer.getX() - Chassis.getInstance().getLocation().getX();
             diff[1] = posToTurnToByLocalizer.getY() - Chassis.getInstance().getLocation().getY();
         }
+
+        if(autoInnerHole && (hexAlign == null || hexAlign.getAutoInnerHole())) {
+            MotionUtils.planeryVisionDataToInnerHole(diff);
+        }
+
         target = Chassis.getInstance().getAngle() - Math.atan(diff[0] / diff[1]);
 //        target = target + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET;
         turn = new TurnToAngle(Math.toDegrees(target) + Math.toDegrees(RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET), 3, 1

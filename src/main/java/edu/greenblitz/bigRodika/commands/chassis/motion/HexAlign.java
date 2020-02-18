@@ -33,9 +33,11 @@ public class HexAlign extends GBCommand {
     private Position globalEnd;
     private double maxPower;
     private boolean autoInnerHole = false;
+    private double maxDiffDesiredAngleToPlannedAngleDegrees = 10;
+    private double angDestDiffFromAngForShootingInnerDegrees = 5;
 
 
-    public HexAlign(double r, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole, ProfilingConfiguration config) {
+    public HexAlign(double r, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole, double angDestDiffFromAngForShootingInnerDegrees, double maxDiffDesiredAngleToPlannedAngleDegrees, ProfilingConfiguration config) {
         super();
         this.k = k;
         this.r = r;
@@ -43,9 +45,12 @@ public class HexAlign extends GBCommand {
         this.tolerance = tolerance;
         this.maxPower = maxPower;
         this.config = config;
+        this.autoInnerHole = autoInnerHole;
+        this.angDestDiffFromAngForShootingInnerDegrees = angDestDiffFromAngForShootingInnerDegrees;
+        this.maxDiffDesiredAngleToPlannedAngleDegrees = maxDiffDesiredAngleToPlannedAngleDegrees;
     }
 
-    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole, ProfilingConfiguration config) {
+    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole, double angDestDiffFromAngForShootingInnerDegrees, double maxDiffDesiredAngleToPlannedAngleDegrees, ProfilingConfiguration config) {
         super();
         this.radsAndCritPoints = radsAndCritPoints;
         this.k = k;
@@ -53,18 +58,25 @@ public class HexAlign extends GBCommand {
         this.driveTolerance = driveTolerance;
         this.maxPower = maxPower;
         this.config = config;
+        this.autoInnerHole = autoInnerHole;
+        this.angDestDiffFromAngForShootingInnerDegrees = angDestDiffFromAngForShootingInnerDegrees;
+        this.maxDiffDesiredAngleToPlannedAngleDegrees = maxDiffDesiredAngleToPlannedAngleDegrees;
     }
 
-    public HexAlign(double r, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole) {
-        this(r, k, driveTolerance, tolerance, maxPower, autoInnerHole, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
+    public HexAlign(double r, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole, double angDestDiffFromAngForShootingInnerDegrees, double maxDiffDesiredAngleToPlannedAngleDegrees) {
+        this(r, k, driveTolerance, tolerance, maxPower, autoInnerHole, angDestDiffFromAngForShootingInnerDegrees, maxDiffDesiredAngleToPlannedAngleDegrees, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
     }
 
-    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole) {
-        this(radsAndCritPoints, k, driveTolerance, tolerance, maxPower, autoInnerHole, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
+    public HexAlign(List<Double> radsAndCritPoints, double k, double driveTolerance, double tolerance, double maxPower, boolean autoInnerHole, double angDestDiffFromAngForShootingInnerDegrees, double maxDiffDesiredAngleToPlannedAngleDegrees) {
+        this(radsAndCritPoints, k, driveTolerance, tolerance, maxPower, autoInnerHole, angDestDiffFromAngForShootingInnerDegrees, maxDiffDesiredAngleToPlannedAngleDegrees, RobotMap.Limbo2.Chassis.MotionData.CONFIG);
     }
 
     public Point getHexPos() {
         return globHexPos;
+    }
+
+    public boolean getAutoInnerHole(){
+        return autoInnerHole;
     }
 
     @Override
@@ -157,13 +169,13 @@ public class HexAlign extends GBCommand {
             );
         }
 
-        double deservedAngle = Math.toRadians(RobotMap.Limbo2.angleForShootingToInnerDegrees - 5);
-        if(autoInnerHole && !inDriveTolerance &&
-                Math.abs(Math.PI/2 - angle0) < deservedAngle &&
-                Math.abs(Math.PI/2 - angle) > deservedAngle &&
-                Math.abs(Math.PI/2 - angle) - deservedAngle < Math.toRadians(10)
-                        ) {
-            angle = Math.PI/2 + Math.signum(angle - Math.PI/2) * deservedAngle;
+        double desiredAngle = Math.toRadians(RobotMap.Limbo2.angleForShootingToInnerDegrees - angDestDiffFromAngForShootingInnerDegrees);
+        autoInnerHole = autoInnerHole && !inDriveTolerance &&
+                Math.abs(Math.PI/2 - angle0) < desiredAngle &&
+                Math.abs(Math.PI/2 - angle) > desiredAngle &&
+                Math.abs(Math.PI/2 - angle) - desiredAngle < Math.toRadians(maxDiffDesiredAngleToPlannedAngleDegrees);
+        if(autoInnerHole) {
+            angle = Math.PI/2 + Math.signum(angle - Math.PI/2) * desiredAngle;
         }
 
 
