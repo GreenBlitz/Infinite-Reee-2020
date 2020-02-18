@@ -16,6 +16,7 @@ public class RobotMap {
             public static final int POTENTIOMETER_PORT = 0;
             public static final boolean IS_MOTOR_REVERS = false;
             public static final boolean IS_POTENTIOMETER_REVERSE = false;
+            public static final int LIMIT_SWITCH_PORT = 1;
         }
 
         public static class Turret {

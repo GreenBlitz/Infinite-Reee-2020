@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 public class Dome extends GBSubsystem {
@@ -14,14 +15,15 @@ public class Dome extends GBSubsystem {
     protected double lastPower = 0;
     private WPI_TalonSRX domeMotor;
     private Potentiometer potentiometer;
+    private DigitalInput limitSwitch;
+    private double zeroValue = 0;
 
     private Dome() {
-
         domeMotor = new WPI_TalonSRX(RobotMap.Limbo2.Dome.MOTOR_PORT);
         domeMotor.setInverted(RobotMap.Limbo2.Dome.IS_MOTOR_REVERS);
         domeMotor.setNeutralMode(NeutralMode.Brake);
         potentiometer = new AnalogPotentiometer(RobotMap.Limbo2.Dome.POTENTIOMETER_PORT);
-
+        limitSwitch = new DigitalInput(RobotMap.Limbo2.Dome.LIMIT_SWITCH_PORT);
     }
 
     public static void init() {
@@ -33,7 +35,8 @@ public class Dome extends GBSubsystem {
     }
 
     public double getPotentiometerValue() {
-        return RobotMap.Limbo2.Dome.IS_POTENTIOMETER_REVERSE ? 1 - potentiometer.get() : potentiometer.get();
+        return (RobotMap.Limbo2.Dome.IS_POTENTIOMETER_REVERSE
+                ? 1 - potentiometer.get() + zeroValue : potentiometer.get() - zeroValue);
     }
 
     public void moveMotor(double power) {
@@ -53,10 +56,18 @@ public class Dome extends GBSubsystem {
         moveMotor(power);
     }
 
+    private boolean switchTriggered() {
+        return limitSwitch.get();
+    }
+
     @Override
     public void periodic() {
         super.periodic();
         safeMove(lastPower);
         putNumber("Potentiometer", getPotentiometerValue());
+
+        if (switchTriggered()) {
+            zeroValue = potentiometer.get();
+        }
     }
 }

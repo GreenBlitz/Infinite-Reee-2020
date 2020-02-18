@@ -5,11 +5,14 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.RoborioEncoder;
+import edu.greenblitz.gblib.encoder.SparkEncoder;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
 import edu.greenblitz.gblib.gyroscope.PigeonGyro;
 import org.greenblitz.motion.Localizer;
@@ -19,9 +22,7 @@ import org.greenblitz.motion.base.Position;
 public class Chassis extends GBSubsystem {
     private static Chassis instance;
 
-    private VictorSPX leftVictor, rightVictor;
-    private WPI_TalonSRX leftTalon, rightTalon;   //chassis
-    //    private CANSparkMax rightLeader, rightFollower1, rightFollower2, leftLeader, leftFollower1, leftFollower2;
+    private CANSparkMax rightLeader, rightFollower1, rightFollower2, leftLeader, leftFollower1, leftFollower2;
     private IEncoder leftEncoder, rightEncoder;
     private IGyroscope gyroscope;
 //    private PowerDistributionPanel robotPDP;
@@ -32,53 +33,25 @@ public class Chassis extends GBSubsystem {
     private long lastTime;
 
     private Chassis() {
+        rightLeader = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        rightFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
+        rightFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);
+        leftLeader = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        leftFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
+        leftFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);   //big-haim
 
-        leftVictor = new VictorSPX(RobotMap.Limbo2.Chassis.Motor.LEFT_VICTOR);
-        rightVictor = new VictorSPX(RobotMap.Limbo2.Chassis.Motor.RIGHT_VICTOR);
-        leftTalon = new WPI_TalonSRX(RobotMap.Limbo2.Chassis.Motor.LEFT_TALON);
-        rightTalon = new WPI_TalonSRX(RobotMap.Limbo2.Chassis.Motor.RIGHT_TALON);
+        leftLeader.setInverted(true);
+        leftFollower1.follow(leftLeader);
+        leftFollower2.follow(leftLeader);
+        rightFollower1.follow(rightLeader);
+        rightFollower2.follow(rightLeader);
 
-        rightVictor.setInverted(true);
-        rightVictor.follow(rightTalon);
-        leftVictor.follow(leftTalon);
-        leftVictor.follow(leftTalon);   //chassis
-
-        leftTalon.configOpenloopRamp(0);
-        rightVictor.configOpenloopRamp(0);
-        rightTalon.configOpenloopRamp(0);
-        leftVictor.configOpenloopRamp(0);
-
-//        rightLeader = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
-//        rightFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
-//        rightFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);
-//        leftLeader = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
-//        leftFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
-//        leftFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);   //big-haim
-//
-//        leftLeader.setInverted(true);
-//        leftFollower1.follow(leftLeader);
-//        leftFollower2.follow(leftLeader);
-//        rightFollower1.follow(rightLeader);
-//        rightFollower2.follow(rightLeader);
-
-
-        leftEncoder = new RoborioEncoder(
-                RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_LEFT,
-                RobotMap.Limbo2.Chassis.Encoder.LEFT_PORT_A,
-                RobotMap.Limbo2.Chassis.Encoder.LEFT_PORT_B);
-        rightEncoder = new RoborioEncoder(
-                RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_RIGHT,
-                RobotMap.Limbo2.Chassis.Encoder.RIGHT_PORT_A,
-                RobotMap.Limbo2.Chassis.Encoder.RIGHT_PORT_B);   //chassis
+        leftEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
         leftEncoder.invert(true);
-//        leftEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
-//        leftEncoder.invert(true);
-//        rightEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
-//        rightEncoder.invert(true);
+        rightEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
+        rightEncoder.invert(true);
 
-        gyroscope = new PigeonGyro(new PigeonIMU(rightTalon));   // chassis
-//        gyroscope.inverse();
-//        gyroscope = new NavxGyro(new AHRS(SerialPort.Port.kUSB));  //big-haim
+        gyroscope = new PigeonGyro(new PigeonIMU(0));   // chassis
 //        gyroscope.inverse();
 
         lastTime = System.currentTimeMillis();
@@ -106,38 +79,28 @@ public class Chassis extends GBSubsystem {
     }
 
     public void moveMotors(double left, double right) {
-        leftTalon.set(ControlMode.PercentOutput, right); // Don't ask this is right
-        rightTalon.set(ControlMode.PercentOutput, left);   //chassis
         putNumber("Left Power", left);
         putNumber("Right Power", right);
-//        rightLeader.set(-right);
-//        leftLeader.set(-left);   //big-haim
+        rightLeader.set(right);
+        leftLeader.set(left);
     }
 
     public void toBrake() {
-        leftTalon.setNeutralMode(NeutralMode.Brake);
-        leftVictor.setNeutralMode(NeutralMode.Brake);
-        rightTalon.setNeutralMode(NeutralMode.Brake);
-        rightVictor.setNeutralMode(NeutralMode.Brake);    //chassis
-//        rightLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
-//        rightFollower1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-//        rightFollower2.setIdleMode(CANSparkMax.IdleMode.kBrake);
-//        leftLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
-//        leftFollower1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-//        leftFollower2.setIdleMode(CANSparkMax.IdleMode.kBrake);   //big-haim
+        rightLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rightFollower1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rightFollower2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        leftLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        leftFollower1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        leftFollower2.setIdleMode(CANSparkMax.IdleMode.kBrake);   //big-haim
     }
 
     public void toCoast() {
-        leftTalon.setNeutralMode(NeutralMode.Coast);
-        leftVictor.setNeutralMode(NeutralMode.Coast);
-        rightTalon.setNeutralMode(NeutralMode.Coast);
-        rightVictor.setNeutralMode(NeutralMode.Coast);   //chassis
-//        rightLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
-//        rightFollower1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-//        rightFollower2.setIdleMode(CANSparkMax.IdleMode.kCoast);
-//        leftLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
-//        leftFollower1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-//        leftFollower2.setIdleMode(CANSparkMax.IdleMode.kCoast);   //big-haim
+        rightLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        rightFollower1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        rightFollower2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        leftLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        leftFollower1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        leftFollower2.setIdleMode(CANSparkMax.IdleMode.kCoast);   //big-haim
     }
 
     public void arcadeDrive(double moveValue, double rotateValue) {
