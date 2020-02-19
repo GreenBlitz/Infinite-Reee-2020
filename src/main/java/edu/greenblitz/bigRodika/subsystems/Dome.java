@@ -18,6 +18,8 @@ public class Dome extends GBSubsystem {
     private WPI_TalonSRX domeMotor;
     private Potentiometer potentiometer;
     private DigitalInput limitSwitch;
+    private double lastPotValue = -1;
+    private static final double MAX_VELOCITY = 0.05;
     private double zeroValue = 0;
 
     private Dome() {
@@ -36,9 +38,13 @@ public class Dome extends GBSubsystem {
         return instance;
     }
 
-    public double getPotentiometerValue() {
+    public double getPotentiometerRaw() {
         return (RobotMap.Limbo2.Dome.IS_POTENTIOMETER_REVERSE
-                ? 1 - potentiometer.get() : potentiometer.get()) - zeroValue;
+                ? 1 - potentiometer.get() : potentiometer.get());
+    }
+
+    public double getPotentiometerValue(){
+        return lastPotValue - zeroValue;
     }
 
     public void moveMotor(double power) {
@@ -47,7 +53,7 @@ public class Dome extends GBSubsystem {
     }
 
     public void safeMove(double power) {
-        if (getPotentiometerValue() < POT_LOWER_LIMIT && power < 0) {
+        if (getPotentiometerRaw() < POT_LOWER_LIMIT && power < 0) {
             if (switchTriggered()) {
                 moveMotor(0);
                 return;
@@ -55,7 +61,7 @@ public class Dome extends GBSubsystem {
                 moveMotor(Math.max(power, POWER_AT_LOWER_END));
             }
         }
-        if (getPotentiometerValue() > POT_HIGHER_LIMIT && power > 0) {
+        if (getPotentiometerRaw() > POT_HIGHER_LIMIT && power > 0) {
             moveMotor(0);
             return;
         }
@@ -72,6 +78,12 @@ public class Dome extends GBSubsystem {
         safeMove(lastPower);
         SmartDashboard.putNumber("Potentiometer", getPotentiometerValue());
         SmartDashboard.putBoolean("LimitSwitch", switchTriggered());
+        SmartDashboard.putNumber("PotZero", zeroValue);
+
+        double raw = getPotentiometerRaw();
+        if (Math.abs(raw - lastPotValue) < MAX_VELOCITY || lastPotValue == -1){
+            lastPotValue = raw;
+        }
 
         if (switchTriggered()) {
             zeroValue += getPotentiometerValue();
