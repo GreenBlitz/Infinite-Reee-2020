@@ -17,6 +17,19 @@ public class RobotMap {
             public static final boolean IS_MOTOR_REVERSE = true;
             public static final boolean IS_POTENTIOMETER_REVERSE = true;
             public static final int LIMIT_SWITCH_PORT = 0;
+
+            public static HashMap<String, Double> DOME;
+
+            static{
+                DOME = new HashMap<>();
+
+                DOME.put("3", 0.1);//TODO: CHECK THIS FOR REAL
+                DOME.put("4", 0.2);//TODO: CHECK THIS FOR REAL
+                DOME.put("5", 0.3);//TODO: CHECK THIS FOR REAL
+
+
+            }
+
         }
 
         public static class Turret {
@@ -104,6 +117,7 @@ public class RobotMap {
             public static final double WHEEL_DIST = 0.622;
             public static final double VISION_CAM_Y_DIST_CENTER = 0.32; // TODO: measure
             public static final double VISION_CAM_X_DIST_CENTER = 0;
+            public static final boolean IS_INTAKE_FRONT = true;// Because Alexey is gay
 
             public static class Motor {
                 public static final int

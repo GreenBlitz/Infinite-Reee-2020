@@ -1,18 +1,22 @@
 package edu.greenblitz.bigRodika.commands.chassis.motion;
 
+import edu.greenblitz.bigRodika.Robot;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
+import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionLocation;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
+import edu.wpi.first.wpilibj.PIDBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Point;
 import org.greenblitz.motion.base.Position;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.profiling.ProfilingConfiguration;
+import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +76,8 @@ public class HexAlign extends GBCommand {
 
         double absAng = gyroInverted * (Chassis.getInstance().getAngle());// + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET);
 
+        if(RobotMap.Limbo2.Chassis.IS_INTAKE_FRONT) absAng = Position.normalizeAngle(absAng + Math.PI);
+
         State startState = new State(0, 0, profileAngleVsGyroInverted * absAng);
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         VisionLocation location = VisionMaster.getInstance().getVisionLocation();
@@ -108,6 +114,11 @@ public class HexAlign extends GBCommand {
                 }
             }
         }
+
+        if(RobotMap.Limbo2.Dome.DOME.containsKey(Double.toString(r))){
+            new DomeApproachSwiftly(RobotMap.Limbo2.Dome.DOME.get(Double.toString(r))).schedule();
+        }
+        else System.err.println("The Radius does not exist in the dome HashMap");
 
         SmartDashboard.putNumber("rds", r);
 
@@ -172,6 +183,11 @@ public class HexAlign extends GBCommand {
             endState.translate(new Point(0, cam_y).rotate(-absAng)).translate(new Point(0, -cam_y).rotate(endState.getAngle()));
         }
 
+        if(RobotMap.Limbo2.Chassis.IS_INTAKE_FRONT) {
+            startState.setAngle(startState.getAngle() + Math.PI);
+            endState.setAngle(endState.getAngle() + Math.PI);
+        }
+
 
         //creates path
         List<State> path = new ArrayList<>();
@@ -179,7 +195,7 @@ public class HexAlign extends GBCommand {
         path.add(endState);
 
         //determines if reversed
-        boolean reverse = Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
+        boolean reverse = RobotMap.Limbo2.Chassis.IS_INTAKE_FRONT ^ Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
 
         SmartDashboard.putString("start", startState.toString());
         SmartDashboard.putString("end", endState.toString());
