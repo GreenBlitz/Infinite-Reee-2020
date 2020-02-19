@@ -56,6 +56,7 @@ public class Funnel {
         private Inserter(Funnel parent) {
             this.parent = parent;
             inserter = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.INSERTER_PORT);
+            inserter.setInverted(RobotMap.Limbo2.Funnel.Motors.INSERTER_REVERSED);
         }
 
         public Funnel getFunnel() {
@@ -79,6 +80,7 @@ public class Funnel {
         private Pusher(Funnel parent) {
             this.parent = parent;
             pusher = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.PUSHER_PORT);
+            pusher.setInverted(RobotMap.Limbo2.Funnel.Motors.PUSHER_REVERSED);
         }
 
         public Funnel getFunnel() {

@@ -10,6 +10,7 @@ import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
+import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.gblib.hid.SmartJoystick;
@@ -40,29 +41,12 @@ public class OI {
 
     private void initTestButtons() {
 
-//        mainJoystick.A.whenPressed(new RollByConstant(0.07));
-        mainJoystick.B.whenPressed(new PushByConstant(0.07));
-        mainJoystick.Y.whenPressed(new InsertByConstant(0.07));
-
-        /*
-        mainJoystick.Y.whenPressed(new HexAlign(4.5, 0.5, 0.5
-                , 0.1, 0.5));
-
-        List<State> path = new ArrayList<>();
-        path.add(new State(0,0));
-        path.add(new State(0,1));
-        Follow2DProfileCommand prof = new Follow2DProfileCommand(path, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5,false);
-        mainJoystick.X.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
-
-
-        List<State> pathi = new ArrayList<>();
-        pathi.add(new State(0,0));
-        pathi.add(new State(1,1, Math.PI/2));
-        Follow2DProfileCommand profi = new Follow2DProfileCommand(pathi, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5,false);
-        mainJoystick.A.whenPressed(new ThreadedCommand(profi, Chassis.getInstance()));
-
-
-        // mainJoystick.A.whenReleased(new ApproachSwiftly(0.5, new AbsoluteTolerance(-0.01)));*/
+        mainJoystick.A.whenPressed(new RollByConstant(0.2));
+        mainJoystick.A.whenReleased(new StopRoller());
+        mainJoystick.B.whenPressed(new PushByConstant(0.2));
+        mainJoystick.B.whenReleased(new StopPusher());
+        mainJoystick.Y.whenPressed(new InsertByConstant(0.2));
+        mainJoystick.Y.whenReleased(new StopInserter());
 
     }
 

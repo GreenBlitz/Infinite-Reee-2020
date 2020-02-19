@@ -34,7 +34,10 @@ public class RobotMap {
             public static class Motors {
 
                 public static final int INSERTER_PORT = 12;
+                public static final boolean INSERTER_REVERSED = false;
+
                 public static final int PUSHER_PORT = 15;
+                public static final boolean PUSHER_REVERSED = true;
 
             }
 
@@ -45,7 +48,7 @@ public class RobotMap {
 
             public static class Motors {
                 public static final int ROLLER_PORT = 16;
-                public static final boolean IS_REVERSED = false; // TODO check is reversed
+                public static final boolean IS_REVERSED = true;
             }
 
             public static class Solenoid {

@@ -15,7 +15,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().enable();
 
 //        Pneumatics.init();
-//        Intake.init();
+        Intake.init();
 //        Shifter.init();
         Funnel.init();
         Shooter.init();
