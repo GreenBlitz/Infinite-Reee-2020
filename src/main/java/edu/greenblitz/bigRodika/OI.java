@@ -36,8 +36,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-        initTestButtons();
-//        initOfficalButtons();
+//        initTestButtons();
+        initOfficalButtons();
     }
 
     public static OI getInstance() {
@@ -84,8 +84,9 @@ public class OI {
         secondStick.R1.whenPressed(new FullyAutoThreeStage(2950, 0.49));
         secondStick.R1.whenReleased(new StopShooter());
 
-        secondStick.L1.whileHeld(new InsertIntoShooter(0.5, 0.7));
-        secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
+        secondStick.L1.whileHeld(new InsertIntoShooter(0.5, 0.7, 0.5));
+        secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
+                new StopInserter(), new StopRoller()));
 
         secondStick.Y.whileHeld(new
                 ParallelCommandGroup(new PushByConstant(-0.7), new InsertByConstant(-0.6)));
