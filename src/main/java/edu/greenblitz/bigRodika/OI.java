@@ -4,6 +4,7 @@ import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftlyTesting;
+import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
@@ -49,19 +50,15 @@ public class OI {
 
         mainJoystick.START.whenPressed(new ResetDome(-0.3));
 
-//        mainJoystick.A.whenPressed(new DomeApproachSwiftlyTesting(0.5, new AbsoluteTolerance(-0.01)));
-//        mainJoystick.A.whenReleased(new DomeMoveByConstant(0));
-//        mainJoystick.B.whenPressed(new DomeMoveByConstant(-0.3));
-//        mainJoystick.B.whenReleased(new DomeMoveByConstant(0));
-
-        mainJoystick.A.whenPressed(new ShootByConstant(0.3));
-        mainJoystick.A.whenReleased(new StopShooter());
-
         mainJoystick.Y.whenPressed(new ShootByConstant(0.05));
         mainJoystick.Y.whenReleased(new StopShooter());
 
         mainJoystick.X.whenPressed(new ShootByDashboard(1000));
         mainJoystick.X.whenReleased(new StopShooter());
+
+        mainJoystick.A.whenPressed(new DomeMoveByConstant(0.2));
+        mainJoystick.A.whenReleased(new DomeMoveByConstant(0));
+
 
     }
 

@@ -57,10 +57,10 @@ public class Dome extends GBSubsystem {
             moveMotor(0);
             return;
         }
-        if (getPotentiometerRaw() < POT_LOWER_LIMIT && power < 0) {
+        if (getPotentiometerValue() < POT_LOWER_LIMIT && power < 0) {
             moveMotor(Math.max(power, POWER_AT_LOWER_END));
         }
-        if (getPotentiometerRaw() > POT_HIGHER_LIMIT && power > 0) {
+        if (getPotentiometerValue() > POT_HIGHER_LIMIT && power > 0) {
             moveMotor(0);
             return;
         }
@@ -75,7 +75,7 @@ public class Dome extends GBSubsystem {
     public void periodic() {
         super.periodic();
         safeMove(lastPower);
-        putNumber("Potentiometer", getPotentiometerValue());
+        SmartDashboard.putNumber("Potentiometer", getPotentiometerValue());
         putBoolean("LimitSwitch", switchTriggered());
         putNumber("PotZero", zeroValue);
 
