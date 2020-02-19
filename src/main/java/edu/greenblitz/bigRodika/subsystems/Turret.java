@@ -22,7 +22,7 @@ public class Turret extends GBSubsystem {
         motor = new WPI_TalonSRX(RobotMap.Limbo2.Turret.MOTOR_PORT);
         motor.setInverted(RobotMap.Limbo2.Turret.IS_INVERTED);
         encoder = new TalonEncoder(RobotMap.Limbo2.Turret.NORMALIZER, motor);
-//        microSwitch = new DigitalInput(RobotMap.Limbo2.Turret.SWITCH_PORT);
+        microSwitch = new DigitalInput(RobotMap.Limbo2.Turret.SWITCH_PORT);
     }
 
     public static void init() {
@@ -38,12 +38,12 @@ public class Turret extends GBSubsystem {
     @Override
     public void periodic() {
         super.periodic();
-//        if (isSwitchPressed()) {
-//            encoder.reset();
-//        }
+        if (isSwitchPressed()) {
+            encoder.reset();
+        }
 
         putNumber("Encoder", encoder.getRawTicks());
-//        SmartDashboard.putBoolean("Switch", isSwitchPressed());
+        putBoolean("Switch", isSwitchPressed());
 
         moveTurret(lastPower);
     }
@@ -74,7 +74,7 @@ public class Turret extends GBSubsystem {
     }
 
     public double getAngleRads(){
-        return 2* Math.PI * getTurretLocation();
+        return 2 * Math.PI * getTurretLocation();
     }
 
     public double getTurretSpeed() {

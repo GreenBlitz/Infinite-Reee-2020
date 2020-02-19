@@ -21,11 +21,11 @@ public class ShootByDashboard extends ShooterCommand {
     public void initialize() {
         shooter.getPIDController().setIAccum(0);
 
-        this.target = SmartDashboard.getNumber("testing_target", 100);
-        this.obj = new PIDObject(SmartDashboard.getNumber("p", 0.01),
-                SmartDashboard.getNumber("i", 0),
-                SmartDashboard.getNumber("d", 0),
-                SmartDashboard.getNumber("f", 0.6));
+        this.target = shooter.getNumber("testing_target", 100);
+        this.obj = new PIDObject(shooter.getNumber("p", 0.01),
+                shooter.getNumber("i", 0),
+                shooter.getNumber("d", 0),
+                shooter.getNumber("f", 0.6));
         this.obj.setKf(this.obj.getKf() / target);
 
         shooter.setPIDConsts(obj);

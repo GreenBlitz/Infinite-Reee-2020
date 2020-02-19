@@ -4,7 +4,8 @@ import edu.greenblitz.bigRodika.commands.shooter.ShooterCommand;
 import org.greenblitz.debug.RemoteCSVTarget;
 import org.greenblitz.motion.pid.PIDObject;
 
-public class ShootBySimplePid extends ShooterCommand {
+public class
+ShootBySimplePid extends ShooterCommand {
 
     protected PIDObject obj;
     protected RemoteCSVTarget logger;

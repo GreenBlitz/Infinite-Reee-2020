@@ -13,6 +13,7 @@ import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
+import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootByDashboard;
@@ -48,17 +49,28 @@ public class OI {
 
     private void initTestButtons() {
 
-        mainJoystick.START.whenPressed(new ResetDome(-0.3));
+        secondStick.START.whenPressed(new ResetDome(-0.22));
 
-        mainJoystick.Y.whenPressed(new ShootByConstant(0.05));
-        mainJoystick.Y.whenReleased(new StopShooter());
+        secondStick.L1.whenPressed(new ShootByConstant(0.6));
+        secondStick.L1.whenReleased(new StopShooter());
 
-        mainJoystick.X.whenPressed(new ShootByDashboard(1000));
-        mainJoystick.X.whenReleased(new StopShooter());
+        secondStick.R1.whenPressed(
+                new ParallelCommandGroup(
+                        new InsertByConstant(0.5),
+                        new PushByConstant(0.5)
+                )
+                );
+        secondStick.R1.whenReleased(
+                new ParallelCommandGroup(new StopInserter(), new StopPusher())
+        );
 
-        mainJoystick.A.whenPressed(new DomeMoveByConstant(0.2));
-        mainJoystick.A.whenReleased(new DomeMoveByConstant(0));
 
+        secondStick.B.whenPressed(new DomeMoveByConstant(0.2));
+        secondStick.B.whenReleased(new DomeMoveByConstant(0));
+
+
+        secondStick.X.whenPressed(new ThreeStageShoot(3400, 0.6));
+        secondStick.X.whenReleased(new StopShooter());
 
     }
 

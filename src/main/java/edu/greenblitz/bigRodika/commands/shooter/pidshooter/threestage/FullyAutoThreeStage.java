@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage;
 
+import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.WaitUntilShooterSpeedClose;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
@@ -16,6 +17,9 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
 
         // 0.6 = 3100
         // 0.48 = 2800
+        double kp = RobotMap.Limbo2.Shooter.SHOOTER_P;
+        double ki = RobotMap.Limbo2.Shooter.SHOOTER_I;
+        double kd = RobotMap.Limbo2.Shooter.SHOOTER_D;
 
         addCommands(
 
@@ -26,7 +30,7 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
 
                 new ParallelRaceGroup(
                         new ShootBySimplePid(
-                                new PIDObject(0.0015, 0.000004, 0.0, ff), target
+                                new PIDObject(kp, ki, 0.0, ff), target
                         ),
                         new SequentialCommandGroup(
 
@@ -39,7 +43,7 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
 
                 new ParallelCommandGroup(
                         new StageThreePID(
-                                new PIDObject(0.002, 0.000004, 0.00015, ff), target
+                                new PIDObject(kp, 0, kd, ff), target
                         )
                 )
         );

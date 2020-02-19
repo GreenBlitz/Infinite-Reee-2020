@@ -30,11 +30,11 @@ public class Shooter extends GBSubsystem {
 
         preparedToShoot = false;
 
-        SmartDashboard.putNumber("testing_target", 0);
-        SmartDashboard.putNumber("p", 0);
-        SmartDashboard.putNumber("i", 0);
-        SmartDashboard.putNumber("d", 0);
-        SmartDashboard.putNumber("f", 0);
+        putNumber("testing_target", 0);
+        putNumber("p", 0);
+        putNumber("i", 0);
+        putNumber("d", 0);
+        putNumber("f", 0);
 
 //        leader.getEncoder().setVelocityConversionFactor(TICKS_PER_REVOLUTION);
 //        encoder = new SparkEncoder(RobotMap.Limbo2.Shooter.NORMALIZER, leader);
@@ -93,7 +93,7 @@ public class Shooter extends GBSubsystem {
     public void periodic() {
 
         putNumber("Position", leader.getEncoder().getPosition());
-        SmartDashboard.putNumber("Velocity", leader.getEncoder().getVelocity());
+        putNumber("Velocity", leader.getEncoder().getVelocity());
         putNumber("Output", leader.getAppliedOutput());
         putBoolean("ReadyToShoot", preparedToShoot);
 
