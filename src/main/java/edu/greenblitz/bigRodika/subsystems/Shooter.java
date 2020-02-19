@@ -21,9 +21,8 @@ public class Shooter extends GBSubsystem {
         follower = new CANSparkMax(RobotMap.Limbo2.Shooter.PORT_FOLLOWER, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         leader.setInverted(RobotMap.Limbo2.Shooter.IS_INVERTED_LEADER);
-        follower.setInverted(RobotMap.Limbo2.Shooter.IS_INVERTED_FOLLOWER);
 
-        follower.follow(leader);
+        follower.follow(leader, RobotMap.Limbo2.Shooter.IS_INVERTED_FOLLOWER);
 
         leader.setIdleMode(CANSparkMax.IdleMode.kCoast);
         follower.setIdleMode(CANSparkMax.IdleMode.kCoast);

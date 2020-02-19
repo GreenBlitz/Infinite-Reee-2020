@@ -40,9 +40,9 @@ public class Chassis extends GBSubsystem {
         rightFollower1.follow(rightLeader);
         rightFollower2.follow(rightLeader);
 
-        leftLeader.setInverted(true);
-        leftFollower1.setInverted(true);
-        leftFollower1.setInverted(true);
+        rightLeader.setInverted(true);
+        rightFollower1.setInverted(true);
+        rightFollower1.setInverted(true);
 
         leftEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
         leftEncoder.invert(true);

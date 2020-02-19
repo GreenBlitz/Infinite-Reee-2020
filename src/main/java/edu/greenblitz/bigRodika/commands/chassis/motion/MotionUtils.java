@@ -41,7 +41,7 @@ public class MotionUtils {
     }
 
     public static double[] getSimulatedVisionLocation(double[] visHex, double turretAngle){
-        double x = RobotMap.Limbo2.Turret.TURRET_RADIUS;
+        double x = RobotMap.Limbo2.Turret.TURRET_CAMERA_RADIUS;
         Point vector = (new Point(visHex[0],visHex[1]).rotate(turretAngle)).translate(0,-x).translate(new Point(0,x).rotate(turretAngle));
         return new double[]{vector.getX(), vector.getY()};
     }

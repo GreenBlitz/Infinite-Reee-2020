@@ -13,10 +13,10 @@ public class RobotMap {
         public static class Dome {
 
             public static final int MOTOR_PORT = 14;
-            public static final int POTENTIOMETER_PORT = 0; // TODO: everything after this including
-            public static final boolean IS_MOTOR_REVERS = false;
-            public static final boolean IS_POTENTIOMETER_REVERSE = false;
-            public static final int LIMIT_SWITCH_PORT = 1;
+            public static final int POTENTIOMETER_PORT = 3;
+            public static final boolean IS_MOTOR_REVERSE = true;
+            public static final boolean IS_POTENTIOMETER_REVERSE = true;
+            public static final int LIMIT_SWITCH_PORT = 0;
         }
 
         public static class Turret {
@@ -26,7 +26,7 @@ public class RobotMap {
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
                     1.0);
 
-            public static final double TURRET_RADIUS = 0.2; // TODO: measure
+            public static final double TURRET_CAMERA_RADIUS = 0.23;
         }
 
         public static class Funnel {
@@ -61,8 +61,8 @@ public class RobotMap {
             public static final int PORT_LEADER = 7;
             public static final int PORT_FOLLOWER = 8;
 
-            public static final boolean IS_INVERTED_LEADER = false; // TODO: Check if inverted
-            public static final boolean IS_INVERTED_FOLLOWER = false;
+            public static final boolean IS_INVERTED_LEADER = false;
+            public static final boolean IS_INVERTED_FOLLOWER = true;
 
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 
@@ -101,9 +101,9 @@ public class RobotMap {
         }
 
         public static class Chassis {
-            public static final double WHEEL_DIST = 0.57; // TODO: measure
-            public static final double VISION_CAM_Y_DIST_CENTER = 0.32;
-            public static final double VISION_CAM_X_DIST_CENTER = 0.03;
+            public static final double WHEEL_DIST = 0.622;
+            public static final double VISION_CAM_Y_DIST_CENTER = 0.32; // TODO: measure
+            public static final double VISION_CAM_X_DIST_CENTER = 0;
 
             public static class Motor {
                 public static final int

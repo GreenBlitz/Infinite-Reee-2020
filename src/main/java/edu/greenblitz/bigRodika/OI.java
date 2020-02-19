@@ -3,6 +3,8 @@ package edu.greenblitz.bigRodika;
 import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
+import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
+import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
@@ -10,7 +12,7 @@ import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
-import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
+import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.gblib.hid.SmartJoystick;
@@ -41,12 +43,17 @@ public class OI {
 
     private void initTestButtons() {
 
-        mainJoystick.A.whenPressed(new RollByConstant(0.2));
-        mainJoystick.A.whenReleased(new StopRoller());
-        mainJoystick.B.whenPressed(new PushByConstant(0.2));
-        mainJoystick.B.whenReleased(new StopPusher());
-        mainJoystick.Y.whenPressed(new InsertByConstant(0.2));
-        mainJoystick.Y.whenReleased(new StopInserter());
+        mainJoystick.Y.whenPressed(new ResetDome(-0.3));
+
+        mainJoystick.A.whenPressed(new DomeMoveByConstant(0.3));
+        mainJoystick.A.whenReleased(new DomeMoveByConstant(0));
+        mainJoystick.B.whenPressed(new DomeMoveByConstant(-0.3));
+        mainJoystick.B.whenReleased(new DomeMoveByConstant(0));
+
+        mainJoystick.X.whenPressed(new ShootByConstant(0.1));
+        mainJoystick.X.whenReleased(new StopShooter());
+
+
 
     }
 

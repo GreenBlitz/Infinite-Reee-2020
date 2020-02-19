@@ -1,10 +1,10 @@
 package edu.greenblitz.bigRodika.commands.dome;
 
-public class MoveByConstant extends DomeCommand {
+public class DomeMoveByConstant extends DomeCommand {
 
     private double power;
 
-    public MoveByConstant(double p) {
+    public DomeMoveByConstant(double p) {
         super();
         power = p;
     }
