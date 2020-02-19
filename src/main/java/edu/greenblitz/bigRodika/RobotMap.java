@@ -77,6 +77,10 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = false;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
+            public static final double SHOOTER_P = 0.005;
+            public static final double SHOOTER_I = 0.00002;
+            public static final double SHOOTER_D = 0.3;
+
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 
         }

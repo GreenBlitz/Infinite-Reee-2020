@@ -42,7 +42,7 @@ public class Turret extends GBSubsystem {
 //            encoder.reset();
 //        }
 
-        SmartDashboard.putNumber("Encoder", encoder.getRawTicks());
+        putNumber("Encoder", encoder.getRawTicks());
 //        SmartDashboard.putBoolean("Switch", isSwitchPressed());
 
         moveTurret(lastPower);

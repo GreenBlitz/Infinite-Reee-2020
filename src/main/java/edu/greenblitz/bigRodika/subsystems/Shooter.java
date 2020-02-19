@@ -30,7 +30,10 @@ public class Shooter extends GBSubsystem {
         preparedToShoot = false;
 
         putNumber("testing_target", 0);
-        putNumber("testing_ff", 0);
+        putNumber("p", 0);
+        putNumber("i", 0);
+        putNumber("d", 0);
+        putNumber("f", 0);
 
 //        leader.getEncoder().setVelocityConversionFactor(TICKS_PER_REVOLUTION);
 //        encoder = new SparkEncoder(RobotMap.Limbo2.Shooter.NORMALIZER, leader);
