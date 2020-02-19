@@ -35,11 +35,14 @@ public class Chassis extends GBSubsystem {
         leftFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
         leftFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);   //big-haim
 
-        leftLeader.setInverted(true);
         leftFollower1.follow(leftLeader);
         leftFollower2.follow(leftLeader);
         rightFollower1.follow(rightLeader);
         rightFollower2.follow(rightLeader);
+
+        leftLeader.setInverted(true);
+        leftFollower1.setInverted(true);
+        leftFollower1.setInverted(true);
 
         leftEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
         leftEncoder.invert(true);

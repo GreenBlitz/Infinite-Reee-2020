@@ -1,10 +1,7 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
-import edu.greenblitz.bigRodika.subsystems.Chassis;
-import edu.greenblitz.bigRodika.subsystems.Dome;
-import edu.greenblitz.bigRodika.subsystems.Funnel;
-import edu.greenblitz.bigRodika.subsystems.Shooter;
+import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,9 +17,9 @@ public class Robot extends TimedRobot {
 //        Pneumatics.init();
 //        Intake.init();
 //        Shifter.init();
-        //Funnel.init();
-        //Shooter.init();
-        // Dome.init();
+        Funnel.init();
+        Shooter.init();
+        Dome.init();
         Chassis.init(); // Must be last!
 
         OI.getInstance();

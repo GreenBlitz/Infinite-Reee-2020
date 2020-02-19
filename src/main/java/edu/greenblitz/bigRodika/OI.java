@@ -40,6 +40,10 @@ public class OI {
 
     private void initTestButtons() {
 
+//        mainJoystick.A.whenPressed(new RollByConstant(0.07));
+        mainJoystick.B.whenPressed(new PushByConstant(0.07));
+        mainJoystick.Y.whenPressed(new InsertByConstant(0.07));
+
         /*
         mainJoystick.Y.whenPressed(new HexAlign(4.5, 0.5, 0.5
                 , 0.1, 0.5));
