@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika.commands.dome;
 
+import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 import org.greenblitz.motion.tolerance.ITolerance;
 
 public class DomeApproachSwiftly extends DomeCommand {
@@ -15,10 +16,16 @@ public class DomeApproachSwiftly extends DomeCommand {
     private double X_OFFSET = SLOW_DOWN_END;
     private double Y_OFFSET = MINIMUM_SPEED;
 
+    private static final double DEFAULT_TOLERENCE = 0.01;
+
     public DomeApproachSwiftly(double target, ITolerance tol) {
         super();
         this.target = target;
         this.tolerance = tol;
+    }
+
+    public DomeApproachSwiftly(double target) {
+        this(target, new AbsoluteTolerance(DEFAULT_TOLERENCE));
     }
 
     @Override
