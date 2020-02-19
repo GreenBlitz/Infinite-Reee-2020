@@ -20,6 +20,7 @@ public class Robot extends TimedRobot {
         Funnel.init();
         Shooter.init();
         Dome.init();
+        Turret.init();
         Chassis.init(); // Must be last!
 
         OI.getInstance();

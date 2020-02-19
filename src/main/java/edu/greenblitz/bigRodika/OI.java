@@ -15,6 +15,7 @@ import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
+import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
@@ -45,15 +46,13 @@ public class OI {
 
         mainJoystick.Y.whenPressed(new ResetDome(-0.3));
 
-        mainJoystick.A.whenPressed(new DomeMoveByConstant(0.3));
-        mainJoystick.A.whenReleased(new DomeMoveByConstant(0));
-        mainJoystick.B.whenPressed(new DomeMoveByConstant(-0.3));
-        mainJoystick.B.whenReleased(new DomeMoveByConstant(0));
+        mainJoystick.A.whenPressed(new MoveTurretByConstant(0.3));
+        mainJoystick.A.whenReleased(new MoveTurretByConstant(0));
+        mainJoystick.B.whenPressed(new MoveTurretByConstant(-0.3));
+        mainJoystick.B.whenReleased(new MoveTurretByConstant(0));
 
         mainJoystick.X.whenPressed(new ShootByConstant(0.1));
         mainJoystick.X.whenReleased(new StopShooter());
-
-
 
     }
 

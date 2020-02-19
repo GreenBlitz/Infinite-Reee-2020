@@ -6,6 +6,7 @@ import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Turret extends GBSubsystem {
@@ -16,17 +17,17 @@ public class Turret extends GBSubsystem {
     private IEncoder encoder;
     private DigitalInput microSwitch;
     private double lastPower = 0;
+
     private Turret() {
         motor = new WPI_TalonSRX(RobotMap.Limbo2.Turret.MOTOR_PORT);
         motor.setInverted(RobotMap.Limbo2.Turret.IS_INVERTED);
         encoder = new TalonEncoder(RobotMap.Limbo2.Turret.NORMALIZER, motor);
-        microSwitch = new DigitalInput(RobotMap.Limbo2.Turret.SWITCH_PORT);
+//        microSwitch = new DigitalInput(RobotMap.Limbo2.Turret.SWITCH_PORT);
     }
 
     public static void init() {
         if (instance == null) {
             instance = new Turret();
-            CommandScheduler.getInstance().registerSubsystem(instance);
         }
     }
 
@@ -37,9 +38,12 @@ public class Turret extends GBSubsystem {
     @Override
     public void periodic() {
         super.periodic();
-        if (isSwitchPressed()) {
-            encoder.reset();
-        }
+//        if (isSwitchPressed()) {
+//            encoder.reset();
+//        }
+
+        SmartDashboard.putNumber("Encoder", encoder.getRawTicks());
+//        SmartDashboard.putBoolean("Switch", isSwitchPressed());
 
         moveTurret(lastPower);
     }

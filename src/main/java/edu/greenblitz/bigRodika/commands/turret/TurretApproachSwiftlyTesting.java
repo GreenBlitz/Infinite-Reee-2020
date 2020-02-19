@@ -2,7 +2,7 @@ package edu.greenblitz.bigRodika.commands.turret;
 
 import org.greenblitz.motion.tolerance.ITolerance;
 
-public class TurrentApproachSwiftlyTesting extends TurretCommand {
+public class TurretApproachSwiftlyTesting extends TurretCommand {
 
     public double SLOW_DOWN_BEGIN = 0.1;
     public double SLOW_DOWN_END = 0.01;
@@ -15,7 +15,7 @@ public class TurrentApproachSwiftlyTesting extends TurretCommand {
     private double X_OFFSET = SLOW_DOWN_END;
     private double Y_OFFSET = MINIMUM_SPEED;
 
-    public TurrentApproachSwiftlyTesting(double target, ITolerance tol) {
+    public TurretApproachSwiftlyTesting(double target, ITolerance tol) {
         super();
         this.target = target;
         this.tolerance = tol;
