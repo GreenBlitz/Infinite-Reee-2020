@@ -70,7 +70,7 @@ public class OI {
         mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
         mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
-        mainJoystick.L1.whileHeld(new PreShoot());
+        mainJoystick.L1.whileHeld(new PreShoot(4.0, false));
 
         secondStick.R1.whenPressed(new FullyAutoThreeStage(2950, 0.49));
         secondStick.R1.whenReleased(new StopShooter());

@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika.commands.turret;
 
+import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 import org.greenblitz.motion.tolerance.ITolerance;
 
 public class TurretApproachSwiftly extends TurretCommand {
@@ -14,11 +15,16 @@ public class TurretApproachSwiftly extends TurretCommand {
     private double SLOPE = (MAXIMUM_SPEED - MINIMUM_SPEED) / (SLOW_DOWN_BEGIN - SLOW_DOWN_END);
     private double X_OFFSET = SLOW_DOWN_END;
     private double Y_OFFSET = MINIMUM_SPEED;
+    private static final double DEFAULT_TOLERANCE = 0.5;
 
     public TurretApproachSwiftly(double target, ITolerance tol) {
         super();
         this.target = target;
         this.tolerance = tol;
+    }
+
+    public TurretApproachSwiftly(double target) {
+        this(target, new AbsoluteTolerance(DEFAULT_TOLERANCE));
     }
 
     @Override
