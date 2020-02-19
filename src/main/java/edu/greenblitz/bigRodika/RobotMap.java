@@ -12,47 +12,40 @@ public class RobotMap {
 
         public static class Dome {
 
-            public static final int MOTOR_PORT = 11;
-            public static final int POTENTIOMETER_PORT = 0;
+            public static final int MOTOR_PORT = 14;
+            public static final int POTENTIOMETER_PORT = 0; // TODO: everything after this including
             public static final boolean IS_MOTOR_REVERS = false;
             public static final boolean IS_POTENTIOMETER_REVERSE = false;
             public static final int LIMIT_SWITCH_PORT = 1;
         }
 
         public static class Turret {
-            public static final int MOTOR_PORT = 0; // TODO: check real ports and use it
-            public static final int SWITCH_PORT = 0;
-            public static final boolean IS_INVERTED = false; // TODO: check this for real
+            public static final int MOTOR_PORT = 11;
+            public static final int SWITCH_PORT = 0; // TODO: everything after this including
+            public static final boolean IS_INVERTED = false;
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
                     1.0);
 
-            public static final double CAMERADISTFROMTURRETCENTER = 0.2;// TODO: CHECK THIS FOR REAL
-            public static final double TICKSPERROUND = 2000;//TODO: CHECK THIS FOR REAL
+            public static final double TURRET_RADIUS = 0.2; // TODO: measure
         }
 
         public static class Funnel {
 
-            public static class Encoder {
-                // This must be the same for power and speed cause they have no meaning here.
-                public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
-                        1.0);
-            }
-
             public static class Motors {
 
-                public static final int INSERTER_PORT = 10;
-                public static final int PUSHER_PORT = 12;
+                public static final int INSERTER_PORT = 12;
+                public static final int PUSHER_PORT = 15;
 
             }
 
         }
 
-        public static class Intake {
+        public static class Intake { // TODO pneumatics here
             public static final int PCM = 22;
 
             public static class Motors {
-                public static final int ROLLER_PORT = 13;
-                public static final boolean IS_REVERSED = false;
+                public static final int ROLLER_PORT = 16;
+                public static final boolean IS_REVERSED = false; // TODO check is reversed
             }
 
             public static class Solenoid {
@@ -62,12 +55,13 @@ public class RobotMap {
         }
 
         public static class Shooter {
-            public static final int PORT = 6;
-            // This must be the same for power and speed cause they have no meaning here.
-            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
-                    1.0);
-            public static final boolean IS_INVERTED = true;
-            public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(-8.0);
+            public static final int PORT_LEADER = 7;
+            public static final int PORT_FOLLOWER = 8;
+
+            public static final boolean IS_INVERTED_LEADER = false; // TODO: Check if inverted
+            public static final boolean IS_INVERTED_FOLLOWER = false;
+
+            public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 
         }
 
@@ -79,7 +73,7 @@ public class RobotMap {
             public static final double SIDE_DEADZONE = 0.05;
         }
 
-        public static class Pneumatics {
+        public static class Pneumatics { // TODO: Check compressor shit
             public static final int PCM = 21;
 
             public static class PressureSensor {
@@ -87,7 +81,7 @@ public class RobotMap {
             }
         }
 
-        public static class Climber {
+        public static class Climber { // TODO: check this for now irrelevant
             public static class Motor {
                 public static final int HOOK = 9;
                 public static final boolean HOOK_REVERSE = false;
@@ -104,28 +98,23 @@ public class RobotMap {
         }
 
         public static class Chassis {
-            public static final double WHEEL_DIST = 0.57;
+            public static final double WHEEL_DIST = 0.57; // TODO: measure
             public static final double VISION_CAM_Y_DIST_CENTER = 0.32;
             public static final double VISION_CAM_X_DIST_CENTER = 0.03;
-            public static final double SHOOTER_X_DIST_CENTER = 0.0;
-            public static final double SHOOTER_Y_DIST_CENTER = 0.0;
 
             public static class Motor {
-                public static final int LEFT_VICTOR = 2, // 2
-                        RIGHT_VICTOR = 3, // 3
-                        LEFT_TALON = 1, // 1
-                        RIGHT_TALON = 4; // 4
-                public static final int RIGHT_LEADER = 4,
-                        RIGHT_FOLLOWER_1 = 5,
-                        RIGHT_FOLLOWER_2 = 6,
+                public static final int
                         LEFT_LEADER = 1,
                         LEFT_FOLLOWER_1 = 2,
-                        LEFT_FOLLOWER_2 = 3;
+                        LEFT_FOLLOWER_2 = 3,
+                        RIGHT_LEADER = 4,
+                        RIGHT_FOLLOWER_1 = 5,
+                        RIGHT_FOLLOWER_2 = 6;
 
 
             }
 
-            public static class Shifter {
+            public static class Shifter { // TODO: check this
                 public static final int PCM = 21;
 
                 public static class Solenoid {
@@ -135,18 +124,11 @@ public class RobotMap {
             }
 
             public static class Encoder {
-                public static final int LEFT_PORT_A = 2,
-                        LEFT_PORT_B = 3,
-                        RIGHT_PORT_A = 0,
-                        RIGHT_PORT_B = 1;
-
-                public static final GearDependentValue<Double>
-                        NORM_CONST_SPARK = new GearDependentValue<>(2300.0, 1234.0 / 2.0),
-                        NORM_CONST_LEFT = new GearDependentValue<>(2100.0, 2100.0),
-                        NORM_CONST_RIGHT = new GearDependentValue<>(1721.0, 1721.0);
+                public static final GearDependentValue<Double> // TODO: check this
+                        NORM_CONST_SPARK = new GearDependentValue<>(2300.0, 1234.0 / 2.0);
             }
 
-            public static class MotionData {
+            public static class MotionData { // TODO: calibrate this
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
                         1.2, 1.0, .0005,
@@ -172,16 +154,13 @@ public class RobotMap {
 
         }
 
-        public static final double angleForShootingToInnerDegrees = 18;
+        public static final double ANGLE_SHOOTING_TO_INNER_DEG = 18;
 
-        public static class PDPPorts {
-            public static final int SHOOTER = 13;
-        }
     }
 
     public static class FieldData{
-        public static final double HexDistFromInnerHole = 0.74295;
-        public static final double anglePhysicalLimitForShootingToInnerDegrees = 25;
+        public static final double HEX_DIST_FROM_INNER = 0.74295;
+        public static final double PHYSICAL_ANGLE_LIMIT = 25;
 
     }
 }

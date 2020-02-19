@@ -5,7 +5,6 @@ import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import org.greenblitz.motion.base.Point;
-import org.greenblitz.motion.base.Position;
 
 /**
  * @author Peleg Caduri
@@ -14,7 +13,7 @@ import org.greenblitz.motion.base.Position;
 public class MotionUtils {
 
     public static double[] planeryVisionDataToInnerHole(double[] visHex, double angle) {
-        Point planeryVector = new Point(visHex[0], visHex[1]).translate(new Point(0, RobotMap.FieldData.HexDistFromInnerHole).rotate(angle));
+        Point planeryVector = new Point(visHex[0], visHex[1]).translate(new Point(0, RobotMap.FieldData.HEX_DIST_FROM_INNER).rotate(angle));
         return new double[]{planeryVector.getX(), planeryVector.getY()};
     }
 
@@ -34,7 +33,7 @@ public class MotionUtils {
     }
 
     public static boolean isAngleGoodForShootingToInnerRads(double angle){
-        return angle <= Math.toRadians(RobotMap.FieldData.anglePhysicalLimitForShootingToInnerDegrees) && angle <= Math.toRadians(RobotMap.Limbo2.angleForShootingToInnerDegrees);
+        return angle <= Math.toRadians(RobotMap.FieldData.PHYSICAL_ANGLE_LIMIT) && angle <= Math.toRadians(RobotMap.Limbo2.ANGLE_SHOOTING_TO_INNER_DEG);
     }
 
     public static boolean isAngleGoodForShootingToInnerRads(){
@@ -42,7 +41,7 @@ public class MotionUtils {
     }
 
     public static double[] getSimulatedVisionLocation(double[] visHex, double turretAngle){
-        double x = RobotMap.Limbo2.Turret.CAMERADISTFROMTURRETCENTER;
+        double x = RobotMap.Limbo2.Turret.TURRET_RADIUS;
         Point vector = (new Point(visHex[0],visHex[1]).rotate(turretAngle)).translate(0,-x).translate(new Point(0,x).rotate(turretAngle));
         return new double[]{vector.getX(), vector.getY()};
     }

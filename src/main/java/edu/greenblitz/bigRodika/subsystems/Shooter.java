@@ -12,20 +12,29 @@ public class Shooter extends GBSubsystem {
 
     private static Shooter instance;
 
-    private CANSparkMax flywheel;
+    // Leader is left, follower is right
+    private CANSparkMax leader, follower;
     private boolean preparedToShoot;
 
     private Shooter() {
-        flywheel = new CANSparkMax(RobotMap.Limbo2.Shooter.PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
-        flywheel.setInverted(RobotMap.Limbo2.Shooter.IS_INVERTED);
-        flywheel.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        leader = new CANSparkMax(RobotMap.Limbo2.Shooter.PORT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        follower = new CANSparkMax(RobotMap.Limbo2.Shooter.PORT_FOLLOWER, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+        leader.setInverted(RobotMap.Limbo2.Shooter.IS_INVERTED_LEADER);
+        follower.setInverted(RobotMap.Limbo2.Shooter.IS_INVERTED_FOLLOWER);
+
+        follower.follow(leader);
+
+        leader.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        follower.setIdleMode(CANSparkMax.IdleMode.kCoast);
+
         preparedToShoot = false;
 
         putNumber("testing_target", 0);
         putNumber("testing_ff", 0);
 
-//        flywheel.getEncoder().setVelocityConversionFactor(TICKS_PER_REVOLUTION);
-//        encoder = new SparkEncoder(RobotMap.Limbo2.Shooter.NORMALIZER, flywheel);
+//        leader.getEncoder().setVelocityConversionFactor(TICKS_PER_REVOLUTION);
+//        encoder = new SparkEncoder(RobotMap.Limbo2.Shooter.NORMALIZER, leader);
     }
 
     public static void init() {
@@ -41,15 +50,15 @@ public class Shooter extends GBSubsystem {
 
     public void shoot(double power) {
         putNumber("power", power);
-        this.flywheel.set(power);
+        this.leader.set(power);
     }
 
     public void setSpeedByPID(double target) {
-        flywheel.getPIDController().setReference(target, ControlType.kVelocity);
+        leader.getPIDController().setReference(target, ControlType.kVelocity);
     }
 
     public void setPIDConsts(PIDObject obj) {
-        CANPIDController controller = flywheel.getPIDController();
+        CANPIDController controller = leader.getPIDController();
         controller.setP(obj.getKp());
         controller.setI(obj.getKi());
         controller.setD(obj.getKd());
@@ -58,7 +67,7 @@ public class Shooter extends GBSubsystem {
 
 
     public double getShooterSpeed() {
-        return flywheel.getEncoder().getVelocity();
+        return leader.getEncoder().getVelocity();
     }
 
     public double getAbsoluteShooterSpeed() {
@@ -66,7 +75,7 @@ public class Shooter extends GBSubsystem {
     }
 
     public void resetEncoder() {
-        flywheel.getEncoder().setPosition(0);
+        leader.getEncoder().setPosition(0);
     }
 
     public boolean isPreparedToShoot() {
@@ -80,13 +89,13 @@ public class Shooter extends GBSubsystem {
     @Override
     public void periodic() {
 
-        putNumber("Position", flywheel.getEncoder().getPosition());
-        putNumber("Velocity", flywheel.getEncoder().getVelocity());
-        putNumber("Output", flywheel.getAppliedOutput());
+        putNumber("Position", leader.getEncoder().getPosition());
+        putNumber("Velocity", leader.getEncoder().getVelocity());
+        putNumber("Output", leader.getAppliedOutput());
         putBoolean("ReadyToShoot", preparedToShoot);
     }
 
     public CANPIDController getPIDController() {
-        return flywheel.getPIDController();
+        return leader.getPIDController();
     }
 }

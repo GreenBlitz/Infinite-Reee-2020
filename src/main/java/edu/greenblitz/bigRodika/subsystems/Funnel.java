@@ -1,12 +1,8 @@
 package edu.greenblitz.bigRodika.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import org.greenblitz.motion.pid.PIDObject;
 
 /**
  * The pusher is the motor in the funnel that pulls the balls from the outer parts of the funnel to the
@@ -44,29 +40,6 @@ public class Funnel {
         inserter.inserter.set(power);
     }
 
-    public void moveInserterByPID(double target) {
-        inserter.inserter.set(ControlMode.Velocity, target);
-    }
-
-    public double getInserterSpeed() {
-        return inserter.inserterEncoder.getNormalizedVelocity();
-    }
-
-    public double getAbsoluteInserterSpeed() {
-        return Math.abs(getInserterSpeed());
-    }
-
-    public void configurePID(int pidIndex, PIDObject obj) {
-        inserter.inserter.config_kP(pidIndex, obj.getKp(), 20);
-        inserter.inserter.config_kI(pidIndex, obj.getKi(), 20);
-        inserter.inserter.config_kD(pidIndex, obj.getKd(), 20);
-        inserter.inserter.config_kF(pidIndex, obj.getKf(), 20);
-    }
-
-    public void selectPIDLoop(int pidIndex) {
-        inserter.inserter.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, pidIndex, 20);
-    }
-
     public Inserter getInserter() {
         return inserter;
     }
@@ -77,14 +50,12 @@ public class Funnel {
 
     public class Inserter extends GBSubsystem {
         private WPI_TalonSRX inserter;
-        private TalonEncoder inserterEncoder;
 
         private Funnel parent;
 
         private Inserter(Funnel parent) {
             this.parent = parent;
             inserter = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.INSERTER_PORT);
-            inserterEncoder = new TalonEncoder(RobotMap.Limbo2.Funnel.Encoder.NORMALIZER, inserter);
         }
 
         public Funnel getFunnel() {

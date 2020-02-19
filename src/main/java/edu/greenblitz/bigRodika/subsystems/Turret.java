@@ -70,7 +70,7 @@ public class Turret extends GBSubsystem {
     }
 
     public double getAngleRads(){
-        return 2* Math.PI * getTurretLocation()/RobotMap.Limbo2.Turret.TICKSPERROUND;
+        return 2* Math.PI * getTurretLocation();
     }
 
     public double getTurretSpeed() {
