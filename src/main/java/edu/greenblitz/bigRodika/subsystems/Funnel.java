@@ -93,6 +93,10 @@ public class Funnel {
             super.periodic();
 
         }
+
+        public WPI_TalonSRX getTalon(){
+            return pusher;
+        }
     }
 
 }

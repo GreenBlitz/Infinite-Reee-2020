@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -45,8 +46,10 @@ public class Chassis extends GBSubsystem {
         rightEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
         rightEncoder.invert(false);
 
-        gyroscope = new PigeonGyro(new PigeonIMU(0));   // chassis
-//        gyroscope.inverse();
+        gyroscope = new PigeonGyro(
+                new PigeonIMU(Funnel.getInstance().getPusher().getTalon()));
+        gyroscope.reset();
+        gyroscope.inverse();
     }
 
     public static void init() {
@@ -149,10 +152,11 @@ public class Chassis extends GBSubsystem {
 
         super.periodic();
 
-        SmartDashboard.putNumber("Left vel", leftEncoder.getNormalizedVelocity());
-        SmartDashboard.putNumber("Right vel", rightEncoder.getNormalizedVelocity());
-        putNumber("Angle", getAngularVelocityByWheels());
-        SmartDashboard.putString("Location", Chassis.getInstance().getLocation().toString());
+        putNumber("Left vel enc", leftEncoder.getNormalizedVelocity());
+        putNumber("Right vel enc", rightEncoder.getNormalizedVelocity());
+        putNumber("Angle vel by wheel", getAngularVelocityByWheels());
+        putNumber("Pigeon angle deg", Math.toDegrees(getAngle()));
+        putString("Location", Chassis.getInstance().getLocation().toString());
 
     }
 

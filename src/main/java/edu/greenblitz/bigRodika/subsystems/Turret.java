@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
@@ -23,7 +24,9 @@ public class Turret extends GBSubsystem {
         motor = new WPI_TalonSRX(RobotMap.Limbo2.Turret.MOTOR_PORT);
         motor.setInverted(RobotMap.Limbo2.Turret.IS_INVERTED);
         encoder = new TalonEncoder(RobotMap.Limbo2.Turret.NORMALIZER, motor);
-        microSwitch = new DigitalInput(RobotMap.Limbo2.Turret.SWITCH_PORT);
+        microSwitch = DigitalInputMap.getInstance().getDigitalInput(
+                RobotMap.Limbo2.Turret.SWITCH_PORT
+        );
     }
 
     public static void init() {
@@ -69,7 +72,7 @@ public class Turret extends GBSubsystem {
     }
 
     public boolean isSwitchPressed() {
-        return microSwitch.get();
+        return !microSwitch.get(); // alexey i changed the code to match the new magnetic switch
     }
 
     public double getTurretLocation() {

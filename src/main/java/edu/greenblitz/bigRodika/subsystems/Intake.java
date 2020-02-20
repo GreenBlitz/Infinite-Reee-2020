@@ -15,14 +15,14 @@ public class Intake {
 
     private Intake() {
         roller = new Intake.Roller();
-//        extender = new Intake.Extender();
+//        extenderLeft = new Intake.Extender();
     }
 
     public static void init() {
         if (instance == null) {
             instance = new Intake();
             CommandScheduler.getInstance().registerSubsystem(instance.roller);
-//            CommandScheduler.getInstance().registerSubsystem(instance.extender);
+//            CommandScheduler.getInstance().registerSubsystem(instance.extenderLeft);
         }
     }
 
@@ -35,15 +35,17 @@ public class Intake {
     }
 
     public void extend() {
-        extender.extender.set(DoubleSolenoid.Value.kForward);
+        extender.extenderLeft.set(DoubleSolenoid.Value.kForward);
+        extender.extenderRight.set(DoubleSolenoid.Value.kForward);
     }
 
     public void retract() {
-        extender.extender.set(DoubleSolenoid.Value.kReverse);
+        extender.extenderLeft.set(DoubleSolenoid.Value.kReverse);
+        extender.extenderRight.set(DoubleSolenoid.Value.kReverse);
     }
 
     public boolean isExtended() {
-        return extender.extender.get().equals(DoubleSolenoid.Value.kForward);
+        return extender.extenderLeft.get().equals(DoubleSolenoid.Value.kForward);
     }
 
     public void toggleExtender() {
@@ -85,10 +87,16 @@ public class Intake {
 
     public class Extender extends IntakeSubsystem {
 
-        private DoubleSolenoid extender;
+        private DoubleSolenoid extenderLeft;
+        private DoubleSolenoid extenderRight;
 
         private Extender() {
-            extender = new DoubleSolenoid(RobotMap.Limbo2.Intake.PCM, RobotMap.Limbo2.Intake.Solenoid.FORWARD, RobotMap.Limbo2.Intake.Solenoid.REVERSE);
+            extenderLeft = new DoubleSolenoid(RobotMap.Limbo2.Intake.PCM,
+                    RobotMap.Limbo2.Intake.Solenoid.FORWARD_LEFT,
+                    RobotMap.Limbo2.Intake.Solenoid.REVERSE_LEFT);
+            extenderRight = new DoubleSolenoid(RobotMap.Limbo2.Intake.PCM,
+                    RobotMap.Limbo2.Intake.Solenoid.FORWARD_RIGHT,
+                    RobotMap.Limbo2.Intake.Solenoid.REVERSE_RIGHT);
         }
 
         @Override

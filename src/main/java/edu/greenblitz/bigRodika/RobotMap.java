@@ -16,7 +16,7 @@ public class RobotMap {
             public static final int POTENTIOMETER_PORT = 3;
             public static final boolean IS_MOTOR_REVERSE = true;
             public static final boolean IS_POTENTIOMETER_REVERSE = true;
-            public static final int LIMIT_SWITCH_PORT = 0;
+            public static final int LIMIT_SWITCH_PORT = 1;
 
             public static final double ANGLE_PER_POT_VALUE = Math.toRadians(65);
             public static final double DOME_ZERO_ANGLE = Math.toRadians(17);
@@ -37,7 +37,7 @@ public class RobotMap {
 
         public static class Turret {
             public static final int MOTOR_PORT = 11;
-            public static final int SWITCH_PORT = 2;
+            public static final int SWITCH_PORT = 3;
             public static final boolean IS_INVERTED = false;
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
                     28672.0);//correct 110 present
@@ -61,7 +61,7 @@ public class RobotMap {
         }
 
         public static class Intake { // TODO pneumatics here
-            public static final int PCM = 22;
+            public static final int PCM = 21;
 
             public static class Motors {
                 public static final int ROLLER_PORT = 16;
@@ -69,8 +69,10 @@ public class RobotMap {
             }
 
             public static class Solenoid {
-                public static final int FORWARD = 5;
-                public static final int REVERSE = 7;
+                public static final int FORWARD_LEFT = 2;
+                public static final int REVERSE_LEFT = 3;
+                public static final int FORWARD_RIGHT = 4;
+                public static final int REVERSE_RIGHT = 5;
             }
         }
 
@@ -143,8 +145,8 @@ public class RobotMap {
                 public static final int PCM = 21;
 
                 public static class Solenoid {
-                    public static final int FORWARD = 3;
-                    public static final int REVERSE = 6;
+                    public static final int FORWARD = 0;
+                    public static final int REVERSE = 1;
                 }
             }
 

@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
@@ -25,7 +26,9 @@ public class Dome extends GBSubsystem {
         domeMotor.setInverted(RobotMap.Limbo2.Dome.IS_MOTOR_REVERSE);
         domeMotor.setNeutralMode(NeutralMode.Brake);
         potentiometer = new AnalogPotentiometer(RobotMap.Limbo2.Dome.POTENTIOMETER_PORT);
-        limitSwitch = new DigitalInput(RobotMap.Limbo2.Dome.LIMIT_SWITCH_PORT);
+        limitSwitch = DigitalInputMap.getInstance().getDigitalInput(
+                RobotMap.Limbo2.Dome.LIMIT_SWITCH_PORT
+        );
     }
 
     public static void init() {

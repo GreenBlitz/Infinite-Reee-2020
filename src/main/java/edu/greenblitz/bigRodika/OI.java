@@ -65,20 +65,19 @@ public class OI {
 
     private void initTestButtons() {
 
-        secondStick.START.whenPressed(new ResetDome(-0.22));
 
-//        secondStick.L1.whenPressed(new ShootByConstant(0.6));
-//        secondStick.L1.whenReleased(new StopShooter());
+        secondStick.L1.whenPressed(new ShootByConstant(0.8));
+        secondStick.L1.whenReleased(new StopShooter());
 
-//        secondStick.R1.whenPressed(
-//                new ParallelCommandGroup(
-//                        new InsertByConstant(0.5),
-//                        new PushByConstant(0.5)
-//                )
-//                );
-//        secondStick.R1.whenReleased(
-//                new ParallelCommandGroup(new StopInserter(), new StopPusher())
-//        );
+        secondStick.R1.whenPressed(
+                new ParallelCommandGroup(
+                        new InsertByConstant(0.5),
+                        new PushByConstant(0.5)
+                )
+                );
+        secondStick.R1.whenReleased(
+                new ParallelCommandGroup(new StopInserter(), new StopPusher())
+        );
 
 
 //        secondStick.B.whenPressed(new DomeApproachSwiftly(0.5,
@@ -87,9 +86,9 @@ public class OI {
 //        mainJoystick.B.whenPressed(new DomeMoveByConstant(0.2));
 //        mainJoystick.B.whenReleased(new DomeMoveByConstant(0));
 
-        secondStick.R1.whenPressed(new TurretApproachSwiftlyByRadiansRelative(Math.PI/8));
-        secondStick.R1.whenReleased(new StopTurret());
-//
+//        secondStick.R1.whenPressed(new TurretApproachSwiftlyByRadiansRelative(Math.PI/8));
+//        secondStick.R1.whenReleased(new StopTurret());
+////
 //        mainJoystick.B.whenPressed(new TurretApproachSwiftly(0.1));
 //        mainJoystick.B.whenReleased(new StopTurret());
 
@@ -97,9 +96,9 @@ public class OI {
 //        secondStick.X.whenReleased(new DomeMoveByConstant(0));
 
         //mainJoystick.A.whenPressed(new CheckMaxRot(0.8));
-
-        secondStick.L1.whenPressed(new UnsafeResetTurret(-0.2));
-        secondStick.L1.whenReleased(new StopTurret());
+//
+//        secondStick.L1.whenPressed(new UnsafeResetTurret(-0.2));
+//        secondStick.L1.whenReleased(new StopTurret());
 
         secondStick.X.whenPressed(new TurretByVision(
                 VisionMaster.Algorithm.FEEDING_STATION));
@@ -107,13 +106,13 @@ public class OI {
 //        mainJoystick.X.whenPressed(new TurretToFront());
 //        mainJoystick.X.whenReleased(new StopTurret());
 
-        secondStick.A.whenPressed(new MoveTurretByConstant(0.2));
-        secondStick.A.whenReleased(new MoveTurretByConstant(0));
+        secondStick.A.whenPressed(new DomeMoveByConstant(0.2));
+        secondStick.A.whenReleased(new DomeMoveByConstant(0));
 
 
 
-        secondStick.Y.whenPressed(new MoveTurretByConstant(-0.2));
-        secondStick.Y.whenReleased(new MoveTurretByConstant(0));
+        secondStick.Y.whenPressed(new DomeMoveByConstant(-0.2));
+        secondStick.Y.whenReleased(new DomeMoveByConstant(0));
 
 //        mainJoystick.Y.whenPressed(new CheckMaxLin(0.8));
 //        mainJoystick.Y.whenReleased(new BrakeChassis());
@@ -146,7 +145,7 @@ public class OI {
 
 //        mainJoystick.L3.whenReleased(new ToggleShift());
 
-        secondStick.R1.whenPressed(new FullyAutoThreeStage(4500, 0.8));
+        secondStick.R1.whenPressed(new FullyAutoThreeStage(3400, 0.6));
         secondStick.R1.whenReleased(new StopShooter());
 
         secondStick.L1.whileHeld(new InsertIntoShooter(0.5, 0.7, 0.5));
@@ -159,6 +158,7 @@ public class OI {
 
         secondStick.B.whenPressed(new ToggleExtender());
         secondStick.A.whileHeld(new RollByConstant(0.5));
+
 
     }
 
