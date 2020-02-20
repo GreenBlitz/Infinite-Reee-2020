@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Turret extends GBSubsystem {
-    private static final double MAX_TICKS = 15000;//16400
-    private static final double MIN_TICKS = -5000;//-12400//-11000 todo :REALLY IMPORTANT FOR ROBOT NOT TO DIE.
+    private static final double MAX_TICKS = 5000;//16400
+    private static final double MIN_TICKS = -15000;//-12400//-11000 todo :REALLY IMPORTANT FOR ROBOT NOT TO DIE.
     //asl @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;
@@ -33,6 +33,10 @@ public class Turret extends GBSubsystem {
         if (instance == null) {
             instance = new Turret();
         }
+    }
+
+    public void resetEncoder(){
+        encoder.reset();
     }
 
     public static Turret getInstance() {

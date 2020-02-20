@@ -41,7 +41,7 @@ public class RobotMap {
             public static final boolean IS_INVERTED = false;
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
                     28672.0);//correct 110 present
-            public static final double ENCODER_VALUE_WHEN_FORWARD = 8974.0;
+            public static double ENCODER_VALUE_WHEN_FORWARD = 8974.0;
 
             public static final double TURRET_CAMERA_RADIUS = 0.23;
         }
@@ -69,8 +69,8 @@ public class RobotMap {
             }
 
             public static class Solenoid {
-                public static final int FORWARD_LEFT = 2;
-                public static final int REVERSE_LEFT = 3;
+                public static final int FORWARD_LEFT = 1;
+                public static final int REVERSE_LEFT = 0;
                 public static final int FORWARD_RIGHT = 4;
                 public static final int REVERSE_RIGHT = 5;
             }
@@ -83,9 +83,9 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = false;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
-            public static final double SHOOTER_P = 0.0004;
+            public static final double SHOOTER_P = 0.00035;
             public static final double SHOOTER_I = 0.000001;
-            public static final double SHOOTER_D = 0.000015;
+            public static final double SHOOTER_D = 0.00002;
 
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 
@@ -145,8 +145,8 @@ public class RobotMap {
                 public static final int PCM = 21;
 
                 public static class Solenoid {
-                    public static final int FORWARD = 0;
-                    public static final int REVERSE = 1;
+                    public static final int FORWARD = 2;
+                    public static final int REVERSE = 3;
                 }
             }
 

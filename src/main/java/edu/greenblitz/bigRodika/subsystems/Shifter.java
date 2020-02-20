@@ -72,6 +72,12 @@ public class Shifter extends GBSubsystem {
         m_piston.set(shiftValue.getValue());
     }
 
+    @Override
+    public void periodic() {
+        super.periodic();
+        putString("Shift", m_currentShift.name());
+    }
+
     public void toggleShift() {
         setShift(getCurrentGear() == Gear.POWER ? Gear.SPEED : Gear.POWER);
     }

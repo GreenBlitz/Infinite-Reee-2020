@@ -1,15 +1,9 @@
 package edu.greenblitz.bigRodika;
 
-import edu.greenblitz.bigRodika.commands.chassis.BrakeChassis;
 import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
-import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
-import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
-import edu.greenblitz.bigRodika.commands.chassis.turns.TurnToVision;
-import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
-import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftlyTesting;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
@@ -23,19 +17,12 @@ import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
 import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootByDashboard;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.ThreeStageShoot;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.test.ThreeStageTesting;
 import edu.greenblitz.bigRodika.commands.turret.*;
-import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.hid.SmartJoystick;
-import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import org.greenblitz.motion.base.Position;
 import org.greenblitz.motion.base.State;
-import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,75 +52,39 @@ public class OI {
 
     private void initTestButtons() {
 
+        mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
+        mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
-        secondStick.L1.whenPressed(new ShootByConstant(0.8));
-        secondStick.L1.whenReleased(new StopShooter());
+        mainJoystick.L1.whileHeld(new PreShoot(4.0, false));
 
-        secondStick.R1.whenPressed(
-                new ParallelCommandGroup(
-                        new InsertByConstant(0.5),
-                        new PushByConstant(0.5)
-                )
-                );
-        secondStick.R1.whenReleased(
-                new ParallelCommandGroup(new StopInserter(), new StopPusher())
-        );
+//        mainJoystick.L3.whenReleased(new ToggleShift());
 
+        secondStick.R1.whenPressed(new FullyAutoThreeStage(4500, 0.8));
+        secondStick.R1.whenReleased(new StopShooter());
 
-//        secondStick.B.whenPressed(new DomeApproachSwiftly(0.5,
-//                new AbsoluteTolerance(0.01)));
-//
-//        mainJoystick.B.whenPressed(new DomeMoveByConstant(0.2));
-//        mainJoystick.B.whenReleased(new DomeMoveByConstant(0));
+        secondStick.L1.whileHeld(new InsertIntoShooter(1, 0.3, 0.5));
+        secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
+                new StopInserter(), new StopRoller()));
 
-//        secondStick.R1.whenPressed(new TurretApproachSwiftlyByRadiansRelative(Math.PI/8));
-//        secondStick.R1.whenReleased(new StopTurret());
-////
-//        mainJoystick.B.whenPressed(new TurretApproachSwiftly(0.1));
-//        mainJoystick.B.whenReleased(new StopTurret());
+        secondStick.Y.whileHeld(new
+                ParallelCommandGroup(new PushByConstant(-0.7), new InsertByConstant(-0.6)));
+        secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
 
-//        secondStick.X.whenPressed(new DomeMoveByConstant(-0.2));
-//        secondStick.X.whenReleased(new DomeMoveByConstant(0));
+        secondStick.B.whenPressed(new ToggleExtender());
+        secondStick.A.whileHeld(new RollByConstant(0.8));
 
-        //mainJoystick.A.whenPressed(new CheckMaxRot(0.8));
-//
-//        secondStick.L1.whenPressed(new UnsafeResetTurret(-0.2));
-//        secondStick.L1.whenReleased(new StopTurret());
+        secondStick.L3.whenPressed(new ResetEncoderWhenInFront());
+        secondStick.R3.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+        secondStick.R3.whenReleased(new StopTurret());
 
-        secondStick.X.whenPressed(new TurretByVision(
-                VisionMaster.Algorithm.FEEDING_STATION));
-        secondStick.X.whenReleased(new StopTurret());
-//        mainJoystick.X.whenPressed(new TurretToFront());
-//        mainJoystick.X.whenReleased(new StopTurret());
-
-        secondStick.A.whenPressed(new DomeMoveByConstant(0.2));
-        secondStick.A.whenReleased(new DomeMoveByConstant(0));
-
-
-
-        secondStick.Y.whenPressed(new DomeMoveByConstant(-0.2));
-        secondStick.Y.whenReleased(new DomeMoveByConstant(0));
-
-//        mainJoystick.Y.whenPressed(new CheckMaxLin(0.8));
-//        mainJoystick.Y.whenReleased(new BrakeChassis());
-
-        List<State> path = new ArrayList<>();
-
-        path.add(new State(0,0));
-        path.add(new State(0,2));
-        Follow2DProfileCommand prof = new Follow2DProfileCommand(
-                path, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5 , false);
-
-        //mainJoystick.Y.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
-
-        List<State> path2 = new ArrayList<>();
-
-        path2.add(new State(0,0));
-        path2.add(new State(1,1, Math.PI/2));
-        Follow2DProfileCommand prof2 = new Follow2DProfileCommand(
-                path2, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5 , false);
-
-        //mainJoystick.A.whenPressed(new ThreadedCommand(prof2, Chassis.getInstance()));
+        mainJoystick.START.whenPressed(new MoveTurretByConstant(0.35));
+        mainJoystick.START.whenReleased(new MoveTurretByConstant(0));
+        mainJoystick.BACK.whenPressed(new MoveTurretByConstant(-0.35));
+        mainJoystick.BACK.whenReleased(new MoveTurretByConstant(0));
+        secondStick.START.whenPressed(new DomeMoveByConstant(0.35));
+        secondStick.START.whenReleased(new DomeMoveByConstant(0));
+        secondStick.BACK.whenPressed(new DomeMoveByConstant(-0.35));
+        secondStick.BACK.whenReleased(new DomeMoveByConstant(0));
     }
 
     private void initOfficalButtons() {
@@ -145,10 +96,10 @@ public class OI {
 
 //        mainJoystick.L3.whenReleased(new ToggleShift());
 
-        secondStick.R1.whenPressed(new FullyAutoThreeStage(3400, 0.6));
+        secondStick.R1.whenPressed(new FullyAutoThreeStage(4500, 0.8));
         secondStick.R1.whenReleased(new StopShooter());
 
-        secondStick.L1.whileHeld(new InsertIntoShooter(0.5, 0.7, 0.5));
+        secondStick.L1.whileHeld(new InsertIntoShooter(1, 0.3, 0.5));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
                 new StopInserter(), new StopRoller()));
 
@@ -157,9 +108,9 @@ public class OI {
         secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
 
         secondStick.B.whenPressed(new ToggleExtender());
-        secondStick.A.whileHeld(new RollByConstant(0.5));
+        secondStick.A.whileHeld(new RollByConstant(0.8));
 
-
+        secondStick.R3.whenPressed(new ResetDome(-0.35));
     }
 
     public SmartJoystick getMainJoystick() {

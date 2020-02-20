@@ -15,14 +15,14 @@ public class Intake {
 
     private Intake() {
         roller = new Intake.Roller();
-//        extenderLeft = new Intake.Extender();
+//        extender = new Intake.Extender();
     }
 
     public static void init() {
         if (instance == null) {
             instance = new Intake();
             CommandScheduler.getInstance().registerSubsystem(instance.roller);
-//            CommandScheduler.getInstance().registerSubsystem(instance.extenderLeft);
+//            CommandScheduler.getInstance().registerSubsystem(instance.extender);
         }
     }
 
@@ -64,7 +64,7 @@ public class Intake {
         return extender;
     }
 
-    private class IntakeSubsystem implements Subsystem {
+    private class IntakeSubsystem extends GBSubsystem {
         public Intake getIntake() {
             return Intake.this;
         }
@@ -101,6 +101,9 @@ public class Intake {
 
         @Override
         public void periodic() {
+            super.periodic();
+            putString("Left", extenderLeft.get().toString());
+            putString("Right", extenderRight.get().toString());
         }
     }
 }
