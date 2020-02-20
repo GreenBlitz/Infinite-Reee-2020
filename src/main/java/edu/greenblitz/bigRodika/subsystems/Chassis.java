@@ -40,9 +40,9 @@ public class Chassis extends GBSubsystem {
         rightFollower1.setInverted(true);
         rightFollower1.setInverted(true);
 
-        leftEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
+        leftEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
         leftEncoder.invert(false);
-        rightEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
+        rightEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
         rightEncoder.invert(false);
 
         gyroscope = new PigeonGyro(new PigeonIMU(0));   // chassis
@@ -149,8 +149,8 @@ public class Chassis extends GBSubsystem {
 
         super.periodic();
 
-        putNumber("Left vel", leftEncoder.getNormalizedVelocity());
-        putNumber("Right vel", rightEncoder.getNormalizedVelocity());
+        SmartDashboard.putNumber("Left vel", leftEncoder.getNormalizedVelocity());
+        SmartDashboard.putNumber("Right vel", rightEncoder.getNormalizedVelocity());
         putNumber("Angle", getAngularVelocityByWheels());
         SmartDashboard.putString("Location", Chassis.getInstance().getLocation().toString());
 

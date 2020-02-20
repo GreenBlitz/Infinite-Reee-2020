@@ -39,8 +39,8 @@ public class RobotMap {
             public static final int MOTOR_PORT = 11;
             public static final int SWITCH_PORT = 2;
             public static final boolean IS_INVERTED = false;
-            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(1.0,
-                    1.0);
+            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28800.0,
+                    28800.0);
 
             public static final double TURRET_CAMERA_RADIUS = 0.23;
         }
@@ -155,9 +155,9 @@ public class RobotMap {
             public static class MotionData { // TODO: calibrate this
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
-                        1.0, 1.0, .0005,
-                        0, .002, 0, .01,
-                        0, 0, 0, .01, 500);
+                        1.05, 1.0, .0005,
+                        1.1, 0, 6.0, .01,
+                        1.0, 0, 0, .01, 500);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
 

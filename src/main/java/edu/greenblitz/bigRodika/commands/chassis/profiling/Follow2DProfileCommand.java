@@ -164,7 +164,7 @@ public class Follow2DProfileCommand implements IThreadable {
             follower.setSendData(sendData);
         }
         else {
-            follower.setSendData(false);
+            follower.setSendData(true);
         }
         Chassis.getInstance().toCoast();
         mult = isOpp ? -1 : 1;

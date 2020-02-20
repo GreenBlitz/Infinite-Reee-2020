@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Turret extends GBSubsystem {
-    private static final double MAX_TICKS = 10000;
-    private static final double MIN_TICKS = 0;
+    private static final double MAX_TICKS = 16400;
+    private static final double MIN_TICKS = -12400;
     private static Turret instance;
     private WPI_TalonSRX motor;
     private IEncoder encoder;
@@ -42,18 +42,19 @@ public class Turret extends GBSubsystem {
             encoder.reset();
         }
 
-        putNumber("Encoder", encoder.getRawTicks());
-        putBoolean("Switch", isSwitchPressed());
+        SmartDashboard.putNumber("Encoder", encoder.getRawTicks());
+        SmartDashboard.putNumber("normEncoder", encoder.getNormalizedTicks());
+        SmartDashboard.putBoolean("Switch", isSwitchPressed());
 
         moveTurret(lastPower);
     }
 
     public void moveTurret(double power) {
-        if (getTurretLocation() < MIN_TICKS && power < 0) {
+        if (encoder.getRawTicks() < MIN_TICKS && power < 0) {
             motor.set(0);
             return;
         }
-        if (getTurretLocation() > MAX_TICKS && power > 0) {
+        if (encoder.getRawTicks() > MAX_TICKS && power > 0) {
             motor.set(0);
             return;
         }

@@ -30,12 +30,12 @@ public class DomeApproachSwiftly extends DomeCommand {
 
     @Override
     public void execute() {
-        dome.safeMove(calculateVelocity(target - dome.getPotentiometerRaw()));
+        dome.safeMove(calculateVelocity(target - dome.getPotentiometerValue()));
     }
 
     @Override
     public boolean isFinished() {
-        return tolerance.onTarget(target, dome.getPotentiometerRaw());
+        return tolerance.onTarget(target, dome.getPotentiometerValue());
     }
 
     @Override
