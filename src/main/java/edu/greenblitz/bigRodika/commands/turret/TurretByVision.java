@@ -33,7 +33,7 @@ public class TurretByVision extends TurretCommand {
             return;
         }
 
-        turret.moveTurret(calculateVelocity(
+        turret.moveTurret(TurretApproachSwiftly.calculateVelocity(
                 Math.atan(diff[0] / diff[1])));
     }
 
@@ -45,24 +45,6 @@ public class TurretByVision extends TurretCommand {
     @Override
     public void end(boolean interrupted) {
         turret.moveTurret(0);
-    }
-
-    public double calculateVelocity(double error) {
-
-        turret.putNumber("Error", error);
-
-        double absError = Math.abs(error);
-        double errorSign = Math.signum(error);
-
-        if (absError <= SLOW_DOWN_END) {
-            return MINIMUM_SPEED * errorSign;
-        }
-        if (absError >= SLOW_DOWN_BEGIN) {
-            return MAXIMUM_SPEED * errorSign;
-        }
-
-        return ((absError - X_OFFSET) * SLOPE + Y_OFFSET) * errorSign;
-
     }
 
 }

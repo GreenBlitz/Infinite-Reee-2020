@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika.commands.turret;
 
+import edu.greenblitz.bigRodika.subsystems.Turret;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 import org.greenblitz.motion.tolerance.ITolerance;
 
@@ -42,9 +43,9 @@ public class TurretApproachSwiftly extends TurretCommand {
         turret.moveTurret(0);
     }
 
-    public double calculateVelocity(double error) {
+    public static double calculateVelocity(double error) {
 
-        turret.putNumber("Error", error);
+        Turret.getInstance().putNumber("Error", error);
 
         double absError = Math.abs(error);
         double errorSign = Math.signum(error);

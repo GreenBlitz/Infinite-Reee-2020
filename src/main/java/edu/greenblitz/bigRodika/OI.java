@@ -20,6 +20,7 @@ import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
+import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootByDashboard;
@@ -142,6 +143,8 @@ public class OI {
         mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
         mainJoystick.L1.whileHeld(new PreShoot(4.0, false));
+
+//        mainJoystick.L3.whenReleased(new ToggleShift());
 
         secondStick.R1.whenPressed(new FullyAutoThreeStage(4500, 0.8));
         secondStick.R1.whenReleased(new StopShooter());

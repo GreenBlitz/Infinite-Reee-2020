@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.commands.chassis.turns;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
 import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyByRadiansRelative;
+import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
@@ -63,11 +64,8 @@ public class TurnToVision extends GBCommand {
         }
 
         if (useTurret) {
-            target = Math.atan(diff[0] / diff[1]);
-            Turret.getInstance().putNumber("Vision Target", target);
             turn =
-                    new TurretApproachSwiftlyByRadiansRelative(target
-                            + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET);
+                    new TurretByVision(algorithm);
         } else {
             target = Chassis.getInstance().getAngle() - Math.atan(diff[0] / diff[1]);
             turn = new TurnToAngle(Math.toDegrees(target) + Math.toDegrees(RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET), 3, 1
