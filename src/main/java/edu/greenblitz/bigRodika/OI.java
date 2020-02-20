@@ -7,6 +7,7 @@ import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
+import edu.greenblitz.bigRodika.commands.chassis.turns.TurnToVision;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftlyTesting;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
@@ -27,6 +28,7 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.ThreeStag
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.test.ThreeStageTesting;
 import edu.greenblitz.bigRodika.commands.turret.*;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -67,15 +69,15 @@ public class OI {
 //        secondStick.L1.whenPressed(new ShootByConstant(0.6));
 //        secondStick.L1.whenReleased(new StopShooter());
 
-        secondStick.R1.whenPressed(
-                new ParallelCommandGroup(
-                        new InsertByConstant(0.5),
-                        new PushByConstant(0.5)
-                )
-                );
-        secondStick.R1.whenReleased(
-                new ParallelCommandGroup(new StopInserter(), new StopPusher())
-        );
+//        secondStick.R1.whenPressed(
+//                new ParallelCommandGroup(
+//                        new InsertByConstant(0.5),
+//                        new PushByConstant(0.5)
+//                )
+//                );
+//        secondStick.R1.whenReleased(
+//                new ParallelCommandGroup(new StopInserter(), new StopPusher())
+//        );
 
 
 //        secondStick.B.whenPressed(new DomeApproachSwiftly(0.5,
@@ -84,29 +86,33 @@ public class OI {
 //        mainJoystick.B.whenPressed(new DomeMoveByConstant(0.2));
 //        mainJoystick.B.whenReleased(new DomeMoveByConstant(0));
 
-        mainJoystick.R1.whenPressed(new TurretApproachSwiftlyByRadiansAbsulote(Math.PI/4));
-        mainJoystick.R1.whenReleased(new StopTurret());
-
-        mainJoystick.B.whenPressed(new TurretApproachSwiftly(0.1));
-        mainJoystick.B.whenReleased(new StopTurret());
+        secondStick.R1.whenPressed(new TurretApproachSwiftlyByRadiansRelative(Math.PI/8));
+        secondStick.R1.whenReleased(new StopTurret());
+//
+//        mainJoystick.B.whenPressed(new TurretApproachSwiftly(0.1));
+//        mainJoystick.B.whenReleased(new StopTurret());
 
 //        secondStick.X.whenPressed(new DomeMoveByConstant(-0.2));
 //        secondStick.X.whenReleased(new DomeMoveByConstant(0));
 
         //mainJoystick.A.whenPressed(new CheckMaxRot(0.8));
 
-        mainJoystick.L1.whenPressed(new UnsafeResetTurret(-0.2));
-        mainJoystick.L1.whenReleased(new StopTurret());
+        secondStick.L1.whenPressed(new UnsafeResetTurret(-0.2));
+        secondStick.L1.whenReleased(new StopTurret());
 
-        mainJoystick.X.whenPressed(new TurretToFront());
-        mainJoystick.X.whenReleased(new StopTurret());
+        secondStick.X.whenPressed(new TurretByVision(
+                VisionMaster.Algorithm.FEEDING_STATION));
+        secondStick.X.whenReleased(new StopTurret());
+//        mainJoystick.X.whenPressed(new TurretToFront());
+//        mainJoystick.X.whenReleased(new StopTurret());
 
-        mainJoystick.A.whenPressed(new MoveTurretByConstant(0.2));
-        mainJoystick.A.whenReleased(new MoveTurretByConstant(0));
+        secondStick.A.whenPressed(new MoveTurretByConstant(0.2));
+        secondStick.A.whenReleased(new MoveTurretByConstant(0));
 
 
-        mainJoystick.Y.whenPressed(new MoveTurretByConstant(-0.2));
-        mainJoystick.Y.whenReleased(new MoveTurretByConstant(0));
+
+        secondStick.Y.whenPressed(new MoveTurretByConstant(-0.2));
+        secondStick.Y.whenReleased(new MoveTurretByConstant(0));
 
 //        mainJoystick.Y.whenPressed(new CheckMaxLin(0.8));
 //        mainJoystick.Y.whenReleased(new BrakeChassis());

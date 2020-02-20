@@ -1,14 +1,14 @@
 package edu.greenblitz.bigRodika.commands.turret;
 
-import edu.greenblitz.bigRodika.subsystems.Turret;
 
-public class TurretApproachSwiftlyByRadiansAbsulote extends TurretCommand {
+public class TurretApproachSwiftlyByRadiansRelative extends TurretCommand {
 
 
     private double angleToTurnRads;
     private TurretApproachSwiftly cmd;
 
-    public TurretApproachSwiftlyByRadiansAbsulote(double angleToTurnRads){
+    public TurretApproachSwiftlyByRadiansRelative(double angleToTurnRads){
+        super();
         this.angleToTurnRads = angleToTurnRads;
     }
 

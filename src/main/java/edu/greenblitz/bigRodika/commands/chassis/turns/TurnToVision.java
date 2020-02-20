@@ -2,9 +2,9 @@ package edu.greenblitz.bigRodika.commands.chassis.turns;
 
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
-import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftly;
-import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyByRadiansAbsulote;
+import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyByRadiansRelative;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +24,9 @@ public class TurnToVision extends GBCommand {
 
     public TurnToVision(VisionMaster.Algorithm algorithm, double maxV, double maxA,
                         double power, boolean useTurret) {
+        if (useTurret){
+            require(Turret.getInstance());
+        }
         this.algorithm = algorithm;
         this.maxA = maxA;
         this.maxV = maxV;
@@ -47,7 +50,6 @@ public class TurnToVision extends GBCommand {
     public void initialize() {
         algorithm.setAsCurrent();
 
-        VisionMaster.getInstance().isLastDataValid();
         double[] diff = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
 
         if (!VisionMaster.getInstance().isLastDataValid()) {
@@ -59,13 +61,18 @@ public class TurnToVision extends GBCommand {
             diff[0] = posToTurnToByLocalizer.getX() - Chassis.getInstance().getLocation().getX();
             diff[1] = posToTurnToByLocalizer.getY() - Chassis.getInstance().getLocation().getY();
         }
-        target = Chassis.getInstance().getAngle() - Math.atan(diff[0] / diff[1]);
 
-        if(useTurret){
-            turn = new TurretApproachSwiftlyByRadiansAbsulote(target + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET);
+        if (useTurret) {
+            target = Math.atan(diff[0] / diff[1]);
+            Turret.getInstance().putNumber("Vision Target", target);
+            turn =
+                    new TurretApproachSwiftlyByRadiansRelative(target
+                            + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET);
+        } else {
+            target = Chassis.getInstance().getAngle() - Math.atan(diff[0] / diff[1]);
+            turn = new TurnToAngle(Math.toDegrees(target) + Math.toDegrees(RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET), 3, 1
+                    , maxV, maxA, power, true, 2);
         }
-        else turn = new TurnToAngle(Math.toDegrees(target) + Math.toDegrees(RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET), 3, 1
-                , maxV, maxA, power, true, 2);
         turn.initialize();
     }
 

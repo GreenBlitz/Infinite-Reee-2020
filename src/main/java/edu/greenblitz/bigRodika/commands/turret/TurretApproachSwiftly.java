@@ -5,17 +5,17 @@ import org.greenblitz.motion.tolerance.ITolerance;
 
 public class TurretApproachSwiftly extends TurretCommand {
 
-    public double SLOW_DOWN_BEGIN = 0.1;
-    public double SLOW_DOWN_END = 0.01;
-    public double MINIMUM_SPEED = 0.05;
-    public double MAXIMUM_SPEED = 0.4;
+    public static final double SLOW_DOWN_BEGIN = 0.1;
+    public static final double SLOW_DOWN_END = 0.01;
+    public static final double MINIMUM_SPEED = 0.05;
+    public static final double MAXIMUM_SPEED = 0.4;
 
-    private double target;
+    protected double target;
     private ITolerance tolerance;
-    private double SLOPE = (MAXIMUM_SPEED - MINIMUM_SPEED) / (SLOW_DOWN_BEGIN - SLOW_DOWN_END);
-    private double X_OFFSET = SLOW_DOWN_END;
-    private double Y_OFFSET = MINIMUM_SPEED;
-    private static final double DEFAULT_TOLERANCE = 0.0015;
+    public static final double SLOPE = (MAXIMUM_SPEED - MINIMUM_SPEED) / (SLOW_DOWN_BEGIN - SLOW_DOWN_END);
+    public static final double X_OFFSET = SLOW_DOWN_END;
+    public static final double Y_OFFSET = MINIMUM_SPEED;
+    private static final double DEFAULT_TOLERANCE = 0.003;//0.0015;
 
     public TurretApproachSwiftly(double target, ITolerance tol) {
         super();

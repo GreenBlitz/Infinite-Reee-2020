@@ -43,9 +43,10 @@ public class Turret extends GBSubsystem {
             encoder.reset();
         }
 
-        SmartDashboard.putNumber("Encoder", encoder.getRawTicks());
-        SmartDashboard.putNumber("normEncoder", encoder.getNormalizedTicks());
-        SmartDashboard.putBoolean("Switch", isSwitchPressed());
+        putNumber("Encoder", encoder.getRawTicks());
+        putNumber("normEncoder", encoder.getNormalizedTicks());
+        putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
+        putBoolean("Switch", isSwitchPressed());
 
         moveTurret(lastPower);
     }
