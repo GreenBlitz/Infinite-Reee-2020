@@ -185,8 +185,8 @@ public class Follow2DProfileCommand implements IThreadable {
     public void run() {
         runTStart = System.currentTimeMillis();
 
-        double[] inp = ProfilingUtils.trasnformInputs(Chassis.getInstance().getDerivedLeft(),
-                Chassis.getInstance().getDerivedRight(),
+        double[] inp = ProfilingUtils.trasnformInputs(Chassis.getInstance().getLeftRate(),
+                Chassis.getInstance().getRightRate(),
                 Chassis.getInstance().getAngularVelocityByWheels(),
                 mult);
         Vector2D vals = follower.run(inp[0], inp[1], inp[2]);

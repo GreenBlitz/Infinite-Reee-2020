@@ -1,8 +1,11 @@
 package edu.greenblitz.bigRodika;
 
+import edu.greenblitz.bigRodika.commands.chassis.BrakeChassis;
 import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
+import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
+import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftlyTesting;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
@@ -36,8 +39,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-//        initTestButtons();
-        initOfficalButtons();
+        initTestButtons();
+//        initOfficalButtons();
     }
 
     public static OI getInstance() {
@@ -71,6 +74,11 @@ public class OI {
 
         secondStick.X.whenPressed(new ThreeStageShoot(3400, 0.6));
         secondStick.X.whenReleased(new StopShooter());
+
+        mainJoystick.A.whenPressed(new CheckMaxRot(0.5));
+
+        mainJoystick.Y.whenPressed(new CheckMaxLin(0.5));
+        mainJoystick.Y.whenReleased(new BrakeChassis());
 
     }
 

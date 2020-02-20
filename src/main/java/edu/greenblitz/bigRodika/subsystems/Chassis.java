@@ -10,6 +10,7 @@ import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.SparkEncoder;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
 import edu.greenblitz.gblib.gyroscope.PigeonGyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.base.Position;
 
@@ -21,11 +22,6 @@ public class Chassis extends GBSubsystem {
     private IEncoder leftEncoder, rightEncoder;
     private IGyroscope gyroscope;
 //    private PowerDistributionPanel robotPDP;
-    private double lastLocationLeft;
-    private double lastLocationRight;
-    private double derivedLeftVel = 0;
-    private double derivedRightVel = 0;
-    private long lastTime;
 
     private Chassis() {
         rightLeader = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -45,17 +41,12 @@ public class Chassis extends GBSubsystem {
         rightFollower1.setInverted(true);
 
         leftEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
-        leftEncoder.invert(true);
+        leftEncoder.invert(false);
         rightEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
-        rightEncoder.invert(true);
+        rightEncoder.invert(false);
 
         gyroscope = new PigeonGyro(new PigeonIMU(0));   // chassis
 //        gyroscope.inverse();
-
-        lastTime = System.currentTimeMillis();
-        lastLocationLeft = leftEncoder.getNormalizedTicks();
-        lastLocationRight = rightEncoder.getNormalizedTicks();
-
     }
 
     public static void init() {
@@ -122,11 +113,11 @@ public class Chassis extends GBSubsystem {
     }
 
     public double getLinearVelocity() {
-        return 0.5 * (getDerivedLeft() + getDerivedRight());
+        return 0.5 * (getRightRate() + getLeftRate());
     }
 
     public double getAngularVelocityByWheels() {
-        return getWheelDistance() * (getDerivedRight() - getDerivedLeft());
+        return getWheelDistance() * (getRightRate() - getLeftRate());
     }
 
     public double getAngle() {
@@ -153,35 +144,15 @@ public class Chassis extends GBSubsystem {
         return Localizer.getInstance().getLocation();
     }
 
-    public double getDerivedLeft() {
-        return derivedLeftVel;
-    }
-
-    public double getDerivedRight() {
-        return derivedRightVel;
-    }
-
     @Override
     public void periodic() {
 
         super.periodic();
 
-        double dt = (System.currentTimeMillis() - lastTime) / 1000.0;
-        double deltaLocLeft = leftEncoder.getNormalizedTicks() - lastLocationLeft;
-        double deltaLocRight = rightEncoder.getNormalizedTicks() - lastLocationRight;
-
-        derivedLeftVel = deltaLocLeft / dt;
-        derivedRightVel = deltaLocRight / dt;
-
-        lastLocationRight = lastLocationRight + deltaLocRight;
-        lastLocationLeft = lastLocationLeft + deltaLocLeft;
-
-        lastTime = System.currentTimeMillis();
-
-        putNumber("left derv", derivedLeftVel);
-        putNumber("right derv", derivedRightVel);
+        putNumber("Left vel", leftEncoder.getNormalizedVelocity());
+        putNumber("Right vel", rightEncoder.getNormalizedVelocity());
         putNumber("Angle", getAngularVelocityByWheels());
-        putString("Location", Localizer.getInstance().getLocation().toString());
+        SmartDashboard.putString("Location", Chassis.getInstance().getLocation().toString());
 
     }
 

@@ -23,7 +23,9 @@ public class LocalizerCommand implements IThreadable {
 
     @Override
     public void run() {
-        localizer.update(chassis.getLeftMeters(), chassis.getRightMeters(), chassis.getAngle());
+//        localizer.update(chassis.getLeftMeters(), chassis.getRightMeters(), chassis.getAngle());
+        localizer.update(chassis.getLeftMeters(), chassis.getRightMeters());
+
         if (System.currentTimeMillis() - tPrev < minimumLoopTime) {
             try {
                 Thread.sleep(minimumLoopTime - (System.currentTimeMillis() - tPrev));

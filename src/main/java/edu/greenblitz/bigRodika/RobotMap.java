@@ -146,7 +146,7 @@ public class RobotMap {
 
             public static class Encoder {
                 public static final GearDependentValue<Double> // TODO: check this
-                        NORM_CONST_SPARK = new GearDependentValue<>(2300.0, 1234.0 / 2.0);
+                        NORM_CONST_SPARK = new GearDependentValue<>(2300.0*0.64, 1234.0 / 2.0);
             }
 
             public static class MotionData { // TODO: calibrate this

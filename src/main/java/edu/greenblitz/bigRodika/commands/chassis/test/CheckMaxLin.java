@@ -33,7 +33,7 @@ public class CheckMaxLin extends ChassisCommand {
         Chassis.getInstance().moveMotors(power, power);
 
         double time = System.currentTimeMillis() / 1000.0;
-        double V = (Chassis.getInstance().getDerivedLeft() + Chassis.getInstance().getDerivedRight()) / 2.0;
+        double V = Chassis.getInstance().getLinearVelocity();
         target.report(time - tStart / 1000.0, V, (V - previousVel) / (time - previousTime));
         previousTime = time;
         previousVel = V;
