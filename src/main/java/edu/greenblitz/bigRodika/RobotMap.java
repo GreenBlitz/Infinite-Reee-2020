@@ -41,6 +41,7 @@ public class RobotMap {
             public static final boolean IS_INVERTED = false;
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
                     28672.0);//correct 110 present
+            public static final double ENCODER_VALUE_WHEN_FORWARD = 8974.0;
 
             public static final double TURRET_CAMERA_RADIUS = 0.23;
         }

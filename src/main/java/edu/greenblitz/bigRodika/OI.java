@@ -25,9 +25,7 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootByDashboard;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.ThreeStageShoot;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.test.ThreeStageTesting;
-import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
-import edu.greenblitz.bigRodika.commands.turret.StopTurret;
-import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftly;
+import edu.greenblitz.bigRodika.commands.turret.*;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
@@ -66,8 +64,8 @@ public class OI {
 
         secondStick.START.whenPressed(new ResetDome(-0.22));
 
-        secondStick.L1.whenPressed(new ShootByConstant(0.6));
-        secondStick.L1.whenReleased(new StopShooter());
+//        secondStick.L1.whenPressed(new ShootByConstant(0.6));
+//        secondStick.L1.whenReleased(new StopShooter());
 
         secondStick.R1.whenPressed(
                 new ParallelCommandGroup(
@@ -86,13 +84,22 @@ public class OI {
 //        mainJoystick.B.whenPressed(new DomeMoveByConstant(0.2));
 //        mainJoystick.B.whenReleased(new DomeMoveByConstant(0));
 
+        mainJoystick.R1.whenPressed(new TurretApproachSwiftlyByRadiansAbsulote(Math.PI/4));
+        mainJoystick.R1.whenReleased(new StopTurret());
+
         mainJoystick.B.whenPressed(new TurretApproachSwiftly(0.1));
         mainJoystick.B.whenReleased(new StopTurret());
 
-        secondStick.X.whenPressed(new DomeMoveByConstant(-0.2));
-        secondStick.X.whenReleased(new DomeMoveByConstant(0));
+//        secondStick.X.whenPressed(new DomeMoveByConstant(-0.2));
+//        secondStick.X.whenReleased(new DomeMoveByConstant(0));
 
         //mainJoystick.A.whenPressed(new CheckMaxRot(0.8));
+
+        mainJoystick.L1.whenPressed(new UnsafeResetTurret(-0.2));
+        mainJoystick.L1.whenReleased(new StopTurret());
+
+        mainJoystick.X.whenPressed(new TurretToFront());
+        mainJoystick.X.whenReleased(new StopTurret());
 
         mainJoystick.A.whenPressed(new MoveTurretByConstant(0.2));
         mainJoystick.A.whenReleased(new MoveTurretByConstant(0));

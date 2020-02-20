@@ -3,15 +3,16 @@ package edu.greenblitz.bigRodika.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Turret extends GBSubsystem {
     private static final double MAX_TICKS = 15000;//16400
-    private static final double MIN_TICKS = -11000;//-12400
+    private static final double MIN_TICKS = -5000;//-12400//-11000 todo :REALLY IMPORTANT FOR ROBOT NOT TO DIE.
+    //asl @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;
     private IEncoder encoder;
@@ -74,8 +75,8 @@ public class Turret extends GBSubsystem {
         return encoder.getNormalizedTicks();
     }
 
-    public double getAngleRads(){
-        return 2 * Math.PI * getTurretLocation();
+    public double getNormAngleRads() {
+        return 2 * Math.PI * (getTurretLocation() - RobotMap.Limbo2.Turret.ENCODER_VALUE_WHEN_FORWARD/RobotMap.Limbo2.Turret.NORMALIZER.getValue());
     }
 
     public double getTurretSpeed() {
@@ -85,6 +86,5 @@ public class Turret extends GBSubsystem {
     public double getAbsoluteTurretSpeed() {
         return Math.abs(getTurretSpeed());
     }
-
 
 }

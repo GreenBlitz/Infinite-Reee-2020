@@ -47,7 +47,7 @@ public class MotionUtils {
     }
 
     public static double[] getSimulatedVisionLocation(double[] visHex){
-        return getSimulatedVisionLocation(visHex, Turret.getInstance().getAngleRads());
+        return getSimulatedVisionLocation(visHex, Turret.getInstance().getNormAngleRads());
     }
 
     public static double[] getSimulatedVisionLocation(double turretAngle){
@@ -58,7 +58,7 @@ public class MotionUtils {
     }
 
     public static double[] getSimulatedVisionLocation(){
-        return getSimulatedVisionLocation(Turret.getInstance().getAngleRads());
+        return getSimulatedVisionLocation(Turret.getInstance().getNormAngleRads());
     }
 
 }
