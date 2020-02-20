@@ -28,6 +28,12 @@ public class ChainFetch extends SequentialCommandGroup {
                                 Chassis.getInstance().toBrake();
                             }
                         }.schedule();
+                            new GBCommand() {
+                                @Override
+                                public void initialize() {
+                                    Chassis.getInstance().moveMotors(0,0);
+                                }
+                            }.schedule();
                         }
                     }
 
