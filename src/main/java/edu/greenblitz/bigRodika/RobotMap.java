@@ -18,6 +18,9 @@ public class RobotMap {
             public static final boolean IS_POTENTIOMETER_REVERSE = true;
             public static final int LIMIT_SWITCH_PORT = 0;
 
+            public static final double ANGLE_PER_POT_VALUE = Math.toRadians(65);
+            public static final double DOME_ZERO_ANGLE = Math.toRadians(17);
+
             public static HashMap<String, Double> DOME;
 
             static{
@@ -152,9 +155,9 @@ public class RobotMap {
             public static class MotionData { // TODO: calibrate this
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
-                        1.2, 1.0, .0005,
-                        0.6, .002, 8, .01,
-                        0.5, 0, 12, .01, 500);
+                        1.0, 1.0, .0005,
+                        0, .002, 0, .01,
+                        0, 0, 0, .01, 500);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
 
@@ -162,11 +165,9 @@ public class RobotMap {
 
                     POWER = new HashMap<>();
 
-                    POWER.put("0.4", new ProfilingData(0.7, 4.6, 2.1, 10));
-                    POWER.put("0.7", new ProfilingData(1.15, 10, 4, 15));
-
-//                    POWER.put("0.5", new ProfilingData(1.5*0.9, 4, 2.6, 8));
-                    POWER.put("0.5", new ProfilingData(1.6, 6, 3, 12.5));
+                    POWER.put("1.0",
+                            new ProfilingData(2.64, 7, 8, 30));
+                    POWER.put("0.5", new ProfilingData(1.35, 6.2, 4, 18.8));
 
                 }
 

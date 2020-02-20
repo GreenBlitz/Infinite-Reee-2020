@@ -6,6 +6,7 @@ import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
+import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftlyTesting;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
@@ -68,16 +69,18 @@ public class OI {
         );
 
 
-        secondStick.B.whenPressed(new DomeMoveByConstant(0.2));
-        secondStick.B.whenReleased(new DomeMoveByConstant(0));
+        secondStick.B.whenPressed(new DomeApproachSwiftlyTesting(0.7,
+                new AbsoluteTolerance(-0.01)));
 
+//        secondStick.B.whenPressed(new DomeMoveByConstant(0.2));
+//        secondStick.B.whenReleased(new DomeMoveByConstant(0));
 
-        secondStick.X.whenPressed(new ThreeStageShoot(3400, 0.6));
-        secondStick.X.whenReleased(new StopShooter());
+        secondStick.X.whenPressed(new DomeMoveByConstant(-0.2));
+        secondStick.X.whenReleased(new DomeMoveByConstant(0));
 
-        mainJoystick.A.whenPressed(new CheckMaxRot(0.5));
+        mainJoystick.A.whenPressed(new CheckMaxRot(1));
 
-        mainJoystick.Y.whenPressed(new CheckMaxLin(0.5));
+        mainJoystick.Y.whenPressed(new CheckMaxLin(1));
         mainJoystick.Y.whenReleased(new BrakeChassis());
 
     }
