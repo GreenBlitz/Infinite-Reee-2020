@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Turret extends GBSubsystem {
-    private static final double MAX_TICKS = 16400;
-    private static final double MIN_TICKS = -12400;
+    private static final double MAX_TICKS = 15000;//16400
+    private static final double MIN_TICKS = -11000;//-12400
     private static Turret instance;
     private WPI_TalonSRX motor;
     private IEncoder encoder;

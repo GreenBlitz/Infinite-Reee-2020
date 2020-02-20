@@ -26,6 +26,8 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAuto
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.ThreeStageShoot;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.test.ThreeStageTesting;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
+import edu.greenblitz.bigRodika.commands.turret.StopTurret;
+import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftly;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
@@ -78,11 +80,14 @@ public class OI {
         );
 
 
-        secondStick.B.whenPressed(new DomeApproachSwiftly(0.5,
-                new AbsoluteTolerance(0.01)));
+//        secondStick.B.whenPressed(new DomeApproachSwiftly(0.5,
+//                new AbsoluteTolerance(0.01)));
+//
+//        mainJoystick.B.whenPressed(new DomeMoveByConstant(0.2));
+//        mainJoystick.B.whenReleased(new DomeMoveByConstant(0));
 
-//        secondStick.B.whenPressed(new DomeMoveByConstant(0.2));
-//        secondStick.B.whenReleased(new DomeMoveByConstant(0));
+        mainJoystick.B.whenPressed(new TurretApproachSwiftly(0.1));
+        mainJoystick.B.whenReleased(new StopTurret());
 
         secondStick.X.whenPressed(new DomeMoveByConstant(-0.2));
         secondStick.X.whenReleased(new DomeMoveByConstant(0));

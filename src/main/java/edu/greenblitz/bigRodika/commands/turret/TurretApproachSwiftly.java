@@ -7,15 +7,15 @@ public class TurretApproachSwiftly extends TurretCommand {
 
     public double SLOW_DOWN_BEGIN = 0.1;
     public double SLOW_DOWN_END = 0.01;
-    public double MINIMUM_SPEED = 0.12;
-    public double MAXIMUM_SPEED = 0.7;
+    public double MINIMUM_SPEED = 0.05;
+    public double MAXIMUM_SPEED = 0.4;
 
     private double target;
     private ITolerance tolerance;
     private double SLOPE = (MAXIMUM_SPEED - MINIMUM_SPEED) / (SLOW_DOWN_BEGIN - SLOW_DOWN_END);
     private double X_OFFSET = SLOW_DOWN_END;
     private double Y_OFFSET = MINIMUM_SPEED;
-    private static final double DEFAULT_TOLERANCE = 0.5;
+    private static final double DEFAULT_TOLERANCE = 0.0015;
 
     public TurretApproachSwiftly(double target, ITolerance tol) {
         super();

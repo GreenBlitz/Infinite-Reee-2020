@@ -39,8 +39,8 @@ public class RobotMap {
             public static final int MOTOR_PORT = 11;
             public static final int SWITCH_PORT = 2;
             public static final boolean IS_INVERTED = false;
-            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28800.0,
-                    28800.0);
+            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
+                    28672.0);//correct 110 present
 
             public static final double TURRET_CAMERA_RADIUS = 0.23;
         }
