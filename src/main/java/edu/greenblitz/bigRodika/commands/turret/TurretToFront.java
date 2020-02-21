@@ -2,18 +2,13 @@ package edu.greenblitz.bigRodika.commands.turret;
 
 import edu.greenblitz.bigRodika.RobotMap;
 
-public class TurretToFront extends TurretApproachSwiftlyByRadiansRelative {
+public class TurretToFront extends TurretApproachSwiftly {
 
     public TurretToFront() {
         super(
-                0
+                RobotMap.Limbo2.Turret.ENCODER_VALUE_WHEN_FORWARD / RobotMap.Limbo2.Turret.NORMALIZER.getValue()
         );
     }
 
-    @Override
-    public void initialize() {
-        angleToTurnRads = -turret.getNormAngleRads();
-        super.initialize();
-    }
 }
 

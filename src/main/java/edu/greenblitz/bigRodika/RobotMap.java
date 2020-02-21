@@ -21,14 +21,14 @@ public class RobotMap {
             public static final double ANGLE_PER_POT_VALUE = Math.toRadians(65);
             public static final double DOME_ZERO_ANGLE = Math.toRadians(17);
 
-            public static HashMap<String, Double> DOME;
+            public static HashMap<Double, Double> DOME;
 
             static{
                 DOME = new HashMap<>();
 
-                DOME.put("3", 0.1);//TODO: CHECK THIS FOR REAL
-                DOME.put("4", 0.2);//TODO: CHECK THIS FOR REAL
-                DOME.put("6", 0.2);//TODO: CHECK THIS FOR REAL
+                DOME.put(3.0, 0.1);//TODO: CHECK THIS FOR REAL
+                DOME.put(4.0, 0.2);//TODO: CHECK THIS FOR REAL
+                DOME.put(5.0, 0.2);//TODO: CHECK THIS FOR REAL
 
 
             }

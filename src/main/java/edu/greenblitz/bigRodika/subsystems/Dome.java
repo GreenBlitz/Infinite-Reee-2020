@@ -19,7 +19,7 @@ public class Dome extends GBSubsystem {
     private WPI_TalonSRX domeMotor;
     private Potentiometer potentiometer;
     private DigitalInput limitSwitch;
-    private double zeroValue = 0;
+    private double zeroValue = 0.31;
 
     private Dome() {
         domeMotor = new WPI_TalonSRX(RobotMap.Limbo2.Dome.MOTOR_PORT);
@@ -32,7 +32,10 @@ public class Dome extends GBSubsystem {
     }
 
     public static void init() {
-        instance = new Dome();
+        if (instance == null) {
+            instance = new Dome();
+            instance.register();
+        }
     }
 
     public static Dome getInstance() {
@@ -54,12 +57,12 @@ public class Dome extends GBSubsystem {
     }
 
     public void safeMove(double power) {
-        if (switchTriggered() && power < 0){
-            moveMotor(0);
-            return;
-        }
+//        if (switchTriggered() && power < 0){
+//            moveMotor(0);
+//            return;
+//        }
         if (getPotentiometerValue() < POT_LOWER_LIMIT && power < 0) {
-            moveMotor(Math.max(power, POWER_AT_LOWER_END));
+            moveMotor(Math.max(power, POWER_AT_LOWER_END*0));
         }
         if (getPotentiometerValue() > POT_HIGHER_LIMIT && power > 0) {
             moveMotor(0);
@@ -80,8 +83,8 @@ public class Dome extends GBSubsystem {
         putBoolean("LimitSwitch", switchTriggered());
         putNumber("PotZero", zeroValue);
 
-        if (switchTriggered()) {
-            zeroValue += getPotentiometerValue();
-        }
+//        if (switchTriggered()) {
+//            zeroValue += getPotentiometerValue();
+//        }
     }
 }

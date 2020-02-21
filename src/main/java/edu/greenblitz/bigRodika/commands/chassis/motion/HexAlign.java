@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.commands.chassis.motion;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
+import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionLocation;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
@@ -109,6 +110,13 @@ public class HexAlign extends GBCommand {
             }
         }
 
+        Double loc = RobotMap.Limbo2.Dome.DOME.get(r);
+        if (loc != null){
+            new DomeApproachSwiftly(loc).schedule();
+        } else {
+            System.out.println("Cant find " + r + " in dome radii");
+        }
+
         SmartDashboard.putNumber("rds", r);
 
         double desRadCenter = r + RobotMap.Limbo2.Chassis.VISION_CAM_Y_DIST_CENTER;
@@ -172,6 +180,18 @@ public class HexAlign extends GBCommand {
             endState.translate(new Point(0, cam_y).rotate(-absAng)).translate(new Point(0, -cam_y).rotate(endState.getAngle()));
         }
 
+//        Point rotatePos = endState.clone().rotate(-startState.getAngle());
+//        double ang;
+//        if (rotatePos.getY() == 0) {
+//            ang = Math.PI;
+//        } else if (rotatePos.getX() == 0) {
+//            ang = 0;
+//        } else {
+//            ang = (Math.PI / 2) - Math.atan2(rotatePos.getY() * rotatePos.getY()
+//                    - rotatePos.getX() * rotatePos.getX(), 2 * rotatePos.getX() * rotatePos.getY());
+//        }
+//        startState.setAngle(0);
+//        endState.setAngle(ang);
 
         //creates path
         List<State> path = new ArrayList<>();

@@ -39,6 +39,10 @@ public class Turret extends GBSubsystem {
     public void resetEncoder(){
         encoder.reset();
     }
+    public void resetEncoder(int value){
+        motor.setSelectedSensorPosition(value);
+    }
+
 
     public static Turret getInstance() {
         return instance;

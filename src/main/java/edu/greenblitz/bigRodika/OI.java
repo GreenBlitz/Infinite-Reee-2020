@@ -7,6 +7,7 @@ import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
+import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
@@ -62,7 +63,7 @@ public class OI {
         mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
         mainJoystick.L1.whileHeld(new PreShoot(5.0));
-        mainJoystick.L1.whenReleased(new TurretToFront());
+        mainJoystick.L1.whenReleased(new DomeApproachSwiftly(0));
 
         mainJoystick.START.whenPressed(new CheckMaxLin(0.5));
         mainJoystick.BACK.whenPressed(new CheckMaxRot(0.5));
@@ -78,6 +79,11 @@ public class OI {
         secondStick.L3.whenPressed(new ResetEncoderWhenInFront());
         secondStick.R3.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
         secondStick.R3.whenReleased(new StopTurret());
+
+        secondStick.START.whenPressed(new DomeMoveByConstant(0.3));
+        secondStick.START.whenReleased(new DomeMoveByConstant(0));
+        secondStick.BACK.whenPressed(new DomeMoveByConstant(-0.3));
+        secondStick.BACK.whenReleased(new DomeMoveByConstant(0));
 
     }
 
