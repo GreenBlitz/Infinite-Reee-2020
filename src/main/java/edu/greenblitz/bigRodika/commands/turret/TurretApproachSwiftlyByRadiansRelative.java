@@ -4,7 +4,7 @@ package edu.greenblitz.bigRodika.commands.turret;
 public class TurretApproachSwiftlyByRadiansRelative extends TurretCommand {
 
 
-    private double angleToTurnRads;
+    protected double angleToTurnRads;
     private TurretApproachSwiftly cmd;
 
     public TurretApproachSwiftlyByRadiansRelative(double angleToTurnRads){

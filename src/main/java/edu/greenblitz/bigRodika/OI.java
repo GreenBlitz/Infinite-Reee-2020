@@ -24,6 +24,7 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAuto
 import edu.greenblitz.bigRodika.commands.turret.*;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
+import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -60,7 +61,8 @@ public class OI {
         mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
         mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
-        mainJoystick.L1.whileHeld(new HexAlign(5.0, 0.2, 0.5, .1, 0.5));
+        mainJoystick.L1.whileHeld(new PreShoot(5.0));
+        mainJoystick.L1.whenReleased(new TurretToFront());
 
         mainJoystick.START.whenPressed(new CheckMaxLin(0.5));
         mainJoystick.BACK.whenPressed(new CheckMaxRot(0.5));
@@ -84,7 +86,7 @@ public class OI {
         mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
         mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
-        mainJoystick.L1.whileHeld(new PreShoot(4.0, false));
+        mainJoystick.L1.whileHeld(new PreShoot(4.0));
 
 //        mainJoystick.L3.whenReleased(new ToggleShift());
 
