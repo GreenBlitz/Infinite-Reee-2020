@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.MotionUtils;
@@ -12,9 +13,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Turret extends GBSubsystem {
-    private static final double MAX_TICKS = 5000;//16400
-    private static final double MIN_TICKS = -15000;//-12400//-11000 todo :REALLY IMPORTANT FOR ROBOT NOT TO DIE.
-    //asl @Peleg before changing
+    private static final double MAX_TICKS = 15000;//16400
+    private static final double MIN_TICKS = -5000;//-12400//-11000 todo :REALLY IMPORTANT FOR ROBOT NOT TO DIE.
+    //ask @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;
     private IEncoder encoder;
@@ -24,6 +25,7 @@ public class Turret extends GBSubsystem {
     private Turret() {
         motor = new WPI_TalonSRX(RobotMap.Limbo2.Turret.MOTOR_PORT);
         motor.setInverted(RobotMap.Limbo2.Turret.IS_INVERTED);
+        motor.setNeutralMode(NeutralMode.Brake);
         encoder = new TalonEncoder(RobotMap.Limbo2.Turret.NORMALIZER, motor);
         microSwitch = DigitalInputMap.getInstance().getDigitalInput(
                 RobotMap.Limbo2.Turret.SWITCH_PORT

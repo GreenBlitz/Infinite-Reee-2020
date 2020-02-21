@@ -59,31 +59,26 @@ public class OI {
 
     private void initTestButtons() {
 
-        mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
-        mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
-
-        mainJoystick.L1.whileHeld(new PreShoot(5.0));
-        mainJoystick.L1.whenReleased(new DomeApproachSwiftly(0));
-
-        mainJoystick.START.whenPressed(new CheckMaxLin(0.5));
-        mainJoystick.BACK.whenPressed(new CheckMaxRot(0.5));
-//        mainJoystick.L3.whenReleased(new ToggleShift());
-
-        List<State> states = new ArrayList<>();
-        states.add(new State(0, 0));
-        states.add(new State(1, 1, Math.PI/2));
-        Follow2DProfileCommand prof = new Follow2DProfileCommand(
-                states, RobotMap.Limbo2.Chassis.MotionData.CONFIG,0.5, false);
-        mainJoystick.A.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
+        //mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
+        //mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
         secondStick.L3.whenPressed(new ResetEncoderWhenInFront());
-        secondStick.R3.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
-        secondStick.R3.whenReleased(new StopTurret());
+        secondStick.A.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+        secondStick.A.whenReleased(new StopTurret());
 
-        secondStick.START.whenPressed(new DomeMoveByConstant(0.3));
-        secondStick.START.whenReleased(new DomeMoveByConstant(0));
-        secondStick.BACK.whenPressed(new DomeMoveByConstant(-0.3));
-        secondStick.BACK.whenReleased(new DomeMoveByConstant(0));
+        secondStick.POV_UP.whenPressed(new DomeMoveByConstant(0.3));
+        secondStick.POV_UP.whenReleased(new DomeMoveByConstant(0));
+        secondStick.POV_DOWN.whenPressed(new DomeMoveByConstant(-0.3));
+        secondStick.POV_DOWN.whenReleased(new DomeMoveByConstant(0));
+
+
+        mainJoystick.START.whenPressed(new MoveTurretByConstant(0.3));
+        mainJoystick.START.whenReleased(new StopTurret());
+
+        mainJoystick.BACK.whenPressed(new MoveTurretByConstant(-0.3));
+        mainJoystick.BACK.whenReleased(new StopTurret());
+        mainJoystick.A.whenPressed(new UnsafeResetTurret(0.3));
+        mainJoystick.A.whenReleased(new StopTurret());
 
     }
 
@@ -92,7 +87,7 @@ public class OI {
         mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
         mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
-        mainJoystick.L1.whileHeld(new PreShoot(4.0));
+        mainJoystick.L1.whileHeld(new PreShoot(5.5));
 
 //        mainJoystick.L3.whenReleased(new ToggleShift());
 
@@ -108,9 +103,22 @@ public class OI {
         secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
 
         secondStick.B.whenPressed(new ToggleExtender());
-        secondStick.A.whileHeld(new RollByConstant(0.8));
+        secondStick.A.whileHeld(new RollByConstant(1.0));
 
-        secondStick.R3.whenPressed(new ResetDome(-0.35));
+        mainJoystick.A.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+        mainJoystick.A.whenReleased(new StopTurret());
+
+        mainJoystick.START.whenPressed(new MoveTurretByConstant(0.3));
+        mainJoystick.START.whenReleased(new MoveTurretByConstant(0));
+
+        mainJoystick.BACK.whenPressed(new MoveTurretByConstant(-0.3));
+        mainJoystick.BACK.whenReleased(new MoveTurretByConstant(0));
+
+        secondStick.START.whenPressed(new DomeMoveByConstant(0.3));
+        secondStick.START.whenReleased(new DomeMoveByConstant(0));
+
+        secondStick.BACK.whenPressed(new DomeMoveByConstant(-0.3));
+        secondStick.BACK.whenReleased(new DomeMoveByConstant(0));
     }
 
     public SmartJoystick getMainJoystick() {

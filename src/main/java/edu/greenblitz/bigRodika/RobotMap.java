@@ -26,9 +26,7 @@ public class RobotMap {
             static{
                 DOME = new HashMap<>();
 
-                DOME.put(3.0, 0.1);//TODO: CHECK THIS FOR REAL
-                DOME.put(4.0, 0.2);//TODO: CHECK THIS FOR REAL
-                DOME.put(5.0, 0.2);//TODO: CHECK THIS FOR REAL
+                DOME.put(6.0, 0.4);
 
 
             }

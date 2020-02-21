@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
  */
 public class VisionMaster extends GBSubsystem {
 
+    private static final long MAX_HANDSHAKE_TIME = 1000;
+
     private static VisionMaster instance;
     private Algorithm currentAlgorithm;
     private GameState currentGameState;
@@ -23,16 +25,20 @@ public class VisionMaster extends GBSubsystem {
     private NetworkTableEntry found;
     private NetworkTableEntry gameState;
     private NetworkTableEntry shifterState;
+    private NetworkTableEntry handshake;
+    private long lastHandShake;
     private Logger logger;
+
     private VisionMaster() {
         logger = LogManager.getLogger(getClass());
         visionTable = NetworkTableInstance.getDefault().getTable("vision"); // table
 
-        algorithm = visionTable.getEntry("algorithm"); // our output, tells the rpi what algorithm to run
+        algorithm = visionTable.getEntry("algorithm"); // our output, tells the handshake what algorithm to run
         output = visionTable.getEntry("output"); // our input, the output of the vision (usually a double array of size 3)
         found = visionTable.getEntry("found"); // our input, boolean indicating if the last sent data was valid
         gameState = visionTable.getEntry("game_state");
         shifterState = visionTable.getEntry("shifter_state");
+        handshake = visionTable.getEntry("handshake");
     }
 
     public static VisionMaster getInstance() {
@@ -62,6 +68,10 @@ public class VisionMaster extends GBSubsystem {
     }
 
     public boolean isLastDataValid() {
+        if (System.currentTimeMillis() - lastHandShake > MAX_HANDSHAKE_TIME) {
+            putString("Error", "Vision took to long to respond");
+            return false;
+        }
         return found.getBoolean(false);
     }
 
@@ -94,6 +104,10 @@ public class VisionMaster extends GBSubsystem {
     @Override
     public void periodic() {
         VisionLocation current = getVisionLocation();
+        if (handshake.getBoolean(false)) {
+            lastHandShake = System.currentTimeMillis();
+            handshake.setBoolean(false);
+        }
         putString("algorithm", algorithm.getString("Not Existing"));
         putString("raw data", current.toString());
         putNumber("planery distance", current.getPlaneDistance());
