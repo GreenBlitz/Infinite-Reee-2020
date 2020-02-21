@@ -37,13 +37,16 @@ public class Chassis extends GBSubsystem {
         rightFollower1.follow(rightLeader);
         rightFollower2.follow(rightLeader);
 
+        leftLeader.setInverted(false);
+//        leftFollower1.setInverted(true);
+//        leftFollower2.setInverted(true);
         rightLeader.setInverted(true);
-        rightFollower1.setInverted(true);
-        rightFollower1.setInverted(true);
+//        leftFollower1.setInverted(true);
+//        leftFollower2.setInverted(true);
 
-        leftEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
+        leftEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
         leftEncoder.invert(false);
-        rightEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
+        rightEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
         rightEncoder.invert(false);
 
         gyroscope = new PigeonGyro(

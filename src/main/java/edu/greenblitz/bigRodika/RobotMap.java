@@ -28,7 +28,7 @@ public class RobotMap {
 
                 DOME.put("3", 0.1);//TODO: CHECK THIS FOR REAL
                 DOME.put("4", 0.2);//TODO: CHECK THIS FOR REAL
-                DOME.put("5", 0.3);//TODO: CHECK THIS FOR REAL
+                DOME.put("6", 0.2);//TODO: CHECK THIS FOR REAL
 
 
             }
@@ -43,7 +43,7 @@ public class RobotMap {
                     28672.0);//correct 110 present
             public static double ENCODER_VALUE_WHEN_FORWARD = 8974.0;
 
-            public static final double TURRET_CAMERA_RADIUS = 0.23;
+            public static final double TURRET_CAMERA_RADIUS = 0.25;
         }
 
         public static class Funnel {
@@ -127,16 +127,16 @@ public class RobotMap {
             public static final double WHEEL_DIST = 0.622;
             public static final double VISION_CAM_Y_DIST_CENTER = 0.32; // TODO: measure
             public static final double VISION_CAM_X_DIST_CENTER = 0;
-            public static final boolean IS_INTAKE_FRONT = true;// Because Alexey is gay
+            public static final boolean IS_INTAKE_FRONT = false;// Because Alexey is gay
 
             public static class Motor {
                 public static final int
-                        LEFT_LEADER = 1,
-                        LEFT_FOLLOWER_1 = 2,
-                        LEFT_FOLLOWER_2 = 3,
-                        RIGHT_LEADER = 4,
-                        RIGHT_FOLLOWER_1 = 5,
-                        RIGHT_FOLLOWER_2 = 6;
+                        LEFT_LEADER = 4,
+                        LEFT_FOLLOWER_1 = 5,
+                        LEFT_FOLLOWER_2 = 6,
+                        RIGHT_LEADER = 1,
+                        RIGHT_FOLLOWER_1 = 2,
+                        RIGHT_FOLLOWER_2 = 3;
 
 
             }
@@ -159,8 +159,8 @@ public class RobotMap {
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
                         1.05, 1.0, .0005,
-                        1.1, 0, 6.0, .01,
-                        1.0, 0, 0, .01, 500);
+                        0.6*0, 0.0, 6.0*0, .01,
+                        0.5*0, 0, 0, .01, 500);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
 
@@ -170,7 +170,8 @@ public class RobotMap {
 
                     POWER.put("1.0",
                             new ProfilingData(2.64, 7, 8, 30));
-                    POWER.put("0.5", new ProfilingData(1.35, 6.2, 4, 18.8));
+                    POWER.put("0.5",
+                            new ProfilingData(1.4, 8.4, 4, 10));
 
                 }
 

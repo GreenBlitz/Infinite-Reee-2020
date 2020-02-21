@@ -58,6 +58,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         VisionMaster.GameState.TELEOP.setAsCurrent();
         Chassis.getInstance().toBrake();
+        Chassis.getInstance().resetGyro();
         Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         Chassis.getInstance().resetEncoders();
         Shooter.getInstance().resetEncoder();

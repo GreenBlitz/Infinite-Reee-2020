@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.bigRodika.commands.chassis.motion.MotionUtils;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.encoder.IEncoder;
@@ -50,10 +51,15 @@ public class Turret extends GBSubsystem {
             encoder.reset();
         }
 
+        double[] simData = MotionUtils.getSimulatedVisionLocation(
+                VisionMaster.getInstance().getVisionLocation().toDoubleArray());
+
         putNumber("Encoder", encoder.getRawTicks());
         putNumber("normEncoder", encoder.getNormalizedTicks());
         putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
         putBoolean("Switch", isSwitchPressed());
+        putString("Simulated vision location",
+                simData[0] + ", " + simData[1]);
 
         moveTurret(lastPower);
     }

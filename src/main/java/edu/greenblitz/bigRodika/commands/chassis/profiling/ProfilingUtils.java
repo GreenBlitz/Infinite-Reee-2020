@@ -13,7 +13,6 @@ public class ProfilingUtils {
         if (isReverse) {
             input = input.scale(-1);
         }
-        input = new Vector2D(input.getY(), input.getX());
 
 
         return input;
