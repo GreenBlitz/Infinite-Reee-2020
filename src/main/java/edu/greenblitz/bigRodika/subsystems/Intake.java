@@ -99,6 +99,21 @@ public class Intake {
                     RobotMap.Limbo2.Intake.Solenoid.REVERSE_RIGHT);
         }
 
+        private void setValue(DoubleSolenoid.Value value){
+            extenderRight.set(value);
+            extenderLeft.set(value);
+        }
+
+        public void extend(){
+            setValue(DoubleSolenoid.Value.kForward);
+        }
+
+        public void retract(){
+            setValue(DoubleSolenoid.Value.kReverse);
+        }
+
+
+
         @Override
         public void periodic() {
             super.periodic();
