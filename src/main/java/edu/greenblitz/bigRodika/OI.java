@@ -61,6 +61,8 @@ public class OI {
 
         //mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
         //mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
+        mainJoystick.B.whenPressed(new PreShoot(4.3));
+        mainJoystick.X.whenPressed(new ResetEncoderWhenInFront());
 
         secondStick.L3.whenPressed(new ResetEncoderWhenInFront());
         secondStick.A.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
@@ -72,13 +74,11 @@ public class OI {
         secondStick.POV_DOWN.whenReleased(new DomeMoveByConstant(0));
 
 
-        mainJoystick.START.whenPressed(new MoveTurretByConstant(0.3));
-        mainJoystick.START.whenReleased(new StopTurret());
+        secondStick.START.whenPressed(new MoveTurretByConstant(0.3));
+        secondStick.START.whenReleased(new StopTurret());
 
-        mainJoystick.BACK.whenPressed(new MoveTurretByConstant(-0.3));
-        mainJoystick.BACK.whenReleased(new StopTurret());
-        mainJoystick.A.whenPressed(new UnsafeResetTurret(0.3));
-        mainJoystick.A.whenReleased(new StopTurret());
+        secondStick.BACK.whenPressed(new MoveTurretByConstant(-0.3));
+        secondStick.BACK.whenReleased(new StopTurret());
 
     }
 

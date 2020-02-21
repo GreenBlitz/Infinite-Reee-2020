@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
+import edu.greenblitz.bigRodika.commands.turret.TurretByVisionUntilStable;
 import edu.greenblitz.bigRodika.commands.turret.TurretToFront;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -14,7 +15,7 @@ public class PreShoot extends ParallelCommandGroup {
         addCommands(
 
                 hexAlign,
-                new TurretByVision(VisionMaster.Algorithm.HEXAGON)
+                new TurretByVisionUntilStable(VisionMaster.Algorithm.HEXAGON)
 
         );
 

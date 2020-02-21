@@ -59,7 +59,6 @@ public class MotionUtils {
     }
 
     public static double[] getSimulatedVisionLocation(double turretAngle) {
-        VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         double[] loc = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
         if (!VisionMaster.getInstance().isLastDataValid()) return null;
         return getSimulatedVisionLocation(loc, turretAngle);

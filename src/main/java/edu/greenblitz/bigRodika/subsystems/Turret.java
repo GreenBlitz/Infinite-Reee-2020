@@ -64,8 +64,13 @@ public class Turret extends GBSubsystem {
         putNumber("normEncoder", encoder.getNormalizedTicks());
         putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
         putBoolean("Switch", isSwitchPressed());
-        putString("Simulated vision location",
-                simData[0] + ", " + simData[1]);
+        double[] sim = MotionUtils.getSimulatedVisionLocation();
+        if(sim != null) {
+            SmartDashboard.putNumberArray("Simulated Vision Location", sim);
+            SmartDashboard.putNumber("Simulated Angle", Math.toDegrees(Math.atan2(sim[0], sim[1])));
+            SmartDashboard.putNumber("Simulated Distance", Math.hypot(sim[0], sim[1]));
+            SmartDashboard.putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
+        }
 
         moveTurret(lastPower);
     }
