@@ -123,8 +123,8 @@ public class HexAlign extends GBCommand {
         double errRadCenter = Math.abs(radCenter - desRadCenter);
 
         SmartDashboard.putNumber("errRadCenter", errRadCenter);
-
-        //if robot is very very close - do nothing
+        close
+        //if robot is very very  - do nothing
         if (errRadCenter < tolerance) {
             fucked = true;
             return;
