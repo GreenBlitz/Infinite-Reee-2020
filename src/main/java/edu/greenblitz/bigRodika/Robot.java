@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
 
         OI.getInstance();
 
-        //VisionMaster.getInstance();
+        VisionMaster.getInstance();
     }
 
     @Override
