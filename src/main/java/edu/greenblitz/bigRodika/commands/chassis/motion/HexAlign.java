@@ -4,9 +4,11 @@ import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.subsystems.Shifter;
 import edu.greenblitz.bigRodika.utils.VisionLocation;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
+import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Point;
@@ -67,8 +69,13 @@ public class HexAlign extends GBCommand {
         return globHexPos;
     }
 
+    private Gear gearBefore;
+
     @Override
     public void initialize() {
+
+        gearBefore = Shifter.getInstance().getCurrentGear();
+        Shifter.getInstance().setShift(Gear.POWER);
 
         double absAng = gyroInverted * (Chassis.getInstance().getAngle());// + RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET);
 
@@ -121,7 +128,7 @@ public class HexAlign extends GBCommand {
         double errRadCenter = Math.abs(radCenter - desRadCenter);
 
         SmartDashboard.putNumber("errRadCenter", errRadCenter);
-        close
+
         //if robot is very very  - do nothing
         if (errRadCenter < tolerance) {
             fucked = true;
@@ -223,7 +230,7 @@ public class HexAlign extends GBCommand {
             cmd.end(interupted);
             SmartDashboard.putString("HexAlign error",
                     new Position(Point.subtract(Chassis.getInstance().getLocation(), globalEnd), Chassis.getInstance().getAngle() - globalEnd.getAngle()).toString());
-
+            Shifter.getInstance().setShift(gearBefore);
         }
         cmd = null;
         prof = null;

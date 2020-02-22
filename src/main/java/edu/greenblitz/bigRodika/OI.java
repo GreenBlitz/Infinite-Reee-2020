@@ -13,6 +13,9 @@ import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
+import edu.greenblitz.bigRodika.commands.shifter.ToPower;
+import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
+import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
@@ -73,12 +76,20 @@ public class OI {
 
     private void initOfficalButtons() {
 
-        mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
-        mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
+//        mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
+//        mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
-        mainJoystick.L1.whileHeld(new PreShoot(5.5));
+        mainJoystick.A.whileHeld(new PreShoot(new DumbAlign(6.0, .1, .5)));
 
-//        mainJoystick.L3.whenReleased(new ToggleShift());
+        mainJoystick.L1.whenReleased(new ToggleShift());
+
+        mainJoystick.B.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+        mainJoystick.B.whenReleased(new StopTurret());
+
+        mainJoystick.START.whenPressed(new ToSpeed());
+        mainJoystick.BACK.whenPressed(new ToPower());
+
+        // ---------------------------------------------------------------
 
         secondStick.R1.whenPressed(new FullyAutoThreeStage(4500, 0.8));
         secondStick.R1.whenReleased(new StopShooter());
@@ -94,20 +105,17 @@ public class OI {
         secondStick.B.whenPressed(new ToggleExtender());
         secondStick.A.whileHeld(new RollByConstant(1.0));
 
-        mainJoystick.A.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
-        mainJoystick.A.whenReleased(new StopTurret());
+        secondStick.POV_UP.whenPressed(new DomeMoveByConstant(0.3));
+        secondStick.POV_UP.whenReleased(new DomeMoveByConstant(0));
 
-        mainJoystick.START.whenPressed(new MoveTurretByConstant(0.3));
-        mainJoystick.START.whenReleased(new MoveTurretByConstant(0));
+        secondStick.POV_DOWN.whenPressed(new DomeMoveByConstant(-0.3));
+        secondStick.POV_DOWN.whenReleased(new DomeMoveByConstant(0));
 
-        mainJoystick.BACK.whenPressed(new MoveTurretByConstant(-0.3));
-        mainJoystick.BACK.whenReleased(new MoveTurretByConstant(0));
+        secondStick.POV_LEFT.whenPressed(new MoveTurretByConstant(0.3));
+        secondStick.POV_LEFT.whenReleased(new MoveTurretByConstant(0));
 
-        secondStick.START.whenPressed(new DomeMoveByConstant(0.3));
-        secondStick.START.whenReleased(new DomeMoveByConstant(0));
-
-        secondStick.BACK.whenPressed(new DomeMoveByConstant(-0.3));
-        secondStick.BACK.whenReleased(new DomeMoveByConstant(0));
+        secondStick.POV_RIGHT.whenPressed(new MoveTurretByConstant(-0.3));
+        secondStick.POV_RIGHT.whenReleased(new MoveTurretByConstant(0));
     }
 
     public SmartJoystick getMainJoystick() {
