@@ -6,10 +6,10 @@ import org.greenblitz.motion.tolerance.ITolerance;
 
 public class TurretByVisionUntilStable extends TurretByVision {
 
-    private static final ITolerance DEFAULT_TOLERANCE = new AbsoluteTolerance(0.5);
+    private static final ITolerance DEFAULT_TOLERANCE = new AbsoluteTolerance(3.0);
     private static final long DEFAULT_TIME_ON_MILLIS = 3000;
 
-    ITolerance tolerance;
+    private ITolerance tolerance;
     private long millisWantedOnTarget;
     private long timeOnTarget;
     private boolean wasOnTarget;

@@ -62,7 +62,7 @@ public class Turret extends GBSubsystem {
 
         putNumber("Encoder", encoder.getRawTicks());
         putNumber("normEncoder", encoder.getNormalizedTicks());
-        putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
+        SmartDashboard.putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
         putBoolean("Switch", isSwitchPressed());
         double[] sim = MotionUtils.getSimulatedVisionLocation();
         if(sim != null) {
@@ -102,6 +102,10 @@ public class Turret extends GBSubsystem {
 
     public double getNormAngleRads() {
         return 2 * Math.PI * (getTurretLocation() - RobotMap.Limbo2.Turret.ENCODER_VALUE_WHEN_FORWARD/RobotMap.Limbo2.Turret.NORMALIZER.getValue());
+    }
+
+    public double getNormAngleDegs(){
+        return Math.toDegrees(getNormAngleRads());
     }
 
     public double getTurretSpeed() {

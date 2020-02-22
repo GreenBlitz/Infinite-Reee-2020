@@ -77,7 +77,7 @@ public class HexAlign extends GBCommand {
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         VisionLocation location = VisionMaster.getInstance().getVisionLocation();
         SmartDashboard.putString("Vision Location", location.toString());
-        double[] difference = MotionUtils.getSimulatedVisionLocation(location.toDoubleArray());
+        double[] difference = MotionUtils.getSimulatedVisionLocation();
 
         if (!VisionMaster.getInstance().isLastDataValid()) {
             fucked = true;
