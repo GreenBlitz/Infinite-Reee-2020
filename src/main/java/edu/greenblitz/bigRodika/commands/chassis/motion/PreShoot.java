@@ -2,6 +2,7 @@ package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.turns.ChassisTurretCompensate;
+import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyRadians;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
@@ -36,7 +37,10 @@ public class PreShoot extends ParallelRaceGroup {
                             }
                         }
                 ),
-                new TurretByVision(VisionMaster.Algorithm.HEXAGON)
+                new SequentialCommandGroup(
+                        new TurretApproachSwiftlyRadians(0),
+                        new TurretByVision(VisionMaster.Algorithm.HEXAGON)
+                )
         );
     }
 
