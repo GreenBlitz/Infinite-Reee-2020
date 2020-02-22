@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2020.1.2" // set this to the latest stable version
+    id "edu.wpi.first.GradleRIO" version "2020.3.2" // set this to the latest stable version
 }
 
 apply plugin: 'idea'
@@ -55,8 +55,8 @@ dependencies {
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
     // Optional lines, adds common robot code libraries to the project
     // The jitpack line in repositories is required for these libraries.
-    compile 'com.github.GreenBlitz.MotionControl:motion:v1.0.1'
-    compile 'com.github.GreenBlitz:GBLib:4af82caef63aa79e950fd183fa8c2acdde68b161'
+    compile 'com.github.GreenBlitz.MotionControl:motion:v1.0.2'
+    compile 'com.github.GreenBlitz:GBLib:d570a3b3db97a268e86cc56ccf64d590c6d573b2'
     compile group: 'com.google.guava', name: 'guava', version: '11.0.2'
 
     // Optional lines, used for writing tests

@@ -2,6 +2,7 @@ package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
+import edu.greenblitz.bigRodika.commands.chassis.motion.DumbAlign;
 import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
@@ -61,7 +62,7 @@ public class OI {
 
         //mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
         //mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
-        mainJoystick.B.whenPressed(new PreShoot(4.3));
+        mainJoystick.B.whenPressed(new DumbAlign(5.0,0.1,0.5));
         mainJoystick.X.whenPressed(new ResetEncoderWhenInFront());
 
         secondStick.L3.whenPressed(new ResetEncoderWhenInFront());
