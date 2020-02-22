@@ -23,7 +23,7 @@ public class RobotMap {
 
             public static HashMap<Double, Double> DOME;
 
-            static{
+            static {
                 DOME = new HashMap<>();
 
                 DOME.put(6.0, 0.4);
@@ -150,15 +150,15 @@ public class RobotMap {
 
             public static class Encoder {
                 public static final GearDependentValue<Double> // TODO: check this
-                        NORM_CONST_SPARK = new GearDependentValue<>(2300.0*0.64, 1234.0 / 2.0);
+                        NORM_CONST_SPARK = new GearDependentValue<>(2300.0 * 0.64, 1234.0 / 2.0);
             }
 
             public static class MotionData { // TODO: calibrate this
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
                         1.05, 1.0, .0005,
-                        0.6*0, 0.0, 6.0*0, .01,
-                        0.5*0, 0, 0, .01, 500);
+                        0.6 * 0, 0.0, 6.0 * 0, .01,
+                        0.5 * 0, 0, 0, .01, 500);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
 
@@ -182,7 +182,7 @@ public class RobotMap {
 
     }
 
-    public static class FieldData{
+    public static class FieldData {
         public static final double HEX_DIST_FROM_INNER = 0.74295;
         public static final double PHYSICAL_ANGLE_LIMIT = 25;
 

@@ -160,10 +160,9 @@ public class Follow2DProfileCommand implements IThreadable {
 
     @Override
     public void atInit() {
-        if(sendData != null){
+        if (sendData != null) {
             follower.setSendData(sendData);
-        }
-        else {
+        } else {
             follower.setSendData(true);
         }
         Chassis.getInstance().toCoast();
@@ -173,10 +172,9 @@ public class Follow2DProfileCommand implements IThreadable {
     }
 
     public void setSendData(boolean val) {
-        if(follower != null) {
+        if (follower != null) {
             follower.setSendData(val);
-        }
-        else{
+        } else {
             sendData = val;
         }
     }

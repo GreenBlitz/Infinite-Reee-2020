@@ -38,10 +38,11 @@ public class Turret extends GBSubsystem {
         }
     }
 
-    public void resetEncoder(){
+    public void resetEncoder() {
         encoder.reset();
     }
-    public void resetEncoder(int value){
+
+    public void resetEncoder(int value) {
         motor.setSelectedSensorPosition(value);
     }
 
@@ -65,7 +66,7 @@ public class Turret extends GBSubsystem {
         SmartDashboard.putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
         putBoolean("Switch", isSwitchPressed());
         double[] sim = MotionUtils.getSimulatedVisionLocation();
-        if(sim != null) {
+        if (sim != null) {
             SmartDashboard.putNumberArray("Simulated Vision Location", sim);
             SmartDashboard.putNumber("Simulated Angle", Math.toDegrees(Math.atan2(sim[0], sim[1])));
             SmartDashboard.putNumber("Simulated Distance", Math.hypot(sim[0], sim[1]));
@@ -101,10 +102,10 @@ public class Turret extends GBSubsystem {
     }
 
     public double getNormAngleRads() {
-        return 2 * Math.PI * (getTurretLocation() - RobotMap.Limbo2.Turret.ENCODER_VALUE_WHEN_FORWARD/RobotMap.Limbo2.Turret.NORMALIZER.getValue());
+        return 2 * Math.PI * (getTurretLocation() - RobotMap.Limbo2.Turret.ENCODER_VALUE_WHEN_FORWARD / RobotMap.Limbo2.Turret.NORMALIZER.getValue());
     }
 
-    public double getNormAngleDegs(){
+    public double getNormAngleDegs() {
         return Math.toDegrees(getNormAngleRads());
     }
 

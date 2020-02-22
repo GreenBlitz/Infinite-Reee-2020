@@ -5,7 +5,6 @@ import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import java.util.List;
 
 /**
- *
  * This is like HexAlign, but only goes forwards.
  *
  * @author Alexey

@@ -42,6 +42,7 @@ public class AdaptiveProfilingPursuitController implements IThreadable {
     private double mult;
     private long latestProfile;
     private long profileLifeSpan;
+
     public AdaptiveProfilingPursuitController(Supplier<State> supplier,
                                               TargetMode mode,
                                               double vEnd, ProfilingData data,

@@ -1,7 +1,6 @@
 package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.commands.chassis.turns.ChassisTurretCompensate;
-import edu.greenblitz.bigRodika.commands.chassis.turns.TurnToVision;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVisionUntilStable;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public class PreShoot extends ParallelCommandGroup {
 
-    private PreShoot(HexAlign align){
+    private PreShoot(HexAlign align) {
         addCommands(
                 new SequentialCommandGroup(
                         align

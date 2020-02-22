@@ -7,7 +7,6 @@ import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Dome extends GBSubsystem {
 
@@ -47,7 +46,7 @@ public class Dome extends GBSubsystem {
                 ? 1 - potentiometer.get() : potentiometer.get());
     }
 
-    public double getPotentiometerValue(){
+    public double getPotentiometerValue() {
         return getPotentiometerRaw() - zeroValue;
     }
 
@@ -62,7 +61,7 @@ public class Dome extends GBSubsystem {
 //            return;
 //        }
         if (getPotentiometerValue() < POT_LOWER_LIMIT && power < 0) {
-            moveMotor(Math.max(power, POWER_AT_LOWER_END*0));
+            moveMotor(Math.max(power, POWER_AT_LOWER_END * 0));
         }
         if (getPotentiometerValue() > POT_HIGHER_LIMIT && power > 0) {
             moveMotor(0);

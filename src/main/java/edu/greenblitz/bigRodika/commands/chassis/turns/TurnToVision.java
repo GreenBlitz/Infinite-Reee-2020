@@ -2,7 +2,6 @@ package edu.greenblitz.bigRodika.commands.chassis.turns;
 
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.HexAlign;
-import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyByRadiansRelative;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Turret;
@@ -25,7 +24,7 @@ public class TurnToVision extends GBCommand {
 
     public TurnToVision(VisionMaster.Algorithm algorithm, double maxV, double maxA,
                         double power, boolean useTurret) {
-        if (useTurret){
+        if (useTurret) {
             require(Turret.getInstance());
         }
         this.algorithm = algorithm;

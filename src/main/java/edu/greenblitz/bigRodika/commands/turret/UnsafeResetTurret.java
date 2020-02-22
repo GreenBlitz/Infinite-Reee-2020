@@ -10,18 +10,18 @@ public class UnsafeResetTurret extends MoveTurretByConstant {
 
     double startLoc;
 
-    public UnsafeResetTurret(double power){
+    public UnsafeResetTurret(double power) {
         super(power);
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
         startLoc = turret.getTurretLocation();
     }
 
     @Override
     public void end(boolean interrupted) {
-        if (!interrupted){
+        if (!interrupted) {
             turret.moveTurret(0);
         }
     }

@@ -20,29 +20,29 @@ public class TurretByVisionUntilStable extends TurretByVision {
         millisWantedOnTarget = milisOnTarget;
     }
 
-    public TurretByVisionUntilStable(VisionMaster.Algorithm algorithm){
+    public TurretByVisionUntilStable(VisionMaster.Algorithm algorithm) {
         this(algorithm, DEFAULT_TOLERANCE, DEFAULT_TIME_ON_MILLIS);
     }
 
-    public TurretByVisionUntilStable(VisionMaster.Algorithm algorithm, ITolerance tol){
+    public TurretByVisionUntilStable(VisionMaster.Algorithm algorithm, ITolerance tol) {
         this(algorithm, tol, DEFAULT_TIME_ON_MILLIS);
     }
 
-    public TurretByVisionUntilStable(VisionMaster.Algorithm algorithm, long millisWantedOnTarget){
+    public TurretByVisionUntilStable(VisionMaster.Algorithm algorithm, long millisWantedOnTarget) {
         this(algorithm, DEFAULT_TOLERANCE, millisWantedOnTarget);
     }
 
 
     @Override
     public boolean isFinished() {
-        if(!VisionMaster.getInstance().isLastDataValid()){
+        if (!VisionMaster.getInstance().isLastDataValid()) {
             return true;
         }
-        if(!tolerance.onTarget(0, VisionMaster.getInstance().getVisionLocation().getRelativeAngle())){
+        if (!tolerance.onTarget(0, VisionMaster.getInstance().getVisionLocation().getRelativeAngle())) {
             wasOnTarget = false;
             return false;
         }
-        if(!wasOnTarget){
+        if (!wasOnTarget) {
             wasOnTarget = true;
             timeOnTarget = System.currentTimeMillis();
         }

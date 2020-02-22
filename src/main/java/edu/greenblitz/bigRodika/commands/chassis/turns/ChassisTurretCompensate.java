@@ -42,7 +42,7 @@ public class ChassisTurretCompensate extends GBCommand { // NOT A TURRET COMMAND
 
     @Override
     public void execute() {
-        if(Math.abs(Turret.getInstance().getNormAngleRads()) <= MAX_ANGLE_RADS){
+        if (Math.abs(Turret.getInstance().getNormAngleRads()) <= MAX_ANGLE_RADS) {
             return;
         }
         double sign;

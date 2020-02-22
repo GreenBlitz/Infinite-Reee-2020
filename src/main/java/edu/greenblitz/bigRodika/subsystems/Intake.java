@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Intake {
 
@@ -99,19 +98,18 @@ public class Intake {
                     RobotMap.Limbo2.Intake.Solenoid.REVERSE_RIGHT);
         }
 
-        private void setValue(DoubleSolenoid.Value value){
+        private void setValue(DoubleSolenoid.Value value) {
             extenderRight.set(value);
             extenderLeft.set(value);
         }
 
-        public void extend(){
+        public void extend() {
             setValue(DoubleSolenoid.Value.kForward);
         }
 
-        public void retract(){
+        public void retract() {
             setValue(DoubleSolenoid.Value.kReverse);
         }
-
 
 
         @Override

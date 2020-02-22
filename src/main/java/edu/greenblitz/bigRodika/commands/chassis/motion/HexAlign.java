@@ -1,7 +1,6 @@
 package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
@@ -85,7 +84,6 @@ public class HexAlign extends GBCommand {
         }
 
 
-
         double targetX = difference[0] + RobotMap.Limbo2.Chassis.VISION_CAM_X_DIST_CENTER;
         double targetY = difference[1];
 
@@ -111,7 +109,7 @@ public class HexAlign extends GBCommand {
         }
 
         Double loc = RobotMap.Limbo2.Dome.DOME.get(r);
-        if (loc != null){
+        if (loc != null) {
             new DomeApproachSwiftly(loc).schedule();
         } else {
             System.out.println("Cant find " + r + " in dome radii");
@@ -174,8 +172,7 @@ public class HexAlign extends GBCommand {
         //if robot is close - drives straight
         if (errRadCenter < driveTolerance) {
             endState.setAngle(startState.getAngle());
-        }
-        else   {
+        } else {
             //translates the profile from mid front to mid mid
             endState.translate(new Point(0, cam_y).rotate(-absAng)).translate(new Point(0, -cam_y).rotate(endState.getAngle()));
         }
@@ -207,7 +204,7 @@ public class HexAlign extends GBCommand {
 
 
         globalEnd = new Position(Chassis.getInstance().getLocation().getX() + endState.getX(),
-                Chassis.getInstance().getLocation().getY() + endState.getY(), - endState.getAngle());
+                Chassis.getInstance().getLocation().getY() + endState.getY(), -endState.getAngle());
 
         prof = new Follow2DProfileCommand(path, config, maxPower, reverse);
         prof.setSendData(false);
@@ -225,7 +222,7 @@ public class HexAlign extends GBCommand {
             cmd.stop();
             cmd.end(interupted);
             SmartDashboard.putString("HexAlign error",
-                    new Position (Point.subtract(Chassis.getInstance().getLocation(), globalEnd),Chassis.getInstance().getAngle() - globalEnd.getAngle()).toString());
+                    new Position(Point.subtract(Chassis.getInstance().getLocation(), globalEnd), Chassis.getInstance().getAngle() - globalEnd.getAngle()).toString());
 
         }
         cmd = null;

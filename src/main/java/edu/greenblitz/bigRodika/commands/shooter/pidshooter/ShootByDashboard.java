@@ -1,7 +1,6 @@
 package edu.greenblitz.bigRodika.commands.shooter.pidshooter;
 
 import edu.greenblitz.bigRodika.commands.shooter.ShooterCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.debug.RemoteCSVTarget;
 import org.greenblitz.motion.pid.PIDObject;
 

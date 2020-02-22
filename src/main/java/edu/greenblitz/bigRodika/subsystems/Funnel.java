@@ -94,7 +94,7 @@ public class Funnel {
 
         }
 
-        public WPI_TalonSRX getTalon(){
+        public WPI_TalonSRX getTalon() {
             return pusher;
         }
     }

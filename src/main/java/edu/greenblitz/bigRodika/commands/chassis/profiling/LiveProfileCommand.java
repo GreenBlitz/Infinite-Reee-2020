@@ -33,6 +33,7 @@ public class LiveProfileCommand implements IThreadable {
     private double mult;
     private long runTStart;
     private long minRuntime = 10;
+
     /**
      * @param end
      * @param jump

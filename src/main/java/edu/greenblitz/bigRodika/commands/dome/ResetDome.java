@@ -9,7 +9,7 @@ public class ResetDome extends DomeMoveByConstant {
 
     @Override
     public void end(boolean interrupted) {
-        if (!interrupted){
+        if (!interrupted) {
             dome.safeMove(0);
         }
     }
