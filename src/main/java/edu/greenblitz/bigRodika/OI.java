@@ -53,6 +53,7 @@ public class OI {
         initOfficalButtons();
     }
 
+
     public static OI getInstance() {
         if (instance == null) {
             instance = new OI();
@@ -71,10 +72,10 @@ public class OI {
 
         List<State> states = new ArrayList<>();
         states.add(new State(0, 0));
-        states.add(new State(0, 2, 0));
+        states.add(new State(0, -2, 0));
 
         Follow2DProfileCommand prof = new Follow2DProfileCommand(states, RobotMap.Limbo2.Chassis.MotionData.CONFIG
-                , 0.3, false);
+                , 0.3, true);
 
         mainJoystick.A.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
 

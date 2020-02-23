@@ -5,6 +5,7 @@ import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.subsystems.GBSubsystem;
 import edu.greenblitz.bigRodika.subsystems.Shifter;
 import edu.greenblitz.bigRodika.utils.VisionLocation;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
@@ -20,7 +21,7 @@ import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HexAlign extends ChassisCommand {
+public class HexAlign extends GBCommand {
 
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;
@@ -201,6 +202,14 @@ public class HexAlign extends ChassisCommand {
 //        startState.setAngle(0);
 //        endState.setAngle(ang);
 
+        if (errRadCenter < driveTolerance){
+            startState.rotate(-startState.getAngle());
+            endState.rotate(-startState.getAngle());
+            endState.setX(0);
+            startState.setAngle(0);
+            endState.setAngle(0);
+        }
+
         //creates path
         List<State> path = new ArrayList<>();
         path.add(startState);
@@ -220,7 +229,7 @@ public class HexAlign extends ChassisCommand {
         prof = new Follow2DProfileCommand(path, config, maxPower, reverse);
         prof.setSendData(false);
         cmd = new ThreadedCommand(prof, Chassis.getInstance());
-        cmd.initialize();
+        cmd.schedule();
     }
 
     @Override
@@ -231,7 +240,6 @@ public class HexAlign extends ChassisCommand {
     public void end(boolean interupted) {
         if (!fucked) {
             cmd.stop();
-            cmd.end(interupted);
             SmartDashboard.putString("HexAlign error",
                     new Position(Point.subtract(Chassis.getInstance().getLocation(), globalEnd), Chassis.getInstance().getAngle() - globalEnd.getAngle()).toString());
             Shifter.getInstance().setShift(gearBefore);

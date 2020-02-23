@@ -62,8 +62,8 @@ public class Follow2DProfileCommand implements IThreadable {
                 config.getSmoothingTail(),
                 data,
                 1.0,
-                maxPower * config.getVelMultLin(),
-                maxPower * config.getAccMultLin(),
+                maxPower*config.getVelMultLin(),
+                maxPower*config.getAccMultLin(),
                 new PIDObject(
                         config.getWheelPidKp() / data.getMaxLinearVelocity(),
                         config.getWheelPidKi() / data.getMaxLinearVelocity(),

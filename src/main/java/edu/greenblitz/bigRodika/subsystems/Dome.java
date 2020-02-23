@@ -90,7 +90,8 @@ public class Dome extends GBSubsystem {
             lastPotValue = tempVal;
         }
 
-        if (switchTriggered() && getCurrentCommand() != null && getCurrentCommand().getName().equals("ResetDome")) {
+        if (switchTriggered() && getCurrentCommand() != null && getCurrentCommand().getName().equals("ResetDome")
+        && Math.abs(getPotentiometerRaw()) < 1.0) {
 //            if (getPotentiometerValue() < 0.05) {
 //                zeroValue += getPotentiometerValue();
 //            } else if (getCurrentCommand() != null && getCurrentCommand().getName().equals("ResetDome")) {
