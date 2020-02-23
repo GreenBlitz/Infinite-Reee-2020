@@ -116,8 +116,8 @@ public class OI {
                 new ResetDome(-0.3), new ExtendRoller()
         ));
 
-        mainJoystick.START.whenPressed(new ToSpeed());
-        mainJoystick.BACK.whenPressed(new ToPower());
+//        mainJoystick.START.whenPressed(new ToSpeed());
+//        mainJoystick.BACK.whenPressed(new ToPower());
 
         mainJoystick.POV_UP.whenPressed(new DomeApproachSwiftly(RobotMap.Limbo2.Dome.DOME.get(6.3)));
         mainJoystick.POV_DOWN.whenPressed(new TurretApproachSwiftlyRadians(0));

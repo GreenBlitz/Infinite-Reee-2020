@@ -36,7 +36,7 @@ public class ThreeBallSimple extends ParallelCommandGroup {
         hardCodedShit.add(new State(0, -1));
 
         addCommands(
-//                new ThreeStageForAutonomous(3700, 0.65),
+                new ThreeStageForAutonomous(3700, 0.65),
                 new SequentialCommandGroup(
                         new DomeMoveByConstant(0.3).withTimeout(0.2),
                         new ResetDome(-0.3),
