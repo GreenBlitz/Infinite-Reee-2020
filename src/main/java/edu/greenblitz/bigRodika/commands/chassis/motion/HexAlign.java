@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika.commands.chassis.motion;
 
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
@@ -19,7 +20,7 @@ import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HexAlign extends GBCommand {
+public class HexAlign extends ChassisCommand {
 
     private Follow2DProfileCommand prof;
     private ThreadedCommand cmd;

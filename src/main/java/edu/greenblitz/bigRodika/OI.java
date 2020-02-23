@@ -4,6 +4,7 @@ import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.DumbAlign;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
+import edu.greenblitz.bigRodika.commands.chassis.motion.PreShootAndWait;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
@@ -49,8 +50,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-        initTestButtons();
-//        initOfficalButtons();
+//        initTestButtons();
+        initOfficalButtons();
     }
 
     public static OI getInstance() {
@@ -101,7 +102,10 @@ public class OI {
 //        mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
 //        mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
-        mainJoystick.A.whileHeld(new PreShoot(new DumbAlign(6.3, .1, .3)));
+        mainJoystick.A.whileHeld(
+                new PreShootAndWait(
+                        new PreShoot(
+                                new DumbAlign(4.0, .1, .3))));
 
 //        mainJoystick.L1.whenReleased(new ToggleShift());
 

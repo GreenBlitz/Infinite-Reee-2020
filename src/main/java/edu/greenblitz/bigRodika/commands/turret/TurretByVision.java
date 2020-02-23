@@ -26,7 +26,6 @@ public class TurretByVision extends TurretCommand {
 
     @Override
     public void execute() {
-        double[] diff = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
 
         if (!VisionMaster.getInstance().isLastDataValid()) {
             turret.moveTurret(0);
@@ -34,7 +33,8 @@ public class TurretByVision extends TurretCommand {
         }
 
         turret.moveTurret(TurretApproachSwiftly.calculateVelocity(
-                Math.atan(diff[0] / diff[1])));
+                Math.toRadians(VisionMaster.getInstance().getVisionLocation().getRelativeAngle())
+                ));
     }
 
     @Override
