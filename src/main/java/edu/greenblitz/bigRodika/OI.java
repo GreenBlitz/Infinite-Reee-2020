@@ -102,10 +102,14 @@ public class OI {
 //        mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
 //        mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
+        List<Double> rads = new ArrayList<>();
+
+        rads.add(0.5); rads.add(4.0); rads.add(4.5); rads.add(6.3);
+
         mainJoystick.A.whileHeld(
                 new PreShootAndWait(
                         new PreShoot(
-                                new DumbAlign(6.3, .1, .3))));
+                                new DumbAlign(rads, .1, .3))));
 
 //        mainJoystick.L1.whenReleased(new ToggleShift());
 
