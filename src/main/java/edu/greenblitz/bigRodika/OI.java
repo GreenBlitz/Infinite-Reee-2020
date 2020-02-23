@@ -114,7 +114,7 @@ public class OI {
 //        mainJoystick.L1.whenReleased(new ToggleShift());
 
         mainJoystick.B.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
-        mainJoystick.B.whenReleased(new StopTurret());
+//        mainJoystick.B.whenReleased(new StopTurret());
 
         mainJoystick.X.whenPressed(new ParallelCommandGroup(
                 new ResetDome(-0.3), new ExtendRoller()
@@ -129,7 +129,8 @@ public class OI {
         // ---------------------------------------------------------------
 
         secondStick.R1.whenPressed(new FullyAutoThreeStage(3700, 0.65));
-        secondStick.R1.whenReleased(new StopShooter());
+        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
+                                                             new ResetDome()));
 
         secondStick.L1.whileHeld(new InsertIntoShooter(1, 0.5, 0.1));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),

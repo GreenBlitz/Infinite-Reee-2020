@@ -3,10 +3,16 @@ package edu.greenblitz.bigRodika.commands.dome;
 
 public class ResetDome extends DomeMoveByConstant {
 
+    private static final double DEFAULT_POWER = 0.3;
+
     private int count;
 
+    public ResetDome() {
+        this(DEFAULT_POWER);
+    }
+
     public ResetDome(double power) {
-        super(power);
+        super(-Math.abs(power));
     }
 
     @Override
