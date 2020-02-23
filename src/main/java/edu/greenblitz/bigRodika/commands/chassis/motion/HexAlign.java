@@ -169,7 +169,10 @@ public class HexAlign extends ChassisCommand {
                     Math.sin(-relAng) *
                             ((targetY - Math.sqrt(r * r - targetX * targetX)) / r)
             );
+            SmartDashboard.putBoolean("As expected", true);
         }
+
+        SmartDashboard.putNumber("Hex Anlign angle", angle);
 
         //calculates the end point
         State endState = new State(

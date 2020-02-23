@@ -158,8 +158,8 @@ public class RobotMap {
             public static class MotionData { // TODO: calibrate this
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
-                        1.05, 1.0, .0005,
-                        0.6, 0.0, 6.0 * 0, .01,
+                        1.1, 1.0, .0005,
+                        0.8, 0.0, 2.0, .01,
                         0.5 * 0, 0, 0, .01, 500);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;

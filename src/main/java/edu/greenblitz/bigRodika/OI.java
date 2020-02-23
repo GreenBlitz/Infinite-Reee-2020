@@ -35,7 +35,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import org.greenblitz.motion.base.State;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class OI {
@@ -105,7 +104,7 @@ public class OI {
         mainJoystick.A.whileHeld(
                 new PreShootAndWait(
                         new PreShoot(
-                                new DumbAlign(4.0, .1, .3))));
+                                new DumbAlign(6.3, .1, .3))));
 
 //        mainJoystick.L1.whenReleased(new ToggleShift());
 

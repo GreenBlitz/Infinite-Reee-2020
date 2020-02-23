@@ -45,10 +45,10 @@ public class PreShoot extends ParallelRaceGroup {
                         }
                 ),
                 new SequentialCommandGroup(
-                        new ParallelRaceGroup(
-                                new TurretApproachSwiftlyRadians(0, new AbsoluteTolerance(0.1)),
-                                new WaitCommand(0.5)
-                        ),
+//                        new ParallelRaceGroup(
+//                                new TurretApproachSwiftlyRadians(0, new AbsoluteTolerance(0.1)),
+//                                new WaitCommand(0.5)
+//                        ),
                         new TurretByVision(VisionMaster.Algorithm.HEXAGON)
                 )
         );

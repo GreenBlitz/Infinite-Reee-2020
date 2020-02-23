@@ -1,8 +1,10 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
+import edu.greenblitz.bigRodika.commands.complex.autonomous.ThreeBallSimple;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInFront;
+import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
@@ -56,6 +58,8 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
         new ResetDome(-0.3).schedule();
+        new ResetEncoderWhenInSide().schedule();
+        new ThreeBallSimple().schedule();
     }
 
     @Override
@@ -72,7 +76,7 @@ public class Robot extends TimedRobot {
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
 
         new ResetDome(-0.3).schedule();
-        new ResetEncoderWhenInFront().schedule();
+//        new ResetEncoderWhenInFront().schedule();
         new LocalizerCommandRunner().schedule();
     }
 }

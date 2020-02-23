@@ -14,7 +14,9 @@ public class Dome extends GBSubsystem {
     private final double POT_LOWER_LIMIT = 0.1, // TODO calibrate
             POT_HIGHER_LIMIT = 0.5;
     private static final double POWER_AT_LOWER_END = -0.05;
+    private static final double MAX_VELOCITY = 0.2;
     protected double lastPower = 0;
+    protected double lastPotValue = Double.POSITIVE_INFINITY;
     private WPI_TalonSRX domeMotor;
     private Potentiometer potentiometer;
     private DigitalInput limitSwitch;
@@ -47,7 +49,7 @@ public class Dome extends GBSubsystem {
     }
 
     public double getPotentiometerValue() {
-        return getPotentiometerRaw() - zeroValue;
+        return lastPotValue - zeroValue;
     }
 
     public void moveMotor(double power) {
@@ -61,7 +63,7 @@ public class Dome extends GBSubsystem {
             return;
         }
         if (getPotentiometerValue() < POT_LOWER_LIMIT && power < 0) {
-            moveMotor(Math.max(power, POWER_AT_LOWER_END * 0));
+            moveMotor(Math.max(power, POWER_AT_LOWER_END));
         }
         if (getPotentiometerValue() > POT_HIGHER_LIMIT && power > 0) {
             moveMotor(0);
@@ -74,6 +76,7 @@ public class Dome extends GBSubsystem {
         return limitSwitch.get();
     }
 
+    private double tempVal;
     @Override
     public void periodic() {
         super.periodic();
@@ -81,6 +84,11 @@ public class Dome extends GBSubsystem {
         putNumber("Potentiometer", getPotentiometerValue());
         putBoolean("LimitSwitch", switchTriggered());
         putNumber("PotZero", zeroValue);
+
+        tempVal = getPotentiometerRaw();
+        if (lastPotValue == Double.POSITIVE_INFINITY || Math.abs(tempVal - lastPotValue) < MAX_VELOCITY){
+            lastPotValue = tempVal;
+        }
 
         if (switchTriggered() && getCurrentCommand() != null && getCurrentCommand().getName().equals("ResetDome")) {
 //            if (getPotentiometerValue() < 0.05) {

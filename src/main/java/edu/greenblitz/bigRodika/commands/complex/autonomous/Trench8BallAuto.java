@@ -29,7 +29,6 @@ public class Trench8BallAuto extends ParallelCommandGroup {
                         new WaitCommand(5),
                         new StopRoller(),
                         new StopPusher(),
-
                         new GoFetch(new State(-Chassis.getInstance().getLocation().getX(), 4.6 - Chassis.getInstance().getLocation().getY(), 0)),
                         new GoFetch(new State(0, 1.6, 0)),
                         new PreShoot(6.4),
