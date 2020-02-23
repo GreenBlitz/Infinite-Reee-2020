@@ -10,7 +10,12 @@ public class ToPower extends ShifterCommand {
     }
 
     @Override
+    public void execute() {
+        shifter.setShift(Gear.POWER);
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

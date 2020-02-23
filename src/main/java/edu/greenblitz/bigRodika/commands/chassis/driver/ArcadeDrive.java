@@ -1,11 +1,13 @@
 package edu.greenblitz.bigRodika.commands.chassis.driver;
 
 import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
+import edu.greenblitz.gblib.gears.GearDependentValue;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 
 public class ArcadeDrive extends ChassisCommand {
 
     private SmartJoystick joystick;
+    private GearDependentValue<Double> turnFactor = new GearDependentValue<>(1.0, 0.7);
 
     public ArcadeDrive(SmartJoystick joystick) {
         this.joystick = joystick;
@@ -19,6 +21,6 @@ public class ArcadeDrive extends ChassisCommand {
     @Override
     public void execute() {
         chassis.arcadeDrive(joystick.getAxisValue(SmartJoystick.Axis.LEFT_Y),
-                joystick.getAxisValue(SmartJoystick.Axis.RIGHT_X));
+                joystick.getAxisValue(SmartJoystick.Axis.RIGHT_X)*turnFactor.getValue());
     }
 }

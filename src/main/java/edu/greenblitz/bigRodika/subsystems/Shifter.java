@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika.subsystems;
 
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.bigRodika.commands.shifter.ToPower;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GearDependentValue;
@@ -45,7 +46,11 @@ public class Shifter extends GBSubsystem {
      * This function creates a new instance of this class.
      */
     public static void init() {
-        if (instance == null) instance = new Shifter();
+        if (instance == null) {
+            instance = new Shifter();
+//            instance.setDefaultCommand(new ToPower());
+        }
+
     }
 
     /**
