@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class VisionMaster extends GBSubsystem {
 
-    private static final long MAX_HANDSHAKE_TIME = 1000;
+    private static final long MAX_HANDSHAKE_TIME = 3000;
 
     private static VisionMaster instance;
     private Algorithm currentAlgorithm;

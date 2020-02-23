@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika;
 
+import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GearDependentValue;
 import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import org.greenblitz.motion.profiling.ProfilingData;
@@ -27,7 +28,7 @@ public class RobotMap {
                 DOME = new HashMap<>();
 
                 DOME.put(6.3, 0.5);
-
+                DOME.put(4.0, 0.5);
 
             }
 
@@ -81,9 +82,9 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = false;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
-            public static final double SHOOTER_P = 0.00035;
+            public static final double SHOOTER_P = 0.0003;
             public static final double SHOOTER_I = 0.000001;
-            public static final double SHOOTER_D = 0.00002;
+            public static final double SHOOTER_D = 0.00001;
 
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 
@@ -157,20 +158,33 @@ public class RobotMap {
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
                         1.05, 1.0, .0005,
-                        0.6 * 0, 0.0, 6.0 * 0, .01,
+                        0.6, 0.0, 6.0 * 0, .01,
                         0.5 * 0, 0, 0, .01, 500);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
+                public static GearDependentValue<HashMap<String, ProfilingData>> PROF;
 
                 static {
 
                     POWER = new HashMap<>();
+                    SPEED = new HashMap<>();
+                    PROF = new GearDependentValue<>(null,null);
 
                     POWER.put("1.0",
                             new ProfilingData(2.64, 7, 8, 30));
                     POWER.put("0.5",
                             new ProfilingData(1.4, 8.4, 4, 10));
 
+                    // TODO this is dumb
+                    POWER.put("0.3",
+                            new ProfilingData(1.93, 4.6, 4.3, 12.6));
+
+
+                    SPEED.put("0.3",
+                            new ProfilingData(1.93, 4.6, 4.3, 12.6));
+
+                    PROF.setValue(Gear.POWER, POWER);
+                    PROF.setValue(Gear.SPEED, SPEED);
                 }
 
             }

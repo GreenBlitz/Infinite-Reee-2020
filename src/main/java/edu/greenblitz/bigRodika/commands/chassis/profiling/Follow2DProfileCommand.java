@@ -46,8 +46,9 @@ public class Follow2DProfileCommand implements IThreadable {
             ProfilingConfiguration config,
             double maxPower,
             boolean isReverse) {
-        this(path, config, (RobotMap.Limbo2.Chassis.MotionData.POWER.containsKey(Double.toString(maxPower))) ?
-                RobotMap.Limbo2.Chassis.MotionData.POWER.get(Double.toString(maxPower)) : retNullandThrow(), maxPower, isReverse);
+        this(path, config,
+                (RobotMap.Limbo2.Chassis.MotionData.PROF.getValue().containsKey(Double.toString(maxPower))) ?
+                RobotMap.Limbo2.Chassis.MotionData.PROF.getValue().get(Double.toString(maxPower)) : retNullandThrow(), maxPower, isReverse);
     }
 
 

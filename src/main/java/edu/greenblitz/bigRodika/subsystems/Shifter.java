@@ -69,6 +69,7 @@ public class Shifter extends GBSubsystem {
      * @param state A value based off of the Gear enum. This value is then set as the state the piston is in.
      */
     public void setShift(Gear state) {
+        if (state.equals(Gear.POWER)) return; // TODO fucking shifter is broken kill me
         VisionMaster.ShifterState shifterState = state.isPower() ? VisionMaster.ShifterState.POWER : VisionMaster.ShifterState.SPEED;
         shifterState.setAsCurrent();
         m_currentShift = state;
