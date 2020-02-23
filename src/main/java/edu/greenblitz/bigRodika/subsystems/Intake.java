@@ -14,14 +14,14 @@ public class Intake {
 
     private Intake() {
         roller = new Intake.Roller();
-//        extender = new Intake.Extender();
+        extender = new Intake.Extender();
     }
 
     public static void init() {
         if (instance == null) {
             instance = new Intake();
             CommandScheduler.getInstance().registerSubsystem(instance.roller);
-//            CommandScheduler.getInstance().registerSubsystem(instance.extender);
+            CommandScheduler.getInstance().registerSubsystem(instance.extender);
         }
     }
 

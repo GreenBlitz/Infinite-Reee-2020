@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
+import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInFront;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
@@ -62,6 +63,9 @@ public class Robot extends TimedRobot {
         Chassis.getInstance().resetEncoders();
         Shooter.getInstance().resetEncoder();
 
+        VisionMaster.Algorithm.HEXAGON.setAsCurrent();
+
+        new ResetEncoderWhenInFront().schedule();
         new LocalizerCommandRunner().schedule();
     }
 }

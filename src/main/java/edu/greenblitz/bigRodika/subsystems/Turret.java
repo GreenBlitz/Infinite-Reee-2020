@@ -5,12 +5,14 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.MotionUtils;
+import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyRadians;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
 public class Turret extends GBSubsystem {
     private static final double MAX_TICKS = 15000;//16400
@@ -35,6 +37,9 @@ public class Turret extends GBSubsystem {
     public static void init() {
         if (instance == null) {
             instance = new Turret();
+//            instance.setDefaultCommand(new TurretApproachSwiftlyRadians(
+//                    -Math.PI/2,
+//                    new AbsoluteTolerance(-0.1)));
         }
     }
 
@@ -57,13 +62,12 @@ public class Turret extends GBSubsystem {
         if (isSwitchPressed()) {
             encoder.reset();
         }
-
-        double[] simData = MotionUtils.getSimulatedVisionLocation(
-                VisionMaster.getInstance().getVisionLocation().toDoubleArray());
+//        double[] simData = MotionUtils.getSimulatedVisionLocation(
+//                VisionMaster.getInstance().getVisionLocation().toDoubleArray());
 
         putNumber("Encoder", encoder.getRawTicks());
         putNumber("normEncoder", encoder.getNormalizedTicks());
-        SmartDashboard.putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
+        putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
         putBoolean("Switch", isSwitchPressed());
         double[] sim = MotionUtils.getSimulatedVisionLocation();
         if (sim != null) {

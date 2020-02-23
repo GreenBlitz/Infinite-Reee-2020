@@ -5,11 +5,14 @@ import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.DumbAlign;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
+import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
+import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRoller;
+import edu.greenblitz.bigRodika.commands.intake.extender.RetractRoller;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
@@ -38,8 +41,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-        initTestButtons();
-//        initOfficalButtons();
+//        initTestButtons();
+        initOfficalButtons();
     }
 
     public static OI getInstance() {
@@ -79,19 +82,23 @@ public class OI {
 //        mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
 //        mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
 
-        mainJoystick.A.whileHeld(new PreShoot(new DumbAlign(6.0, .1, .5)));
+        mainJoystick.A.whileHeld(new PreShoot(new DumbAlign(6.3, .1, .5)));
 
         mainJoystick.L1.whenReleased(new ToggleShift());
 
         mainJoystick.B.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
         mainJoystick.B.whenReleased(new StopTurret());
 
+        mainJoystick.X.whenPressed(new ParallelCommandGroup(
+                new ResetDome(-0.3), new ExtendRoller()
+        ));
+
         mainJoystick.START.whenPressed(new ToSpeed());
         mainJoystick.BACK.whenPressed(new ToPower());
 
         // ---------------------------------------------------------------
 
-        secondStick.R1.whenPressed(new FullyAutoThreeStage(4500, 0.8));
+        secondStick.R1.whenPressed(new FullyAutoThreeStage(3700, 0.65));
         secondStick.R1.whenReleased(new StopShooter());
 
         secondStick.L1.whileHeld(new InsertIntoShooter(1, 0.3, 0.5));
@@ -105,17 +112,15 @@ public class OI {
         secondStick.B.whenPressed(new ToggleExtender());
         secondStick.A.whileHeld(new RollByConstant(1.0));
 
-        secondStick.POV_UP.whenPressed(new DomeMoveByConstant(0.3));
-        secondStick.POV_UP.whenReleased(new DomeMoveByConstant(0));
+        secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
 
-        secondStick.POV_DOWN.whenPressed(new DomeMoveByConstant(-0.3));
-        secondStick.POV_DOWN.whenReleased(new DomeMoveByConstant(0));
+        secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
 
-        secondStick.POV_LEFT.whenPressed(new MoveTurretByConstant(0.3));
-        secondStick.POV_LEFT.whenReleased(new MoveTurretByConstant(0));
+        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.3));
 
-        secondStick.POV_RIGHT.whenPressed(new MoveTurretByConstant(-0.3));
-        secondStick.POV_RIGHT.whenReleased(new MoveTurretByConstant(0));
+        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.3));
+
+        secondStick.START.whenPressed(new ResetDome(-0.3));
     }
 
     public SmartJoystick getMainJoystick() {

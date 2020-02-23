@@ -45,9 +45,6 @@ public class Shooter extends GBSubsystem {
     public static void init() {
         if (instance == null) {
             instance = new Shooter();
-            instance.setDefaultCommand(new TurretApproachSwiftlyRadians(
-                    -Math.PI/2,
-                    new AbsoluteTolerance(-0.1)));
         }
     }
 

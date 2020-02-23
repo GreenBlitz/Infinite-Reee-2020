@@ -56,10 +56,10 @@ public class Dome extends GBSubsystem {
     }
 
     public void safeMove(double power) {
-//        if (switchTriggered() && power < 0){
-//            moveMotor(0);
-//            return;
-//        }
+        if (switchTriggered() && power < 0){
+            moveMotor(0);
+            return;
+        }
         if (getPotentiometerValue() < POT_LOWER_LIMIT && power < 0) {
             moveMotor(Math.max(power, POWER_AT_LOWER_END * 0));
         }
@@ -82,8 +82,8 @@ public class Dome extends GBSubsystem {
         putBoolean("LimitSwitch", switchTriggered());
         putNumber("PotZero", zeroValue);
 
-//        if (switchTriggered()) {
-//            zeroValue += getPotentiometerValue();
-//        }
+        if (switchTriggered()) {
+            zeroValue += getPotentiometerValue();
+        }
     }
 }

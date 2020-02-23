@@ -15,6 +15,11 @@ public class DomeMoveByConstant extends DomeCommand {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        dome.safeMove(0);
+    }
+
+    @Override
     public boolean isFinished() {
         return false;
     }
