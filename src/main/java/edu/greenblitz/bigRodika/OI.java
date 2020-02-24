@@ -128,8 +128,6 @@ public class OI {
                 new ResetDome(-0.3), new ExtendRoller()
         ));
 
-        mainJoystick.Y.whileHeld(new Drive());
-
 //        mainJoystick.START.whenPressed(new ToSpeed());
 //        mainJoystick.BACK.whenPressed(new ToPower());
 
