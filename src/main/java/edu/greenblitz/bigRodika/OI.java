@@ -136,7 +136,7 @@ public class OI {
 
         // ---------------------------------------------------------------
 
-        secondStick.R1.whenPressed(new FullyAutoThreeStage(3700, 0.65));
+        secondStick.R1.whenPressed(new FullyAutoThreeStage(3600, 0.65));
         secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
                                                              new ResetDome()));
 
@@ -156,7 +156,7 @@ public class OI {
 
         secondStick.START.whenPressed(new ParallelCommandGroup(
                 new TurretApproachSwiftlyRadians(-Math.PI),
-                new DomeApproachSwiftly(0.11)
+                new DomeApproachSwiftly(0.15)
         ));
 
         secondStick.X.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));

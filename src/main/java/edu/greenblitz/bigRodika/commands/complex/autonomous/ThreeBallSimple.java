@@ -27,7 +27,7 @@ public class ThreeBallSimple extends SequentialCommandGroup {
                 new PreShoot(new DumbAlign(4.0, .1, .3)),
                 new ParallelCommandGroup(
                         new InsertIntoShooter(1, 0.3, 0.1),
-                        new ThreeStageForAutonomous(3700, 0.65)
+                        new ThreeStageForAutonomous(3600, 0.65)
                 )
         );
 

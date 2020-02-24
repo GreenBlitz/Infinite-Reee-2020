@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Dome extends GBSubsystem {
 
     private static Dome instance;
-    private final double POT_LOWER_LIMIT = 0.1, // TODO calibrate
+    private final double POT_LOWER_LIMIT = 0.1,
             POT_HIGHER_LIMIT = 0.52;
     private static final double POWER_AT_LOWER_END = -0.05;
     private static final double MAX_VELOCITY = 0.2;

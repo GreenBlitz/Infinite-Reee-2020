@@ -37,32 +37,36 @@ public class FiveBallTrench extends SequentialCommandGroup {
         secondHardCodedShit.add(new State(0, 0.5));
 
         addCommands(
-                new DomeMoveByConstant(0.3).withTimeout(0.2),
-                new ResetDome(-0.3),
-                new ExtendRoller(),
-                new WaitCommand(0.4),
-                new ParallelRaceGroup(
-                        new ThreadedCommand(new Follow2DProfileCommand(hardCodedShit,
-                                RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, true),
-                                Chassis.getInstance()),
-                        new SequentialCommandGroup(new WaitCommand(0.6), new RollByConstant(1.0))
-                ),
+                new DomeMoveByConstant(0.4).withTimeout(0.2),
+                new ParallelCommandGroup(
+                        new ResetDome(-0.3),
+                        new ExtendRoller(),
+                        new ParallelRaceGroup(
+                                new ThreadedCommand(new Follow2DProfileCommand(hardCodedShit,
+                                        RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, true),
+                                        Chassis.getInstance()),
+                                new SequentialCommandGroup(new WaitCommand(0.4), new RollByConstant(1.0))
+                        )),
                 new StopRoller(),
-                new WaitCommand(0.4),
+                new WaitCommand(0.2),
 //                new PreShoot(new DumbAlign(6.3, .1, .3)),
-                new ThreadedCommand(new Follow2DProfileCommand(secondHardCodedShit,
-                        RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, false),
-                        Chassis.getInstance()),
-                new TurretApproachSwiftlyRadians(Math.toRadians(-13)).withInterrupt(() ->
-                        VisionMaster.getInstance().isLastDataValid() &&
-                                Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 10).withTimeout(2),
-                new TurretByVision(VisionMaster.Algorithm.HEXAGON).withInterrupt(() ->
-                        VisionMaster.getInstance().isLastDataValid() &&
-                                Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 1).withTimeout(3),
-                new DomeApproachSwiftly(5.0).withTimeout(1),
+                new ParallelCommandGroup(
+                        new ThreadedCommand(new Follow2DProfileCommand(secondHardCodedShit,
+                                RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, false),
+                                Chassis.getInstance()),
+                        new TurretApproachSwiftlyRadians(Math.toRadians(-11.5)).withInterrupt(() ->
+                                VisionMaster.getInstance().isLastDataValid() &&
+                                        Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 10).withTimeout(2)),
+                new ParallelCommandGroup(
+                        new TurretByVision(VisionMaster.Algorithm.HEXAGON).withInterrupt(() ->
+                                VisionMaster.getInstance().isLastDataValid() &&
+                                        Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 1).withTimeout(1.5),
+
+                        new DomeApproachSwiftly(0.5).withTimeout(1)
+                ),
                 new ParallelCommandGroup(
                         new InsertIntoShooter(1, 0.5, 0.6),
-                        new ThreeStageForAutonomous(3700, 0.65))
+                        new ThreeStageForAutonomous(3600, 0.65))
         );
     }
 

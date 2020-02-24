@@ -62,8 +62,9 @@ public class Robot extends TimedRobot {
         Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         Shifter.getInstance().setShift(Gear.SPEED);
         VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
-//        new FiveBallTrench().schedule();
-        new ThreeBallNoVision().schedule();
+        new ResetEncoderWhenInSide().initialize();
+        new FiveBallTrench().schedule();
+//        new ThreeBallNoVision().schedule();
     }
 
     @Override

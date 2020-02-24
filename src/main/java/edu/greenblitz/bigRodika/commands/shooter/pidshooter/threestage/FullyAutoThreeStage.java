@@ -25,7 +25,7 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
 
                 new ParallelRaceGroup(
                         new WaitUntilShooterSpeedClose(target, 100),
-                        new ShootByConstant(0.8) // TODO changeeee
+                        new ShootByConstant(1.0) // TODO changeeee
                 ),
 
                 new ParallelRaceGroup(
@@ -34,7 +34,7 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
                         ),
                         new SequentialCommandGroup(
 
-                                new WaitUntilShooterSpeedClose(target, 5, 15),
+                                new WaitUntilShooterSpeedClose(target, 20, 10),
 
                                 new WaitUntilCommand(() ->
                                         Funnel.getInstance().getPusher().getCurrentCommand() != null)
