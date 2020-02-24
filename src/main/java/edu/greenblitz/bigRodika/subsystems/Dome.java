@@ -82,7 +82,7 @@ public class Dome extends GBSubsystem {
     public void periodic() {
         super.periodic();
         safeMove(lastPower);
-        putNumber("Potentiometer", getPotentiometerValue());
+        SmartDashboard.putNumber("Potentiometer", getPotentiometerValue());
         SmartDashboard.putBoolean("LimitSwitch", switchTriggered());
         putNumber("PotZero", zeroValue);
 

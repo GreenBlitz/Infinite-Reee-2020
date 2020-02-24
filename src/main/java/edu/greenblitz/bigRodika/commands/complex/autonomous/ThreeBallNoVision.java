@@ -31,17 +31,18 @@ public class ThreeBallNoVision extends SequentialCommandGroup {
         addCommands(
                 new DomeMoveByConstant(0.3).withTimeout(0.2),
                 new ResetDome(-0.3),
-                new ExtendRoller(),
+//                new ExtendRoller(),
                 new ParallelCommandGroup(
-                        new ThreadedCommand(new Follow2DProfileCommand(
-                                stateList,
-                                RobotMap.Limbo2.Chassis.MotionData.CONFIG,
-                                0.3, true
-                        ), Chassis.getInstance()),
+                            new ThreadedCommand(new Follow2DProfileCommand(
+                                    stateList,
+                                    RobotMap.Limbo2.Chassis.MotionData.CONFIG,
+                                    0.3, true
+                        ), Chassis.getInstance())).withTimeout(5),
 //                new PreShoot(new DumbAlign(4.0, .1, .3)),
-                        new TurretToFront(),
-                        new DomeApproachSwiftly(RobotMap.Limbo2.Dome.DOME.get(4.0)).withTimeout(1.5)
-                ),
+//                        new TurretToFront(),
+//                        new DomeApproachSwiftly(RobotMap.Limbo2.Dome.DOME.get(4.0)).withTimeout(1.5)
+//                )
+                new DomeApproachSwiftly(0.5).withTimeout(2),
                 new ParallelCommandGroup(
                         new InsertIntoShooter(1, 0.3, 0.1),
                         new ThreeStageForAutonomous(3700, 0.65)

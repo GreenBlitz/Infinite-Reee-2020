@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -69,7 +70,7 @@ public class VisionMaster extends GBSubsystem {
 
     public boolean isLastDataValid() {
         if (System.currentTimeMillis() - lastHandShake > MAX_HANDSHAKE_TIME) {
-            putString("Error", "Vision took to long to respond");
+            SmartDashboard.putString("vision Error", "Vision took to long to respond");
             return false;
         }
         return found.getBoolean(false);
@@ -77,10 +78,10 @@ public class VisionMaster extends GBSubsystem {
 
     public double[] getCurrentRawVisionData() {
         if (output.getType() != NetworkTableType.kDoubleArray) {
-            putString("Error", "Vision sent data that isn't a double array");
+            SmartDashboard.putString("vision Error", "Vision sent data that isn't a double array");
             return null;
         }
-        putString("Error", "None");
+        SmartDashboard.putString("vision Error", "None");
         return output.getValue().getDoubleArray();
     }
 
@@ -108,12 +109,12 @@ public class VisionMaster extends GBSubsystem {
             lastHandShake = System.currentTimeMillis();
             handshake.setBoolean(false);
         }
-        putString("algorithm", algorithm.getString("Not Existing"));
-        putString("raw data", current.toString());
-        putNumber("planery distance", current.getPlaneDistance());
-        putNumber("derived angle", current.getRelativeAngle());
-        putBoolean("valid", isLastDataValid());
-        putNumber("full distance", current.getFullDistance());
+        SmartDashboard.putString("vision algorithm", algorithm.getString("Not Existing"));
+        SmartDashboard.putString("vision raw data", current.toString());
+        SmartDashboard.putNumber("vision planery distance", current.getPlaneDistance());
+        SmartDashboard.putNumber("vision derived angle", current.getRelativeAngle());
+        SmartDashboard.putBoolean("vision valid", isLastDataValid());
+        SmartDashboard.putNumber("vision full distance", current.getFullDistance());
     }
 
     public enum Algorithm {

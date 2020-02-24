@@ -4,6 +4,7 @@ import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunne
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.ThreeBallNoVision;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
+import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
@@ -81,6 +82,7 @@ public class Robot extends TimedRobot {
         new ResetDome(-0.3).schedule();
 //        new ResetEncoderWhenInFront().schedule();
         new LocalizerCommandRunner().schedule();
+        new StopShooter().schedule();
 
 //        if (!DriverStation.getInstance().isFMSAttached()){
 //            new CompressorOn().schedule();
