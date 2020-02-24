@@ -6,12 +6,12 @@ import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.bigRodika.subsystems.Turret;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
-public class TurretToSide extends TurretApproachSwiftly {
+public class TurretToDefault extends TurretApproachSwiftly {
 
 
-    public TurretToSide() {
+    public TurretToDefault() {
         super(
-                RobotMap.Limbo2.Turret.ENCODER_VALUE_WHEN_NEGATIVE_90 / RobotMap.Limbo2.Turret.NORMALIZER.getValue()
+                RobotMap.Limbo2.Turret.ENCODER_VALUE_WHEN_NEGATIVE_180 / RobotMap.Limbo2.Turret.NORMALIZER.getValue()
         , new AbsoluteTolerance(0.0025));
     }
 

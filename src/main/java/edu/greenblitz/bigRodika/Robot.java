@@ -3,10 +3,12 @@ package edu.greenblitz.bigRodika;
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.ThreeBallSimple;
+import edu.greenblitz.bigRodika.commands.compressor.CompressorOn;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.shooter.ShooterCommand;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
+import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInBack;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
@@ -67,7 +69,7 @@ public class Robot extends TimedRobot {
         Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         Shifter.getInstance().setShift(Gear.SPEED);
         VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
-        new ResetEncoderWhenInSide().schedule();
+        new ResetEncoderWhenInBack().schedule();
 //        new FiveBallTrench().schedule();
         new ThreeBallSimple().schedule();
     }
@@ -91,7 +93,8 @@ public class Robot extends TimedRobot {
         new LocalizerCommandRunner().schedule();
 
         if (!DriverStation.getInstance().isFMSAttached()){
-            new ResetEncoderWhenInSide().schedule();
+            new CompressorOn().schedule();
+            new ResetEncoderWhenInBack().schedule();
             Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         }
     }

@@ -5,16 +5,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.MotionUtils;
-import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyRadians;
-import edu.greenblitz.bigRodika.commands.turret.TurretToSide;
+import edu.greenblitz.bigRodika.commands.turret.TurretToDefault;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
-import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
 public class Turret extends GBSubsystem {
     private static final double MAX_TICKS = 15000;//16400
@@ -41,7 +38,7 @@ public class Turret extends GBSubsystem {
     public static void init() {
         if (instance == null) {
             instance = new Turret();
-            instance.defaultCommand = new TurretToSide();
+            instance.defaultCommand = new TurretToDefault();
         }
     }
 
