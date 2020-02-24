@@ -8,6 +8,7 @@ import edu.greenblitz.bigRodika.commands.chassis.motion.PreShootAndWait;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
+import edu.greenblitz.bigRodika.commands.complex.autonomous.Drive;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
@@ -24,8 +25,10 @@ import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
 import edu.greenblitz.bigRodika.commands.shifter.ToPower;
 import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
 import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
+import edu.greenblitz.bigRodika.commands.shooter.ShooterCommand;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
 import edu.greenblitz.bigRodika.commands.turret.*;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
@@ -124,6 +127,8 @@ public class OI {
         mainJoystick.X.whenPressed(new ParallelCommandGroup(
                 new ResetDome(-0.3), new ExtendRoller()
         ));
+
+        mainJoystick.Y.whileHeld(new Drive());
 
 //        mainJoystick.START.whenPressed(new ToSpeed());
 //        mainJoystick.BACK.whenPressed(new ToPower());

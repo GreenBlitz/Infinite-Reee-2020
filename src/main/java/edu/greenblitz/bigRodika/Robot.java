@@ -4,15 +4,20 @@ import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunne
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.ThreeBallSimple;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
+import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
+import edu.greenblitz.bigRodika.commands.shooter.ShooterCommand;
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
+import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import org.greenblitz.motion.Localizer;
 
 import java.sql.Driver;
@@ -59,11 +64,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         Shifter.getInstance().setShift(Gear.SPEED);
         VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
         new ResetEncoderWhenInSide().schedule();
-        new FiveBallTrench().schedule();
-//        new ThreeBallSimple().schedule();
+//        new FiveBallTrench().schedule();
+        new ThreeBallSimple().schedule();
     }
 
     @Override
@@ -73,7 +79,6 @@ public class Robot extends TimedRobot {
         VisionMaster.GameState.TELEOP.setAsCurrent();
         Chassis.getInstance().toBrake();
         Chassis.getInstance().resetGyro();
-        Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         Chassis.getInstance().resetEncoders();
         Shooter.getInstance().resetEncoder();
 
@@ -87,6 +92,7 @@ public class Robot extends TimedRobot {
 
         if (!DriverStation.getInstance().isFMSAttached()){
             new ResetEncoderWhenInSide().schedule();
+            Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         }
     }
 }
