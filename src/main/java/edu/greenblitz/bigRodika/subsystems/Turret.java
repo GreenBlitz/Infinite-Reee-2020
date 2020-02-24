@@ -102,7 +102,7 @@ public class Turret extends GBSubsystem {
     }
 
     public boolean isSwitchPressed() {
-        return !microSwitch.get(); // alexey i changed the code to match the new magnetic switch
+        return false;//!microSwitch.get(); // alexey i changed the code to match the new magnetic switch
     }
 
     public double getTurretLocation() {

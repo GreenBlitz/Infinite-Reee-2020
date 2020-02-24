@@ -2,6 +2,7 @@ package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
+import edu.greenblitz.bigRodika.commands.complex.autonomous.ThreeBallNoVision;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
@@ -32,6 +33,8 @@ public class Robot extends TimedRobot {
         OI.getInstance();
 
         VisionMaster.getInstance();
+
+        new ResetEncoderWhenInSide().initialize();
     }
 
     @Override
@@ -58,9 +61,8 @@ public class Robot extends TimedRobot {
         Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         Shifter.getInstance().setShift(Gear.SPEED);
         VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
-        new ResetEncoderWhenInSide().schedule();
-        new FiveBallTrench().schedule();
-//        new ThreeBallSimple().schedule();
+//        new FiveBallTrench().schedule();
+        new ThreeBallNoVision().schedule();
     }
 
     @Override

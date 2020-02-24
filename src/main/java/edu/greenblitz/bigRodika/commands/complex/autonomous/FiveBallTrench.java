@@ -53,7 +53,7 @@ public class FiveBallTrench extends SequentialCommandGroup {
                 new ThreadedCommand(new Follow2DProfileCommand(secondHardCodedShit,
                         RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, false),
                         Chassis.getInstance()),
-                new TurretApproachSwiftlyRadians(Math.toRadians(-10)).withInterrupt(() ->
+                new TurretApproachSwiftlyRadians(Math.toRadians(-13)).withInterrupt(() ->
                         VisionMaster.getInstance().isLastDataValid() &&
                                 Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 10).withTimeout(2),
                 new TurretByVision(VisionMaster.Algorithm.HEXAGON).withInterrupt(() ->

@@ -7,6 +7,7 @@ import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Dome extends GBSubsystem {
 
@@ -82,7 +83,7 @@ public class Dome extends GBSubsystem {
         super.periodic();
         safeMove(lastPower);
         putNumber("Potentiometer", getPotentiometerValue());
-        putBoolean("LimitSwitch", switchTriggered());
+        SmartDashboard.putBoolean("LimitSwitch", switchTriggered());
         putNumber("PotZero", zeroValue);
 
         double tempVal = getPotentiometerRaw();
