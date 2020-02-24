@@ -58,9 +58,9 @@ public class Turret extends GBSubsystem {
     @Override
     public void periodic() {
         super.periodic();
-        if (isSwitchPressed()) {
-            encoder.reset();
-        }
+//        if (isSwitchPressed()) {
+//            encoder.reset();
+//        }
 
         if (getCurrentCommand() == null && defaultCommand != null) {
             defaultCommand.schedule();

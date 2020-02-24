@@ -2,27 +2,16 @@ package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
-import edu.greenblitz.bigRodika.commands.complex.autonomous.ThreeBallSimple;
-import edu.greenblitz.bigRodika.commands.compressor.CompressorOn;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
-import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
-import edu.greenblitz.bigRodika.commands.shooter.ShooterCommand;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
-import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInBack;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
-import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import org.greenblitz.motion.Localizer;
-
-import java.sql.Driver;
 
 public class Robot extends TimedRobot {
 
@@ -82,7 +71,6 @@ public class Robot extends TimedRobot {
         Chassis.getInstance().toBrake();
         Chassis.getInstance().resetGyro();
         Chassis.getInstance().resetEncoders();
-        Shooter.getInstance().resetEncoder();
 
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         Shifter.getInstance().setShift(Gear.SPEED);
@@ -92,10 +80,10 @@ public class Robot extends TimedRobot {
 //        new ResetEncoderWhenInFront().schedule();
         new LocalizerCommandRunner().schedule();
 
-        if (!DriverStation.getInstance().isFMSAttached()){
-            new CompressorOn().schedule();
-            new ResetEncoderWhenInSide().schedule();
-            Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
-        }
+//        if (!DriverStation.getInstance().isFMSAttached()){
+//            new CompressorOn().schedule();
+//            new ResetEncoderWhenInSide().schedule();
+//            Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
+//        }
     }
 }

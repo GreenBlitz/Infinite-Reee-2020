@@ -85,8 +85,8 @@ public class OI {
 
 //        mainJoystick.A.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
 
-        secondStick.L3.whenPressed(new ResetEncoderWhenInFront());
-        secondStick.A.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+//        secondStick.L3.whenPressed(new ResetEncoderWhenInFront());
+        secondStick.A.whenPressed(new TurretByVision(VisionMaster.Algorithm.FEEDING_STATION));
         secondStick.A.whenReleased(new StopTurret());
 
         secondStick.POV_UP.whenPressed(new DomeMoveByConstant(0.3));
