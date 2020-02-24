@@ -26,7 +26,7 @@ public class PreShoot extends SequentialCommandGroup {
                                 align,
 //                        new ChassisTurretCompensate(),
                                 new GBCommand() {
-                                    private ITolerance tol = new AbsoluteTolerance(Math.toRadians(1.0));
+                                    private ITolerance tol = new AbsoluteTolerance(1.0);
 
                                     @Override
                                     public void initialize() {
@@ -37,18 +37,16 @@ public class PreShoot extends SequentialCommandGroup {
 
                                     @Override
                                     public boolean isFinished() {
-                                        double[] diff = VisionMaster.getInstance().getVisionLocation().toDoubleArray();
-
                                         if (!VisionMaster.getInstance().isLastDataValid()) {
                                             return false;
                                         }
-                                        if(tol.onTarget(
-                                                RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET,
-                                                Math.atan(diff[0] / diff[1]))) SmartDashboard.putBoolean("Finished", true);
+
+                                        double angleDegs = VisionMaster.getInstance().getVisionLocation().getRelativeAngle();
+
 
                                         return tol.onTarget(
-                                                RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET,
-                                                Math.atan(diff[0] / diff[1]));
+                                                Math.toDegrees(RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET),
+                                                angleDegs);
                                     }
                                 }
                         ),

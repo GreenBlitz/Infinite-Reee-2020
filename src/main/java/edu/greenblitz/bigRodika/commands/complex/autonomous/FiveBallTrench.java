@@ -1,8 +1,6 @@
 package edu.greenblitz.bigRodika.commands.complex.autonomous;
 
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.bigRodika.commands.chassis.motion.DumbAlign;
-import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
@@ -14,20 +12,18 @@ import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
 import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyRadians;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
-import edu.greenblitz.bigRodika.commands.turret.TurretToFront;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
-import edu.greenblitz.bigRodika.subsystems.Dome;
-import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
-import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import org.greenblitz.motion.base.State;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BooleanSupplier;
 
 public class FiveBallTrench extends SequentialCommandGroup {
 
@@ -55,17 +51,19 @@ public class FiveBallTrench extends SequentialCommandGroup {
                 new WaitCommand(0.4),
 //                new PreShoot(new DumbAlign(6.3, .1, .3)),
                 new ThreadedCommand(new Follow2DProfileCommand(secondHardCodedShit,
-                    RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, false),
-                    Chassis.getInstance()),
+                        RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, false),
+                        Chassis.getInstance()),
                 new TurretApproachSwiftlyRadians(Math.toRadians(-10)).withInterrupt(() ->
                         VisionMaster.getInstance().isLastDataValid() &&
                                 Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 10).withTimeout(2),
-                new TurretByVision(VisionMaster.Algorithm.HEXAGON).withTimeout(1),
+                new TurretByVision(VisionMaster.Algorithm.HEXAGON).withInterrupt(() ->
+                        VisionMaster.getInstance().isLastDataValid() &&
+                                Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 1).withTimeout(3),
                 new DomeApproachSwiftly(5.0).withTimeout(1),
                 new ParallelCommandGroup(
-                    new InsertIntoShooter(1, 0.5, 0.6),
-                    new ThreeStageForAutonomous(3700, 0.65))
-            );
+                        new InsertIntoShooter(1, 0.5, 0.6),
+                        new ThreeStageForAutonomous(3700, 0.65))
+        );
     }
 
     @Override

@@ -145,8 +145,10 @@ public class OI {
                 new StopInserter(), new StopRoller()));
 
         secondStick.Y.whileHeld(new
-                ParallelCommandGroup(new PushByConstant(-0.3), new InsertByConstant(-0.6)));
-        secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()));
+                ParallelCommandGroup(
+                        new RollByConstant(-0.5), new PushByConstant(-0.3), new InsertByConstant(-0.6)));
+        secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()
+        , new StopRoller()));
 
         secondStick.B.whenPressed(new ToggleExtender());
         secondStick.A.whileHeld(new RollByConstant(1.0));
