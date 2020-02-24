@@ -69,9 +69,9 @@ public class Robot extends TimedRobot {
         Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         Shifter.getInstance().setShift(Gear.SPEED);
         VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
-        new ResetEncoderWhenInBack().schedule();
-//        new FiveBallTrench().schedule();
-        new ThreeBallSimple().schedule();
+        new ResetEncoderWhenInSide().schedule();
+        new FiveBallTrench().schedule();
+//        new ThreeBallSimple().schedule();
     }
 
     @Override
@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
 
         if (!DriverStation.getInstance().isFMSAttached()){
             new CompressorOn().schedule();
-            new ResetEncoderWhenInBack().schedule();
+            new ResetEncoderWhenInSide().schedule();
             Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         }
     }

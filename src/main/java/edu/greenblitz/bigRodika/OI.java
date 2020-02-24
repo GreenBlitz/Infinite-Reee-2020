@@ -117,7 +117,7 @@ public class OI {
         mainJoystick.A.whileHeld(
                 new PreShootAndWait(
                         new PreShoot(
-                                new DumbAlign(6.3, .1, .3))));
+                                new DumbAlign(rads, .1, .3))));
         mainJoystick.A.whenReleased(new ParallelCommandGroup(new ResetDome(), new StopTurret()));
 //        mainJoystick.L1.whenReleased(new ToggleShift());
 
