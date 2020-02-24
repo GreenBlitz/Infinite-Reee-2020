@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
+import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.ThreeBallSimple;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
@@ -58,13 +59,17 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        Shifter.getInstance().setShift(Gear.SPEED);
         VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
         new ResetEncoderWhenInSide().schedule();
-        new ThreeBallSimple().schedule();
+        new FiveBallTrench().schedule();
+//        new ThreeBallSimple().schedule();
     }
 
     @Override
     public void teleopInit() {
+        Shifter.getInstance().setShift(Gear.SPEED);
+        CommandScheduler.getInstance().cancelAll();
         VisionMaster.GameState.TELEOP.setAsCurrent();
         Chassis.getInstance().toBrake();
         Chassis.getInstance().resetGyro();

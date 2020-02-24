@@ -6,6 +6,7 @@ import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
@@ -17,7 +18,6 @@ public class PreShoot extends SequentialCommandGroup {
 
     public PreShoot(HexAlign align) {
         addCommands(
-
                 new MoveTurretByConstant(0.3).withInterrupt(() ->
                         VisionMaster.getInstance().isLastDataValid() &&
                                 Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 20),
@@ -30,6 +30,7 @@ public class PreShoot extends SequentialCommandGroup {
 
                                     @Override
                                     public void initialize() {
+                                        SmartDashboard.putBoolean("Initialized", true);
                                         Chassis.getInstance().moveMotors(0, 0);
                                         Chassis.getInstance().toBrake();
                                     }
@@ -41,6 +42,9 @@ public class PreShoot extends SequentialCommandGroup {
                                         if (!VisionMaster.getInstance().isLastDataValid()) {
                                             return false;
                                         }
+                                        if(tol.onTarget(
+                                                RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET,
+                                                Math.atan(diff[0] / diff[1]))) SmartDashboard.putBoolean("Finished", true);
 
                                         return tol.onTarget(
                                                 RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET,
@@ -49,7 +53,6 @@ public class PreShoot extends SequentialCommandGroup {
                                 }
                         ),
                         new TurretByVision(VisionMaster.Algorithm.HEXAGON)
-
                 )
         );
     }

@@ -30,6 +30,13 @@ public class Chassis extends GBSubsystem {
         leftFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
         leftFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);   //big-haim
 
+        rightLeader.setSmartCurrentLimit(40);
+        rightFollower1.setSmartCurrentLimit(40);
+        rightFollower2.setSmartCurrentLimit(40);
+        leftLeader.setSmartCurrentLimit(40);
+        leftFollower1.setSmartCurrentLimit(40);
+        leftFollower2.setSmartCurrentLimit(40);
+
         leftFollower1.follow(leftLeader);
         leftFollower2.follow(leftLeader);
         rightFollower1.follow(rightLeader);

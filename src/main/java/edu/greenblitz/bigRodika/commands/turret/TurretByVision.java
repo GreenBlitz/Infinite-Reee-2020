@@ -22,6 +22,7 @@ public class TurretByVision extends TurretCommand {
     @Override
     public void initialize() {
         algorithm.setAsCurrent();
+        System.out.println("Start TurretByVision");
     }
 
     @Override

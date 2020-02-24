@@ -29,9 +29,12 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAuto
 import edu.greenblitz.bigRodika.commands.turret.*;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
+import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.base.State;
 
 import java.util.ArrayList;
@@ -77,7 +80,7 @@ public class OI {
         Follow2DProfileCommand prof = new Follow2DProfileCommand(states, RobotMap.Limbo2.Chassis.MotionData.CONFIG
                 , 0.3, true);
 
-        mainJoystick.A.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
+//        mainJoystick.A.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
 
         secondStick.L3.whenPressed(new ResetEncoderWhenInFront());
         secondStick.A.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
@@ -95,6 +98,8 @@ public class OI {
         secondStick.BACK.whenPressed(new MoveTurretByConstant(-0.3));
         secondStick.BACK.whenReleased(new StopTurret());
 
+        mainJoystick.A.whenPressed(new TurretApproachSwiftlyRadians(0));
+        mainJoystick.A.whenReleased(new StopTurret());
     }
 
     private void initOfficalButtons() {
@@ -109,11 +114,11 @@ public class OI {
         mainJoystick.A.whileHeld(
                 new PreShootAndWait(
                         new PreShoot(
-                                new DumbAlign(rads, .1, .3))));
-
+                                new DumbAlign(6.3, .1, .3))));
+        mainJoystick.A.whenReleased(new ParallelCommandGroup(new ResetDome(), new StopTurret()));
 //        mainJoystick.L1.whenReleased(new ToggleShift());
 
-        mainJoystick.B.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+        mainJoystick.B.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
 //        mainJoystick.B.whenReleased(new StopTurret());
 
         mainJoystick.X.whenPressed(new ParallelCommandGroup(
@@ -142,6 +147,7 @@ public class OI {
 
         secondStick.B.whenPressed(new ToggleExtender());
         secondStick.A.whileHeld(new RollByConstant(1.0));
+        secondStick.R3.whileHeld(new RollByConstant(-1.0));
 
         secondStick.START.whenPressed(new ParallelCommandGroup(
                 new TurretApproachSwiftlyRadians(-Math.PI),
@@ -159,6 +165,18 @@ public class OI {
         secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
 
         secondStick.BACK.whenPressed(new ResetDome(-0.3));
+
+        secondStick.L3.whenPressed(new GBCommand() {
+            @Override
+            public void initialize() {
+                CommandScheduler.getInstance().cancelAll();
+            }
+
+            @Override
+            public boolean isFinished() {
+                return true;
+            }
+        });
     }
 
     public SmartJoystick getMainJoystick() {

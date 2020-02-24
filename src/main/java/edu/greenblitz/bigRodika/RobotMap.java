@@ -28,7 +28,7 @@ public class RobotMap {
                 DOME = new HashMap<>();
 
                 DOME.put(6.3, 0.5);
-                DOME.put(4.0, 0.5);
+                DOME.put(4.0, 0.52);
 
             }
 

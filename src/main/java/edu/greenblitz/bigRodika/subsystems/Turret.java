@@ -13,6 +13,7 @@ import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
 public class Turret extends GBSubsystem {
@@ -24,6 +25,8 @@ public class Turret extends GBSubsystem {
     private IEncoder encoder;
     private DigitalInput microSwitch;
     private double lastPower = 0;
+
+    public Command defaultCommand;
 
     private Turret() {
         motor = new WPI_TalonSRX(RobotMap.Limbo2.Turret.MOTOR_PORT);
@@ -38,7 +41,7 @@ public class Turret extends GBSubsystem {
     public static void init() {
         if (instance == null) {
             instance = new Turret();
-            instance.setDefaultCommand(new TurretToSide());
+            instance.defaultCommand = new TurretToSide();
         }
     }
 
@@ -61,6 +64,11 @@ public class Turret extends GBSubsystem {
         if (isSwitchPressed()) {
             encoder.reset();
         }
+
+        if (getCurrentCommand() == null && defaultCommand != null) {
+            defaultCommand.schedule();
+        }
+
 //        double[] simData = MotionUtils.getSimulatedVisionLocation(
 //                VisionMaster.getInstance().getVisionLocation().toDoubleArray());
 

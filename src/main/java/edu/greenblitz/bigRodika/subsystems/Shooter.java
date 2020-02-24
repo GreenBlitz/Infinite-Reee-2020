@@ -30,6 +30,9 @@ public class Shooter extends GBSubsystem {
         leader.setIdleMode(CANSparkMax.IdleMode.kCoast);
         follower.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
+        leader.setSmartCurrentLimit(40);
+        follower.setSmartCurrentLimit(40);
+
         preparedToShoot = false;
 
         putNumber("testing_target", 0);

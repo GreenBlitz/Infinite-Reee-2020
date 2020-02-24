@@ -40,7 +40,7 @@ public class DomeApproachSwiftly extends DomeCommand {
 
     @Override
     public void end(boolean interrupted) {
-        dome.moveMotor(0);
+        dome.safeMove(0);
     }
 
     public double calculateVelocity(double error) {
