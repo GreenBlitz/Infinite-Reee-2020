@@ -52,7 +52,7 @@ public class FiveBallTrench extends SequentialCommandGroup {
                 new StopRoller(),
                 new WaitCommand(0.2),
 //                new PreShoot(new DumbAlign(6.3, .1, .3)),
-                new ParallelCommandGroup(
+                new  ParallelCommandGroup(
                         new ThreadedCommand(new Follow2DProfileCommand(secondHardCodedShit,
                                 RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, false),
                                 Chassis.getInstance()),

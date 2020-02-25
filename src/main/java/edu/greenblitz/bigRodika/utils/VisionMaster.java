@@ -108,13 +108,15 @@ public class VisionMaster extends GBSubsystem {
     @Override
     public void periodic() {
         VisionLocation current = getVisionLocation();
-        if (handshake.getBoolean(false)) {
-            lastHandShake = System.currentTimeMillis();
-            handshake.setBoolean(false);
-        }
+
         if(System.currentTimeMillis() - lastPrintTime > 500){
             System.out.println(current.toString());
             lastPrintTime = System.currentTimeMillis();
+            System.out.println("HandShake: " + handshake.getBoolean(false));
+        }
+        if (handshake.getBoolean(false)) {
+            lastHandShake = System.currentTimeMillis();
+            handshake.setBoolean(false);
         }
         SmartDashboard.putString("vision algorithm", algorithm.getString("Not Existing"));
         SmartDashboard.putString("vision raw data", current.toString());
