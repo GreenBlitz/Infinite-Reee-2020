@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika;
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrenchSteal;
+import edu.greenblitz.bigRodika.commands.complex.autonomous.ThreeBallNoVision;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
@@ -68,9 +69,9 @@ public class Robot extends TimedRobot {
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         new ResetEncoderWhenInSide().initialize();
         new LocalizerCommandRunner().schedule();
-//        new FiveBallTrench().schedule();
+        new FiveBallTrench().schedule();
 //        new ThreeBallNoVision().schedule();
-        new FiveBallTrenchSteal().schedule();
+//        new FiveBallTrenchSteal().schedule();
     }
 
     @Override

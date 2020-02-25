@@ -55,22 +55,22 @@ public class FiveBallTrench extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new ThreadedCommand(new Follow2DProfileCommand(secondHardCodedShit,
                                 RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, false),
-                                Chassis.getInstance())//,
-//                        new TurretApproachSwiftlyRadians(Math.toRadians(-11.5)).withInterrupt(() ->
-//                                VisionMaster.getInstance().isLastDataValid() &&
-//                                        Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 10).withTimeout(2)
+                                Chassis.getInstance()),
+                        new TurretApproachSwiftlyRadians(Math.toRadians(-12.5)).withInterrupt(() ->
+                                VisionMaster.getInstance().isLastDataValid() &&
+                                        Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 10).withTimeout(2)
                 ),
-//                new GBCommand() {
-//                    @Override
-//                    public boolean isFinished() {
-//                        return VisionMaster.getInstance().isLastDataValid();
-//                    }
-//                },
+                new GBCommand() {
+                    @Override
+                    public boolean isFinished() {
+                        return VisionMaster.getInstance().isLastDataValid();
+                    }
+                },
                 new ParallelCommandGroup(
-//                        new TurretByVision(VisionMaster.Algorithm.HEXAGON).withInterrupt(() ->
-//                                VisionMaster.getInstance().isLastDataValid() &&
-//                                        Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 1).withTimeout(2),
-                        new AngleByMath(1, new AbsoluteTolerance(Math.toRadians(0.5))),
+                        new TurretByVision(VisionMaster.Algorithm.HEXAGON).withInterrupt(() ->
+                                VisionMaster.getInstance().isLastDataValid() &&
+                                        Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 1).withTimeout(2),
+//                        new AngleByMath(1, new AbsoluteTolerance(Math.toRadians(0.5))),
                         new DomeApproachSwiftly(0.5)
                 ).withTimeout(1.5),
                 new ParallelCommandGroup(
