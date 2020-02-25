@@ -36,8 +36,6 @@ public class Robot extends TimedRobot {
         VisionMaster.getInstance().register();
 
         new ResetEncoderWhenInSide().initialize();
-
-        CameraServer.getInstance().startAutomaticCapture();
     }
 
     @Override

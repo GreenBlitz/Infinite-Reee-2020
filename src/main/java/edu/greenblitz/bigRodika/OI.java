@@ -128,15 +128,6 @@ public class OI {
                 new ResetDome(-0.3), new ExtendRoller()
         ));
 
-        List<State> yes = new ArrayList<>();
-        yes.add(new State(0, 0));
-        yes.add(new State(0, 0.6));
-
-        mainJoystick.Y.whileHeld(new ThreadedCommand(
-                new Follow2DProfileCommand(yes, RobotMap.Limbo2.Chassis.MotionData.CONFIG,
-                        0.3, false),
-                Chassis.getInstance()));
-
 //        mainJoystick.START.whenPressed(new ToSpeed());
 //        mainJoystick.BACK.whenPressed(new ToPower());
 
