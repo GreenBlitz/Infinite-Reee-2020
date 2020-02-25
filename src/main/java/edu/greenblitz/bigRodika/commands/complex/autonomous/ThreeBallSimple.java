@@ -8,6 +8,7 @@ import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRoller;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
 import edu.greenblitz.bigRodika.subsystems.Dome;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -24,10 +25,16 @@ public class ThreeBallSimple extends SequentialCommandGroup {
                 new ResetDome(-0.3),
                 new ExtendRoller(),
                 new WaitCommand(0.4),
+                new GBCommand() {
+                    @Override
+                    public boolean isFinished() {
+                        return VisionMaster.getInstance().isLastDataValid();
+                    }
+                },
                 new PreShoot(new DumbAlign(4.0, .1, .3)),
                 new ParallelCommandGroup(
                         new InsertIntoShooter(1, 0.3, 0.1),
-                        new ThreeStageForAutonomous(3600, 0.65)
+                        new ThreeStageForAutonomous(3550, 0.65)
                 )
         );
 
