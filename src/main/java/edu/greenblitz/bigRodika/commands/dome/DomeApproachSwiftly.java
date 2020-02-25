@@ -16,7 +16,7 @@ public class DomeApproachSwiftly extends DomeCommand {
     private double X_OFFSET = SLOW_DOWN_END;
     private double Y_OFFSET = MINIMUM_SPEED;
 
-    private static final double DEFAULT_TOLERENCE = 0.01;
+    private static final double DEFAULT_TOLERENCE = 0.005;
 
     public DomeApproachSwiftly(double target, ITolerance tol) {
         super();

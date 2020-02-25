@@ -14,6 +14,7 @@ import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyRadians;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
+import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import org.greenblitz.motion.base.State;
+import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,17 +55,24 @@ public class FiveBallTrench extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new ThreadedCommand(new Follow2DProfileCommand(secondHardCodedShit,
                                 RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, false),
-                                Chassis.getInstance()),
-                        new TurretApproachSwiftlyRadians(Math.toRadians(-11.5)).withInterrupt(() ->
-                                VisionMaster.getInstance().isLastDataValid() &&
-                                        Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 10).withTimeout(2)),
-                new ParallelCommandGroup(
-                        new TurretByVision(VisionMaster.Algorithm.HEXAGON).withInterrupt(() ->
-                                VisionMaster.getInstance().isLastDataValid() &&
-                                        Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 1).withTimeout(1.5),
-
-                        new DomeApproachSwiftly(0.5).withTimeout(1)
+                                Chassis.getInstance())//,
+//                        new TurretApproachSwiftlyRadians(Math.toRadians(-11.5)).withInterrupt(() ->
+//                                VisionMaster.getInstance().isLastDataValid() &&
+//                                        Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 10).withTimeout(2)
                 ),
+//                new GBCommand() {
+//                    @Override
+//                    public boolean isFinished() {
+//                        return VisionMaster.getInstance().isLastDataValid();
+//                    }
+//                },
+                new ParallelCommandGroup(
+//                        new TurretByVision(VisionMaster.Algorithm.HEXAGON).withInterrupt(() ->
+//                                VisionMaster.getInstance().isLastDataValid() &&
+//                                        Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 1).withTimeout(2),
+                        new AngleByMath(1, new AbsoluteTolerance(Math.toRadians(0.5))),
+                        new DomeApproachSwiftly(0.5)
+                ).withTimeout(1.5),
                 new ParallelCommandGroup(
                         new InsertIntoShooter(1, 0.5, 0.6),
                         new ThreeStageForAutonomous(3600, 0.65))

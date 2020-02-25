@@ -16,6 +16,8 @@ public class VisionMaster extends GBSubsystem {
 
     private static final long MAX_HANDSHAKE_TIME = 3000;
 
+    private long lastPrintTime = 0;
+
     private static VisionMaster instance;
     private Algorithm currentAlgorithm;
     private GameState currentGameState;
@@ -31,6 +33,7 @@ public class VisionMaster extends GBSubsystem {
     private Logger logger;
 
     private VisionMaster() {
+        super();
         logger = LogManager.getLogger(getClass());
         visionTable = NetworkTableInstance.getDefault().getTable("vision"); // table
 
@@ -108,6 +111,10 @@ public class VisionMaster extends GBSubsystem {
         if (handshake.getBoolean(false)) {
             lastHandShake = System.currentTimeMillis();
             handshake.setBoolean(false);
+        }
+        if(System.currentTimeMillis() - lastPrintTime > 500){
+            System.out.println(current.toString());
+            lastPrintTime = System.currentTimeMillis();
         }
         SmartDashboard.putString("vision algorithm", algorithm.getString("Not Existing"));
         SmartDashboard.putString("vision raw data", current.toString());

@@ -2,7 +2,7 @@ package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
-import edu.greenblitz.bigRodika.commands.complex.autonomous.ThreeBallNoVision;
+import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrenchSteal;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
@@ -11,6 +11,7 @@ import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.greenblitz.motion.Localizer;
@@ -36,6 +37,8 @@ public class Robot extends TimedRobot {
         VisionMaster.getInstance();
 
         new ResetEncoderWhenInSide().initialize();
+
+        CameraServer.getInstance().startAutomaticCapture();
     }
 
     @Override
@@ -62,9 +65,12 @@ public class Robot extends TimedRobot {
         Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         Shifter.getInstance().setShift(Gear.SPEED);
         VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
+        VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         new ResetEncoderWhenInSide().initialize();
-        new FiveBallTrench().schedule();
+        new LocalizerCommandRunner().schedule();
+//        new FiveBallTrench().schedule();
 //        new ThreeBallNoVision().schedule();
+        new FiveBallTrenchSteal().schedule();
     }
 
     @Override
@@ -82,7 +88,6 @@ public class Robot extends TimedRobot {
 
         new ResetDome(-0.3).schedule();
 //        new ResetEncoderWhenInFront().schedule();
-        new LocalizerCommandRunner().schedule();
         new StopShooter().schedule();
 
 //        if (!DriverStation.getInstance().isFMSAttached()){
