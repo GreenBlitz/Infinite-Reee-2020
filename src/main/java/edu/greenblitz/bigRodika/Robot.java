@@ -7,6 +7,7 @@ import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
+import edu.greenblitz.bigRodika.utils.RS232Communication;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
@@ -30,6 +31,8 @@ public class Robot extends TimedRobot {
         Dome.init();
         Turret.init();
         Chassis.init(); // Must be last!
+
+        RS232Communication.getInstance().register();
 
         OI.getInstance();
 

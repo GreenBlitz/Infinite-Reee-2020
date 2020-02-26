@@ -1,15 +1,16 @@
 package edu.greenblitz.bigRodika.utils;
 
+import edu.greenblitz.bigRodika.subsystems.GBSubsystem;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.nio.ByteBuffer;
 
-public class RS232Communication {
+public class RS232Communication extends GBSubsystem {
 
     private static RS232Communication instance;
     private SerialPort channel;
-    private static final int ROBORIO_MAX_BAUD_RATE = 115200;
-    private static final int RASPBERRY_MAX_BAUD_RATE = 15625000;
+    private static final int BAUD_RATE = 115200;
     private static final int RESPONSE_WAIT_TIME = 5;
     private static final int DEFAULT_TIMEOUT = 20;
 
@@ -18,7 +19,7 @@ public class RS232Communication {
 
     public enum REQUESTS {
         PING(1),
-        GET(Double.BYTES*3),
+        GET(1 + Double.BYTES*3),
         SET_ALGO(1);
 
         public final int responseSize;
@@ -28,9 +29,8 @@ public class RS232Communication {
     }
 
     private RS232Communication(){
-        channel = new SerialPort(Math.min(
-                ROBORIO_MAX_BAUD_RATE, RASPBERRY_MAX_BAUD_RATE
-        ), SerialPort.Port.kOnboard);
+        super();
+        channel = new SerialPort(BAUD_RATE, SerialPort.Port.kMXP);
         channel.disableTermination();
 
         pingReq = new byte[1];
@@ -79,7 +79,7 @@ public class RS232Communication {
 
     public VisionLocation get(){
         byte[] resp = sendRequest(getReq);
-        if (resp.length == 0){
+        if (resp.length == 0 || resp[0] == 0){
             return null;
         }
         ByteBuffer buff = ByteBuffer.wrap(resp);
@@ -97,4 +97,13 @@ public class RS232Communication {
         return response.length > 0 && response[0] == 1;
     }
 
+    @Override
+    public void periodic() {
+        VisionLocation data = get();
+        if (data == null){
+            SmartDashboard.putString("RS232_data", "null");
+        } else {
+            SmartDashboard.putString("RS232_data", data.toString());
+        }
+    }
 }
