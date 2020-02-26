@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Random;
 
 public class RS232Communication extends GBSubsystem {
 
@@ -14,11 +16,15 @@ public class RS232Communication extends GBSubsystem {
     private static final int RESPONSE_WAIT_TIME = 5;
     private static final int DEFAULT_TIMEOUT = 20;
 
+    private Random rn = new Random();
+    private static final int PING_PAYLOAD = 50;
+    private boolean ping = false;
+
     private byte[] pingReq;
     private byte[] getReq;
 
     public enum REQUESTS {
-        PING(1),
+        PING(PING_PAYLOAD),
         GET(1 + Double.BYTES*3),
         SET_ALGO(1);
 
@@ -32,9 +38,6 @@ public class RS232Communication extends GBSubsystem {
         super();
         channel = new SerialPort(BAUD_RATE, SerialPort.Port.kMXP);
         channel.disableTermination();
-
-        pingReq = new byte[1];
-        pingReq[0] = (byte) REQUESTS.PING.ordinal();
 
         getReq = new byte[1];
         getReq[0] = (byte) REQUESTS.GET.ordinal();
@@ -74,7 +77,27 @@ public class RS232Communication extends GBSubsystem {
     }
 
     public boolean ping(){
-        return sendRequest(pingReq).length > 0;
+        return ping;
+    }
+
+    public boolean checkConnection(){
+        byte[] toSend = new byte[PING_PAYLOAD + 1];
+        rn.nextBytes(toSend);
+        toSend[0] = (byte) REQUESTS.PING.ordinal();
+        byte[] resp = sendRequest(toSend);
+        if (resp.length != PING_PAYLOAD) {
+            ping = false;
+            return false;
+        }
+
+        ping = true;
+
+        for (int i = 0; i < resp.length; i++){
+            if (resp[i] != toSend[i + 1]){
+                return false;
+            }
+        }
+        return true;
     }
 
     public VisionLocation get(){
@@ -82,7 +105,9 @@ public class RS232Communication extends GBSubsystem {
         if (resp.length == 0 || resp[0] == 0){
             return null;
         }
+
         ByteBuffer buff = ByteBuffer.wrap(resp);
+        buff.get();
         double x = buff.getDouble();
         double y = buff.getDouble();
         double z = buff.getDouble();
@@ -97,13 +122,15 @@ public class RS232Communication extends GBSubsystem {
         return response.length > 0 && response[0] == 1;
     }
 
+    private long lastPing = 0;
+    private static final long BETWEEN_PINGS = 200;
+
     @Override
     public void periodic() {
-        VisionLocation data = get();
-        if (data == null){
-            SmartDashboard.putString("RS232_data", "null");
-        } else {
-            SmartDashboard.putString("RS232_data", data.toString());
+        if (System.currentTimeMillis() - lastPing > BETWEEN_PINGS) {
+            SmartDashboard.putBoolean("RS232 connection good", checkConnection());
+            SmartDashboard.putBoolean("RS232 ping", ping());
+            lastPing = System.currentTimeMillis();
         }
     }
 }
