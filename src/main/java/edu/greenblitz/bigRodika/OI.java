@@ -31,6 +31,7 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAuto
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
 import edu.greenblitz.bigRodika.commands.turret.*;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.utils.RS232Communication;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
@@ -55,8 +56,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-//        initTestButtons();
-        initOfficalButtons();
+        initTestButtons();
+//        initOfficalButtons();
     }
 
 
@@ -69,40 +70,18 @@ public class OI {
 
     private void initTestButtons() {
 
-        //mainJoystick.R1.whileHeld(new ChainFetch(5, mainJoystick));
-        //mainJoystick.R1.whenReleased(new ArcadeDrive(mainJoystick));
-        mainJoystick.B.whenPressed(new DumbAlign(4.0, 0.1, 0.3));
+        mainJoystick.B.whenPressed(new GBCommand() {
+            @Override
+            public void initialize() {
+                RS232Communication.getInstance().checkConnection();
+            }
 
-        mainJoystick.POV_UP.whenPressed(new CheckMaxLin(0.3));
-        mainJoystick.POV_DOWN.whenPressed(new CheckMaxRot(0.3));
+            @Override
+            public boolean isFinished() {
+                return true;
+            }
+        });
 
-        List<State> states = new ArrayList<>();
-        states.add(new State(0, 0));
-        states.add(new State(0, -2, 0));
-
-        Follow2DProfileCommand prof = new Follow2DProfileCommand(states, RobotMap.Limbo2.Chassis.MotionData.CONFIG
-                , 0.3, true);
-
-//        mainJoystick.A.whenPressed(new ThreadedCommand(prof, Chassis.getInstance()));
-
-//        secondStick.L3.whenPressed(new ResetEncoderWhenInFront());
-        secondStick.A.whenPressed(new TurretByVision(VisionMaster.Algorithm.FEEDING_STATION));
-        secondStick.A.whenReleased(new StopTurret());
-
-        secondStick.POV_UP.whenPressed(new DomeMoveByConstant(0.3));
-        secondStick.POV_UP.whenReleased(new DomeMoveByConstant(0));
-        secondStick.POV_DOWN.whenPressed(new DomeMoveByConstant(-0.3));
-        secondStick.POV_DOWN.whenReleased(new DomeMoveByConstant(0));
-
-
-        secondStick.START.whenPressed(new MoveTurretByConstant(0.3));
-        secondStick.START.whenReleased(new StopTurret());
-
-        secondStick.BACK.whenPressed(new MoveTurretByConstant(-0.3));
-        secondStick.BACK.whenReleased(new StopTurret());
-
-        mainJoystick.A.whenPressed(new TurretApproachSwiftlyRadians(0));
-        mainJoystick.A.whenReleased(new StopTurret());
     }
 
     private void initOfficalButtons() {

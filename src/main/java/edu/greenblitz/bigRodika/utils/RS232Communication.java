@@ -12,12 +12,12 @@ public class RS232Communication extends GBSubsystem {
 
     private static RS232Communication instance;
     private SerialPort channel;
-    private static final int BAUD_RATE = 115200;
+    private static final int BAUD_RATE = 9600;
     private static final int RESPONSE_WAIT_TIME = 5;
     private static final int DEFAULT_TIMEOUT = 20;
 
     private Random rn = new Random();
-    private static final int PING_PAYLOAD = 50;
+    private static final int PING_PAYLOAD = 1;
     private boolean ping = false;
 
     private byte[] pingReq;
@@ -86,11 +86,15 @@ public class RS232Communication extends GBSubsystem {
         toSend[0] = (byte) REQUESTS.PING.ordinal();
         byte[] resp = sendRequest(toSend);
         if (resp.length != PING_PAYLOAD) {
+            System.out.println("No ping");
             ping = false;
             return false;
         }
 
         ping = true;
+
+        SmartDashboard.putString("Sent = ", Arrays.toString(toSend));
+        SmartDashboard.putString("Got = ", Arrays.toString(resp));
 
         for (int i = 0; i < resp.length; i++){
             if (resp[i] != toSend[i + 1]){
@@ -98,6 +102,34 @@ public class RS232Communication extends GBSubsystem {
             }
         }
         return true;
+    }
+
+    public double detailedCheckConnection(){
+        byte[] toSend = new byte[PING_PAYLOAD + 1];
+        for (int i = 1; i < toSend.length; i++){
+            toSend[i] = (byte) ((Math.abs(rn.nextInt()) % 122) + 48);
+        }
+        toSend[0] = (byte) REQUESTS.PING.ordinal();
+        byte[] resp = sendRequest(toSend);
+        if (resp.length != PING_PAYLOAD) {
+            ping = false;
+            return 1;
+        }
+
+        ping = true;
+        double mistakeCount = 0;
+
+        for (int i = 0; i < resp.length; i++){
+            mistakeCount += diffCount(resp[i], toSend[i + 1], 8);
+            System.out.println(diffCount(resp[i], toSend[i + 1], 8));
+        }
+        return mistakeCount / (PING_PAYLOAD*8);
+    }
+
+    public int diffCount(int first, int second, int toCount){
+        if ((first == 0 && second == 0) || toCount == 0) return 0;
+        return (Math.abs(first % 2) ^ Math.abs(second % 2))
+                + diffCount(first >> 2, second >> 2, toCount - 1);
     }
 
     public VisionLocation get(){
@@ -123,13 +155,13 @@ public class RS232Communication extends GBSubsystem {
     }
 
     private long lastPing = 0;
-    private static final long BETWEEN_PINGS = 200;
+    private static final long BETWEEN_PINGS = 500;
 
     @Override
     public void periodic() {
         if (System.currentTimeMillis() - lastPing > BETWEEN_PINGS) {
-            SmartDashboard.putBoolean("RS232 connection good", checkConnection());
-            SmartDashboard.putBoolean("RS232 ping", ping());
+//            SmartDashboard.putBoolean("RS232 connection good", checkConnection());
+//            SmartDashboard.putBoolean("RS232 ping", ping());
             lastPing = System.currentTimeMillis();
         }
     }

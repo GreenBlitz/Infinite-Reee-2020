@@ -7,6 +7,7 @@ import com.revrobotics.ControlType;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyRadians;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
@@ -99,7 +100,7 @@ public class Shooter extends GBSubsystem {
         putNumber("Position", leader.getEncoder().getPosition());
         putNumber("Velocity", leader.getEncoder().getVelocity());
         putNumber("Output", leader.getAppliedOutput());
-        putBoolean("ReadyToShoot", preparedToShoot);
+        SmartDashboard.putBoolean("ReadyToShoot", preparedToShoot);
 
     }
 

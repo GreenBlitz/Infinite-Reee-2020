@@ -25,7 +25,7 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
 
                 new ParallelRaceGroup(
                         new WaitUntilShooterSpeedClose(target, 100),
-                        new ShootByConstant(1.0) // TODO changeeee
+                        new ShootByConstant(1.0)
                 ),
 
                 new ParallelRaceGroup(

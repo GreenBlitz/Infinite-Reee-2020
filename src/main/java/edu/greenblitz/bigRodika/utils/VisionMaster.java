@@ -76,20 +76,20 @@ public class VisionMaster extends GBSubsystem {
 
     @Override
     public void periodic() {
-        VisionLocation current = getVisionLocation();
-
-        if(System.currentTimeMillis() - lastPrintTime > 500){
-            System.out.println(current.toString());
-            lastPrintTime = System.currentTimeMillis();
-        }
-        if (currentAlgorithm != null) {
-            SmartDashboard.putString("vision algo", currentAlgorithm.getRawName());
-        }
-        SmartDashboard.putString("vision raw data", current.toString());
-        SmartDashboard.putNumber("vision planery distance", current.getPlaneDistance());
-        SmartDashboard.putNumber("vision derived angle", current.getRelativeAngle());
-        SmartDashboard.putBoolean("vision valid", isLastDataValid());
-        SmartDashboard.putNumber("vision full distance", current.getFullDistance());
+//        VisionLocation current = getVisionLocation();
+//
+//        if(System.currentTimeMillis() - lastPrintTime > 500){
+//            System.out.println(current.toString());
+//            lastPrintTime = System.currentTimeMillis();
+//        }
+//        if (currentAlgorithm != null) {
+//            SmartDashboard.putString("vision algo", currentAlgorithm.getRawName());
+//        }
+//        SmartDashboard.putString("vision raw data", current.toString());
+//        SmartDashboard.putNumber("vision planery distance", current.getPlaneDistance());
+//        SmartDashboard.putNumber("vision derived angle", current.getRelativeAngle());
+//        SmartDashboard.putBoolean("vision valid", isLastDataValid());
+//        SmartDashboard.putNumber("vision full distance", current.getFullDistance());
     }
 
     public enum Algorithm {
