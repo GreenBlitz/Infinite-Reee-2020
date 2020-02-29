@@ -4,6 +4,7 @@ import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunne
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
+import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInBack;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
@@ -11,7 +12,6 @@ import edu.greenblitz.bigRodika.utils.RS232Communication;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.greenblitz.motion.Localizer;
@@ -22,23 +22,23 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         CommandScheduler.getInstance().enable();
 
-//        DigitalInputMap.getInstance();
-//        Pneumatics.init();
-//        Intake.init();
-//        Shifter.init();
-//        Funnel.init();
-//        Shooter.init();
-//        Dome.init();
-//        Turret.init();
-//        Chassis.init(); // Must be last!
+        DigitalInputMap.getInstance();
+        Pneumatics.init();
+        Intake.init();
+        Shifter.init();
+        Funnel.init();
+        Shooter.init();
+        Dome.init();
+        Turret.init();
+        Chassis.init(); // Must be last!
 
         RS232Communication.getInstance().register();
 
         OI.getInstance();
 
-//        VisionMaster.getInstance().register();
+        VisionMaster.getInstance().register();
 
-//        new ResetEncoderWhenInSide().initialize();
+        new ResetEncoderWhenInBack().initialize();
     }
 
     @Override
@@ -75,27 +75,26 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        if (false) {
-            Shifter.getInstance().setShift(Gear.SPEED);
-            CommandScheduler.getInstance().cancelAll();
-            VisionMaster.GameState.TELEOP.setAsCurrent();
-            Chassis.getInstance().toBrake();
-            Chassis.getInstance().resetGyro();
-            Chassis.getInstance().resetEncoders();
+        Shifter.getInstance().setShift(Gear.SPEED);
+        CommandScheduler.getInstance().cancelAll();
+        VisionMaster.GameState.TELEOP.setAsCurrent();
+        Chassis.getInstance().toBrake();
+        Chassis.getInstance().resetGyro();
+        Chassis.getInstance().resetEncoders();
 
-            VisionMaster.Algorithm.HEXAGON.setAsCurrent();
-            Shifter.getInstance().setShift(Gear.SPEED);
-            GlobalGearContainer.getInstance().setGear(Gear.SPEED);
+        VisionMaster.Algorithm.HEXAGON.setAsCurrent();
+        Shifter.getInstance().setShift(Gear.SPEED);
+        GlobalGearContainer.getInstance().setGear(Gear.SPEED);
 
-            new ResetDome(-0.3).schedule();
+        new ResetDome(-0.3).schedule();
 //        new ResetEncoderWhenInFront().schedule();
-            new StopShooter().schedule();
+        new StopShooter().schedule();
 
 //        if (!DriverStation.getInstance().isFMSAttached()){
 //            new CompressorOn().schedule();
 //            new ResetEncoderWhenInSide().schedule();
 //            Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
 //        }
-        }
+
     }
 }

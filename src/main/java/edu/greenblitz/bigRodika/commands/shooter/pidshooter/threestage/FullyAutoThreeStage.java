@@ -5,6 +5,7 @@ import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.WaitUntilShooterSpeedClose;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import edu.greenblitz.bigRodika.subsystems.Funnel;
+import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -12,6 +13,10 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import org.greenblitz.motion.pid.PIDObject;
 
 public class FullyAutoThreeStage extends SequentialCommandGroup {
+
+    public FullyAutoThreeStage(double target){
+        this(target, Shooter.getInstance().getDesiredPower(target));
+    }
 
     public FullyAutoThreeStage(double target, double ff) {
 
@@ -25,7 +30,9 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
 
                 new ParallelRaceGroup(
                         new WaitUntilShooterSpeedClose(target, 100),
-                        new ShootByConstant(1.0)
+                        new ShootBySimplePid(
+                                new PIDObject(kp*2, 0.0, 0.0, ff), target
+                        )
                 ),
 
                 new ParallelRaceGroup(
@@ -34,7 +41,7 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
                         ),
                         new SequentialCommandGroup(
 
-                                new WaitUntilShooterSpeedClose(target, 20, 10),
+                                new WaitUntilShooterSpeedClose(target, 20, 5),
 
                                 new WaitUntilCommand(() ->
                                         Funnel.getInstance().getPusher().getCurrentCommand() != null)

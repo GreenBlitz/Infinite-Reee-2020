@@ -9,6 +9,7 @@ import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyRadians;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import org.greenblitz.motion.interpolation.Dataset;
 import org.greenblitz.motion.pid.PIDObject;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
@@ -18,6 +19,7 @@ public class Shooter extends GBSubsystem {
 
     // Leader is left, follower is right
     private CANSparkMax leader, follower;
+    private Dataset rpmToPowerMap;
     private boolean preparedToShoot;
 
     private Shooter() {
@@ -35,6 +37,13 @@ public class Shooter extends GBSubsystem {
         follower.setSmartCurrentLimit(40);
 
         preparedToShoot = false;
+        rpmToPowerMap = new Dataset(2);
+        rpmToPowerMap.addDatapoint(0, new double[]{0});
+        rpmToPowerMap.addDatapoint(1100, new double[]{0.2});
+        rpmToPowerMap.addDatapoint(2250, new double[]{0.4});
+        rpmToPowerMap.addDatapoint(3400, new double[]{0.6});
+        rpmToPowerMap.addDatapoint(4500, new double[]{0.8});
+        rpmToPowerMap.addDatapoint(5500, new double[]{1.0});
 
         putNumber("testing_target", 0);
         putNumber("p", 0);
@@ -59,6 +68,10 @@ public class Shooter extends GBSubsystem {
     public void shoot(double power) {
         putNumber("power", power);
         this.leader.set(power);
+    }
+
+    public double getDesiredPower(double rpm){
+        return rpmToPowerMap.linearlyInterpolate(rpm)[0];
     }
 
     public void setSpeedByPID(double target) {
@@ -98,7 +111,7 @@ public class Shooter extends GBSubsystem {
     public void periodic() {
 
         putNumber("Position", leader.getEncoder().getPosition());
-        putNumber("Velocity", leader.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Velocity", leader.getEncoder().getVelocity());
         putNumber("Output", leader.getAppliedOutput());
         SmartDashboard.putBoolean("ReadyToShoot", preparedToShoot);
 

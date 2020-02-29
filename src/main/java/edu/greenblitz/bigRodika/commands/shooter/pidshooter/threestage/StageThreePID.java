@@ -2,6 +2,7 @@ package edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage;
 
 import com.revrobotics.CANPIDController;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.pid.PIDObject;
 
 public class StageThreePID extends ShootBySimplePid {
@@ -18,7 +19,7 @@ public class StageThreePID extends ShootBySimplePid {
         obj.setKf(obj.getKf() + ISum / target);
         obj.setKi(0);
         shooter.setPreparedToShoot(true);
-        shooter.putNumber("I addition", ISum);
+        SmartDashboard.putNumber("I addition", ISum);
         super.initialize();
     }
 

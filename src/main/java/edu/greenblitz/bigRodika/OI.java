@@ -25,6 +25,7 @@ import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
 import edu.greenblitz.bigRodika.commands.shifter.ToPower;
 import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
 import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
+import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.ShooterCommand;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
@@ -56,8 +57,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-        initTestButtons();
-//        initOfficalButtons();
+//        initTestButtons();
+        initOfficalButtons();
     }
 
 
@@ -70,17 +71,22 @@ public class OI {
 
     private void initTestButtons() {
 
-        mainJoystick.B.whenPressed(new GBCommand() {
-            @Override
-            public void initialize() {
-                RS232Communication.getInstance().checkConnection();
-            }
+        mainJoystick.B.whileHeld(
+                new ShootByConstant(0.636)
+        );
+        mainJoystick.B.whenPressed(new StopShooter());
 
-            @Override
-            public boolean isFinished() {
-                return true;
-            }
-        });
+        secondStick.R1.whenPressed(new FullyAutoThreeStage(2500));
+        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
+                new ResetDome()));
+
+//        secondStick.R1.whenPressed(new FullyAutoThreeStage(2600, 0.5));
+//        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
+//                new ResetDome()));
+
+        secondStick.L1.whileHeld(new InsertIntoShooter(1, 0.5, 0.6));
+        secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
+                new StopInserter(), new StopRoller()));
 
     }
 
@@ -115,7 +121,7 @@ public class OI {
 
         // ---------------------------------------------------------------
 
-        secondStick.R1.whenPressed(new FullyAutoThreeStage(2500, 0.45));
+        secondStick.R1.whenPressed(new FullyAutoThreeStage(2500));
         secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
                                                              new ResetDome()));
 
