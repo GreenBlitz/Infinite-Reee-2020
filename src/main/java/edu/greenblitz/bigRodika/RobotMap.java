@@ -2,6 +2,7 @@ package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GearDependentValue;
+import org.greenblitz.motion.interpolation.Dataset;
 import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import org.greenblitz.motion.profiling.ProfilingData;
 
@@ -90,6 +91,15 @@ public class RobotMap {
             public static final double SHOOTER_D = 0.00001;
 
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
+
+            public static Dataset distanceToShooterState = new Dataset(3);
+
+            static {
+                // TODO measure
+                // First element = rpm. second = dome
+                Shooter.distanceToShooterState.addDatapoint(6.3,
+                        new double[] {3600, 0.5});
+            }
 
         }
 
