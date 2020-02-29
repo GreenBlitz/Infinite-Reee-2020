@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
 
         VisionMaster.getInstance().register();
 
-        new ResetEncoderWhenInBack().initialize();
+        new ResetEncoderWhenInSide().initialize();
     }
 
     @Override
