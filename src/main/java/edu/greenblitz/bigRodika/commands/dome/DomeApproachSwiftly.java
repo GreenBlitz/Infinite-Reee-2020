@@ -6,7 +6,7 @@ import org.greenblitz.motion.tolerance.ITolerance;
 public class DomeApproachSwiftly extends DomeCommand {
 
     public double SLOW_DOWN_BEGIN = 0.1;
-    public double SLOW_DOWN_END = 0.01;
+    public double SLOW_DOWN_END = 0.04;
     public double MINIMUM_SPEED = 0.08;
     public double MAXIMUM_SPEED = 0.3;
 

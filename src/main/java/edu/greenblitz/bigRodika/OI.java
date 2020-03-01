@@ -9,6 +9,7 @@ import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileComman
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.Drive;
+import edu.greenblitz.bigRodika.commands.complex.multisystem.PrepareShooterByDistance;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
@@ -121,7 +122,10 @@ public class OI {
 
         // ---------------------------------------------------------------
 
-        secondStick.R1.whenPressed(new FullyAutoThreeStage(2500)); // 2500 = old
+//        secondStick.R1.whenPressed(new FullyAutoThreeStage(2500)); // 2500 = old
+        secondStick.R1.whenPressed(new PrepareShooterByDistance(
+                () -> 5.8
+        ));
         secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
                                                              new ResetDome()));
 
