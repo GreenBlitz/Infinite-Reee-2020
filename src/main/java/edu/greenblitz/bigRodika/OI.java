@@ -121,7 +121,7 @@ public class OI {
 
         // ---------------------------------------------------------------
 
-        secondStick.R1.whenPressed(new FullyAutoThreeStage(2500));
+        secondStick.R1.whenPressed(new FullyAutoThreeStage(2500)); // 2500 = old
         secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
                                                              new ResetDome()));
 
@@ -141,7 +141,7 @@ public class OI {
 
         secondStick.B.whenPressed(new ToggleExtender());
         secondStick.A.whileHeld(new RollByConstant(1.0));
-        secondStick.R3.whileHeld(new RollByConstant(-1.0));
+        secondStick.R3.whileHeld(new RollByConstant(-0.7));
 
         secondStick.START.whenPressed(new ParallelCommandGroup(
                 new TurretApproachSwiftlyRadians(-Math.PI),

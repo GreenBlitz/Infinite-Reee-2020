@@ -86,19 +86,24 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = false;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
-            public static final double SHOOTER_P = 0.0005;
+            public static final double SHOOTER_P = 0.0012;
             public static final double SHOOTER_I = 0.000001;
-            public static final double SHOOTER_D = 0.00001;
+            public static final double SHOOTER_D = 0.00005;
 
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 
             public static Dataset distanceToShooterState = new Dataset(3);
 
             static {
-                // TODO measure
                 // First element = rpm. second = dome
-                Shooter.distanceToShooterState.addDatapoint(6.3,
-                        new double[] {3600, 0.5});
+                Shooter.distanceToShooterState.addDatapoint(3.3,
+                        new double[] {3000, 0.37});
+                Shooter.distanceToShooterState.addDatapoint(4.2,
+                        new double[] {3350, 0.45});
+                Shooter.distanceToShooterState.addDatapoint(5.3,
+                        new double[] {3600, 0.522});
+                Shooter.distanceToShooterState.addDatapoint(6.5,
+                        new double[] {4200, 0.55});
             }
 
         }

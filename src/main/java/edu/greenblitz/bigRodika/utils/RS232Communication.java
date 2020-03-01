@@ -160,8 +160,8 @@ public class RS232Communication extends GBSubsystem {
     @Override
     public void periodic() {
         if (System.currentTimeMillis() - lastPing > BETWEEN_PINGS) {
-//            SmartDashboard.putBoolean("RS232 connection good", checkConnection());
-//            SmartDashboard.putBoolean("RS232 ping", ping());
+            SmartDashboard.putBoolean("RS232 connection good", checkConnection());
+            SmartDashboard.putBoolean("RS232 ping", ping());
             lastPing = System.currentTimeMillis();
         }
     }
