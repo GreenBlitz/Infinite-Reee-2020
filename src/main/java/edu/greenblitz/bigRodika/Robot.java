@@ -5,6 +5,7 @@ import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInBack;
+import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInFront;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
@@ -38,7 +39,9 @@ public class Robot extends TimedRobot {
 
         VisionMaster.getInstance().register();
 
-        new ResetEncoderWhenInSide().initialize();
+        new ResetEncoderWhenInBack().initialize();
+//        new ResetEncoderWhenInSide().initialize();
+//        new ResetEncoderWhenInFront().initialize();
     }
 
     @Override

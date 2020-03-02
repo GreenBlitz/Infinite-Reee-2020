@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Turret extends GBSubsystem {
-    private static final double MAX_TICKS = 15000;//16400
+    private static final double MAX_TICKS = 14000;//16400
     private static final double MIN_TICKS = -5000;//-12400//-11000 todo :REALLY IMPORTANT FOR ROBOT NOT TO DIE.
     //ask @Peleg before changing
     private static Turret instance;
@@ -58,9 +58,9 @@ public class Turret extends GBSubsystem {
     @Override
     public void periodic() {
         super.periodic();
-//        if (isSwitchPressed()) {
-//            encoder.reset();
-//        }
+        if (isSwitchPressed()) {
+            encoder.reset();
+        }
 
         if (getCurrentCommand() == null && defaultCommand != null) {
             defaultCommand.schedule();
@@ -75,10 +75,10 @@ public class Turret extends GBSubsystem {
         putBoolean("Switch", isSwitchPressed());
         double[] sim = MotionUtils.getSimulatedVisionLocation();
         if (sim != null) {
-            SmartDashboard.putNumberArray("Simulated Vision Location", sim);
-            SmartDashboard.putNumber("Simulated Angle", Math.toDegrees(Math.atan2(sim[0], sim[1])));
-            SmartDashboard.putNumber("Simulated Distance", Math.hypot(sim[0], sim[1]));
-            SmartDashboard.putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
+            putNumberArray("Simulated Vision Location", sim);
+            putNumber("Simulated Angle", Math.toDegrees(Math.atan2(sim[0], sim[1])));
+            putNumber("Simulated Distance", Math.hypot(sim[0], sim[1]));
+            putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
         }
 
         moveTurret(lastPower);

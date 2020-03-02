@@ -9,6 +9,8 @@ import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileComman
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.Drive;
+import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
+import edu.greenblitz.bigRodika.commands.complex.multisystem.PrepareShooterByDistance;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
@@ -41,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.base.State;
+import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,11 +75,11 @@ public class OI {
     private void initTestButtons() {
 
         mainJoystick.B.whileHeld(
-                new ShootByConstant(0.636)
+                new ShootByConstant(0.6)
         );
         mainJoystick.B.whenPressed(new StopShooter());
 
-        secondStick.R1.whenPressed(new FullyAutoThreeStage(2500));
+        secondStick.R1.whenPressed(new CompleteShoot());
         secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
                 new ResetDome()));
 
@@ -87,6 +90,16 @@ public class OI {
         secondStick.L1.whileHeld(new InsertIntoShooter(1, 0.5, 0.6));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
                 new StopInserter(), new StopRoller()));
+
+        secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
+
+        secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
+
+        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
+
+        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
+
+        secondStick.BACK.whenPressed(new ResetDome(-0.3));
 
     }
 
@@ -121,7 +134,7 @@ public class OI {
 
         // ---------------------------------------------------------------
 
-        secondStick.R1.whenPressed(new FullyAutoThreeStage(2500)); // 2500 = old
+        secondStick.R1.whenPressed(new CompleteShoot()); // 1400 = old
         secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
                                                              new ResetDome()));
 
@@ -129,7 +142,7 @@ public class OI {
 //        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
 //                new ResetDome()));
 
-        secondStick.L1.whileHeld(new InsertIntoShooter(1, 0.5, 0.6));
+        secondStick.L1.whileHeld(new InsertIntoShooter(1, 0.4, 0.6));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
                 new StopInserter(), new StopRoller()));
 
@@ -144,8 +157,8 @@ public class OI {
         secondStick.R3.whileHeld(new RollByConstant(-0.7));
 
         secondStick.START.whenPressed(new ParallelCommandGroup(
-                new TurretApproachSwiftlyRadians(-Math.PI),
-                new DomeApproachSwiftly(0.15)
+                new TurretToFront(),
+                new DomeApproachSwiftly(0.08)
         ));
 
         secondStick.X.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));

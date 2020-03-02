@@ -16,6 +16,7 @@ public class Dome extends GBSubsystem {
             POT_HIGHER_LIMIT = 0.55;
     private static final double POWER_AT_LOWER_END = -0.05;
     private static final double MAX_VELOCITY = 0.2;
+    private static final double MIN_VELOCITY = 0.004;
     protected double lastPower = 0;
     protected double lastPotValue = Double.POSITIVE_INFINITY;
     protected long lastPotMeasureTime;
@@ -82,26 +83,26 @@ public class Dome extends GBSubsystem {
     public void periodic() {
         super.periodic();
         safeMove(lastPower);
-        SmartDashboard.putNumber("Potentiometer", getPotentiometerValue());
-        SmartDashboard.putBoolean("LimitSwitch", switchTriggered());
+        putNumber("Potentiometer", getPotentiometerValue());
+        putBoolean("LimitSwitch", switchTriggered());
         putNumber("PotZero", zeroValue);
 
         double tempVal = getPotentiometerRaw();
 
         putNumber("DeltaPot", Math.abs(tempVal - lastPotValue));
         putNumber("Period Time", System.currentTimeMillis() - lastPotMeasureTime);
-        if (lastPotValue == Double.POSITIVE_INFINITY || Math.abs(50 * (tempVal - lastPotValue)/(lastPotMeasureTime - System.currentTimeMillis())) < MAX_VELOCITY){
+        if (lastPotValue == Double.POSITIVE_INFINITY ||
+                (
+                        Math.abs(tempVal - lastPotValue) < MAX_VELOCITY
+                )
+
+        ){
             lastPotValue = tempVal;
             lastPotMeasureTime = System.currentTimeMillis();
         }
 
         if (switchTriggered() && getCurrentCommand() != null && getCurrentCommand().getName().equals("ResetDome")
         && Math.abs(getPotentiometerRaw()) < 1.0) {
-//            if (getPotentiometerValue() < 0.05) {
-//                zeroValue += getPotentiometerValue();
-//            } else if (getCurrentCommand() != null && getCurrentCommand().getName().equals("ResetDome")) {
-//                zeroValue += getPotentiometerValue();
-//            }
             zeroValue += getPotentiometerValue();
         }
     }

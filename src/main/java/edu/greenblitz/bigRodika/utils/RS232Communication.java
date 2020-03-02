@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika.utils;
 
 import edu.greenblitz.bigRodika.subsystems.GBSubsystem;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -12,9 +13,10 @@ public class RS232Communication extends GBSubsystem {
 
     private static RS232Communication instance;
     private SerialPort channel;
-    private static final int BAUD_RATE = 9600;
+    private static final int BAUD_RATE = 115200;
     private static final int RESPONSE_WAIT_TIME = 5;
-    private static final int DEFAULT_TIMEOUT = 20;
+    private static final int DEFAULT_TIMEOUT = 50;
+    private boolean started;
 
     private Random rn = new Random();
     private static final int PING_PAYLOAD = 1;
@@ -26,7 +28,8 @@ public class RS232Communication extends GBSubsystem {
     public enum REQUESTS {
         PING(PING_PAYLOAD),
         GET(1 + Double.BYTES*3),
-        SET_ALGO(1);
+        SET_ALGO(1),
+        CONN_START(1);
 
         public final int responseSize;
         REQUESTS(int rSize){
@@ -36,8 +39,13 @@ public class RS232Communication extends GBSubsystem {
 
     private RS232Communication(){
         super();
+
+        started = false;
+
+        table = NetworkTableInstance.getDefault().getTable("uart");
         channel = new SerialPort(BAUD_RATE, SerialPort.Port.kMXP);
         channel.disableTermination();
+        channel.read(channel.getBytesReceived());
 
         getReq = new byte[1];
         getReq[0] = (byte) REQUESTS.GET.ordinal();
@@ -47,6 +55,10 @@ public class RS232Communication extends GBSubsystem {
         if (instance == null){
             instance = new RS232Communication();
         }
+
+        byte[] toSend = new byte[] { (byte) REQUESTS.CONN_START.ordinal() };
+        instance.channel.write(toSend, toSend.length);
+
         return instance;
     }
 
@@ -88,13 +100,14 @@ public class RS232Communication extends GBSubsystem {
         if (resp.length != PING_PAYLOAD) {
             System.out.println("No ping");
             ping = false;
+            started = false;
             return false;
         }
 
         ping = true;
 
-        SmartDashboard.putString("Sent = ", Arrays.toString(toSend));
-        SmartDashboard.putString("Got = ", Arrays.toString(resp));
+        putString("Sent = ", Arrays.toString(toSend));
+        putString("Got = ", Arrays.toString(resp));
 
         for (int i = 0; i < resp.length; i++){
             if (resp[i] != toSend[i + 1]){
@@ -159,10 +172,16 @@ public class RS232Communication extends GBSubsystem {
 
     @Override
     public void periodic() {
-        if (System.currentTimeMillis() - lastPing > BETWEEN_PINGS) {
-            SmartDashboard.putBoolean("RS232 connection good", checkConnection());
-            SmartDashboard.putBoolean("RS232 ping", ping());
-            lastPing = System.currentTimeMillis();
+        putBoolean("Started comm", started);
+        if (started) {
+            if (System.currentTimeMillis() - lastPing > BETWEEN_PINGS) {
+                putBoolean("RS232 connection good", checkConnection());
+                putBoolean("RS232 ping", ping());
+                lastPing = System.currentTimeMillis();
+            }
+        } else if (channel.getBytesReceived() > 0){
+            channel.read(channel.getBytesReceived());
+            started = true;
         }
     }
 }

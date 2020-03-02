@@ -42,9 +42,11 @@ public class RobotMap {
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
                     28672.0);//correct 110 present
             public static double ENCODER_VALUE_WHEN_FORWARD = 8974.0;
-            public static double ENCODER_VALUE_WHEN_NEGATIVE_90 = 1581.0;
+            public static double ENCODER_90_DEG_ABS = 8974.0 - 1581.0;
+            public static double ENCODER_VALUE_WHEN_NEGATIVE_90 = ENCODER_VALUE_WHEN_FORWARD -
+                    ENCODER_90_DEG_ABS;
             public static double ENCODER_VALUE_WHEN_NEGATIVE_180 = ENCODER_VALUE_WHEN_FORWARD
-                    - 2*(ENCODER_VALUE_WHEN_FORWARD - ENCODER_VALUE_WHEN_NEGATIVE_90);
+                    - 2*ENCODER_90_DEG_ABS;
 
             public static final double TURRET_CAMERA_RADIUS = 0.25;
         }
@@ -86,24 +88,29 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = false;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
-            public static final double SHOOTER_P = 0.0012;
-            public static final double SHOOTER_I = 0.000001;
+            public static final double SHOOTER_P = 0.00085;
+            public static final double SHOOTER_I = 0.0000006;
             public static final double SHOOTER_D = 0.00005;
 
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 
             public static Dataset distanceToShooterState = new Dataset(3);
 
+            public static final double MINIMUM_SHOOT_DIST = 3.2;
+            public static final double MAXIMUM_SHOOT_DIST = 6.7;
+
             static {
                 // First element = rpm. second = dome
-                Shooter.distanceToShooterState.addDatapoint(3.3,
-                        new double[] {3000, 0.37});
-                Shooter.distanceToShooterState.addDatapoint(4.2,
-                        new double[] {3350, 0.45});
-                Shooter.distanceToShooterState.addDatapoint(5.3,
-                        new double[] {3600, 0.522});
-                Shooter.distanceToShooterState.addDatapoint(6.5,
-                        new double[] {4200, 0.55});
+                Shooter.distanceToShooterState.addDatapoint(3.2,
+                        new double[] {2000, 0.365});
+                Shooter.distanceToShooterState.addDatapoint(4.0,
+                        new double[] {2350, 0.38});
+                Shooter.distanceToShooterState.addDatapoint(5.0,
+                        new double[] {2550, 0.423});
+                Shooter.distanceToShooterState.addDatapoint(6.1,
+                        new double[] {2800, 0.49});
+                Shooter.distanceToShooterState.addDatapoint(6.7,
+                        new double[] {3000, 0.486});
             }
 
         }

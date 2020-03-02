@@ -6,10 +6,10 @@ import org.greenblitz.motion.tolerance.ITolerance;
 
 public class TurretApproachSwiftly extends TurretCommand {
 
-    public static final double SLOW_DOWN_BEGIN = 0.35;
-    public static final double SLOW_DOWN_END = 0.01;
-    public static final double MINIMUM_SPEED = 0.05;
-    public static final double MAXIMUM_SPEED = 0.4;
+    public static final double SLOW_DOWN_BEGIN = Math.toRadians(25) / 2*Math.PI;
+    public static final double SLOW_DOWN_END = Math.toRadians(7.5) / 2*Math.PI;
+    public static final double MINIMUM_SPEED = 0.08;
+    public static final double MAXIMUM_SPEED = 0.6;
 
     protected double target;
     protected ITolerance tolerance;
