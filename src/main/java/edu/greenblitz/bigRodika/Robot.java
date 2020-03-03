@@ -5,11 +5,10 @@ import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInBack;
-import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInFront;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
-import edu.greenblitz.bigRodika.utils.RS232Communication;
+import edu.greenblitz.bigRodika.utils.UARTCommunication;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
@@ -33,7 +32,7 @@ public class Robot extends TimedRobot {
         Turret.init();
         Chassis.init(); // Must be last!
 
-        RS232Communication.getInstance().register();
+        UARTCommunication.getInstance().register();
 
         OI.getInstance();
 
@@ -85,7 +84,7 @@ public class Robot extends TimedRobot {
         Chassis.getInstance().resetGyro();
         Chassis.getInstance().resetEncoders();
 
-        VisionMaster.Algorithm.HEXAGON.setAsCurrent();
+        VisionMaster.Algorithm.FEEDING_STATION.setAsCurrent();
         Shifter.getInstance().setShift(Gear.SPEED);
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
 

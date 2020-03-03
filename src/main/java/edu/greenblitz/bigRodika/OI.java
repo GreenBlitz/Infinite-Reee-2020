@@ -1,16 +1,10 @@
 package edu.greenblitz.bigRodika;
 
-import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
-import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.DumbAlign;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShootAndWait;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
-import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
-import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
-import edu.greenblitz.bigRodika.commands.complex.autonomous.Drive;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
-import edu.greenblitz.bigRodika.commands.complex.multisystem.PrepareShooterByDistance;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
@@ -20,32 +14,25 @@ import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRoller;
-import edu.greenblitz.bigRodika.commands.intake.extender.RetractRoller;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
-import edu.greenblitz.bigRodika.commands.shifter.ToPower;
-import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
-import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
-import edu.greenblitz.bigRodika.commands.shooter.ShooterCommand;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
 import edu.greenblitz.bigRodika.commands.turret.*;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
-import edu.greenblitz.bigRodika.utils.RS232Communication;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import org.greenblitz.motion.base.State;
-import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 public class OI {
@@ -60,8 +47,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-//        initTestButtons();
-        initOfficalButtons();
+        initTestButtons();
+//        initOfficalButtons();
     }
 
 
@@ -79,9 +66,38 @@ public class OI {
         );
         mainJoystick.B.whenPressed(new StopShooter());
 
-        secondStick.R1.whenPressed(new CompleteShoot());
-        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
-                new ResetDome()));
+        List<State> goBack = new ArrayList<>();
+        goBack.add(new State(0, 0));
+        goBack.add(new State(0,0.4));
+
+        secondStick.A.whenPressed(
+                new ParallelRaceGroup(
+                        new DomeApproachSwiftly(0.1), // was 0.1
+                        new ThreadedCommand(
+                                new Follow2DProfileCommand(goBack,
+                                        RobotMap.Limbo2.Chassis.MotionData.CONFIG,
+                                        0.3, false),
+                                Chassis.getInstance())
+                ).andThen(
+                        new ExtendRoller()
+                )
+                        .andThen(
+                        new GBCommand() {
+                            @Override
+                            public boolean isFinished() {
+                                return !mainJoystick.A.get();
+                            }
+                        }
+                )
+        );
+
+        secondStick.R1.whenPressed(
+                new FullyAutoThreeStage(1640)
+        );
+        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter()));
+//                new ResetDome()));
+
+        secondStick.B.whenPressed(new ToggleExtender());
 
 //        secondStick.R1.whenPressed(new FullyAutoThreeStage(2600, 0.5));
 //        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
@@ -134,15 +150,16 @@ public class OI {
 
         // ---------------------------------------------------------------
 
-        secondStick.R1.whenPressed(new CompleteShoot()); // 1400 = old
-        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
-                                                             new ResetDome()));
+//        secondStick.R1.whenPressed(new CompleteShoot()); // 1400 = old
+        secondStick.R1.whenPressed(new FullyAutoThreeStage(1650));
+        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter()));
+//                                                             new ResetDome()));
 
 //        secondStick.R1.whenPressed(new FullyAutoThreeStage(2600, 0.5));
 //        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
 //                new ResetDome()));
 
-        secondStick.L1.whileHeld(new InsertIntoShooter(1, 0.4, 0.6));
+        secondStick.L1.whileHeld(new InsertIntoShooter(1.0, 0.8, 0.6));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
                 new StopInserter(), new StopRoller()));
 
@@ -156,10 +173,32 @@ public class OI {
         secondStick.A.whileHeld(new RollByConstant(1.0));
         secondStick.R3.whileHeld(new RollByConstant(-0.7));
 
-        secondStick.START.whenPressed(new ParallelCommandGroup(
-                new TurretToFront(),
-                new DomeApproachSwiftly(0.08)
-        ));
+        List<State> goBack = new ArrayList<>();
+        goBack.add(new State(0, 0));
+        goBack.add(new State(0,0.4));
+
+        secondStick.START.whenPressed(
+
+                new ParallelRaceGroup(
+                        new DomeApproachSwiftly(0.1), // was 0.1
+                        new ThreadedCommand(
+                                new Follow2DProfileCommand(goBack,
+                                        RobotMap.Limbo2.Chassis.MotionData.CONFIG,
+                                        0.3, false),
+                                Chassis.getInstance())
+                ).andThen(
+                        new ExtendRoller()
+                )
+                        .andThen(
+                                new GBCommand() {
+                                    @Override
+                                    public boolean isFinished() {
+                                        return !mainJoystick.A.get();
+                                    }
+                                }
+                        )
+
+        );
 
         secondStick.X.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
 

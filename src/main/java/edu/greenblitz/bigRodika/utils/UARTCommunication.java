@@ -3,20 +3,21 @@ package edu.greenblitz.bigRodika.utils;
 import edu.greenblitz.bigRodika.subsystems.GBSubsystem;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Random;
 
-public class RS232Communication extends GBSubsystem {
+public class UARTCommunication extends GBSubsystem {
 
-    private static RS232Communication instance;
+    private static UARTCommunication instance;
     private SerialPort channel;
     private static final int BAUD_RATE = 115200;
+    private static final long BETWEEN_PINGS = 1000;
     private static final int RESPONSE_WAIT_TIME = 5;
     private static final int DEFAULT_TIMEOUT = 50;
     private boolean started;
+    private long timeConnectionEst = 0;
 
     private Random rn = new Random();
     private static final int PING_PAYLOAD = 1;
@@ -37,7 +38,7 @@ public class RS232Communication extends GBSubsystem {
         }
     }
 
-    private RS232Communication(){
+    private UARTCommunication(){
         super();
 
         started = false;
@@ -47,17 +48,17 @@ public class RS232Communication extends GBSubsystem {
         channel.disableTermination();
         channel.read(channel.getBytesReceived());
 
+        byte[] toSend = new byte[] { (byte) REQUESTS.CONN_START.ordinal() };
+        channel.write(toSend, toSend.length);
+
         getReq = new byte[1];
         getReq[0] = (byte) REQUESTS.GET.ordinal();
     }
 
-    public static RS232Communication getInstance(){
+    public static UARTCommunication getInstance(){
         if (instance == null){
-            instance = new RS232Communication();
+            instance = new UARTCommunication();
         }
-
-        byte[] toSend = new byte[] { (byte) REQUESTS.CONN_START.ordinal() };
-        instance.channel.write(toSend, toSend.length);
 
         return instance;
     }
@@ -139,6 +140,10 @@ public class RS232Communication extends GBSubsystem {
         return mistakeCount / (PING_PAYLOAD*8);
     }
 
+    public boolean connectionActive(){
+        return started && System.currentTimeMillis() - timeConnectionEst > 1000;
+    }
+
     public int diffCount(int first, int second, int toCount){
         if ((first == 0 && second == 0) || toCount == 0) return 0;
         return (Math.abs(first % 2) ^ Math.abs(second % 2))
@@ -146,6 +151,9 @@ public class RS232Communication extends GBSubsystem {
     }
 
     public VisionLocation get(){
+        if (!connectionActive()) {
+            return null;
+        }
         byte[] resp = sendRequest(getReq);
         if (resp.length == 0 || resp[0] == 0){
             return null;
@@ -160,6 +168,7 @@ public class RS232Communication extends GBSubsystem {
     }
 
     public boolean setAlgo(VisionMaster.Algorithm algo){
+        if (!connectionActive()) return false;
         byte[] algoReq = new byte[2];
         algoReq[0] = (byte) REQUESTS.SET_ALGO.ordinal();
         algoReq[1] = (byte) algo.ordinal();
@@ -168,19 +177,19 @@ public class RS232Communication extends GBSubsystem {
     }
 
     private long lastPing = 0;
-    private static final long BETWEEN_PINGS = 500;
 
     @Override
     public void periodic() {
-        putBoolean("Started comm", started);
-        if (started) {
+        putBoolean("Started comm", connectionActive());
+        if (connectionActive()) {
             if (System.currentTimeMillis() - lastPing > BETWEEN_PINGS) {
                 putBoolean("RS232 connection good", checkConnection());
                 putBoolean("RS232 ping", ping());
                 lastPing = System.currentTimeMillis();
             }
-        } else if (channel.getBytesReceived() > 0){
+        } else if (!started && channel.getBytesReceived() > 0){
             channel.read(channel.getBytesReceived());
+            timeConnectionEst = System.currentTimeMillis();
             started = true;
         }
     }
