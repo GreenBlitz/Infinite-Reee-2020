@@ -152,7 +152,7 @@ public class OI {
         secondStick.R3.whileHeld(new RollByConstant(-0.7));
 
         secondStick.START.whenPressed(new FullyAutoThreeStage(1650));
-        secondStick.START.whenReleased(new ParallelCommandGroup(new StopShooter()));
+        secondStick.START.whenReleased(new StopShooter());
 
         secondStick.X.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
 

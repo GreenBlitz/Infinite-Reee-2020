@@ -13,14 +13,14 @@ public class UARTCommunication extends GBSubsystem {
     private static UARTCommunication instance;
     private SerialPort channel;
     private static final int BAUD_RATE = 115200;
-    private static final long BETWEEN_PINGS = 1000;
-    private static final int RESPONSE_WAIT_TIME = 5;
-    private static final int DEFAULT_TIMEOUT = 50;
+    private static final long BETWEEN_PINGS = 5000;
+    private static final int RESPONSE_WAIT_TIME = 2;
+    private static final int DEFAULT_TIMEOUT = 20;
     private boolean started;
     private long timeConnectionEst = 0;
 
     private Random rn = new Random();
-    private static final int PING_PAYLOAD = 1;
+    private static final int PING_PAYLOAD = 100;
     private boolean ping = false;
 
     private byte[] pingReq;
@@ -164,7 +164,9 @@ public class UARTCommunication extends GBSubsystem {
         double x = buff.getDouble();
         double y = buff.getDouble();
         double z = buff.getDouble();
-        return new VisionLocation(x, y, z);
+        // Different because ido dumb
+        // z before y, not a mistake
+        return new VisionLocation(x, z, y);
     }
 
     public boolean setAlgo(VisionMaster.Algorithm algo){
