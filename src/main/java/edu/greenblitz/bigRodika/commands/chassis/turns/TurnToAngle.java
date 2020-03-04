@@ -54,7 +54,7 @@ public class TurnToAngle extends ChassisCommand {
         double timePassed = (System.currentTimeMillis() - t0) / 1000.0;
 
         if (motionProfile.isOver(timePassed)) {
-            System.out.println("Finishing with TurnToAngle: " + overCount);
+            System.out.println("Finishing with TurretToAngle: " + overCount);
             chassis.moveMotors(0, 0);
             overCount++;
             return;
