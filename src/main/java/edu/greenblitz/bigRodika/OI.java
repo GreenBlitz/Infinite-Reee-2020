@@ -23,6 +23,7 @@ import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.commands.turret.*;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
@@ -137,7 +138,7 @@ public class OI {
         secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
                                                              new ResetDome()));
 
-        secondStick.L1.whileHeld(new InsertIntoShooter(1.0, 0.8, 0.6));
+        secondStick.L1.whileHeld(new InsertIntoShooter(0.7, 0.8, 0.6));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
                 new StopInserter(), new StopRoller()));
 
@@ -151,7 +152,7 @@ public class OI {
         secondStick.A.whileHeld(new RollByConstant(1.0));
         secondStick.R3.whileHeld(new RollByConstant(-0.7));
 
-        secondStick.START.whenPressed(new FullyAutoThreeStage(1650));
+        secondStick.START.whenPressed(new FullyAutoThreeStage(1650)); // 1650
         secondStick.START.whenReleased(new StopShooter());
 
         secondStick.X.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
@@ -170,6 +171,7 @@ public class OI {
             @Override
             public void initialize() {
                 CommandScheduler.getInstance().cancelAll();
+                Shooter.getInstance().shoot(0);
             }
 
             @Override

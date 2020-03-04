@@ -1,6 +1,11 @@
 package edu.greenblitz.bigRodika.utils;
 
 import edu.greenblitz.bigRodika.subsystems.GBSubsystem;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,12 +22,27 @@ public class VisionMaster extends GBSubsystem {
     private Algorithm currentAlgorithm;
     private GameState currentGameState;
     private ShifterState currentShifterState;
+    private NetworkTable visionTable;
+    private NetworkTableEntry algorithm;
+    private NetworkTableEntry output;
+    private NetworkTableEntry found;
+    private NetworkTableEntry gameState;
+    private NetworkTableEntry shifterState;
+    private NetworkTableEntry handshake;
     private long lastHandShake;
     private Logger logger;
 
     private VisionMaster() {
         super();
         logger = LogManager.getLogger(getClass());
+        visionTable = NetworkTableInstance.getDefault().getTable("vision"); // table
+
+        algorithm = visionTable.getEntry("algorithm"); // our output, tells the handshake what algorithm to run
+        output = visionTable.getEntry("output"); // our input, the output of the vision (usually a double array of size 3)
+        found = visionTable.getEntry("found"); // our input, boolean indicating if the last sent data was valid
+        gameState = visionTable.getEntry("game_state");
+        shifterState = visionTable.getEntry("shifter_state");
+        handshake = visionTable.getEntry("handshake");
     }
 
     public static VisionMaster getInstance() {
@@ -34,10 +54,12 @@ public class VisionMaster extends GBSubsystem {
 
     private void setCurrentShifterState(ShifterState state) {
         this.currentShifterState = state;
+        this.shifterState.setString(state.getRawName());
     }
 
     private void setCurrentGameState(GameState state) {
         this.currentGameState = state;
+        gameState.setString(state.getRawName());
     }
 
     public Algorithm getCurrentAlgorithm() {
@@ -46,32 +68,41 @@ public class VisionMaster extends GBSubsystem {
 
     private void setCurrentAlgorithm(Algorithm algo) {
         this.currentAlgorithm = algo;
-        UARTCommunication.getInstance().setAlgo(algo);
+        algorithm.setString(algo.getRawName());
     }
 
     public boolean isLastDataValid() {
-        return UARTCommunication.getInstance().get() != null;
+        if (System.currentTimeMillis() - lastHandShake > MAX_HANDSHAKE_TIME) {
+            SmartDashboard.putString("vision Error", "Vision took to long to respond");
+            return false;
+        }
+        return found.getBoolean(false);
     }
 
     public double[] getCurrentRawVisionData() {
-        VisionLocation data = UARTCommunication.getInstance().get();
-        if (data == null){
-            return new double[] {Double.NaN, Double.NaN, Double.NaN};
+        if (output.getType() != NetworkTableType.kDoubleArray) {
+            SmartDashboard.putString("vision Error", "Vision sent data that isn't a double array");
+            return null;
         }
-        return data.toDoubleArray();
+        SmartDashboard.putString("vision Error", "None");
+        return output.getValue().getDoubleArray();
     }
 
     public VisionLocation getVisionLocation() {
-        VisionLocation loc;
-        if (UARTCommunication.getInstance().connectionActive()){
-            loc = UARTCommunication.getInstance().get();
-        } else {
-            loc = null;
-        }
+        double[] input = getCurrentRawVisionData();
 
-        if (loc == null) return new VisionLocation(new double[]{Double.NaN, Double.NaN, Double.NaN});
+        if (input == null) return new VisionLocation(new double[]{Double.NaN, Double.NaN, Double.NaN});
 
-        return loc;
+        // TODO Temp because vision is dumb
+        //if (algorithm.getString("Bruh").equals("hexagon")) {
+        //    double full_dist_squared = input[0] * input[0] + input[1] * input[1] + input[2] * input[2];
+        //    input[1] = RobotMap.Limbo2.Chassis.MotionData.HEXAGON_CAMERA_H_DIFF;
+        //    input[2] = Math.sqrt(full_dist_squared
+        //            - Math.pow(input[0], 2) - Math.pow(input[1], 2));
+        //}
+        // Bruh moment
+
+        return new VisionLocation(input);
     }
 
     @Override
@@ -81,15 +112,18 @@ public class VisionMaster extends GBSubsystem {
         if(System.currentTimeMillis() - lastPrintTime > 500){
             System.out.println(current.toString());
             lastPrintTime = System.currentTimeMillis();
+            System.out.println("HandShake: " + handshake.getBoolean(false));
         }
-        if (currentAlgorithm != null) {
-            putString("vision algo", currentAlgorithm.getRawName());
+        if (handshake.getBoolean(false)) {
+            lastHandShake = System.currentTimeMillis();
+            handshake.setBoolean(false);
         }
-        putString("vision raw data", current.toString());
-        putNumber("vision planery distance", current.getPlaneDistance());
-        putNumber("vision derived angle", current.getRelativeAngle());
-        putBoolean("vision valid", isLastDataValid());
-        putNumber("vision full distance", current.getFullDistance());
+        SmartDashboard.putString("vision algorithm", algorithm.getString("Not Existing"));
+        SmartDashboard.putString("vision raw data", current.toString());
+        SmartDashboard.putNumber("vision planery distance", current.getPlaneDistance());
+        SmartDashboard.putNumber("vision derived angle", current.getRelativeAngle());
+        SmartDashboard.putBoolean("vision valid", isLastDataValid());
+        SmartDashboard.putNumber("vision full distance", current.getFullDistance());
     }
 
     public enum Algorithm {

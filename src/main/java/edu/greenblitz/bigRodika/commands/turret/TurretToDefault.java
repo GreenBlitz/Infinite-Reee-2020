@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika.commands.turret;
 
+import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Shifter;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
@@ -18,10 +19,12 @@ public class TurretToDefault extends TurretApproachSwiftly {
     @Override
     public void execute() {
         if (Shooter.getInstance().getCurrentCommand() == Shooter.getInstance().getDefaultCommand()) {
-            if (tolerance.onTarget(target, turret.getTurretLocation())){
-                turret.moveTurret(0);
-            } else {
-                super.execute();
+            if (!OI.getInstance().getSideStick().R1.get()) {
+                if (tolerance.onTarget(target, turret.getTurretLocation())) {
+                    turret.moveTurret(0);
+                } else {
+                    super.execute();
+                }
             }
         }
     }

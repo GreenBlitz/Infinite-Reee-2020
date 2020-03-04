@@ -88,11 +88,11 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = false;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
-            public static final double SHOOTER_P = 0.00085;
-            public static final double SHOOTER_I = 0.0000006;
-            public static final double SHOOTER_D = 0.00005;
+            public static final double SHOOTER_P = 0.00075;
+            public static final double SHOOTER_I = 0.0000005;
+            public static final double SHOOTER_D = 0.00006*0.0;
 
-            public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
+            public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(4.5);
 
             public static Dataset distanceToShooterState = new Dataset(3);
 
@@ -104,13 +104,15 @@ public class RobotMap {
                 Shooter.distanceToShooterState.addDatapoint(3.2,
                         new double[] {2000, 0.365});
                 Shooter.distanceToShooterState.addDatapoint(4.0,
-                        new double[] {2350, 0.38});
+                        new double[] {2250, 0.38});
                 Shooter.distanceToShooterState.addDatapoint(5.0,
-                        new double[] {2550, 0.423});
+                        new double[] {2300, 0.423});
                 Shooter.distanceToShooterState.addDatapoint(6.1,
-                        new double[] {2800, 0.49});
+                        new double[] {2450, 0.49});
+                Shooter.distanceToShooterState.addDatapoint(6.5,
+                        new double[] {2450, 0.52});
                 Shooter.distanceToShooterState.addDatapoint(6.7,
-                        new double[] {3000, 0.486});
+                        new double[] {2750, 0.486});
             }
 
         }

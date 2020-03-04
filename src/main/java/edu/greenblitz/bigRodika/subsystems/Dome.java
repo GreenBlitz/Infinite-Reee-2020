@@ -17,13 +17,14 @@ public class Dome extends GBSubsystem {
     private static final double POWER_AT_LOWER_END = -0.05;
     private static final double MAX_VELOCITY = 0.2;
     private static final double MIN_VELOCITY = 0.004;
+    private static final boolean SWITCH_ON = false;
     protected double lastPower = 0;
     protected double lastPotValue = Double.POSITIVE_INFINITY;
     protected long lastPotMeasureTime;
     private WPI_TalonSRX domeMotor;
     private Potentiometer potentiometer;
     private DigitalInput limitSwitch;
-    private double zeroValue = 0.31;
+    private double zeroValue = 0.35;
 
     private Dome() {
         domeMotor = new WPI_TalonSRX(RobotMap.Limbo2.Dome.MOTOR_PORT);
@@ -76,7 +77,7 @@ public class Dome extends GBSubsystem {
     }
 
     public boolean switchTriggered() {
-        return limitSwitch.get();
+        return limitSwitch.get() && SWITCH_ON;
     }
 
     @Override

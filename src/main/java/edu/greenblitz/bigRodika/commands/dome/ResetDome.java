@@ -6,6 +6,8 @@ public class ResetDome extends DomeMoveByConstant {
     private static final double DEFAULT_POWER = 0.3;
 
     private int count;
+    private long tStart = 0;
+    private static final long TIMEOUT = 3000;
 
     public ResetDome() {
         this(DEFAULT_POWER);
@@ -18,6 +20,7 @@ public class ResetDome extends DomeMoveByConstant {
     @Override
     public void initialize() {
         super.initialize();
+        tStart = System.currentTimeMillis();
         count = 0;
     }
 
@@ -38,6 +41,6 @@ public class ResetDome extends DomeMoveByConstant {
 
     @Override
     public boolean isFinished() {
-        return count > 5;
+        return count > 5 || (System.currentTimeMillis() - tStart > TIMEOUT);
     }
 }
