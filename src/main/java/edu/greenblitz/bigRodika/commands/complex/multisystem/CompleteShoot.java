@@ -5,6 +5,8 @@ import edu.greenblitz.bigRodika.commands.chassis.motion.MotionUtils;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
 import edu.greenblitz.bigRodika.commands.turret.StopTurret;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
+import edu.greenblitz.bigRodika.commands.turret.profiling.DelicateTurnTurret;
+import edu.greenblitz.bigRodika.commands.turret.profiling.TurretToAngle;
 import edu.greenblitz.bigRodika.commands.turret.threaded.TurretByVisionThreaded;
 import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.VisionLocation;
@@ -13,11 +15,19 @@ import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import org.greenblitz.motion.interpolation.Dataset;
+
+import java.util.function.Supplier;
 
 public class CompleteShoot extends SequentialCommandGroup {
 
     public CompleteShoot() {
+
+        Supplier<Double> supplier = () ->
+                Turret.getInstance().getNormAngleRads() +
+                        VisionMaster.getInstance().getVisionLocation().getRelativeAngleRad();
+
         addCommands(
 
                 new MoveTurretByConstant(0.4).withInterrupt(() ->
@@ -34,9 +44,14 @@ public class CompleteShoot extends SequentialCommandGroup {
                                 && planaryDist > RobotMap.Limbo2.Shooter.MINIMUM_SHOOT_DIST;
                     }
                 },
-                new ThreadedCommand(new TurretByVisionThreaded(VisionMaster.Algorithm.HEXAGON),
-                        Turret.getInstance()).withTimeout(2),
                 new StopTurret(),
+                new WaitCommand(0.1),
+//                new ThreadedCommand(new TurretByVisionThreaded(VisionMaster.Algorithm.HEXAGON),
+//                        Turret.getInstance()).withTimeout(2),
+                new TurretToAngle(supplier,
+                        0.1, 0.1, 2.6, 80, 0.4,
+                        false, Math.toRadians(1.5)),
+                new ThreadedCommand(new DelicateTurnTurret(supplier), Turret.getInstance()),
                 new GBCommand() {
                     @Override
                     public boolean isFinished() {
@@ -48,10 +63,8 @@ public class CompleteShoot extends SequentialCommandGroup {
                     }
                 },
                 new ParallelCommandGroup(
-                        new PrepareShooterByDistance(() -> {
-                            return
-                                    VisionMaster.getInstance().getVisionLocation().getPlaneDistance();
-                        }
+                        new PrepareShooterByDistance(() ->
+                                    VisionMaster.getInstance().getVisionLocation().getPlaneDistance()
                         )
                 )
 

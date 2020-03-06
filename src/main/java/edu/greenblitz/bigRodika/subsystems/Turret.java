@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class Turret extends GBSubsystem {
     private static final double MAX_TICKS = 14000;//16400
-    private static final double MIN_TICKS = -5000;//-12400//-11000 todo :REALLY IMPORTANT FOR ROBOT NOT TO DIE.
+    private static final double MIN_TICKS = -7000;//-12400//-11000 todo :REALLY IMPORTANT FOR ROBOT NOT TO DIE.
     //ask @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;

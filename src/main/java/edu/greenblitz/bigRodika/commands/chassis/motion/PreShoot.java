@@ -14,7 +14,7 @@ import org.greenblitz.motion.tolerance.ITolerance;
 
 import java.util.List;
 
-public class PreShoot extends SequentialCommandGroup {
+public class   PreShoot extends SequentialCommandGroup {
 
     public PreShoot(HexAlign align) {
         addCommands(

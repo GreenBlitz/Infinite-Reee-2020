@@ -4,6 +4,7 @@ import edu.greenblitz.bigRodika.commands.chassis.motion.DumbAlign;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShootAndWait;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
+import edu.greenblitz.bigRodika.commands.climber.MoveHookByConstant;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
@@ -51,8 +52,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-        initTestButtons();
-//        initOfficalButtons();
+//        initTestButtons();
+        initOfficalButtons();
     }
 
 
@@ -66,7 +67,7 @@ public class OI {
     private void initTestButtons() {
 
         mainJoystick.B.whenPressed(
-                new TurretToAngle(-Math.PI/2, 0.1, 0.1, 2.6, 80, 0.4 ,
+                new TurretToAngle(() -> 0.0, 0.1, 0.1, 2.6, 80, 0.4 ,
                         true, Math.toRadians(1.5))
         );
         mainJoystick.B.whenPressed(new StopShooter());
@@ -118,9 +119,9 @@ public class OI {
 
         secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
 
-        mainJoystick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.4));
+        mainJoystick.POV_DOWN.whileHeld(new MoveHookByConstant(-0.2));
 
-        mainJoystick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.4));
+        mainJoystick.POV_UP.whileHeld(new MoveHookByConstant(0.2));
 
         secondStick.BACK.whenPressed(new ResetDome(-0.3));
 

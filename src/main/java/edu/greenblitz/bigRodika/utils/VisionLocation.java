@@ -52,6 +52,10 @@ public class VisionLocation {
         return Math.toDegrees(calculateRelativeAngle(this.x, this.y));
     }
 
+    public double getRelativeAngleRad(){
+        return calculateRelativeAngle(this.x, this.y);
+    }
+
     public boolean isValid() {
         return Double.isFinite(x) && Double.isFinite(y) && Double.isFinite(z);
     }

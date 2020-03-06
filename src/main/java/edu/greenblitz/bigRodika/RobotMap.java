@@ -135,15 +135,15 @@ public class RobotMap {
 
         public static class Climber { // TODO: check this for now irrelevant
             public static class Motor {
-                public static final int HOOK = 9;
+                public static final int HOOK = 13;
                 public static final boolean HOOK_REVERSE = false;
-                public static final int ELEVATOR = 10;
+                public static final int ELEVATOR = 18;
                 public static final boolean ELEVATOR_REVERSE = false;
             }
 
             public static class Break {
-                public static final int FORWARD = 3;
-                public static final int REVERSE = 4;
+                public static final int FORWARD = 6;
+                public static final int REVERSE = 7;
                 public static final int PCM = 21;
             }
 

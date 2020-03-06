@@ -5,16 +5,19 @@ import edu.greenblitz.gblib.threading.IThreadable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.Position;
 
+import java.util.function.Supplier;
+
 public class DelicateTurnTurret implements IThreadable {
 
-    private double POWER = 0.05;
+    private double POWER = 0.07;
     private double TOL = Math.toRadians(1.5);
+    private Supplier<Double> goalSupp;
     private double goal;
     private Turret turret;
     private double mult;
 
-    public DelicateTurnTurret(double goal) {
-        this.goal = goal;
+    public DelicateTurnTurret(Supplier<Double> goal) {
+        this.goalSupp = goal;
         this.turret = Turret.getInstance();
     }
 
@@ -43,7 +46,8 @@ public class DelicateTurnTurret implements IThreadable {
     }
 
     @Override
-    public void atInit() {
+        public void atInit() {
+        goal = goalSupp.get();
         mult = Math.signum(Position.normalizeAngle(goal - turret.getNormAngleRads()));
     }
 }
