@@ -8,7 +8,9 @@ public class ArcadeDrive extends ChassisCommand {
 
     private SmartJoystick joystick;
     private GearDependentValue<Double> forwardsFactor = new GearDependentValue<>(1.0, 0.7);
-    private GearDependentValue<Double> turnFactor = new GearDependentValue<>(1.0, 0.55);
+    private GearDependentValue<Double> turnFactor = new GearDependentValue<>(
+            0.55,
+            0.55);
 
     public ArcadeDrive(SmartJoystick joystick) {
         this.joystick = joystick;

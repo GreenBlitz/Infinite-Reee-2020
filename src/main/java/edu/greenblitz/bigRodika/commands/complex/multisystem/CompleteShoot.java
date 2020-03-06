@@ -30,28 +30,14 @@ public class CompleteShoot extends SequentialCommandGroup {
 
         addCommands(
 
-                new MoveTurretByConstant(0.4).withInterrupt(() ->
+                new MoveTurretByConstant(0.3).withInterrupt(() ->
                         VisionMaster.getInstance().isLastDataValid() &&
-                                Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 10)
+                                Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 15)
                         .withTimeout(2.5),
-                new GBCommand() {
-                    @Override
-                    public boolean isFinished() {
-                        if (!VisionMaster.getInstance().isLastDataValid()) return false;
-                        double planaryDist = VisionMaster.getInstance().getVisionLocation().getPlaneDistance();
-
-                        return planaryDist < RobotMap.Limbo2.Shooter.MAXIMUM_SHOOT_DIST
-                                && planaryDist > RobotMap.Limbo2.Shooter.MINIMUM_SHOOT_DIST;
-                    }
-                },
                 new StopTurret(),
-                new WaitCommand(0.1),
+                new WaitCommand(0.05),
 //                new ThreadedCommand(new TurretByVisionThreaded(VisionMaster.Algorithm.HEXAGON),
 //                        Turret.getInstance()).withTimeout(2),
-                new TurretToAngle(supplier,
-                        0.1, 0.1, 2.6, 80, 0.4,
-                        false, Math.toRadians(1.5)),
-                new ThreadedCommand(new DelicateTurnTurret(supplier), Turret.getInstance()),
                 new GBCommand() {
                     @Override
                     public boolean isFinished() {
@@ -63,6 +49,7 @@ public class CompleteShoot extends SequentialCommandGroup {
                     }
                 },
                 new ParallelCommandGroup(
+                        new ThreadedCommand(new DelicateTurnTurret(supplier), Turret.getInstance()),
                         new PrepareShooterByDistance(() ->
                                     VisionMaster.getInstance().getVisionLocation().getPlaneDistance()
                         )

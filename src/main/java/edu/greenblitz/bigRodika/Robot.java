@@ -85,7 +85,7 @@ public class Robot extends TimedRobot {
         Chassis.getInstance().resetGyro();
         Chassis.getInstance().resetEncoders();
 
-        VisionMaster.Algorithm.FEEDING_STATION.setAsCurrent();
+        VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         Shifter.getInstance().setShift(Gear.SPEED);
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
 

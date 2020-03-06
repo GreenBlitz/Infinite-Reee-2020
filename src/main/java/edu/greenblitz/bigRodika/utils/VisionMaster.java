@@ -54,12 +54,10 @@ public class VisionMaster extends GBSubsystem {
 
     private void setCurrentShifterState(ShifterState state) {
         this.currentShifterState = state;
-        this.shifterState.setString(state.getRawName());
     }
 
     private void setCurrentGameState(GameState state) {
         this.currentGameState = state;
-        gameState.setString(state.getRawName());
     }
 
     public Algorithm getCurrentAlgorithm() {
@@ -68,10 +66,13 @@ public class VisionMaster extends GBSubsystem {
 
     private void setCurrentAlgorithm(Algorithm algo) {
         this.currentAlgorithm = algo;
-        algorithm.setString(algo.getRawName());
+        UARTCommunication.getInstance().setAlgo(algo);
     }
 
     public boolean isLastDataValid() {
+        if(UARTCommunication.getInstance().get() != null){
+            return true;
+        }
         if (System.currentTimeMillis() - lastHandShake > MAX_HANDSHAKE_TIME) {
             SmartDashboard.putString("vision Error", "Vision took to long to respond");
             return false;
@@ -80,29 +81,32 @@ public class VisionMaster extends GBSubsystem {
     }
 
     public double[] getCurrentRawVisionData() {
-        if (output.getType() != NetworkTableType.kDoubleArray) {
-            SmartDashboard.putString("vision Error", "Vision sent data that isn't a double array");
-            return null;
+        VisionLocation data = UARTCommunication.getInstance().get();
+        if (data == null){
+            if (output.getType() != NetworkTableType.kDoubleArray) {
+                SmartDashboard.putString("vision Error", "Vision sent data that isn't a double array");
+                return null;
+            }
+            SmartDashboard.putString("vision Error", "None");
+            return output.getValue().getDoubleArray();
         }
-        SmartDashboard.putString("vision Error", "None");
-        return output.getValue().getDoubleArray();
+        return data.toDoubleArray();
     }
 
     public VisionLocation getVisionLocation() {
-        double[] input = getCurrentRawVisionData();
+        VisionLocation loc;
+        if (UARTCommunication.getInstance().connectionActive()){
+            loc = UARTCommunication.getInstance().get();
+        } else {
+            double[] input = getCurrentRawVisionData();
 
-        if (input == null) return new VisionLocation(new double[]{Double.NaN, Double.NaN, Double.NaN});
+            if (input == null) return new VisionLocation(new double[]{Double.NaN, Double.NaN, Double.NaN});
+            return new VisionLocation(input);
+        }
 
-        // TODO Temp because vision is dumb
-        //if (algorithm.getString("Bruh").equals("hexagon")) {
-        //    double full_dist_squared = input[0] * input[0] + input[1] * input[1] + input[2] * input[2];
-        //    input[1] = RobotMap.Limbo2.Chassis.MotionData.HEXAGON_CAMERA_H_DIFF;
-        //    input[2] = Math.sqrt(full_dist_squared
-        //            - Math.pow(input[0], 2) - Math.pow(input[1], 2));
-        //}
-        // Bruh moment
+        if (loc == null) return new VisionLocation(new double[]{Double.NaN, Double.NaN, Double.NaN});
 
-        return new VisionLocation(input);
+        return loc;
     }
 
     @Override
@@ -112,18 +116,19 @@ public class VisionMaster extends GBSubsystem {
         if(System.currentTimeMillis() - lastPrintTime > 500){
             System.out.println(current.toString());
             lastPrintTime = System.currentTimeMillis();
-            System.out.println("HandShake: " + handshake.getBoolean(false));
+        }
+        if (currentAlgorithm != null) {
+            putString("vision algo", currentAlgorithm.getRawName());
         }
         if (handshake.getBoolean(false)) {
             lastHandShake = System.currentTimeMillis();
             handshake.setBoolean(false);
         }
-        SmartDashboard.putString("vision algorithm", algorithm.getString("Not Existing"));
-        SmartDashboard.putString("vision raw data", current.toString());
-        SmartDashboard.putNumber("vision planery distance", current.getPlaneDistance());
-        SmartDashboard.putNumber("vision derived angle", current.getRelativeAngle());
-        SmartDashboard.putBoolean("vision valid", isLastDataValid());
-        SmartDashboard.putNumber("vision full distance", current.getFullDistance());
+        putString("vision raw data", current.toString());
+        putNumber("vision planery distance", current.getPlaneDistance());
+        putNumber("vision derived angle", current.getRelativeAngle());
+        putBoolean("vision valid", isLastDataValid());
+        putNumber("vision full distance", current.getFullDistance());
     }
 
     public enum Algorithm {
