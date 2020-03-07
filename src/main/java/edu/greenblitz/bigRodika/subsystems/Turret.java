@@ -49,7 +49,6 @@ public class Turret extends GBSubsystem {
                             OI.getInstance().getSideStick().START,
                             OI.getInstance().getMainJoystick().R1,
                             OI.getInstance().getMainJoystick().START},
-                        -Math.PI,
                 Math.toRadians(1.0),
                 Math.toRadians(15.0), Math.toRadians(5.0),
                 0.6, 0.04,

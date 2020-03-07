@@ -2,19 +2,22 @@ package edu.greenblitz.bigRodika.commands.turret.help;
 
 import edu.greenblitz.bigRodika.commands.turret.TurretCommand;
 
+import java.util.function.Supplier;
+
 public class JustGoToTheFuckingTarget extends TurretCommand {
 
     private double slowDownBegin, slowDownEnd, maximumSpeed, minimumSpeed, speedUpSlope;
     private double startOfRise = Double.NaN;
     private double target, tolerance;
+    private Supplier<Double> targetSupplier;
     private long timeStartBeingOnTarget;
 
     private static final long MINIMUM_TIME_ON_TARGET = 100;
 
     public JustGoToTheFuckingTarget(
-            double target, double tolerance,
+            Supplier<Double> targetSupp, double tolerance,
             double slowDownBegin, double slowDownEnd, double maximumSpeed, double minimumSpeed, double speedUpSlope) {
-        this.target = target;
+        this.targetSupplier = targetSupp;
         this.tolerance = tolerance;
         this.slowDownBegin = slowDownBegin;
         this.slowDownEnd = slowDownEnd;
@@ -37,6 +40,7 @@ public class JustGoToTheFuckingTarget extends TurretCommand {
 
     @Override
     public void initialize() {
+        target = targetSupplier.get();
         startOfRise = Double.NaN;
         timeStartBeingOnTarget = 0;
     }

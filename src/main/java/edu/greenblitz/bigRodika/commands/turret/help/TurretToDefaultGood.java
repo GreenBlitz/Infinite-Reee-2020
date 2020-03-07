@@ -8,10 +8,9 @@ public class TurretToDefaultGood extends JustGoToTheFuckingTarget {
     private JoystickButton[] blockers;
 
     public TurretToDefaultGood(
-            JoystickButton[] blockers,
-            double target, double tolerance,
+            JoystickButton[] blockers, double tolerance,
             double slowDownBegin, double slowDownEnd, double maximumSpeed, double minimumSpeed, double speedUpSlope) {
-        super(target, tolerance, slowDownBegin, slowDownEnd, maximumSpeed, minimumSpeed, speedUpSlope);
+        super(() -> -Math.PI, tolerance, slowDownBegin, slowDownEnd, maximumSpeed, minimumSpeed, speedUpSlope);
         this.blockers = blockers;
     }
 

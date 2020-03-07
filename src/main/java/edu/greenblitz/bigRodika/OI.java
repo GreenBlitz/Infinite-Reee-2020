@@ -67,7 +67,7 @@ public class OI {
 //                        true, Math.toRadians(1.5))
 //        );
         mainJoystick.B.whenPressed(
-                new JustGoToTheFuckingTarget(-Math.PI/2,
+                new JustGoToTheFuckingTarget(() -> -Math.PI/2,
                         Math.toRadians(1.0),
                         Math.toRadians(15.0), Math.toRadians(5.0),
                         0.6, 0.04,

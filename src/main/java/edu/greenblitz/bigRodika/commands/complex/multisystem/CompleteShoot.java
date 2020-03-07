@@ -5,6 +5,7 @@ import edu.greenblitz.bigRodika.commands.chassis.motion.MotionUtils;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
 import edu.greenblitz.bigRodika.commands.turret.StopTurret;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
+import edu.greenblitz.bigRodika.commands.turret.help.JustGoToTheFuckingTarget;
 import edu.greenblitz.bigRodika.commands.turret.profiling.DelicateTurnTurret;
 import edu.greenblitz.bigRodika.commands.turret.profiling.TurretToAngle;
 import edu.greenblitz.bigRodika.commands.turret.threaded.TurretByVisionThreaded;
@@ -49,7 +50,11 @@ public class CompleteShoot extends SequentialCommandGroup {
                     }
                 },
                 new ParallelCommandGroup(
-                        new ThreadedCommand(new DelicateTurnTurret(supplier), Turret.getInstance()),
+                        new JustGoToTheFuckingTarget(supplier,
+                                Math.toRadians(1.0),
+                                Math.toRadians(15.0), Math.toRadians(5.0),
+                                0.6, 0.04,
+                                0.02/0.5),
                         new PrepareShooterByDistance(() ->
                                     VisionMaster.getInstance().getVisionLocation().getPlaneDistance()
                         )
