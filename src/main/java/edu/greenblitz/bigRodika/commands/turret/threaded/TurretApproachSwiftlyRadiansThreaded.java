@@ -1,6 +1,6 @@
 package edu.greenblitz.bigRodika.commands.turret.threaded;
 
-import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftly;
+import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 import org.greenblitz.motion.tolerance.ITolerance;
 

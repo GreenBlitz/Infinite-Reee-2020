@@ -3,15 +3,16 @@ package edu.greenblitz.bigRodika.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.MotionUtils;
-import edu.greenblitz.bigRodika.commands.turret.TurretToDefault;
+import edu.greenblitz.bigRodika.commands.turret.help.TurretToDefaultGood;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Turret extends GBSubsystem {
     private static final double MAX_TICKS = 14000;//16400
@@ -38,8 +39,21 @@ public class Turret extends GBSubsystem {
     public static void init() {
         if (instance == null) {
             instance = new Turret();
-            instance.defaultCommand = new TurretToDefault();
         }
+    }
+
+    public static void setDefaultCommand(){
+        instance.defaultCommand = new TurretToDefaultGood(
+                    new JoystickButton[] {
+                            OI.getInstance().getSideStick().R1,
+                            OI.getInstance().getSideStick().START,
+                            OI.getInstance().getMainJoystick().R1,
+                            OI.getInstance().getMainJoystick().START},
+                        -Math.PI,
+                Math.toRadians(1.0),
+                Math.toRadians(15.0), Math.toRadians(5.0),
+                0.6, 0.04,
+                0.02/0.5);
     }
 
     public void resetEncoder() {

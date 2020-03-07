@@ -185,8 +185,8 @@ public class UARTCommunication extends GBSubsystem {
         putBoolean("Started comm", connectionActive());
         if (connectionActive()) {
             if (System.currentTimeMillis() - lastPing > BETWEEN_PINGS) {
-                putBoolean("RS232 connection good", checkConnection());
-                putBoolean("RS232 ping", ping());
+                putBoolean("uart connection good", checkConnection());
+                putBoolean("uart ping", ping());
                 lastPing = System.currentTimeMillis();
             }
         } else if (!started && channel.getBytesReceived() > 0){

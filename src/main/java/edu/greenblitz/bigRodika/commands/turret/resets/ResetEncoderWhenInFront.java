@@ -1,6 +1,7 @@
-package edu.greenblitz.bigRodika.commands.turret;
+package edu.greenblitz.bigRodika.commands.turret.resets;
 
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.bigRodika.commands.turret.TurretCommand;
 
 public class ResetEncoderWhenInFront extends TurretCommand {
 

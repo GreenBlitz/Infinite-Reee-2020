@@ -1,6 +1,5 @@
-package edu.greenblitz.bigRodika.commands.turret;
+package edu.greenblitz.bigRodika.commands.turret.movebyp;
 
-import edu.greenblitz.bigRodika.subsystems.Turret;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 import org.greenblitz.motion.tolerance.ITolerance;
 

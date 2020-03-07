@@ -1,8 +1,5 @@
 package edu.greenblitz.bigRodika;
 
-import edu.greenblitz.bigRodika.commands.chassis.motion.DumbAlign;
-import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
-import edu.greenblitz.bigRodika.commands.chassis.motion.PreShootAndWait;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.climber.MoveHookByConstant;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
@@ -19,11 +16,10 @@ import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRoller;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
-import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.commands.turret.*;
-import edu.greenblitz.bigRodika.commands.turret.profiling.TurretToAngle;
+import edu.greenblitz.bigRodika.commands.turret.help.JustGoToTheFuckingTarget;
 import edu.greenblitz.bigRodika.commands.turret.test.CheckMaxRotTurr;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
@@ -52,8 +48,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-//        initTestButtons();
-        initOfficalButtons();
+        initTestButtons();
+//        initOfficalButtons();
     }
 
 
@@ -66,11 +62,17 @@ public class OI {
 
     private void initTestButtons() {
 
+//        mainJoystick.B.whenPressed(
+//                new TurretToAngle(() -> 0.0, 0.1, 0.1, 2.6, 80, 0.4 ,
+//                        true, Math.toRadians(1.5))
+//        );
         mainJoystick.B.whenPressed(
-                new TurretToAngle(() -> 0.0, 0.1, 0.1, 2.6, 80, 0.4 ,
-                        true, Math.toRadians(1.5))
+                new JustGoToTheFuckingTarget(-Math.PI/2,
+                        Math.toRadians(1.0),
+                        Math.toRadians(15.0), Math.toRadians(5.0),
+                        0.6, 0.04,
+                        0.02/0.5)
         );
-        mainJoystick.B.whenPressed(new StopShooter());
 
         mainJoystick.A.whenPressed(new CheckMaxRotTurr(0.4));
 
@@ -122,6 +124,11 @@ public class OI {
         mainJoystick.POV_DOWN.whileHeld(new MoveHookByConstant(-0.2));
 
         mainJoystick.POV_UP.whileHeld(new MoveHookByConstant(0.2));
+
+        mainJoystick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
+
+        mainJoystick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
+
 
         secondStick.BACK.whenPressed(new ResetDome(-0.3));
 

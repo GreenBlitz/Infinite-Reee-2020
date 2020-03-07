@@ -1,10 +1,9 @@
-package edu.greenblitz.bigRodika.commands.turret;
+package edu.greenblitz.bigRodika.commands.turret.movebyp;
 
 import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.bigRodika.subsystems.Shifter;
+import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
-import edu.greenblitz.bigRodika.subsystems.Turret;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 
 public class TurretToDefault extends TurretApproachSwiftly {

@@ -1,6 +1,6 @@
 package edu.greenblitz.bigRodika.commands.complex.autonomous;
 
-import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyRadians;
+import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftlyRadians;
 import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.tolerance.ITolerance;
 

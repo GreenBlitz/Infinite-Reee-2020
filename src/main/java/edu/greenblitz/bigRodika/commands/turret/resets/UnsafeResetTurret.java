@@ -1,4 +1,6 @@
-package edu.greenblitz.bigRodika.commands.turret;
+package edu.greenblitz.bigRodika.commands.turret.resets;
+
+import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
 
 public class UnsafeResetTurret extends MoveTurretByConstant {
     /*
