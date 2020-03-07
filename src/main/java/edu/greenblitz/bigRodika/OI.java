@@ -16,6 +16,7 @@ import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRoller;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
+import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.commands.turret.*;
@@ -48,8 +49,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-        initTestButtons();
-//        initOfficalButtons();
+//        initTestButtons();
+        initOfficalButtons();
     }
 
 
@@ -147,9 +148,9 @@ public class OI {
 
         // ---------------------------------------------------------------
 
-        secondStick.R1.whenPressed(new CompleteShoot());
+        secondStick.R1.whenPressed(new CompleteShoot(secondStick));
         secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
-                                                             new ResetDome()));
+                                                             new ResetDome(-0.5)));
 
         secondStick.L1.whileHeld(new InsertIntoShooter(0.7, 0.8, 0.6));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
@@ -168,7 +169,9 @@ public class OI {
         secondStick.START.whenPressed(new FullyAutoThreeStage(1650)); // 1650
         secondStick.START.whenReleased(new StopShooter());
 
-        secondStick.X.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+        secondStick.X.whileHeld(new ShootByConstant(
+                Shooter.getInstance().getDesiredPower(2000)
+        ));
 
         secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
 

@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().enable();
 
         DigitalInputMap.getInstance();
-        Pneumatics.init();
+//        Pneumatics.init();
         Intake.init();
         Shifter.init();
         Funnel.init();
