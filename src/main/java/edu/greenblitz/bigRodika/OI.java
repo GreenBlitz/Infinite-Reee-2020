@@ -152,7 +152,7 @@ public class OI {
         secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
                                                              new ResetDome(-0.5)));
 
-        secondStick.L1.whileHeld(new InsertIntoShooter(0.7, 0.8, 0.6));
+        secondStick.L1.whileHeld(new InsertIntoShooter(1.0, 0.8, 0.6));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
                 new StopInserter(), new StopRoller()));
 
@@ -169,9 +169,20 @@ public class OI {
         secondStick.START.whenPressed(new FullyAutoThreeStage(1650)); // 1650
         secondStick.START.whenReleased(new StopShooter());
 
-        secondStick.X.whileHeld(new ShootByConstant(
+        secondStick.X.whenPressed(new ShootByConstant(
                 Shooter.getInstance().getDesiredPower(2000)
         ));
+        secondStick.X.whenReleased(new GBCommand() {
+            @Override
+            public void initialize() {
+                if (!secondStick.R1.get()) new StopShooter().schedule();
+            }
+
+            @Override
+            public boolean isFinished() {
+                return true;
+            }
+        });
 
         secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
 

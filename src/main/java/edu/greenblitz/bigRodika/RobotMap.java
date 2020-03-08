@@ -42,7 +42,7 @@ public class RobotMap {
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
                     28672.0);//correct 110 present
             public static double ENCODER_VALUE_WHEN_FORWARD = 8974.0;
-            public static double ENCODER_90_DEG_ABS = 8974.0 - 1581.0;
+            public static double ENCODER_90_DEG_ABS = NORMALIZER.getValue() / 4.0;
             public static double ENCODER_VALUE_WHEN_NEGATIVE_90 = ENCODER_VALUE_WHEN_FORWARD -
                     ENCODER_90_DEG_ABS;
             public static double ENCODER_VALUE_WHEN_NEGATIVE_180 = ENCODER_VALUE_WHEN_FORWARD

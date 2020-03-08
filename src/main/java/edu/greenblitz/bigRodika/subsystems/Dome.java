@@ -13,7 +13,7 @@ public class Dome extends GBSubsystem {
 
     private static Dome instance;
     private final double POT_LOWER_LIMIT = 0.1,
-            POT_HIGHER_LIMIT = 0.55;
+            POT_HIGHER_LIMIT = 0.52;
     private static final double POWER_AT_LOWER_END = -0.05;
     private static final double MAX_VELOCITY = 0.2;
     private static final double MIN_VELOCITY = 0.004;
@@ -58,7 +58,7 @@ public class Dome extends GBSubsystem {
 
     private void moveMotor(double power) {
         lastPower = power;
-        domeMotor.set(power);
+//        domeMotor.set(power);
     }
 
     public void safeMove(double power) {

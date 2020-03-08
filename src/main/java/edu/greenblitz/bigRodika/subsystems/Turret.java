@@ -50,9 +50,9 @@ public class Turret extends GBSubsystem {
                             OI.getInstance().getMainJoystick().R1,
                             OI.getInstance().getMainJoystick().START},
                 Math.toRadians(1.0),
-                Math.toRadians(15.0), Math.toRadians(5.0),
-                0.6, 0.04,
-                0.02/0.5);
+                Math.toRadians(20.0), Math.toRadians(5.0),
+                0.5, 0.03,
+                0.02/0.75);
     }
 
     public void resetEncoder() {

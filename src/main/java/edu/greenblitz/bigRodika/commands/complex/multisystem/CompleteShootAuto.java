@@ -8,24 +8,20 @@ import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.LogTime;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
+import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import java.util.function.Supplier;
 
-public class CompleteShoot extends SequentialCommandGroup {
+public class CompleteShootAuto extends SequentialCommandGroup {
 
-    public CompleteShoot(SmartJoystick secondStick) {
+    public CompleteShootAuto() {
 
         Supplier<Double> turretAlignSupp = () ->
                 Turret.getInstance().getNormAngleRads() +
                         VisionMaster.getInstance().getVisionLocation().getRelativeAngleRad();
-
-        Supplier<Double> turretFindVisionSupp = () ->
-                -Chassis.getInstance().getAngle();
-
-        long prevStartedAt = 0;
 
         addCommands(
 
@@ -33,18 +29,11 @@ public class CompleteShoot extends SequentialCommandGroup {
 //                        VisionMaster.getInstance().isLastDataValid() &&
 //                                Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 15)
 //                        .withTimeout(2.5),
-                new LogTime(""),
-                new JustGoToTheFuckingTarget(turretFindVisionSupp,
-                        Math.toRadians(5.0),
-                        Math.toRadians(12.5), Math.toRadians(5.0),
-                        0.6, 0.04,
-                        0.02 / 0.75),
                 new StopTurret(),
-                new LogTime("Turret to face hex wall"),
                 //new WaitCommand(0.05),
 //                new ThreadedCommand(new TurretByVisionThreaded(VisionMaster.Algorithm.HEXAGON),
 //                        Turret.getInstance()).withTimeout(2),
-                new TurretByTriggers(secondStick) {
+                new GBCommand() {
 
                     @Override
                     public boolean isFinished() {

@@ -14,7 +14,7 @@ public class UARTCommunication extends GBSubsystem {
     private SerialPort channel;
     private static final int BAUD_RATE = 115200;
     private static final long BETWEEN_PINGS = 100;
-    private static final int RESPONSE_WAIT_TIME = 2;
+    private static final int RESPONSE_WAIT_TIME = 5;
     private static final int DEFAULT_TIMEOUT = 20;
     private boolean started;
     private long timeConnectionEst = 0;

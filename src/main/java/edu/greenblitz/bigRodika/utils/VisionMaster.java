@@ -19,6 +19,7 @@ public class VisionMaster extends GBSubsystem {
     private long lastPrintTime = 0;
 
     private static VisionMaster instance;
+    private VisionLocation current;
     private Algorithm currentAlgorithm;
     private GameState currentGameState;
     private ShifterState currentShifterState;
@@ -29,6 +30,7 @@ public class VisionMaster extends GBSubsystem {
     private NetworkTableEntry gameState;
     private NetworkTableEntry shifterState;
     private NetworkTableEntry handshake;
+    private boolean visionGood = false;
     private long lastHandShake;
     private Logger logger;
 
@@ -70,7 +72,9 @@ public class VisionMaster extends GBSubsystem {
     }
 
     public boolean isLastDataValid() {
-        if(UARTCommunication.getInstance().get() != null){
+        if(UARTCommunication.getInstance().getBoolean("uart connection good",
+                false) && UARTCommunication.getInstance().connectionActive()
+        && visionGood){
             return true;
         }
         if (System.currentTimeMillis() - lastHandShake > MAX_HANDSHAKE_TIME) {
@@ -85,15 +89,25 @@ public class VisionMaster extends GBSubsystem {
         if (data == null){
             if (output.getType() != NetworkTableType.kDoubleArray) {
                 SmartDashboard.putString("vision Error", "Vision sent data that isn't a double array");
+                visionGood = false;
                 return null;
             }
+            visionGood = true;
             SmartDashboard.putString("vision Error", "None");
             return output.getValue().getDoubleArray();
         }
+        visionGood = true;
         return data.toDoubleArray();
     }
 
-    public VisionLocation getVisionLocation() {
+    public VisionLocation getVisionLocation(){
+        if (current == null){
+            current = getVisionLocationInternal();
+        }
+        return current;
+    }
+
+    private VisionLocation getVisionLocationInternal() {
         VisionLocation loc;
         if (UARTCommunication.getInstance().connectionActive()){
             loc = UARTCommunication.getInstance().get();
@@ -111,7 +125,9 @@ public class VisionMaster extends GBSubsystem {
 
     @Override
     public void periodic() {
-        VisionLocation current = getVisionLocation();
+        long t0 = System.currentTimeMillis();
+        current = getVisionLocationInternal();
+        putNumber("Time to get data", System.currentTimeMillis() - t0);
 
         if(System.currentTimeMillis() - lastPrintTime > 500){
             System.out.println(current.toString());

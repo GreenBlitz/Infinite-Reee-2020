@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika.commands.turret.help;
 
 import edu.greenblitz.bigRodika.commands.turret.TurretCommand;
+import org.opencv.core.Mat;
 
 import java.util.function.Supplier;
 
@@ -13,6 +14,14 @@ public class JustGoToTheFuckingTarget extends TurretCommand {
     private long timeStartBeingOnTarget;
 
     private static final long MINIMUM_TIME_ON_TARGET = 100;
+
+    public JustGoToTheFuckingTarget(
+            Supplier<Double> targetSupp) {
+        this(targetSupp,  Math.toRadians(1.0),
+                Math.toRadians(20.0), Math.toRadians(5.0),
+                0.5, 0.04,
+                0.02/0.75);
+    }
 
     public JustGoToTheFuckingTarget(
             Supplier<Double> targetSupp, double tolerance,
