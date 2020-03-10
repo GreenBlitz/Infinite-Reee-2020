@@ -1,17 +1,22 @@
 package edu.greenblitz.bigRodika.commands.climber;
 
+import org.greenblitz.motion.pid.PIDController;
 import org.greenblitz.motion.pid.PIDObject;
 
 public class HookByPID extends ClimberCommand {
-    protected PIDObject obj;
-    protected double target;
+    private PIDController controller;
 
-    public HookByPID(PIDObject obj, double target) {
-        this.obj = obj;
-        this.target = target;
+    public HookByPID(PIDObject obj) {
+        controller = new PIDController(obj);
     }
 
     @Override
     public void execute() {
+        climber.moveHook(controller.calculatePID(climber.getElevatorPosition()));
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        climber.moveHook(0);
     }
 }
