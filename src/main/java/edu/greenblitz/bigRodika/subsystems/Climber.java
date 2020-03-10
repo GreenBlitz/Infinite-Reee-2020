@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.gblib.encoder.IEncoder;
+import edu.greenblitz.gblib.encoder.SparkEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.greenblitz.gblib.gears.GearDependentValue;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -17,24 +18,26 @@ public class Climber extends GBSubsystem {
     private static Climber instance;
     private WPI_TalonSRX elevator;
     private CANSparkMax hook;
-    private CANEncoder hookEncoder;
+    private SparkEncoder hookEncoder;
     private TalonEncoder elevatorEncoder;
     private Servo stopper;
 
     public Climber() {
         elevator = new WPI_TalonSRX(RobotMap.Limbo2.Climber.Motor.ELEVATOR);
-        elevatorEncoder = new TalonEncoder(new GearDependentValue<>(RobotMap.Limbo2.Climber.Motor.ELEVATOR_RATIO,RobotMap.Limbo2.Climber.Motor.ELEVATOR_RATIO), elevator);
+        elevatorEncoder = new TalonEncoder(RobotMap.Limbo2.Climber.Motor.ELEVATOR_TICKS_PER_METER, elevator);
         elevator.setInverted(RobotMap.Limbo2.Climber.Motor.HOOK_REVERSE);
         hook = new CANSparkMax(RobotMap.Limbo2.Climber.Motor.HOOK, CANSparkMaxLowLevel.MotorType.kBrushless);
-        hookEncoder = new CANEncoder(hook);
+        hookEncoder = new SparkEncoder(RobotMap.Limbo2.Climber.Motor.HOOK_TICKS_PER_METER, hook);
         hook.setInverted(RobotMap.Limbo2.Climber.Motor.HOOK_REVERSE);
         stopper = new Servo(RobotMap.Limbo2.Climber.Break.SERVO_PORT);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Servo VAlue:", stopper.get());
-        SmartDashboard.putNumber("Hook ticks:", this.getHookTicks());
+        super.periodic();
+        putNumber("Servo Value", stopper.get());
+        putNumber("Hook ticks", this.getHookTicks());
+        putNumber("Elvator position", getElevatorPosition());
     }
 
     public static void init() {
@@ -55,7 +58,7 @@ public class Climber extends GBSubsystem {
     }
 
     public double getHookTicks() {
-        return hookEncoder.getPosition();
+        return hookEncoder.getRawTicks();
     }
 
     public double getElevatorPosition() {

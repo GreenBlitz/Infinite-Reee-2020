@@ -138,6 +138,8 @@ public class RobotMap {
                 public static final int HOOK = 9;
                 public static final boolean HOOK_REVERSE = false;
                 public static final int ELEVATOR = 13;
+                public static final GearDependentValue<Double> ELEVATOR_TICKS_PER_METER = new GearDependentValue<>(1.0,1.0);
+                public static final GearDependentValue<Double> HOOK_TICKS_PER_METER = new GearDependentValue<>(1.0,1.0);
                 public static final double ELEVATOR_RATIO = 0.025;
                 public static final boolean ELEVATOR_REVERSE = false;
             }
