@@ -69,7 +69,7 @@ public class Intake {
         }
     }
 
-    public class Roller extends IntakeSubsystem {
+    private class Roller extends IntakeSubsystem {
 
         private WPI_TalonSRX roller;
 

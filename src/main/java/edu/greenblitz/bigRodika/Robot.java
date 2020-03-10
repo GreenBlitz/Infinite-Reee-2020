@@ -100,8 +100,7 @@ public class Robot extends TimedRobot {
         if (!DriverStation.getInstance().isFMSAttached()){
 //            new CompressorOn().schedule();
 //            new ResetEncoderWhenInSide().schedule();
-            new HookByTriggers(OI.getInstance().getSideStick(), 0.4).schedule();
-            new ClimbByTriggers(OI.getInstance().getMainJoystick(), 0.4).schedule();
+            new ClimbByTriggers(OI.getInstance().getMainJoystick(), OI.getInstance().getSideStick(), 0.4, 0.4).schedule();
             Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         }
 

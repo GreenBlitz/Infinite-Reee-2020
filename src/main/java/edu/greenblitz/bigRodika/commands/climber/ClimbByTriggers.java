@@ -4,18 +4,24 @@ import edu.greenblitz.gblib.hid.SmartJoystick;
 
 public class ClimbByTriggers extends ClimberCommand {
 
-    private SmartJoystick stick;
-    private double multiplier;
+    private SmartJoystick elevatorStick;
+    private SmartJoystick hookStick;
+    private double elevatorMultiplier;
+    private double hookMultiplier;
 
-    public ClimbByTriggers(SmartJoystick s, double mult) {
-        stick = s;
-        multiplier = mult;
+    public ClimbByTriggers(SmartJoystick elevatorStick, SmartJoystick hookStick, double elevatorMult, double hookMult) {
+        this.elevatorStick = elevatorStick;
+        this.hookStick = hookStick;
+        this.elevatorMultiplier = elevatorMult;
+        this.hookMultiplier = hookMult;
     }
 
     @Override
     public void execute() {
-        climber.moveElevator(multiplier * (stick.getAxisValue(SmartJoystick.Axis.RIGHT_TRIGGER) -
-                stick.getAxisValue(SmartJoystick.Axis.LEFT_TRIGGER)));
+        climber.moveElevator(elevatorMultiplier * (elevatorStick.getAxisValue(SmartJoystick.Axis.RIGHT_TRIGGER) -
+                elevatorStick.getAxisValue(SmartJoystick.Axis.LEFT_TRIGGER)));
+        climber.moveHook(hookMultiplier * (hookStick.getAxisValue(SmartJoystick.Axis.RIGHT_TRIGGER) -
+                hookStick.getAxisValue(SmartJoystick.Axis.LEFT_TRIGGER)));
     }
 
 
