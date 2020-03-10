@@ -1,7 +1,9 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
+import edu.greenblitz.bigRodika.commands.climber.HoldElevator;
 import edu.greenblitz.bigRodika.commands.climber.MoveHookByConstant;
+import edu.greenblitz.bigRodika.commands.climber.ReleaseElevator;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
@@ -49,8 +51,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-//        initTestButtons();
-        initOfficalButtons();
+        initTestButtons();
+//        initOfficalButtons();
     }
 
 
@@ -63,75 +65,8 @@ public class OI {
 
     private void initTestButtons() {
 
-//        mainJoystick.B.whenPressed(
-//                new TurretToAngle(() -> 0.0, 0.1, 0.1, 2.6, 80, 0.4 ,
-//                        true, Math.toRadians(1.5))
-//        );
-        mainJoystick.B.whenPressed(
-                new JustGoToTheFuckingTarget(() -> -Math.PI/2,
-                        Math.toRadians(1.0),
-                        Math.toRadians(15.0), Math.toRadians(5.0),
-                        0.6, 0.04,
-                        0.02/0.5)
-        );
-
-        mainJoystick.A.whenPressed(new CheckMaxRotTurr(0.4));
-
-        List<State> goBack = new ArrayList<>();
-        goBack.add(new State(0, 0));
-        goBack.add(new State(0,0.4));
-
-        secondStick.A.whenPressed(
-                new ParallelRaceGroup(
-                        new DomeApproachSwiftly(0.1), // was 0.1
-                        new ThreadedCommand(
-                                new Follow2DProfileCommand(goBack,
-                                        RobotMap.Limbo2.Chassis.MotionData.CONFIG,
-                                        0.3, false),
-                                Chassis.getInstance())
-                ).andThen(
-                        new ExtendRoller()
-                )
-                        .andThen(
-                        new GBCommand() {
-                            @Override
-                            public boolean isFinished() {
-                                return !mainJoystick.A.get();
-                            }
-                        }
-                )
-        );
-
-        secondStick.R1.whenPressed(
-                new FullyAutoThreeStage(1640)
-        );
-        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter()));
-//                new ResetDome()));
-
-        secondStick.B.whenPressed(new ToggleExtender());
-
-//        secondStick.R1.whenPressed(new FullyAutoThreeStage(2600, 0.5));
-//        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
-//                new ResetDome()));
-
-        secondStick.L1.whileHeld(new InsertIntoShooter(1, 0.5, 0.6));
-        secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
-                new StopInserter(), new StopRoller()));
-
-        secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
-
-        secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
-
-        mainJoystick.POV_DOWN.whileHeld(new MoveHookByConstant(-0.2));
-
-        mainJoystick.POV_UP.whileHeld(new MoveHookByConstant(0.2));
-
-        mainJoystick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
-
-        mainJoystick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
-
-
-        secondStick.BACK.whenPressed(new ResetDome(-0.3));
+        mainJoystick.A.whenPressed(new HoldElevator());
+        mainJoystick.B.whenPressed(new ReleaseElevator());
 
     }
 

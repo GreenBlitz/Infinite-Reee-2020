@@ -1,6 +1,8 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
+import edu.greenblitz.bigRodika.commands.climber.ClimbByTriggers;
+import edu.greenblitz.bigRodika.commands.climber.HookByTriggers;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
@@ -12,6 +14,7 @@ import edu.greenblitz.bigRodika.utils.UARTCommunication;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.greenblitz.motion.Localizer;
@@ -94,11 +97,13 @@ public class Robot extends TimedRobot {
 //        new ResetEncoderWhenInFront().schedule();
         new StopShooter().schedule();
 
-//        if (!DriverStation.getInstance().isFMSAttached()){
+        if (!DriverStation.getInstance().isFMSAttached()){
 //            new CompressorOn().schedule();
 //            new ResetEncoderWhenInSide().schedule();
-//            Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
-//        }
+            new HookByTriggers(OI.getInstance().getSideStick(), 0.4).schedule();
+            new ClimbByTriggers(OI.getInstance().getMainJoystick(), 0.4).schedule();
+            Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
+        }
 
     }
 }
