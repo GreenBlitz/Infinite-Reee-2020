@@ -27,6 +27,8 @@ public class Climber extends GBSubsystem {
         elevator = new CANSparkMax(RobotMap.Limbo2.Climber.Motor.ELEVATOR, CANSparkMaxLowLevel.MotorType.kBrushless);
         elevatorEncoder = new CANEncoder(elevator);
         elevator.setInverted(RobotMap.Limbo2.Climber.Motor.ELEVATOR_REVERSE);
+
+        stopper = new Servo(RobotMap.Limbo2.Climber.Break.SERVO_PORT);
     }
 
     public static void init() {
