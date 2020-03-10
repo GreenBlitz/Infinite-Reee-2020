@@ -38,7 +38,7 @@ public class Trench8BallAuto extends ParallelCommandGroup {
 
         List<State> hardCodedShit2 = new ArrayList<>();
         hardCodedShit2.add(new State(0, 0));
-        hardCodedShit2.add(new State(0, -2)); //TODO: change the y to the real y -> betwen end of 5 to end of 8
+        hardCodedShit2.add(new State(0, -2)); //TODO: change the y to the real y -> between end of 5 to end of 8
 
         addCommands(
                 new DomeMoveByConstant(0.4).withTimeout(0.2),

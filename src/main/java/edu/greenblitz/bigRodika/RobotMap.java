@@ -136,15 +136,18 @@ public class RobotMap {
         public static class Climber { // TODO: check this for now irrelevant
             public static class Motor {
                 public static final int HOOK = 13;
+                public static final int HOOK_ENCODER = 2;
+                public static final double HOOK_RATIO = 1.0;
                 public static final boolean HOOK_REVERSE = false;
                 public static final int ELEVATOR = 18;
+                public static final int ELEVATOR_ENCODER = 3;
                 public static final boolean ELEVATOR_REVERSE = false;
             }
 
             public static class Break {
-                public static final int FORWARD = 6;
-                public static final int REVERSE = 7;
-                public static final int PCM = 21;
+                public static final int SERVO_PORT = 1;
+                public static final double RELEASE_VALUE = 0.0;
+                public static final double HOLD_VALUE = 1.0;
             }
 
         }
