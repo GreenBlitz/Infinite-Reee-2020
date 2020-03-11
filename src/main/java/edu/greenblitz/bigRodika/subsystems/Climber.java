@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Climber extends GBSubsystem {
+    private final double HOOK_MIN_VALUE = 0.0;
+
     private static Climber instance;
     private WPI_TalonSRX elevator;
     private CANSparkMax hook;
@@ -52,6 +54,13 @@ public class Climber extends GBSubsystem {
         hook.set(power);
     }
 
+    public void safeMoveHook(double power) {
+        if (isStopped() && power < 0) {
+            moveHook(0);
+            return;
+        }
+        moveHook(power);
+    }
 
     public void moveElevator(double power) {
         elevator.set(power);

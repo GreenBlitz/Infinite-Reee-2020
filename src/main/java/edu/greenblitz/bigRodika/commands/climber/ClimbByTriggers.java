@@ -20,8 +20,7 @@ public class ClimbByTriggers extends ClimberCommand {
     public void execute() {
         climber.moveElevator(elevatorMultiplier * (elevatorStick.getAxisValue(SmartJoystick.Axis.RIGHT_TRIGGER) -
                 elevatorStick.getAxisValue(SmartJoystick.Axis.LEFT_TRIGGER)));
-        climber.moveHook(hookMultiplier * (hookStick.getAxisValue(SmartJoystick.Axis.RIGHT_TRIGGER) -
-                hookStick.getAxisValue(SmartJoystick.Axis.LEFT_TRIGGER)));
+        climber.safeMoveHook(hookMultiplier * (hookStick.getAxisValue(SmartJoystick.Axis.LEFT_TRIGGER) - hookStick.getAxisValue(SmartJoystick.Axis.RIGHT_TRIGGER)));
     }
 
 

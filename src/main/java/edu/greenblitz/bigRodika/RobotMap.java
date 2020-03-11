@@ -136,7 +136,7 @@ public class RobotMap {
         public static class Climber { // TODO: check this for now irrelevant
             public static class Motor {
                 public static final int HOOK = 9;
-                public static final boolean HOOK_REVERSE = false;
+                public static final boolean HOOK_REVERSE = true;
                 public static final int ELEVATOR = 13;
                 public static final GearDependentValue<Double> ELEVATOR_TICKS_PER_METER = new GearDependentValue<>(1.0,1.0);
                 public static final GearDependentValue<Double> HOOK_TICKS_PER_METER = new GearDependentValue<>(1.0,1.0);
@@ -146,8 +146,8 @@ public class RobotMap {
 
             public static class Break {
                 public static final int SERVO_PORT = 0;
-                public static final double RELEASE_VALUE = 0.0;
-                public static final double HOLD_VALUE = 1.0;
+                public static final double RELEASE_VALUE = 1.0;
+                public static final double HOLD_VALUE = 0.0;
             }
 
         }
