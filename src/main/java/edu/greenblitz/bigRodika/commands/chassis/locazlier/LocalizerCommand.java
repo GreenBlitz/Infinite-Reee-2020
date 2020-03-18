@@ -1,35 +1,34 @@
-package edu.greenblitz.bigRodika.commands.chassis;
+package edu.greenblitz.bigRodika.commands.chassis.locazlier;
 
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.threading.IThreadable;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.greenblitz.motion.app.Localizer;
+import org.greenblitz.motion.Localizer;
 
 public class LocalizerCommand implements IThreadable {
 
+    private static final long DEFAULT_MINIMUM_LOOP_TIME = 0;
     private Chassis chassis;
     private Localizer localizer;
     private long minimumLoopTime;
     private long tPrev;
     private boolean died;
 
-    private static final long DEFAULT_MINIMUM_LOOP_TIME = 0;
-
-    public LocalizerCommand(){
+    public LocalizerCommand() {
         this(DEFAULT_MINIMUM_LOOP_TIME);
     }
 
-    public LocalizerCommand(long t){
+    public LocalizerCommand(long t) {
         minimumLoopTime = t;
     }
 
     @Override
     public void run() {
         localizer.update(chassis.getLeftMeters(), chassis.getRightMeters(), chassis.getAngle());
+//        localizer.update(chassis.getLeftMeters(), chassis.getRightMeters());
+
         if (System.currentTimeMillis() - tPrev < minimumLoopTime) {
             try {
-                Thread.sleep(System.currentTimeMillis() - tPrev);
+                Thread.sleep(minimumLoopTime - (System.currentTimeMillis() - tPrev));
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 died = true;
@@ -44,7 +43,8 @@ public class LocalizerCommand implements IThreadable {
     }
 
     @Override
-    public void atEnd() { }
+    public void atEnd() {
+    }
 
     @Override
     public void atInit() {

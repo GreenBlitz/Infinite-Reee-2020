@@ -1,77 +1,117 @@
 package edu.greenblitz.bigRodika.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.bigRodika.commands.chassis.ArcadeDrive;
+import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.gblib.encoder.IEncoder;
-import edu.greenblitz.gblib.encoder.RoborioEncoder;
-import edu.greenblitz.gblib.encoder.TalonEncoder;
+import edu.greenblitz.gblib.encoder.SparkEncoder;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
 import edu.greenblitz.gblib.gyroscope.PigeonGyro;
-import edu.greenblitz.utils.SmartRobotDrive;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import org.greenblitz.motion.app.Localizer;
+import org.greenblitz.motion.Localizer;
+import org.greenblitz.motion.base.Position;
 
-import java.util.Arrays;
 
-public class Chassis implements Subsystem {
+public class Chassis extends GBSubsystem {
     private static Chassis instance;
 
-    private VictorSPX leftVictor, rightVictor;
-    private TalonSRX leftTalon, rightTalon;
+    private CANSparkMax rightLeader, rightFollower1, rightFollower2, leftLeader, leftFollower1, leftFollower2;
     private IEncoder leftEncoder, rightEncoder;
     private IGyroscope gyroscope;
-    private SmartRobotDrive robotDrive;
+//    private PowerDistributionPanel robotPDP;
 
     private Chassis() {
-        leftVictor = new VictorSPX(RobotMap.BigRodika.Chassis.Motor.LEFT_VICTOR);
-        rightVictor = new VictorSPX(RobotMap.BigRodika.Chassis.Motor.RIGHT_VICTOR);
-        leftTalon = new TalonSRX(RobotMap.BigRodika.Chassis.Motor.LEFT_TALON);
-        rightTalon = new TalonSRX(RobotMap.BigRodika.Chassis.Motor.RIGHT_TALON);
+        rightLeader = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        rightFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
+        rightFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);
+        leftLeader = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        leftFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
+        leftFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);   //big-haim
 
-        leftEncoder = new RoborioEncoder(
-                RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_LEFT,
-                RobotMap.BigRodika.Chassis.Encoder.LEFT_PORT_A,
-                RobotMap.BigRodika.Chassis.Encoder.LEFT_PORT_B);
-        rightEncoder = new RoborioEncoder(
-                RobotMap.BigRodika.Chassis.Encoder.NORM_CONST_RIGHT,
-                RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_A,
-                RobotMap.BigRodika.Chassis.Encoder.RIGHT_PORT_B);
+        rightLeader.setSmartCurrentLimit(40);
+        rightFollower1.setSmartCurrentLimit(40);
+        rightFollower2.setSmartCurrentLimit(40);
+        leftLeader.setSmartCurrentLimit(40);
+        leftFollower1.setSmartCurrentLimit(40);
+        leftFollower2.setSmartCurrentLimit(40);
 
-        gyroscope = new PigeonGyro(new PigeonIMU(rightTalon));
+        leftFollower1.follow(leftLeader);
+        leftFollower2.follow(leftLeader);
+        rightFollower1.follow(rightLeader);
+        rightFollower2.follow(rightLeader);
 
-        robotDrive = new SmartRobotDrive(rightVictor, rightTalon, leftVictor, leftTalon);
-        robotDrive.setInvetedMotor(SmartRobotDrive.TalonID.FRONT_RIGHT, true);
+        leftLeader.setInverted(false);
+//        leftFollower1.setInverted(true);
+//        leftFollower2.setInverted(true);
+        rightLeader.setInverted(true);
+//        leftFollower1.setInverted(true);
+//        leftFollower2.setInverted(true);
 
-        setDefaultCommand(new ArcadeDrive(this, OI.getInstance().getMainJoystick()));
+        leftEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, leftLeader);
+        leftEncoder.invert(false);
+        rightEncoder = new SparkEncoder(RobotMap.Limbo2.Chassis.Encoder.NORM_CONST_SPARK, rightLeader);
+        rightEncoder.invert(false);
+
+        gyroscope = new PigeonGyro(
+                new PigeonIMU(Funnel.getInstance().getPusher().getTalon()));
+        gyroscope.reset();
+        gyroscope.inverse();
+    }
+
+    public static void init() {
+        if (instance == null) {
+            instance = new Chassis();
+            instance.setDefaultCommand(
+                    new ArcadeDrive(OI.getInstance().getMainJoystick())
+            );
+        }
     }
 
     public static Chassis getInstance() {
-        if (instance == null) {
-            instance = new Chassis();
-        }
         return instance;
     }
 
-    public void moveMotors(double left, double right){
-        robotDrive.tankDrive(left, right);
+    public void changeGear() {
+        leftEncoder.switchGear();
+        rightEncoder.switchGear();
+    }
+
+    public void moveMotors(double left, double right) {
+        putNumber("Left Power", left);
+        putNumber("Right Power", right);
+        rightLeader.set(right);
+        leftLeader.set(left);
+    }
+
+    public void toBrake() {
+        rightLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rightFollower1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rightFollower2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        leftLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        leftFollower1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        leftFollower2.setIdleMode(CANSparkMax.IdleMode.kBrake);   //big-haim
+    }
+
+    public void toCoast() {
+        rightLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        rightFollower1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        rightFollower2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        leftLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        leftFollower1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        leftFollower2.setIdleMode(CANSparkMax.IdleMode.kCoast);   //big-haim
     }
 
     public void arcadeDrive(double moveValue, double rotateValue) {
-        robotDrive.arcadeDrive(moveValue, rotateValue);
+        moveMotors(moveValue - rotateValue, moveValue + rotateValue);
     }
 
-    public double getLeftMeters(){
+    public double getLeftMeters() {
         return leftEncoder.getNormalizedTicks();
     }
 
-    public double getRightMeters(){
+    public double getRightMeters() {
         return rightEncoder.getNormalizedTicks();
     }
 
@@ -79,37 +119,58 @@ public class Chassis implements Subsystem {
         return leftEncoder.getNormalizedVelocity();
     }
 
-    public double getRightRate(){
+    public double getRightRate() {
         return rightEncoder.getNormalizedVelocity();
     }
 
-    public double getLinearVelocity(){
-        return 0.5*(getLeftRate() + getRightRate());
+    public double getLinearVelocity() {
+        return 0.5 * (getRightRate() + getLeftRate());
     }
 
-    public double getAngularVelocityByWheels(){
-        return getWheelDistance() * (getLeftRate() - getRightRate());
+    public double getAngularVelocityByWheels() {
+        return getWheelDistance() * (getRightRate() - getLeftRate());
     }
 
-    public double getAngle(){
+    public double getAngle() {
         return gyroscope.getNormalizedYaw();
     }
 
-    public double getAngularVelocityByGyro(){
+    public double getRawAngle() {
+        return gyroscope.getRawYaw();
+    }
+
+    public double getAngularVelocityByGyro() {
         return gyroscope.getYawRate();
     }
 
-    public void resetGyro(){
+    public void resetGyro() {
         gyroscope.reset();
     }
 
-    public double getWheelDistance(){
-        return RobotMap.BigRodika.Chassis.WHEEL_DIST;
+    public double getWheelDistance() {
+        return RobotMap.Limbo2.Chassis.WHEEL_DIST;
+    }
+
+    public Position getLocation() {
+        return Localizer.getInstance().getLocation();
     }
 
     @Override
-    public void periodic(){
-        SmartDashboard.putString("Location", Localizer.getInstance().getLocation().toString());
+    public void periodic() {
+
+        super.periodic();
+
+        putNumber("Left vel enc", leftEncoder.getNormalizedVelocity());
+        putNumber("Right vel enc", rightEncoder.getNormalizedVelocity());
+        putNumber("Angle vel by wheel", getAngularVelocityByWheels());
+        putNumber("Pigeon angle deg", Math.toDegrees(getAngle()));
+        putString("Location", Chassis.getInstance().getLocation().toString());
+
+    }
+
+    public void resetEncoders() {
+        rightEncoder.reset();
+        leftEncoder.reset();
     }
 
 }
