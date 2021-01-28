@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import org.greenblitz.motion.base.State;
+import org.greenblitz.motion.profiling.ProfilingConfiguration;
 
 import java.util.ArrayList;
 
@@ -64,10 +65,17 @@ public class OI {
     }
 
     private void initTestButtons() {
-
+        List<State> l1 = new ArrayList<>();
+        l1.add(new State(0, 0, 0, 0, 0));
+        l1.add(new State(0, 2, 0, 0, 0));
+        double maxPower = 0.5;
+        ProfilingConfiguration config1 = new ProfilingConfiguration(1, 1, 0.001,0,
+                0, 0, 0, 0, 0, 0, 0,
+                50);
+        Follow2DProfileCommand f1 = new Follow2DProfileCommand(l1, config1, maxPower,false);
         mainJoystick.A.whenPressed(new HoldElevator());
         mainJoystick.B.whenPressed(new ReleaseElevator());
-
+        //mainJoystick.X.whenPressed(f1);
     }
 
     private void initOfficalButtons() {
