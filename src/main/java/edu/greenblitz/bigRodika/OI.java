@@ -75,7 +75,7 @@ public class OI {
         Follow2DProfileCommand f1 = new Follow2DProfileCommand(l1, config1, maxPower,false);
         mainJoystick.A.whenPressed(new HoldElevator());
         mainJoystick.B.whenPressed(new ReleaseElevator());
-        //mainJoystick.X.whenPressed(f1);
+        mainJoystick.X.whenPressed(new ThreadedCommand(f1, Chassis.getInstance()));
     }
 
     private void initOfficalButtons() {
