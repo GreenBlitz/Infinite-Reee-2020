@@ -74,10 +74,10 @@ public class RobotMap {
             }
 
             public static class Solenoid {
-                public static final int FORWARD_LEFT = 1;
-                public static final int REVERSE_LEFT = 0;
-                public static final int FORWARD_RIGHT = 4;
-                public static final int REVERSE_RIGHT = 5;
+                public static final int FORWARD_LEFT = 4;
+                public static final int REVERSE_LEFT = 3;
+                public static final int FORWARD_RIGHT = 5;
+                public static final int REVERSE_RIGHT = 2;
             }
         }
 
@@ -92,7 +92,7 @@ public class RobotMap {
             public static final double SHOOTER_I = 0.0000005;
             public static final double SHOOTER_D = 0.00006*0.0;
 
-            public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(1.0);
+            public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 
             public static Dataset distanceToShooterState = new Dataset(3);
 
@@ -102,15 +102,15 @@ public class RobotMap {
             static {
                 // First element = rpm. second = dome
                 Shooter.distanceToShooterState.addDatapoint(3.2,
-                        new double[] {2000, 0.365});
+                        new double[] {2000, 0.345});
                 Shooter.distanceToShooterState.addDatapoint(4.0,
-                        new double[] {2250, 0.38});
+                        new double[] {2100, 0.36});
                 Shooter.distanceToShooterState.addDatapoint(5.0,
-                        new double[] {2300, 0.423});
+                        new double[] {2350, 0.403});
                 Shooter.distanceToShooterState.addDatapoint(6.1,
-                        new double[] {2600, 0.49});
+                        new double[] {2500, 0.48});
                 Shooter.distanceToShooterState.addDatapoint(6.5,
-                        new double[] {2600, 0.52});
+                        new double[] {2500, 0.50});
                 Shooter.distanceToShooterState.addDatapoint(6.7,
                         new double[] {2800, 0.486});
             }
@@ -174,8 +174,8 @@ public class RobotMap {
                 public static final int PCM = 21;
 
                 public static class Solenoid {
-                    public static final int FORWARD = 2;
-                    public static final int REVERSE = 3;
+                    public static final int FORWARD = 6;
+                    public static final int REVERSE = 1;
                 }
             }
 

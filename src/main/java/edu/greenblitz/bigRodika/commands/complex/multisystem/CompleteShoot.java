@@ -11,6 +11,7 @@ import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import java.util.function.Supplier;
 
@@ -20,7 +21,8 @@ public class CompleteShoot extends SequentialCommandGroup {
 
         Supplier<Double> turretAlignSupp = () ->
                 Turret.getInstance().getNormAngleRads() +
-                        VisionMaster.getInstance().getVisionLocation().getRelativeAngleRad();
+                        VisionMaster.getInstance().getVisionLocation().getRelativeAngleRad()
+                        - RobotMap.Limbo2.Shooter.SHOOTER_ANGLE_OFFSET;
 
         Supplier<Double> turretFindVisionSupp = () ->
                 -Chassis.getInstance().getAngle();
@@ -33,14 +35,12 @@ public class CompleteShoot extends SequentialCommandGroup {
 //                        VisionMaster.getInstance().isLastDataValid() &&
 //                                Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 15)
 //                        .withTimeout(2.5),
-                new LogTime(""),
                 new JustGoToTheFuckingTarget(turretFindVisionSupp,
                         Math.toRadians(5.0),
                         Math.toRadians(12.5), Math.toRadians(5.0),
-                        0.6, 0.04,
-                        0.02 / 0.75),
+                        0.5, 0.02,
+                        0.02),
                 new StopTurret(),
-                new LogTime("Turret to face hex wall"),
                 //new WaitCommand(0.05),
 //                new ThreadedCommand(new TurretByVisionThreaded(VisionMaster.Algorithm.HEXAGON),
 //                        Turret.getInstance()).withTimeout(2),
@@ -57,7 +57,7 @@ public class CompleteShoot extends SequentialCommandGroup {
                     }
 
                 },
-                new LogTime("Turret look for vision"),
+                new WaitCommand(0.05),
                 new ParallelCommandGroup(
                         new JustGoToTheFuckingTarget(turretAlignSupp,
                                 Math.toRadians(1.0),

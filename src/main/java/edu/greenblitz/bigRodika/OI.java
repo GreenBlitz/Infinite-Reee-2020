@@ -18,6 +18,9 @@ import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRoller;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
+import edu.greenblitz.bigRodika.commands.shifter.ToPower;
+import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
+import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
@@ -51,8 +54,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-        initTestButtons();
-//        initOfficalButtons();
+//        initTestButtons();
+        initOfficalButtons();
     }
 
 
@@ -72,14 +75,14 @@ public class OI {
 
     private void initOfficalButtons() {
 
-//        mainJoystick.L1.whenReleased(new ToggleShift());
+        mainJoystick.L1.whenReleased(new ToggleShift());
 
         mainJoystick.X.whenPressed(new ResetDome(-0.3));
 
         mainJoystick.Y.whenPressed(new ShootAdjesant(mainJoystick.Y));
 
-//        mainJoystick.START.whenPressed(new ToSpeed());
-//        mainJoystick.BACK.whenPressed(new ToPower());
+        mainJoystick.START.whenPressed(new ToSpeed());
+        mainJoystick.BACK.whenPressed(new ToPower());
 
         // ---------------------------------------------------------------
 
@@ -93,7 +96,7 @@ public class OI {
 
         secondStick.Y.whileHeld(new
                 ParallelCommandGroup(
-                        new RollByConstant(-0.5), new PushByConstant(-0.3), new InsertByConstant(-0.6)));
+                        new RollByConstant(0.5), new PushByConstant(0.8), new InsertByConstant(0.6)));
         secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()
         , new StopRoller()));
 

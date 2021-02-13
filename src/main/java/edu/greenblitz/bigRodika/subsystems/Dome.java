@@ -58,7 +58,7 @@ public class Dome extends GBSubsystem {
 
     private void moveMotor(double power) {
         lastPower = power;
-//        domeMotor.set(power);
+        domeMotor.set(power);
     }
 
     public void safeMove(double power) {

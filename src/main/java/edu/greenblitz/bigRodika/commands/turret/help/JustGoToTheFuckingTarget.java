@@ -19,8 +19,8 @@ public class JustGoToTheFuckingTarget extends TurretCommand {
             Supplier<Double> targetSupp) {
         this(targetSupp,  Math.toRadians(1.0),
                 Math.toRadians(20.0), Math.toRadians(5.0),
-                0.5, 0.04,
-                0.02/0.75);
+                0.6, 0.02,
+                0.02);
     }
 
     public JustGoToTheFuckingTarget(

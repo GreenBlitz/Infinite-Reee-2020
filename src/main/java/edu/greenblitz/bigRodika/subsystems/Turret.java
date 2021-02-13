@@ -49,10 +49,10 @@ public class Turret extends GBSubsystem {
                             OI.getInstance().getSideStick().START,
                             OI.getInstance().getMainJoystick().R1,
                             OI.getInstance().getMainJoystick().START},
-                Math.toRadians(1.0),
+                Math.toRadians(10.0),
                 Math.toRadians(20.0), Math.toRadians(5.0),
-                0.5, 0.03,
-                0.02/0.75);
+                0.4, 0.02,
+                0.02);
     }
 
     public void resetEncoder() {
