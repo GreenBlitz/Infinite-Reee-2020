@@ -11,6 +11,8 @@ import org.greenblitz.motion.profiling.ChassisProfiler2D;
 import org.greenblitz.motion.profiling.MotionProfile2D;
 import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import org.greenblitz.motion.profiling.ProfilingData;
+import org.greenblitz.motion.profiling.followers.AbstractFollower2D;
+import org.greenblitz.motion.profiling.followers.LiveProfilingFollower2D;
 import org.greenblitz.motion.profiling.followers.PidFollower2D;
 import org.greenblitz.motion.profiling.kinematics.CurvatureConverter;
 
@@ -19,7 +21,9 @@ import java.util.List;
 public class Follow2DProfileCommand implements IThreadable {
 
     private MotionProfile2D profile2D;
-    private PidFollower2D follower;
+    private AbstractFollower2D follower;
+    private enum FollowerType {LIVE_FOLLOWER, PID_FOLLOWER}
+
     private double linKv, linKa;
     private PIDObject perWheelPIDConsts;
     private PIDObject angularPIDConsts;
@@ -40,15 +44,21 @@ public class Follow2DProfileCommand implements IThreadable {
 
     private Boolean sendData;
 
+    private double liveProfilingError = 1;
+    private double kX = 1;
+    private double kY = 1;
+    private double kAngle = 5;
+
 
     public Follow2DProfileCommand(
             List<State> path,
             ProfilingConfiguration config,
             double maxPower,
-            boolean isReverse) {
+            boolean isReverse,
+            FollowerType followerType) {
         this(path, config,
                 (RobotMap.Limbo2.Chassis.MotionData.PROF.getValue().containsKey(Double.toString(maxPower))) ?
-                RobotMap.Limbo2.Chassis.MotionData.PROF.getValue().get(Double.toString(maxPower)) : retNullandThrow(), maxPower, isReverse);
+                RobotMap.Limbo2.Chassis.MotionData.PROF.getValue().get(Double.toString(maxPower)) : retNullandThrow(), maxPower, isReverse, followerType);
     }
 
 
@@ -56,7 +66,8 @@ public class Follow2DProfileCommand implements IThreadable {
                                   ProfilingConfiguration config,
                                   ProfilingData data,
                                   double maxPower,
-                                  boolean isReverse) {
+                                  boolean isReverse,
+                                  FollowerType followerType) {
         this(path,
                 config.getJump(),
                 config.getSmoothingTail(),
@@ -74,7 +85,8 @@ public class Follow2DProfileCommand implements IThreadable {
                         config.getAngPidKi() / data.getMaxAngularVelocity(),
                         config.getAngPidKd() / data.getMaxAngularAccel()),
                 config.getCollapseConstAngular() * data.getMaxAngularVelocity(),
-                isReverse);
+                isReverse,
+                followerType);
     }
 
     /**
@@ -102,9 +114,10 @@ public class Follow2DProfileCommand implements IThreadable {
                                   double collapseConstaPerWheel,
                                   PIDObject angularPIDConsts,
                                   double collapseConstAngular,
-                                  boolean isReverse) {
+                                  boolean isReverse,
+                                  FollowerType followerType) {
         this(path, jump, smoothingTail, data, maxPower, velMultLin, accMultLin, perWheelPIDCosnts, collapseConstaPerWheel,
-                angularPIDConsts, collapseConstAngular, isReverse, 0, 0);
+                angularPIDConsts, collapseConstAngular, isReverse, 0, 0, followerType);
     }
 
     public Follow2DProfileCommand(List<State> path,
@@ -120,7 +133,8 @@ public class Follow2DProfileCommand implements IThreadable {
                                   double collapseConstAngular,
                                   boolean isReverse,
                                   double startV,
-                                  double endV) {
+                                  double endV,
+                                  FollowerType followerType) {
         this.startV = startV;
         this.endV = endV;
         if (isReverse) {
@@ -147,12 +161,26 @@ public class Follow2DProfileCommand implements IThreadable {
         this.angularPIDConsts = angularPIDConsts;
         this.collapsingAngularPIDTol = collapseConstAngular;
         this.maxPower = maxPower;
-        follower = new PidFollower2D(linKv, linKa, linKv, linKa,
-                perWheelPIDConsts,
-                collapsingPerWheelPIDTol, Double.NaN, angularPIDConsts, collapsingAngularPIDTol,
-                RobotMap.Limbo2.Chassis.WHEEL_DIST,
-                profile2D);
-        follower.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
+        PidFollower2D tempPID;
+        switch (followerType) {
+            case PID_FOLLOWER:
+                 tempPID = new PidFollower2D(linKv, linKa, linKv, linKa,
+                        perWheelPIDConsts,
+                        collapsingPerWheelPIDTol, Double.NaN, angularPIDConsts, collapsingAngularPIDTol,
+                        RobotMap.Limbo2.Chassis.WHEEL_DIST,
+                        profile2D);
+                tempPID.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
+                follower = tempPID;
+            case LIVE_FOLLOWER:
+                 tempPID = new PidFollower2D(linKv, linKa, linKv, linKa,
+                        perWheelPIDConsts,
+                        collapsingPerWheelPIDTol, Double.NaN, angularPIDConsts, collapsingAngularPIDTol,
+                        RobotMap.Limbo2.Chassis.WHEEL_DIST,
+                        profile2D);
+                tempPID.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
+                follower = new LiveProfilingFollower2D(profile2D, liveProfilingError, kX, kY, kAngle, data, 1, tempPID);
+
+        }
     }
 
     private static ProfilingData retNullandThrow() {
