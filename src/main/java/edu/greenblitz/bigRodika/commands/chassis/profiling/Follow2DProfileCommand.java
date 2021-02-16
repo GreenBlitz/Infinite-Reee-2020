@@ -225,6 +225,7 @@ public class Follow2DProfileCommand implements IThreadable {
                         profile2D);
                 tempPID.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
                 follower = tempPID;
+                break;
             case LIVE_FOLLOWER:
                  tempPID = new PidFollower2D(linKv, linKa, linKv, linKa,
                         perWheelPIDConsts,
@@ -233,6 +234,7 @@ public class Follow2DProfileCommand implements IThreadable {
                         profile2D);
                 tempPID.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
                 follower = new LiveProfilingFollower2D(profile2D, liveProfilingError, kX, kY, kAngle,kLinVel,kAngVel, data, 1, tempPID);
+
 
         }
     }
