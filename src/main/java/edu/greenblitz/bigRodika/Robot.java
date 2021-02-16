@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().enable();
 
         DigitalInputMap.getInstance();
+
 //        Pneumatics.init();
         Intake.init();
         Shifter.init();
@@ -70,7 +71,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
-        Shifter.getInstance().setShift(Gear.SPEED);
+        //Shifter.getInstance().setShift(Gear.SPEED);
         VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         new ResetEncoderWhenInSide().initialize();
@@ -82,17 +83,18 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        Shifter.getInstance().setShift(Gear.SPEED);
+        //Shifter.getInstance().setShift(Gear.SPEED);
         CommandScheduler.getInstance().cancelAll();
         VisionMaster.GameState.TELEOP.setAsCurrent();
         Chassis.getInstance().toBrake();
         Chassis.getInstance().resetGyro();
         Chassis.getInstance().resetEncoders();
+        new LocalizerCommandRunner().schedule();
 
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
-        Shifter.getInstance().setShift(Gear.SPEED);
+        //Shifter.getInstance().setShift(Gear.SPEED);
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
-
+/*
         new ResetDome(-0.3).schedule();
 //        new ResetEncoderWhenInFront().schedule();
         new StopShooter().schedule();
@@ -102,7 +104,7 @@ public class Robot extends TimedRobot {
 //            new ResetEncoderWhenInSide().schedule();
             new ClimbByTriggers(OI.getInstance().getMainJoystick(), OI.getInstance().getSideStick(), 0.4, 0.4).schedule();
             Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
-        }
+        }*/
 
     }
 }
