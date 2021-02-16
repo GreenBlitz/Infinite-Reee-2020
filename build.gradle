@@ -55,7 +55,7 @@ dependencies {
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
     // Optional lines, adds common robot code libraries to the project
     // The jitpack line in repositories is required for these libraries.
-    compile 'com.github.GreenBlitz.MotionControl:motion:a697e8fab5918e2571b4002f5537e292954c5ecb'
+    compile 'com.github.GreenBlitz.MotionControl:motion:775ae87cd9689d357c800a274a5e4aa7042d0588'
     compile 'com.github.GreenBlitz:GBLib:d570a3b3db97a268e86cc56ccf64d590c6d573b2'
     compile group: 'com.google.guava', name: 'guava', version: '11.0.2'
 
