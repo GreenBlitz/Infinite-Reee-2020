@@ -22,7 +22,7 @@ public class Follow2DProfileCommand implements IThreadable {
 
     private MotionProfile2D profile2D;
     private AbstractFollower2D follower;
-    private enum FollowerType {LIVE_FOLLOWER, PID_FOLLOWER}
+    public enum FollowerType {LIVE_FOLLOWER, PID_FOLLOWER}
 
     private double linKv, linKa;
     private PIDObject perWheelPIDConsts;
