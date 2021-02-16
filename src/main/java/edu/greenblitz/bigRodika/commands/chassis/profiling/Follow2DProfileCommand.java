@@ -51,6 +51,8 @@ public class Follow2DProfileCommand implements IThreadable {
     private double kLinVel = 5;
     private double kAngVel = 25;
 
+    private static FollowerType defaultFollowerType = FollowerType.PID_FOLLOWER;
+
 
     public Follow2DProfileCommand(
             List<State> path,
@@ -61,6 +63,14 @@ public class Follow2DProfileCommand implements IThreadable {
         this(path, config,
                 (RobotMap.Limbo2.Chassis.MotionData.PROF.getValue().containsKey(Double.toString(maxPower))) ?
                 RobotMap.Limbo2.Chassis.MotionData.PROF.getValue().get(Double.toString(maxPower)) : retNullandThrow(), maxPower, isReverse, followerType);
+    }
+
+    public Follow2DProfileCommand(
+            List<State> path,
+            ProfilingConfiguration config,
+            double maxPower,
+            boolean isReverse) {
+        this(path, config, maxPower, isReverse, defaultFollowerType);
     }
 
 
@@ -89,6 +99,14 @@ public class Follow2DProfileCommand implements IThreadable {
                 config.getCollapseConstAngular() * data.getMaxAngularVelocity(),
                 isReverse,
                 followerType);
+    }
+
+    public Follow2DProfileCommand(List<State> path,
+                                  ProfilingConfiguration config,
+                                  ProfilingData data,
+                                  double maxPower,
+                                  boolean isReverse) {
+        this(path, config, data, maxPower, isReverse, defaultFollowerType);
     }
 
     /**
@@ -121,6 +139,40 @@ public class Follow2DProfileCommand implements IThreadable {
         this(path, jump, smoothingTail, data, maxPower, velMultLin, accMultLin, perWheelPIDCosnts, collapseConstaPerWheel,
                 angularPIDConsts, collapseConstAngular, isReverse, 0, 0, followerType);
     }
+
+    public Follow2DProfileCommand(List<State> path,
+                                  double jump,
+                                  int smoothingTail,
+                                  ProfilingData data,
+                                  double maxPower,
+                                  double velMultLin,
+                                  double accMultLin,
+                                  PIDObject perWheelPIDCosnts,
+                                  double collapseConstaPerWheel,
+                                  PIDObject angularPIDConsts,
+                                  double collapseConstAngular,
+                                  boolean isReverse) {
+        this(path, jump, smoothingTail, data, maxPower, velMultLin, accMultLin, perWheelPIDCosnts, collapseConstaPerWheel, angularPIDConsts, collapseConstAngular, isReverse, defaultFollowerType);
+    }
+
+
+    public Follow2DProfileCommand(List<State> path,
+                                  double jump,
+                                  int smoothingTail,
+                                  ProfilingData data,
+                                  double maxPower,
+                                  double velMultLin,
+                                  double accMultLin,
+                                  PIDObject perWheelPIDCosnts,
+                                  double collapseConstaPerWheel,
+                                  PIDObject angularPIDConsts,
+                                  double collapseConstAngular,
+                                  boolean isReverse,
+                                  double startV,
+                                  double endV) {
+        this(path, jump, smoothingTail, data, maxPower, velMultLin, accMultLin, perWheelPIDCosnts, collapseConstaPerWheel, angularPIDConsts, collapseConstAngular, isReverse, startV, endV, defaultFollowerType);
+    }
+
 
     public Follow2DProfileCommand(List<State> path,
                                   double jump,
