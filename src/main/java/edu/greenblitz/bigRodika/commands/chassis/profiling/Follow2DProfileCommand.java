@@ -48,6 +48,8 @@ public class Follow2DProfileCommand implements IThreadable {
     private double kX = 1;
     private double kY = 1;
     private double kAngle = 5;
+    private double kLinVel = 5;
+    private double kAngVel = 25;
 
 
     public Follow2DProfileCommand(
@@ -178,7 +180,7 @@ public class Follow2DProfileCommand implements IThreadable {
                         RobotMap.Limbo2.Chassis.WHEEL_DIST,
                         profile2D);
                 tempPID.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
-                follower = new LiveProfilingFollower2D(profile2D, liveProfilingError, kX, kY, kAngle, data, 1, tempPID);
+                follower = new LiveProfilingFollower2D(profile2D, liveProfilingError, kX, kY, kAngle,kLinVel,kAngVel, data, 1, tempPID);
 
         }
     }
