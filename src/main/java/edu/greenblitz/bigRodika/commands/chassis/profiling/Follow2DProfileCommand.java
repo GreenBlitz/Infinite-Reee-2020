@@ -128,13 +128,15 @@ public class Follow2DProfileCommand implements IThreadable {
                 s.setAngle(s.getAngle() + Math.PI);
             }
         }
-        this.profile2D = ChassisProfiler2D.generateProfile(
+        this.profile2D = ChassisProfiler2D.generateProfileLCv1(
                 path,
                 jump,
                 this.startV,
                 this.endV,
-                data,
-                0.0,
+                data.getMaxLinearVelocity(),
+                data.getMaxAngularVelocity(),
+                data.getMaxLinearAccel(),
+                data.getMaxAngularAccel(),
                 1.0,
                 smoothingTail);
         SmartDashboard.putNumber("Profile Tend", this.profile2D.getTEnd());
