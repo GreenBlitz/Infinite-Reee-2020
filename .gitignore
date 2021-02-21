@@ -73,3 +73,5 @@ fabric.properties
 build/
 
 .idea/
+
+*.DS_Store
