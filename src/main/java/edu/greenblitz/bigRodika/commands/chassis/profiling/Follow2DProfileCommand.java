@@ -53,8 +53,8 @@ public class Follow2DProfileCommand implements IThreadable {
 
     private static FollowerType defaultFollowerType = FollowerType.PID_FOLLOWER;
 
-    private double updateDelay = 0.3;
-    private double destinationTimeOffset = 0.5;
+    private double updateDelay = 0.25;
+    private double destinationTimeOffset = 0.4;
 
 
     public Follow2DProfileCommand(
@@ -306,6 +306,7 @@ public class Follow2DProfileCommand implements IThreadable {
             Chassis.getInstance().toBrake();
             Chassis.getInstance().moveMotors(0, 0);
         }
+        //follower.atEnd();
     }
 
 }

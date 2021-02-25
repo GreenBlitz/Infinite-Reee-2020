@@ -56,6 +56,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        Chassis.getInstance().toBrake();
+        //Chassis.getInstance().moveMotors(0, 0);
         VisionMaster.GameState.DISABLED.setAsCurrent();
         CommandScheduler.getInstance().cancelAll();
     }
@@ -85,13 +87,13 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         //Shifter.getInstance().setShift(Gear.SPEED);
         CommandScheduler.getInstance().cancelAll();
-        VisionMaster.GameState.TELEOP.setAsCurrent();
+        VisionMaster.GameState.DISABLED.setAsCurrent();
         Chassis.getInstance().toBrake();
         Chassis.getInstance().resetGyro();
         Chassis.getInstance().resetEncoders();
         new LocalizerCommandRunner().schedule();
 
-        VisionMaster.Algorithm.HEXAGON.setAsCurrent();
+        //VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         //Shifter.getInstance().setShift(Gear.SPEED);
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
 /*
