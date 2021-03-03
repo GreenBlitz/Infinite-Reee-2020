@@ -12,7 +12,7 @@ import org.greenblitz.motion.profiling.MotionProfile2D;
 import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import org.greenblitz.motion.profiling.ProfilingData;
 import org.greenblitz.motion.profiling.followers.AbstractFollower2D;
-import org.greenblitz.motion.profiling.followers.LiveProfilingFollower2D;
+//import org.greenblitz.motion.profiling.followers.LiveProfilingFollower2D;
 import org.greenblitz.motion.profiling.followers.PidFollower2D;
 import org.greenblitz.motion.profiling.kinematics.CurvatureConverter;
 
@@ -199,14 +199,16 @@ public class Follow2DProfileCommand implements IThreadable {
                 s.setAngle(s.getAngle() + Math.PI);
             }
         }
-        this.profile2D = ChassisProfiler2D.generateProfile(
+        this.profile2D = ChassisProfiler2D.generateProfileLCv1(
                 path,
                 jump,
                 this.startV,
                 this.endV,
-                data,
-                0.0,
-                1.0,
+                data.getMaxLinearVelocity(),
+                data.getMaxAngularVelocity(),
+                data.getMaxLinearAccel(),
+                data.getMaxAngularAccel(),
+                1,
                 smoothingTail);
         SmartDashboard.putNumber("Profile Tend", this.profile2D.getTEnd());
         SmartDashboard.putString("Data for profile", data.toString());
@@ -229,7 +231,7 @@ public class Follow2DProfileCommand implements IThreadable {
                 tempPID.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
                 follower = tempPID;
                 break;
-            case LIVE_FOLLOWER:
+            /*case LIVE_FOLLOWER:
                  tempPID = new PidFollower2D(linKv, linKa, linKv, linKa,
                         perWheelPIDConsts,
                         collapsingPerWheelPIDTol, Double.NaN, angularPIDConsts, collapsingAngularPIDTol,
@@ -238,7 +240,7 @@ public class Follow2DProfileCommand implements IThreadable {
                 tempPID.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
                 follower = new LiveProfilingFollower2D(profile2D, liveProfilingError, kX, kY, kAngle,kLinVel,kAngVel, data, destinationTimeOffset, 1, tempPID, updateDelay);
 
-
+*/
         }
     }
 

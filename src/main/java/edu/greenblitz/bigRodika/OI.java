@@ -66,7 +66,7 @@ public class OI {
 
     private void initTestButtons() {
 
-        Follow2DProfileCommand.FollowerType follower = Follow2DProfileCommand.FollowerType.LIVE_FOLLOWER;
+        Follow2DProfileCommand.FollowerType follower = Follow2DProfileCommand.FollowerType.PID_FOLLOWER;
         double maxPower = 0.3;
         ProfilingConfiguration config = RobotMap.Limbo2.Chassis.MotionData.CONFIG;
 
