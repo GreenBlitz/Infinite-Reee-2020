@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
         OI.getInstance();
         Turret.setDefaultCommand();
 
-        //VisionMaster.getInstance().register();
+        VisionMaster.getInstance().register();
 
         new ResetEncoderWhenInBack().initialize();
 //        new ResetEncoderWhenInSide().initialize();
@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         Chassis.getInstance().toBrake();
         //Chassis.getInstance().moveMotors(0, 0);
-        //VisionMaster.GameState.DISABLED.setAsCurrent();
+        VisionMaster.GameState.DISABLED.setAsCurrent();
         CommandScheduler.getInstance().cancelAll();
     }
 
@@ -74,8 +74,8 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
         //Shifter.getInstance().setShift(Gear.SPEED);
-//        VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
-//        VisionMaster.Algorithm.HEXAGON.setAsCurrent();
+        VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
+        VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         new ResetEncoderWhenInSide().initialize();
         new LocalizerCommandRunner().schedule();
         new FiveBallTrench().schedule();
@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         //Shifter.getInstance().setShift(Gear.SPEED);
         CommandScheduler.getInstance().cancelAll();
-        //VisionMaster.GameState.DISABLED.setAsCurrent();
+        VisionMaster.GameState.DISABLED.setAsCurrent();
         Chassis.getInstance().toBrake();
         Chassis.getInstance().resetGyro();
         Chassis.getInstance().resetEncoders();

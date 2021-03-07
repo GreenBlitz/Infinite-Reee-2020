@@ -76,7 +76,7 @@ public class OI {
         l1.add(new State(0, 2, 0, 0, 0));
         Follow2DProfileCommand f1 = new Follow2DProfileCommand(l1, config, maxPower,false, follower);
         mainJoystick.X.whenPressed(new ThreadedCommand(f1, Chassis.getInstance()));
-
+        /*
         //testing 90 degrees rotation
         List<State> l2 = new ArrayList<>();
         l2.add(new State(0, 0, 0, 0, 0));
@@ -117,7 +117,7 @@ public class OI {
         l6.add(new State(0, 1, -Math.PI/2, 0, 0));
         Follow2DProfileCommand f6 = new Follow2DProfileCommand(l6, config, maxPower, false, follower);
         mainJoystick.POV_DOWN.whenPressed(new ThreadedCommand(f6, Chassis.getInstance()));
-
+*/
     }
 
     private void initOfficalButtons() {
