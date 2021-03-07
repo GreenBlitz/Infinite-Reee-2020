@@ -76,33 +76,33 @@ public class OI {
         l1.add(new State(0, 2, 0, 0, 0));
         Follow2DProfileCommand f1 = new Follow2DProfileCommand(l1, config, maxPower,false, follower);
         mainJoystick.X.whenPressed(new ThreadedCommand(f1, Chassis.getInstance()));
-        /*
+
         //testing 90 degrees rotation
         List<State> l2 = new ArrayList<>();
         l2.add(new State(0, 0, 0, 0, 0));
-        l2.add(new State(2, 2, -Math.PI/2, 0, 0));
+        l2.add(new State(1.5, 1.5, Math.PI/2, 0, 0));
         Follow2DProfileCommand f2 = new Follow2DProfileCommand(l2, config, maxPower, false, follower);
         mainJoystick.Y.whenPressed(new ThreadedCommand(f2, Chassis.getInstance()));
 
         //driving like a 'tangent graph'
         List<State> l3  = new ArrayList<>();
         l3.add(new State(0, 0, 0, 0, 0));
-        l3.add(new State(2, 2, 0, 0, 0));
+        l3.add(new State(1.5, 1.5, 0, 0, 0));
         Follow2DProfileCommand f3 = new Follow2DProfileCommand(l3, config, maxPower, false, follower);
         mainJoystick.L1.whenPressed(new ThreadedCommand(f3, Chassis.getInstance()));
 
         //velocity check: the velocity changes at the middle point
         List<State> l4 = new ArrayList<>();
         l4.add(new State(0, 0, 0, 0, 0));
-        l4.add(new State(0, 1, 0, 1, 0));
-        l4.add(new State(0, 2, 0, 0, 0));
+        l4.add(new State(0, 0.75, 0, 1, 0));
+        l4.add(new State(0, 1.5, 0, 0, 0));
         Follow2DProfileCommand f4 = new Follow2DProfileCommand(l4, config, maxPower, false, follower);
         mainJoystick.R1.whenPressed(new ThreadedCommand(f4, Chassis.getInstance()));
 
         //reverse test
         List<State> l5 = new ArrayList<>();
         l5.add(new State(0, 0, 0, 0, 0));
-        l5.add(new State(0, -2, 0, 0, 0));
+        l5.add(new State(0, -1.5, 0, 0, 0));
         Follow2DProfileCommand f5 = new Follow2DProfileCommand(l5, config, maxPower, true, follower);
         mainJoystick.POV_UP.whenPressed(new ThreadedCommand(f5, Chassis.getInstance()));
 
@@ -110,14 +110,14 @@ public class OI {
         // Ittai Sheffy recommends using the Localizer to check if the location had changed during the test because it
         // is not supposed to change.
         List<State> l6 = new ArrayList<>();
-        l6.add(new State(0, 1, -Math.PI/2, 0, 0));
-        l6.add(new State(1, 0, -Math.PI, 1, -Math.PI/4));
-        l6.add(new State(0, -1, Math.PI/2, 1, -Math.PI/4));
-        l6.add(new State(-1, 0, 0, 1, -Math.PI/4));
-        l6.add(new State(0, 1, -Math.PI/2, 0, 0));
+        l6.add(new State(0, 0.75, -Math.PI/2, 0, 0));
+        l6.add(new State(0.75, 0, -Math.PI, 1, -Math.PI/4));
+        l6.add(new State(0, -0.75, Math.PI/2, 1, -Math.PI/4));
+        l6.add(new State(-0.75, 0, 0, 1, -Math.PI/4));
+        l6.add(new State(0, 0.75, -Math.PI/2, 0, 0));
         Follow2DProfileCommand f6 = new Follow2DProfileCommand(l6, config, maxPower, false, follower);
         mainJoystick.POV_DOWN.whenPressed(new ThreadedCommand(f6, Chassis.getInstance()));
-*/
+
     }
 
     private void initOfficalButtons() {
