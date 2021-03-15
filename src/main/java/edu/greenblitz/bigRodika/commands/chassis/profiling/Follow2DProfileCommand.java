@@ -248,7 +248,7 @@ public class Follow2DProfileCommand implements IThreadable {
 
     @Override
     public void atInit() {
-        follower.setProfile(profile2D);
+        follower.setProfile(profile2D.clone());
         if (sendData != null) {
             follower.setSendData(sendData);
         } else {
