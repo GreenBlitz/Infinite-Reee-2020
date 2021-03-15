@@ -1,5 +1,8 @@
 package edu.greenblitz.bigRodika.commands.turret;
 
+import edu.greenblitz.bigRodika.subsystems.Turret;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class MoveTurretByConstant extends TurretCommand {
     private double power;
 
@@ -10,6 +13,7 @@ public class MoveTurretByConstant extends TurretCommand {
 
     @Override
     public void execute() {
+        SmartDashboard.putNumber("raw ticks", turret.encoder.getRawTicks());
         turret.moveTurret(power);
     }
 

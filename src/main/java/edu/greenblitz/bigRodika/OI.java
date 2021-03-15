@@ -51,8 +51,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-        initTestButtons();
-//        initOfficalButtons();
+//        initTestButtons();
+        initOfficalButtons();
     }
 
 
@@ -123,9 +123,9 @@ public class OI {
 
         secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
 
-        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
+        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.3));
 
-        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
+        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.3));
 
         secondStick.BACK.whenPressed(new ResetDome(-0.3));
 

@@ -1,5 +1,7 @@
 package edu.greenblitz.bigRodika.commands.dome;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class DomeMoveByConstant extends DomeCommand {
 
     private double power;
@@ -11,6 +13,8 @@ public class DomeMoveByConstant extends DomeCommand {
 
     @Override
     public void execute() {
+        SmartDashboard.putBoolean("limit switch", dome.limitSwitch.get());
+        SmartDashboard.putNumber("PotentiometerValue", dome.getPotentiometerValue());
         dome.safeMove(power);
     }
 

@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
         Shifter.getInstance().setShift(Gear.SPEED);
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
 
-        new ResetDome(-0.3).schedule();
+//        new ResetDome(-0.3).schedule();
 //        new ResetEncoderWhenInFront().schedule();
         new StopShooter().schedule();
 

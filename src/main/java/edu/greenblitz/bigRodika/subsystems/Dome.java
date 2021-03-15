@@ -23,7 +23,7 @@ public class Dome extends GBSubsystem {
     protected long lastPotMeasureTime;
     private WPI_TalonSRX domeMotor;
     private Potentiometer potentiometer;
-    private DigitalInput limitSwitch;
+    public DigitalInput limitSwitch;
     private double zeroValue = 0.35;
 
     private Dome() {
@@ -56,9 +56,9 @@ public class Dome extends GBSubsystem {
         return lastPotValue - zeroValue;
     }
 
-    private void moveMotor(double power) {
-        lastPower = power;
-//        domeMotor.set(power);
+    public void moveMotor(double power) {
+//        lastPower = power;
+        domeMotor.set(power);
     }
 
     public void safeMove(double power) {
@@ -83,7 +83,7 @@ public class Dome extends GBSubsystem {
     @Override
     public void periodic() {
         super.periodic();
-        safeMove(lastPower);
+        /*safeMove(lastPower);
         putNumber("Potentiometer", getPotentiometerValue());
         putBoolean("LimitSwitch", switchTriggered());
         putNumber("PotZero", zeroValue);
@@ -105,6 +105,6 @@ public class Dome extends GBSubsystem {
         if (switchTriggered() && getCurrentCommand() != null && getCurrentCommand().getName().equals("ResetDome")
         && Math.abs(getPotentiometerRaw()) < 1.0) {
             zeroValue += getPotentiometerValue();
-        }
+        }*/
     }
 }
