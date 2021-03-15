@@ -74,8 +74,7 @@ public class OI {
         List<State> l1 = new ArrayList<>();
         l1.add(new State(0, 0, 0, 0, 0));
         l1.add(new State(0, 2, 0, 0, 0));
-        Follow2DProfileCommand f1 = new Follow2DProfileCommand(l1, config, maxPower,false, follower);
-        mainJoystick.X.whenPressed(new ThreadedCommand(f1, Chassis.getInstance()));
+        mainJoystick.X.whenPressed(new ThreadedCommand(new Follow2DProfileCommand(l1, config, maxPower,false, follower), Chassis.getInstance()));
 
         //testing 90 degrees rotation
         List<State> l2 = new ArrayList<>();

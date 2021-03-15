@@ -56,6 +56,8 @@ public class Follow2DProfileCommand implements IThreadable {
     private double updateDelay = 0.25;
     private double destinationTimeOffset = 0.4;
 
+    private AbstractFollower2D followerAtStart;
+
 
     public Follow2DProfileCommand(
             List<State> path,
@@ -237,8 +239,7 @@ public class Follow2DProfileCommand implements IThreadable {
                         profile2D);
                 tempPID.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
                 follower = new LiveProfilingFollower2D(profile2D, liveProfilingError, kX, kY, kAngle,kLinVel,kAngVel, data, destinationTimeOffset, 1, tempPID, updateDelay);
-
-
+                    followerAtStart = follower.clone();
         }
     }
 
@@ -306,6 +307,7 @@ public class Follow2DProfileCommand implements IThreadable {
             Chassis.getInstance().toBrake();
             Chassis.getInstance().moveMotors(0, 0);
         }
+        follower = followerAtStart;
         //follower.atEnd();
     }
 
