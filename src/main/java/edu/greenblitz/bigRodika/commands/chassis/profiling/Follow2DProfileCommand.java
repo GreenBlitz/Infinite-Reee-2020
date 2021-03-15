@@ -53,7 +53,7 @@ public class Follow2DProfileCommand implements IThreadable {
 
     private static FollowerType defaultFollowerType = FollowerType.PID_FOLLOWER;
 
-    private double updateDelay = 0.25;
+    private double updateDelay = 1;
     private double destinationTimeOffset = 0.4;
 
     private AbstractFollower2D followerAtStart;
