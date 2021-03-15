@@ -56,7 +56,6 @@ public class Follow2DProfileCommand implements IThreadable {
     private double updateDelay = 1;
     private double destinationTimeOffset = 0.4;
 
-    private AbstractFollower2D followerAtStart;
 
 
     public Follow2DProfileCommand(
@@ -232,14 +231,14 @@ public class Follow2DProfileCommand implements IThreadable {
                 follower = tempPID;
                 break;
             case LIVE_FOLLOWER:
+                 MotionProfile2D followerProfile = profile2D.clone();
                  tempPID = new PidFollower2D(linKv, linKa, linKv, linKa,
                         perWheelPIDConsts,
                         collapsingPerWheelPIDTol, Double.NaN, angularPIDConsts, collapsingAngularPIDTol,
                         RobotMap.Limbo2.Chassis.WHEEL_DIST,
-                        profile2D);
+                        followerProfile);
                 tempPID.setConverter(new CurvatureConverter(RobotMap.Limbo2.Chassis.WHEEL_DIST));
-                follower = new LiveProfilingFollower2D(profile2D, liveProfilingError, kX, kY, kAngle,kLinVel,kAngVel, data, destinationTimeOffset, 1, tempPID, updateDelay);
-                    followerAtStart = follower.clone();
+                follower = new LiveProfilingFollower2D(followerProfile, liveProfilingError, kX, kY, kAngle,kLinVel,kAngVel, data, destinationTimeOffset, 1, tempPID, updateDelay);
         }
     }
 
@@ -249,6 +248,7 @@ public class Follow2DProfileCommand implements IThreadable {
 
     @Override
     public void atInit() {
+        follower.setProfile(profile2D);
         if (sendData != null) {
             follower.setSendData(sendData);
         } else {
@@ -307,7 +307,6 @@ public class Follow2DProfileCommand implements IThreadable {
             Chassis.getInstance().toBrake();
             Chassis.getInstance().moveMotors(0, 0);
         }
-        follower = followerAtStart;
         //follower.atEnd();
     }
 
