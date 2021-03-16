@@ -81,15 +81,18 @@ public class Turret extends GBSubsystem {
             SmartDashboard.putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
         }
 
+        SmartDashboard.putNumber("vroom groom", lastPower);
         moveTurret(lastPower);
     }
 
     public void moveTurret(double power) {
         if (encoder.getRawTicks() < MIN_TICKS && power < 0) {
+            SmartDashboard.putNumber("vroom vroom", 0);
             motor.set(0);
             return;
         }
         if (encoder.getRawTicks() > MAX_TICKS && power > 0) {
+            SmartDashboard.putNumber("vroom vroom", 0);
             motor.set(0);
             return;
         }

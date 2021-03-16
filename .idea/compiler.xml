@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="Infinite-Reee-2020.main" target="11" />
       <module name="Infinite-Reee-2020.test" target="11" />
+      <module name="Infinite-Reee-2020_main" target="11" />
+      <module name="Infinite-Reee-2020_test" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

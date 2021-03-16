@@ -2,6 +2,7 @@ package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
+import edu.greenblitz.bigRodika.commands.compressor.CompressorOn;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.turret.ResetEncoderWhenInSide;
@@ -84,6 +85,7 @@ public class Robot extends TimedRobot {
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
 
         new ResetDome(-0.3).schedule();
+        new CompressorOn();
 //        new ResetEncoderWhenInFront().schedule();
         new StopShooter().schedule();
 

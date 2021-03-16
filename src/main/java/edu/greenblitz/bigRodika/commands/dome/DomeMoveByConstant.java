@@ -1,5 +1,7 @@
 package edu.greenblitz.bigRodika.commands.dome;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class DomeMoveByConstant extends DomeCommand {
 
     private double power;

@@ -8,6 +8,7 @@ import edu.greenblitz.gblib.gears.GearDependentValue;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
 import edu.greenblitz.gblib.sendables.SendableDoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is in charge of the shifter subsystem of the robot.
@@ -69,12 +70,14 @@ public class Shifter extends GBSubsystem {
      * @param state A value based off of the Gear enum. This value is then set as the state the piston is in.
      */
     public void setShift(Gear state) {
-        if (state.equals(Gear.POWER)) return; // TODO fucking shifter is broken kill me
+        //if (state.equals(Gear.POWER)) return; // TODO fucking shifter is broken kill me
         VisionMaster.ShifterState shifterState = state.isPower() ? VisionMaster.ShifterState.POWER : VisionMaster.ShifterState.SPEED;
         shifterState.setAsCurrent();
         m_currentShift = state;
         Chassis.getInstance().changeGear();
         GlobalGearContainer.getInstance().setGear(state);
+        SmartDashboard.putBoolean("works", true);
+        SmartDashboard.putString("state value", shiftValue.getValue().toString());
         m_piston.set(shiftValue.getValue());
     }
 

@@ -35,7 +35,7 @@ public class RobotMap {
         }
 
         public static class Turret {
-            public static final int MOTOR_PORT = 11;
+            public static final int MOTOR_PORT = 13;
             public static final int SWITCH_PORT = 3;
             public static final boolean IS_INVERTED = false;
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
@@ -148,7 +148,7 @@ public class RobotMap {
 
                 public static class Solenoid {
                     public static final int FORWARD = 2;
-                    public static final int REVERSE = 3;
+                    public static final int REVERSE = 6;
                 }
             }
 

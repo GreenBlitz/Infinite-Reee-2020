@@ -95,11 +95,11 @@ public class OI {
         secondStick.POV_DOWN.whenReleased(new DomeMoveByConstant(0));
 
 
-        secondStick.START.whenPressed(new MoveTurretByConstant(0.3));
+        /*secondStick.START.whenPressed(new MoveTurretByConstant(0.3));
         secondStick.START.whenReleased(new StopTurret());
 
         secondStick.BACK.whenPressed(new MoveTurretByConstant(-0.3));
-        secondStick.BACK.whenReleased(new StopTurret());
+        secondStick.BACK.whenReleased(new StopTurret());*/
 
         mainJoystick.A.whenPressed(new TurretApproachSwiftlyRadians(0));
         mainJoystick.A.whenReleased(new StopTurret());
@@ -119,7 +119,7 @@ public class OI {
                         new PreShoot(
                                 new DumbAlign(rads, .1, .3))));
         mainJoystick.A.whenReleased(new ParallelCommandGroup(new ResetDome(), new StopTurret()));
-//        mainJoystick.L1.whenReleased(new ToggleShift());
+//        mainJoystick.START.whenPressed(new ToggleShift());
 
         mainJoystick.B.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
 //        mainJoystick.B.whenReleased(new StopTurret());
@@ -128,8 +128,9 @@ public class OI {
                 new ResetDome(-0.3), new ExtendRoller()
         ));
 
-//        mainJoystick.START.whenPressed(new ToSpeed());
-//        mainJoystick.BACK.whenPressed(new ToPower());
+
+        mainJoystick.START.whenPressed(new ToSpeed());
+        mainJoystick.BACK.whenPressed(new ToPower());
 
         mainJoystick.POV_UP.whenPressed(new DomeApproachSwiftly(RobotMap.Limbo2.Dome.DOME.get(6.3)));
         mainJoystick.POV_DOWN.whenPressed(new TurretApproachSwiftlyRadians(0));
@@ -169,9 +170,9 @@ public class OI {
 
         secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
 
-        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
+        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.5));
 
-        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
+        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.5));
 
         secondStick.BACK.whenPressed(new ResetDome(-0.3));
 

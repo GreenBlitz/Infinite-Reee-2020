@@ -1,6 +1,7 @@
 package edu.greenblitz.bigRodika.commands.turret;
 
 import edu.greenblitz.bigRodika.utils.VisionMaster;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurretByVision extends TurretCommand {
 
@@ -32,10 +33,12 @@ public class TurretByVision extends TurretCommand {
             turret.moveTurret(0);
             return;
         }
-
+        SmartDashboard.putNumber("groom broom", TurretApproachSwiftly.calculateVelocity(
+                Math.toRadians(VisionMaster.getInstance().getVisionLocation().getRelativeAngle())
+        ));
         turret.moveTurret(TurretApproachSwiftly.calculateVelocity(
                 Math.toRadians(VisionMaster.getInstance().getVisionLocation().getRelativeAngle())
-                ));
+        ));
     }
 
     @Override
