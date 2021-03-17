@@ -83,25 +83,25 @@ public class OI {
 
         // ---------------------------------------------------------------
 
-        secondStick.R1.whenPressed(new CompleteShoot(secondStick));
-        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
-                                                             new ResetDome(-0.5)));
+//        secondStick.R1.whenPressed(new CompleteShoot(secondStick));
+//        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
+//                                                             new ResetDome(-0.5)));
 
-        secondStick.L1.whileHeld(new InsertIntoShooter(1.0, 0.8, 0.6));
-        secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
-                new StopInserter(), new StopRoller()));
+//        secondStick.L1.whileHeld(new InsertIntoShooter(1.0, 0.8, 0.6));
+//        secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
+//                new StopInserter(), new StopRoller()));
 
-        secondStick.Y.whileHeld(new
-                ParallelCommandGroup(
-                        new RollByConstant(-0.5), new PushByConstant(-0.3), new InsertByConstant(-0.6)));
-        secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()
-        , new StopRoller()));
+//        secondStick.Y.whileHeld(new
+//                ParallelCommandGroup(
+//                        new RollByConstant(-0.5), new PushByConstant(-0.3), new InsertByConstant(-0.6)));
+//        secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()
+//        , new StopRoller()));
 
         secondStick.B.whenPressed(new ToggleExtender());
-        secondStick.A.whileHeld(new RollByConstant(1.0));
-        secondStick.R3.whileHeld(new RollByConstant(-0.7));
+        secondStick.R1.whileHeld(new RollByConstant(1.0));
+        secondStick.L1.whileHeld(new RollByConstant(-0.7));
 
-        secondStick.START.whenPressed(new FullyAutoThreeStage(1650)); // 1650
+        /*secondStick.START.whenPressed(new FullyAutoThreeStage(1650)); // 1650
         secondStick.START.whenReleased(new StopShooter());
 
         secondStick.X.whenPressed(new ShootByConstant(
@@ -118,16 +118,16 @@ public class OI {
                 return true;
             }
         });
-
+*/
         secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
 
         secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
 
-        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.3));
+//        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.3));
+//
+//        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.3));
 
-        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.3));
-
-        secondStick.BACK.whenPressed(new ResetDome(-0.3));
+        secondStick.X.whenPressed(new ResetDome(-0.3));
 
         secondStick.L3.whenPressed(new GBCommand() {
             @Override

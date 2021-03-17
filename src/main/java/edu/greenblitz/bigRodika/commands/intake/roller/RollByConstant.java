@@ -1,5 +1,7 @@
 package edu.greenblitz.bigRodika.commands.intake.roller;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class RollByConstant extends RollerCommand {
     private double power;
 
@@ -10,6 +12,7 @@ public class RollByConstant extends RollerCommand {
 
     @Override
     public void execute() {
+        SmartDashboard.putBoolean("RollByConstant", true);
         intake.moveRoller(power);
     }
 
@@ -20,6 +23,7 @@ public class RollByConstant extends RollerCommand {
 
     @Override
     public void end(boolean interrupted) {
+        SmartDashboard.putBoolean("RollByConstant", false);
         intake.moveRoller(0);
     }
 }
