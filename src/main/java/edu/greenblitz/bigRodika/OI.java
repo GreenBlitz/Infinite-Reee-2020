@@ -1,6 +1,8 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
+import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
+import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.bigRodika.commands.climber.HoldElevator;
 import edu.greenblitz.bigRodika.commands.climber.MoveHookByConstant;
 import edu.greenblitz.bigRodika.commands.climber.ReleaseElevator;
@@ -18,6 +20,8 @@ import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRoller;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
+import edu.greenblitz.bigRodika.commands.shifter.ToPower;
+import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
@@ -51,8 +55,8 @@ public class OI {
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-//        initTestButtons();
-        initOfficalButtons();
+//       initTestButtons();
+       initOfficalButtons();
     }
 
 
@@ -65,8 +69,7 @@ public class OI {
 
     private void initTestButtons() {
 
-        mainJoystick.A.whenPressed(new HoldElevator());
-        mainJoystick.B.whenPressed(new ReleaseElevator());
+        mainJoystick.A.whenPressed(new CheckMaxRot(0.5));
 
     }
 
@@ -78,8 +81,10 @@ public class OI {
 
         mainJoystick.Y.whenPressed(new ShootAdjesant(mainJoystick.Y));
 
-//        mainJoystick.START.whenPressed(new ToSpeed());
-//        mainJoystick.BACK.whenPressed(new ToPower());
+        mainJoystick.A.whenPressed(new CheckMaxLin(1));
+
+        mainJoystick.START.whenPressed(new ToSpeed());
+        mainJoystick.BACK.whenPressed(new ToPower());
 
         // ---------------------------------------------------------------
 

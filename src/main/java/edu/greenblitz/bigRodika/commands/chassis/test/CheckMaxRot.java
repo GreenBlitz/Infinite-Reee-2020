@@ -44,6 +44,7 @@ public class CheckMaxRot extends ChassisCommand {
             double time = System.currentTimeMillis() / 1000.0;
             double angle = Chassis.getInstance().getLocation().getAngle();
             double V = (angle - previousAngle) / (time - previousTime);
+            System.out.println(angle);
             target.report(time - tStart / 1000.0, V, (V - previousVel) / (time - previousTime));
             previousAngle = angle;
             previousTime = time;

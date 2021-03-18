@@ -201,9 +201,10 @@ public class RobotMap {
                     PROF = new GearDependentValue<>(null,null);
 
                     POWER.put("1.0",
-                            new ProfilingData(2.64, 7, 8, 30));
+                            new ProfilingData(6.5, 32, 5.8, 22));
+
                     POWER.put("0.5",
-                            new ProfilingData(1.4, 8.4, 4, 10));
+                            new ProfilingData(3.25, 18.25, 3.1, 11.7));
 
                     // TODO this is dumb
                     POWER.put("0.3",
@@ -211,7 +212,7 @@ public class RobotMap {
 
 
                     SPEED.put("0.3",
-                            new ProfilingData(1.93*1.2, 4.6, 4.3, 12.6));
+                            new ProfilingData(1.93*1.2, 4.6, 4.3, 12.6));//TODO this
 
                     PROF.setValue(Gear.POWER, POWER);
                     PROF.setValue(Gear.SPEED, SPEED);

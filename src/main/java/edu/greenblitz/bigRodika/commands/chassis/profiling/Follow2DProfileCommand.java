@@ -190,7 +190,7 @@ public class Follow2DProfileCommand implements IThreadable {
                 mult);
         Vector2D vals = follower.run(inp[0], inp[1], inp[2]);
 
-        vals = ProfilingUtils.Clamp(ProfilingUtils.flipToBackwards(vals, isOpp), maxPower);
+        vals = ProfilingUtils.Clamp(ProfilingUtils.flipToBackwards(vals, isOpp), maxPower); //TODO: fix this
 
         Chassis.getInstance().moveMotors(vals.getX(), vals.getY());
 

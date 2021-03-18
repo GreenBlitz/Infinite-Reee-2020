@@ -88,6 +88,7 @@ public class Robot extends TimedRobot {
         Chassis.getInstance().toBrake();
         Chassis.getInstance().resetGyro();
         Chassis.getInstance().resetEncoders();
+        new LocalizerCommandRunner().schedule();
 
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         Shifter.getInstance().setShift(Gear.SPEED);
