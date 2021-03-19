@@ -21,6 +21,7 @@ ShootBySimplePid extends ShooterCommand {
 
     @Override
     public void initialize() {
+
         shooter.getPIDController().setIAccum(0);
         shooter.setPIDConsts(obj);
         tStart = System.currentTimeMillis();

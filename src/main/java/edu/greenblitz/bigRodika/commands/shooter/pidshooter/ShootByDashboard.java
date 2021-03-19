@@ -20,7 +20,7 @@ public class ShootByDashboard extends ShooterCommand {
     public void initialize() {
         shooter.getPIDController().setIAccum(0);
 
-        this.target = shooter.getNumber("testing_target", 100);
+        this.target = shooter.getNumber("testing_target", target);
         this.obj = new PIDObject(shooter.getNumber("p", 0.01),
                 shooter.getNumber("i", 0),
                 shooter.getNumber("d", 0),
