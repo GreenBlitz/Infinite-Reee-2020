@@ -76,15 +76,21 @@ public class OI {
     private void initOfficalButtons() {
 
 //        mainJoystick.L1.whenReleased(new ToggleShift());
-
-        mainJoystick.X.whenPressed(new ResetDome(-0.3));
+        List<State> locations = new ArrayList<>(2);
+        locations.add(new State(0, 0, 0, 0, 0));
+        locations.add(new State(0, 4.0, 0, 0, 0));
+        Follow2DProfileCommand command =  new Follow2DProfileCommand(locations, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5, false);
+        command.setSendData(true);
+        mainJoystick.X.whenPressed(new ThreadedCommand(command, Chassis.getInstance()));
 
         mainJoystick.Y.whenPressed(new ShootAdjesant(mainJoystick.Y));
 
-        mainJoystick.A.whenPressed(new CheckMaxLin(1));
+        mainJoystick.A.whenPressed(new CheckMaxLin(0.5));
 
         mainJoystick.START.whenPressed(new ToSpeed());
         mainJoystick.BACK.whenPressed(new ToPower());
+
+
 
         // ---------------------------------------------------------------
 
@@ -96,11 +102,11 @@ public class OI {
 //        secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
 //                new StopInserter(), new StopRoller()));
 
-//        secondStick.Y.whileHeld(new
-//                ParallelCommandGroup(
-//                        new RollByConstant(-0.5), new PushByConstant(-0.3), new InsertByConstant(-0.6)));
-//        secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()
-//        , new StopRoller()));
+        secondStick.Y.whileHeld(new
+                ParallelCommandGroup(
+                        new RollByConstant(-0.5), new PushByConstant(-0.3), new InsertByConstant(-0.6)));
+        secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()
+        , new StopRoller()));
 
         secondStick.B.whenPressed(new ToggleExtender());
         secondStick.R1.whileHeld(new RollByConstant(1.0));
