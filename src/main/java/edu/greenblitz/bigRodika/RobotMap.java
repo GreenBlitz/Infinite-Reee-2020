@@ -99,6 +99,8 @@ public class RobotMap {
             public static final double MINIMUM_SHOOT_DIST = 3.2;
             public static final double MAXIMUM_SHOOT_DIST = 6.7;
 
+            public static final double DISTANCE_ERROR_THRESHOLD = 0.05;
+
             static {
                 // First element = rpm. second = dome
                 Shooter.distanceToShooterState.addDatapoint(3.2,
