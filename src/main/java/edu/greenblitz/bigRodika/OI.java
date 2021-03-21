@@ -27,6 +27,7 @@ import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
 import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
 import edu.greenblitz.bigRodika.commands.shooter.ShooterCommand;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
 import edu.greenblitz.bigRodika.commands.turret.*;
@@ -39,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.base.State;
+import org.greenblitz.motion.pid.PIDObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,6 +189,13 @@ public class OI {
                 return true;
             }
         });
+
+        secondStick.X.whileHeld(new ParallelCommandGroup(
+                new RollByConstant(0.6), new PushByConstant(0.5), new InsertByConstant(1)));
+
+        mainJoystick.X.whenPressed(new ShootBySimplePid(new PIDObject(RobotMap.Limbo2.Shooter.SHOOTER_P,RobotMap.Limbo2.Shooter.SHOOTER_I,RobotMap.Limbo2.Shooter.SHOOTER_D), 2500));
+
+        mainJoystick.Y.whenPressed(new ParallelCommandGroup(new ResetDome(-0.3), new StopShooter()));
     }
 
     public SmartJoystick getMainJoystick() {
