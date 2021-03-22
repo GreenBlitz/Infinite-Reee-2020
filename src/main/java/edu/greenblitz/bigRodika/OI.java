@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika;
 
+import edu.greenblitz.bigRodika.commands.chassis.ApproachSlow;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.climber.HoldElevator;
 import edu.greenblitz.bigRodika.commands.climber.MoveHookByConstant;
@@ -70,6 +71,7 @@ public class OI {
     private void initTestButtons() {
 
 
+/*
         double maxPower = 0.3;
         ProfilingConfiguration config = RobotMap.Limbo2.Chassis.MotionData.CONFIG;
 
@@ -120,7 +122,8 @@ public class OI {
         l6.add(new State(0, 1, -Math.PI/2, 0, 0));
         Follow2DProfileCommand f6 = new Follow2DProfileCommand(l6, config, maxPower, false);
         mainJoystick.POV_DOWN.whenPressed(new ThreadedCommand(f6, Chassis.getInstance()));
-
+*/
+        mainJoystick.A.whenPressed(new ApproachSlow(3));
     }
 
     private void initOfficalButtons() {
