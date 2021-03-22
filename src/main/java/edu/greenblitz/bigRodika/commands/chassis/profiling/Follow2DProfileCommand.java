@@ -137,6 +137,7 @@ public class Follow2DProfileCommand implements IThreadable {
                 0.0,
                 1.0,
                 smoothingTail);
+        System.out.println(this.profile2D);
         SmartDashboard.putNumber("Profile Tend", this.profile2D.getTEnd());
         SmartDashboard.putString("Data for profile", data.toString());
         this.linKv = velMultLin / data.getMaxLinearVelocity();
