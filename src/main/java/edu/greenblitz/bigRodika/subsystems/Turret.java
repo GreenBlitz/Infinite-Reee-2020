@@ -62,6 +62,7 @@ public class Turret extends GBSubsystem {
 //            encoder.reset();
 //        }
 
+        SmartDashboard.putNumber("Turret Encoder", this.encoder.getNormalizedTicks());
         if (getCurrentCommand() == null && defaultCommand != null) {
             defaultCommand.schedule();
         }
@@ -69,10 +70,10 @@ public class Turret extends GBSubsystem {
 //        double[] simData = MotionUtils.getSimulatedVisionLocation(
 //                VisionMaster.getInstance().getVisionLocation().toDoubleArray());
 
-        putNumber("Encoder", encoder.getRawTicks());
-        putNumber("normEncoder", encoder.getNormalizedTicks());
-        putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
-        putBoolean("Switch", isSwitchPressed());
+//        putNumber("Encoder", encoder.getRawTicks());
+//        putNumber("normEncoder", encoder.getNormalizedTicks());
+//        putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
+//        putBoolean("Switch", isSwitchPressed());
         double[] sim = MotionUtils.getSimulatedVisionLocation();
         if (sim != null) {
             SmartDashboard.putNumberArray("Simulated Vision Location", sim);
@@ -81,18 +82,18 @@ public class Turret extends GBSubsystem {
             SmartDashboard.putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
         }
 
-        SmartDashboard.putNumber("vroom groom", lastPower);
+//        SmartDashboard.putNumber("vroom groom", lastPower);
         moveTurret(lastPower);
     }
 
     public void moveTurret(double power) {
         if (encoder.getRawTicks() < MIN_TICKS && power < 0) {
-            SmartDashboard.putNumber("vroom vroom", 0);
+//            SmartDashboard.putNumber("vroom vroom", 0);
             motor.set(0);
             return;
         }
         if (encoder.getRawTicks() > MAX_TICKS && power > 0) {
-            SmartDashboard.putNumber("vroom vroom", 0);
+//            SmartDashboard.putNumber("vroom vroom", 0);
             motor.set(0);
             return;
         }

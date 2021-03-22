@@ -35,7 +35,7 @@ public class RobotMap {
         }
 
         public static class Turret {
-            public static final int MOTOR_PORT = 13;
+            public static final int MOTOR_PORT = 11;
             public static final int SWITCH_PORT = 3;
             public static final boolean IS_INVERTED = false;
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
@@ -85,9 +85,10 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = false;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
-            public static final double SHOOTER_P = 0.01;
+            public static final double SHOOTER_P = 0.000;//5;
             public static final double SHOOTER_I = 0.0000;
             public static final double SHOOTER_D = 0.0000;
+            public static final double SHOOTER_F = 0.5500;
 
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 

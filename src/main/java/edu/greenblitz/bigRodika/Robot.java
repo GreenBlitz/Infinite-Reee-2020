@@ -13,6 +13,7 @@ import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.greenblitz.motion.Localizer;
 
@@ -88,6 +89,11 @@ public class Robot extends TimedRobot {
         new CompressorOn();
 //        new ResetEncoderWhenInFront().schedule();
         new StopShooter().schedule();
+
+        SmartDashboard.putNumber("P", 0);
+        SmartDashboard.putNumber("I", 0);
+        SmartDashboard.putNumber("D", 0);
+        SmartDashboard.putNumber("F", 0);
 
 //        if (!DriverStation.getInstance().isFMSAttached()){
 //            new CompressorOn().schedule();

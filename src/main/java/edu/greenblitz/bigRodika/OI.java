@@ -1,14 +1,11 @@
 package edu.greenblitz.bigRodika;
 
-import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
-import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
 import edu.greenblitz.bigRodika.commands.chassis.motion.DumbAlign;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShootAndWait;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
-import edu.greenblitz.bigRodika.commands.complex.autonomous.Drive;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
@@ -17,28 +14,25 @@ import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
-import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRoller;
-import edu.greenblitz.bigRodika.commands.intake.extender.RetractRoller;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
 import edu.greenblitz.bigRodika.commands.shifter.ToPower;
 import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
-import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
-import edu.greenblitz.bigRodika.commands.shooter.ShooterCommand;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootByDashboard;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
-import edu.greenblitz.bigRodika.commands.turret.*;
-import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
+import edu.greenblitz.bigRodika.commands.turret.StopTurret;
+import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyRadians;
+import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
-import edu.greenblitz.gblib.threading.ThreadedCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 
@@ -114,7 +108,10 @@ public class OI {
 
         List<Double> rads = new ArrayList<>();
 
-        rads.add(0.5); rads.add(4.0); rads.add(4.5); rads.add(6.3);
+        rads.add(0.5);
+        rads.add(4.0);
+        rads.add(4.5);
+        rads.add(6.3);
 
         mainJoystick.A.whileHeld(
                 new PreShootAndWait(
@@ -126,11 +123,6 @@ public class OI {
         mainJoystick.B.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
 //        mainJoystick.B.whenReleased(new StopTurret());
 
-        mainJoystick.X.whenPressed(new ParallelCommandGroup(
-                new ResetDome(-0.3), new ExtendRoller()
-        ));
-
-
         mainJoystick.START.whenPressed(new ToSpeed());
         mainJoystick.BACK.whenPressed(new ToPower());
 
@@ -141,7 +133,7 @@ public class OI {
 
         secondStick.R1.whenPressed(new FullyAutoThreeStage(2500, 0.45));
         secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
-                                                             new ResetDome()));
+                new ResetDome()));
 
 //        secondStick.R1.whenPressed(new FullyAutoThreeStage(2600, 0.5));
 //        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
@@ -153,9 +145,9 @@ public class OI {
 
         secondStick.Y.whileHeld(new
                 ParallelCommandGroup(
-                        new RollByConstant(-0.5), new PushByConstant(-0.3), new InsertByConstant(-0.6)));
+                new RollByConstant(-0.5), new PushByConstant(-0.3), new InsertByConstant(-0.6)));
         secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()
-        , new StopRoller()));
+                , new StopRoller()));
 
         secondStick.B.whenPressed(new ToggleExtender());
         secondStick.A.whileHeld(new RollByConstant(1.0));
@@ -166,15 +158,13 @@ public class OI {
                 new DomeApproachSwiftly(0.15)
         ));
 
-        secondStick.X.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
-
         secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
 
         secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
 
-        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.5));
+        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
 
-        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.5));
+        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
 
         secondStick.BACK.whenPressed(new ResetDome(-0.3));
 
@@ -193,7 +183,9 @@ public class OI {
         secondStick.X.whileHeld(new ParallelCommandGroup(
                 new RollByConstant(0.6), new PushByConstant(0.5), new InsertByConstant(1)));
 
-        mainJoystick.X.whenPressed(new ShootBySimplePid(new PIDObject(RobotMap.Limbo2.Shooter.SHOOTER_P,RobotMap.Limbo2.Shooter.SHOOTER_I,RobotMap.Limbo2.Shooter.SHOOTER_D), 2500));
+        mainJoystick.X.whenPressed(new ShootBySimplePid(
+                new PIDObject(RobotMap.Limbo2.Shooter.SHOOTER_P,RobotMap.Limbo2.Shooter.SHOOTER_I,RobotMap.Limbo2.Shooter.SHOOTER_D, RobotMap.Limbo2.Shooter.SHOOTER_F ),
+                2000));
 
         mainJoystick.Y.whenPressed(new ParallelCommandGroup(new ResetDome(-0.3), new StopShooter()));
     }
