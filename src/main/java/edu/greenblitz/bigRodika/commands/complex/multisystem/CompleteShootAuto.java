@@ -3,13 +3,10 @@ package edu.greenblitz.bigRodika.commands.complex.multisystem;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.turret.StopTurret;
 import edu.greenblitz.bigRodika.commands.turret.help.JustGoToTheFuckingTarget;
-import edu.greenblitz.bigRodika.commands.turret.help.TurretByTriggers;
-import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.LogTime;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
-import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -18,7 +15,6 @@ import java.util.function.Supplier;
 public class CompleteShootAuto extends SequentialCommandGroup {
 
     public CompleteShootAuto() {
-
         Supplier<Double> turretAlignSupp = () ->
                 Turret.getInstance().getNormAngleRads() +
                         VisionMaster.getInstance().getVisionLocation().getRelativeAngleRad();

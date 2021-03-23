@@ -1,13 +1,12 @@
 package edu.greenblitz.bigRodika.commands.complex.multisystem;
 
-import edu.greenblitz.bigRodika.Robot;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.subsystems.Dome;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
-import org.greenblitz.motion.base.TwoTuple;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.function.Supplier;
 
@@ -27,7 +26,7 @@ public class PrepareShooterByDistance extends GBCommand {
 
     }
 
-    public void testing(){
+    public void testing() {
         System.out.println("sup to be true");
         testForTheFunctionInitialize(6.1);
         System.out.println("sup to be false");
@@ -52,8 +51,7 @@ public class PrepareShooterByDistance extends GBCommand {
             shoot = false;
         }
         if (shoot) {
-            System.out.println("Shooted");
-
+            System.out.println("Shot");
         } else {
             System.out.println("Did not shoot");
         }
@@ -62,33 +60,17 @@ public class PrepareShooterByDistance extends GBCommand {
 
     @Override
     public void initialize() {
-        double distance = distanceSupplier.get();
-        double idealX1 = RobotMap.Limbo2.Shooter.distanceToShooterState.getAdjesent(distance).getFirst().getFirst();
-        double idealX2 = RobotMap.Limbo2.Shooter.distanceToShooterState.getAdjesent(distance).getSecond().getFirst();
-        double minDiff = Math.min(Math.abs(idealX1 - distance), Math.abs(idealX2 - distance));
-        boolean shoot;
+        double distance = distanceSupplier;
+        double[] shooterState = RobotMap.Limbo2.Shooter.
+                distanceToShooterState.linearlyInterpolate(
+                distance
+        );
 
-        if (minDiff <= DISTANCE_ERROR_THRESHOLD) {
-            shoot = true;
-        } else {
-            shoot = false;
-        }
-        if (shoot) {
-            System.out.println("Shooted");
-            double[] shooterState = RobotMap.Limbo2.Shooter.
-                    distanceToShooterState.linearlyInterpolate(
-                    distance
-            );
+        domeCommand = new DomeApproachSwiftly(shooterState[1]);
+        shooterCommand = new FullyAutoThreeStage(shooterState[0]);
 
-            domeCommand = new DomeApproachSwiftly(shooterState[1]);
-            shooterCommand = new FullyAutoThreeStage(shooterState[0]);
-
-            domeCommand.initialize();
-            shooterCommand.initialize();
-        } else {
-            System.out.println("Did not shoot");
-            end(false);
-        }
+        domeCommand.initialize();
+        shooterCommand.initialize();
     }
 
 
@@ -106,6 +88,12 @@ public class PrepareShooterByDistance extends GBCommand {
 
     @Override
     public boolean isFinished() {
-        return domeCommand.isFinished() && shooterCommand.isFinished();
+        double distance = distanceSupplier;
+        double idealX1 = RobotMap.Limbo2.Shooter.distanceToShooterState.getAdjesent(distance).getFirst().getFirst();
+        double idealX2 = RobotMap.Limbo2.Shooter.distanceToShooterState.getAdjesent(distance).getSecond().getFirst();
+        double minDiff = Math.min(Math.abs(idealX1 - distance), Math.abs(idealX2 - distance));
+        SmartDashboard.putBoolean("Shoot", minDiff <= DISTANCE_ERROR_THRESHOLD);
+
+        return domeCommand.isFinished() && shooterCommand.isFinished() && minDiff <= DISTANCE_ERROR_THRESHOLD;
     }
 }

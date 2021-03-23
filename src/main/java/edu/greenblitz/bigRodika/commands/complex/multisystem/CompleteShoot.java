@@ -18,7 +18,6 @@ import java.util.function.Supplier;
 public class CompleteShoot extends SequentialCommandGroup {
 
     public CompleteShoot(SmartJoystick secondStick) {
-
         Supplier<Double> turretAlignSupp = () ->
                 Turret.getInstance().getNormAngleRads() +
                         VisionMaster.getInstance().getVisionLocation().getRelativeAngleRad()

@@ -5,6 +5,7 @@ import edu.greenblitz.bigRodika.commands.climber.HoldElevator;
 import edu.greenblitz.bigRodika.commands.climber.MoveHookByConstant;
 import edu.greenblitz.bigRodika.commands.climber.ReleaseElevator;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
+import edu.greenblitz.bigRodika.commands.complex.multisystem.PrepareShooterByDistance;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
@@ -42,6 +43,8 @@ import org.greenblitz.motion.profiling.ProfilingConfiguration;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class OI {
     private static OI instance;
@@ -120,6 +123,9 @@ public class OI {
         l6.add(new State(0, 1, -Math.PI/2, 0, 0));
         Follow2DProfileCommand f6 = new Follow2DProfileCommand(l6, config, maxPower, false);
         mainJoystick.POV_DOWN.whenPressed(new ThreadedCommand(f6, Chassis.getInstance()));
+
+        secondStick.A.whenPressed(new PrepareShooterByDistance(3.2));
+        secondStick.B.whenPressed(new PrepareShooterByDistance(3.3));
 
     }
 
