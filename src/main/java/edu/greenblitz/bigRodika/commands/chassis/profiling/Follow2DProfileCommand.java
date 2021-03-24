@@ -50,7 +50,7 @@ public class Follow2DProfileCommand implements IThreadable {
         this(path, config,
                 (RobotMap.Limbo2.Chassis.MotionData.PROF.getValue().containsKey(Double.toString(maxPower))) ?
                 RobotMap.Limbo2.Chassis.MotionData.PROF.getValue().get(Double.toString(maxPower)) : retNullandThrow(), maxPower, isReverse);
-        SmartDashboard.putString("gear", GlobalGearContainer.getInstance().toString());
+        SmartDashboard.putString("gear",  Boolean.toString(GlobalGearContainer.getInstance().getGear().isPower()));
     }
 
 

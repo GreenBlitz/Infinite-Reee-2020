@@ -174,8 +174,8 @@ public class RobotMap {
                 public static final int PCM = 21;
 
                 public static class Solenoid {
-                    public static final int FORWARD = 2;
-                    public static final int REVERSE = 3;
+                    public static final int FORWARD = 6;
+                    public static final int REVERSE = 2;
                 }
             }
 
@@ -187,8 +187,8 @@ public class RobotMap {
             public static class MotionData { // TODO: calibrate this
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
-                        1.0, 1.0, .0005,
-                        0.8, 0.0075, 1.1, .01, //7,0.5,8 / 3.75,0,0.25
+                        1.0, 0.4, .0005,
+                        2, 0.0, 0, .01, //7,0.5,8 / 3.75,0,0.25 / 0.8,0.0075,1.1
                         0.5 * 0, 0, 0, .01, 500); //TODO this
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
@@ -214,6 +214,11 @@ public class RobotMap {
                     SPEED.put("0.3",
                                     new ProfilingData(1.9, 3.0, 4.3, 12.6));
                     //1.8,1.2,4.5,7
+
+                    SPEED.put("1.0",
+                            new ProfilingData(4.04, 6, 10.5, 9));
+
+
                     PROF.setValue(Gear.POWER, POWER);
                     PROF.setValue(Gear.SPEED, SPEED);
                 }
