@@ -7,7 +7,7 @@ import edu.greenblitz.gblib.hid.SmartJoystick;
 public class ArcadeDrive extends ChassisCommand {
 
     private SmartJoystick joystick;
-    private GearDependentValue<Double> forwardsFactor = new GearDependentValue<>(1.0, 0.7);
+    private GearDependentValue<Double> forwardsFactor = new GearDependentValue<>(1.0, 1.0);
     private GearDependentValue<Double> turnFactor = new GearDependentValue<>(
             0.55,
             0.55);

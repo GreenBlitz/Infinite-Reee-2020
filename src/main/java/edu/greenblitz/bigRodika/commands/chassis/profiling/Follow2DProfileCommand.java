@@ -2,6 +2,7 @@ package edu.greenblitz.bigRodika.commands.chassis.profiling;
 
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.gblib.gears.GlobalGearContainer;
 import edu.greenblitz.gblib.threading.IThreadable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.base.State;
@@ -49,6 +50,7 @@ public class Follow2DProfileCommand implements IThreadable {
         this(path, config,
                 (RobotMap.Limbo2.Chassis.MotionData.PROF.getValue().containsKey(Double.toString(maxPower))) ?
                 RobotMap.Limbo2.Chassis.MotionData.PROF.getValue().get(Double.toString(maxPower)) : retNullandThrow(), maxPower, isReverse);
+        SmartDashboard.putString("gear", GlobalGearContainer.getInstance().toString());
     }
 
 
@@ -191,7 +193,7 @@ public class Follow2DProfileCommand implements IThreadable {
                 mult);
         Vector2D vals = follower.run(inp[0], inp[1], inp[2]);
 
-        vals = ProfilingUtils.Clamp(ProfilingUtils.flipToBackwards(vals, isOpp), maxPower); //TODO: fix this
+        vals = ProfilingUtils.Clamp(ProfilingUtils.flipToBackwards(vals, isOpp), maxPower);
 
         Chassis.getInstance().moveMotors(vals.getX(), vals.getY());
 

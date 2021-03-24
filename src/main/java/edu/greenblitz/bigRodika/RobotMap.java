@@ -188,7 +188,7 @@ public class RobotMap {
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
                         1.0, 1.0, .0005,
-                        1.1, 0.0, 0.0, .01, //7,0.5,8 / 3.75,0,0.25
+                        0.8, 0.0075, 1.1, .01, //7,0.5,8 / 3.75,0,0.25
                         0.5 * 0, 0, 0, .01, 500); //TODO this
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
@@ -201,10 +201,10 @@ public class RobotMap {
                     PROF = new GearDependentValue<>(null,null);
 
                     POWER.put("1.0",
-                            new ProfilingData(6.5, 32, 5.8, 22));
+                            new ProfilingData(2.5, 6.2, 6.8, 9)); //maxLinA = 15
 
                     POWER.put("0.5",
-                            new ProfilingData(3.25, 5.1, 3.1, 11.7));
+                            new ProfilingData(3.25, 5.1, 6, 3.9));
 
                     // TODO this is dumb
                     POWER.put("0.3",
@@ -212,8 +212,8 @@ public class RobotMap {
 
 
                     SPEED.put("0.3",
-                            new ProfilingData(1.9, 3.0, 4.3, 12.6));//TODO this when shifter is fixed
-                    //1.9,4,4.3,12.6
+                                    new ProfilingData(1.9, 3.0, 4.3, 12.6));
+                    //1.8,1.2,4.5,7
                     PROF.setValue(Gear.POWER, POWER);
                     PROF.setValue(Gear.SPEED, SPEED);
                 }

@@ -78,14 +78,15 @@ public class OI {
 //        mainJoystick.L1.whenReleased(new ToggleShift());
         List<State> locations = new ArrayList<>(2);
         locations.add(new State(0, 0, 0, 0, 0));
-        locations.add(new State(0, 2.0, 0.125*Math.PI, 0, 0));
-        Follow2DProfileCommand command =  new Follow2DProfileCommand(locations, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, false);
+        locations.add(new State(0.0, 2.0, 0, 0, 0));
+        Follow2DProfileCommand command =  new Follow2DProfileCommand(locations, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 1, false);
         command.setSendData(true);
         mainJoystick.X.whenPressed(new ThreadedCommand(command, Chassis.getInstance()));
 
         mainJoystick.Y.whenPressed(new ShootAdjesant(mainJoystick.Y));
 
         mainJoystick.A.whenPressed(new CheckMaxLin(0.3));
+        mainJoystick.B.whenPressed(new CheckMaxRot(0.3));
 
         mainJoystick.START.whenPressed(new ToSpeed());
         mainJoystick.BACK.whenPressed(new ToPower());

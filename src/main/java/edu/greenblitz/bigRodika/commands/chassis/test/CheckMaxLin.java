@@ -42,6 +42,6 @@ public class CheckMaxLin extends ChassisCommand {
 
     @Override
     public boolean isFinished() {
-        return System.currentTimeMillis() - tStart > 3000;
+        return System.currentTimeMillis() - tStart > 2000;
     }
 }
