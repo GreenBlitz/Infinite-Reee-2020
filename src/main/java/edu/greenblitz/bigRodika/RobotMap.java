@@ -85,7 +85,7 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = false;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
-            public static final double SHOOTER_P = 0.000;//5;
+            public static final double SHOOTER_P = 0.000;
             public static final double SHOOTER_I = 0.0000;
             public static final double SHOOTER_D = 0.0000;
             public static final double SHOOTER_F = 0.5500;

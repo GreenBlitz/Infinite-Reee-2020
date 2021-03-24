@@ -8,7 +8,7 @@ public class ToSpeed extends ShifterCommand {
 
     @Override
     public void initialize() {
-        SmartDashboard.putBoolean("is start", true);
+//        SmartDashboard.putBoolean("is start", true);
         shifter.setShift(Gear.SPEED);
     }
 

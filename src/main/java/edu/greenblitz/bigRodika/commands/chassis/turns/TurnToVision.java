@@ -87,7 +87,7 @@ public class TurnToVision extends GBCommand {
 
     @Override
     public void end(boolean interrupted) {
-        SmartDashboard.putNumber("Angle Error =", target - Chassis.getInstance().getAngle());
+//        SmartDashboard.putNumber("Angle Error =", target - Chassis.getInstance().getAngle());
         if (fucked || turn == null) return;
         turn.end(interrupted);
     }

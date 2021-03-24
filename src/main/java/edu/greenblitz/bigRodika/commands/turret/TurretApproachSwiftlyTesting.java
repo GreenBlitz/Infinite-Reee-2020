@@ -42,7 +42,6 @@ public class TurretApproachSwiftlyTesting extends TurretCommand {
         MINIMUM_SPEED = turret.getNumber("MINIMUM_SPEED", MINIMUM_SPEED);
         MAXIMUM_SPEED = turret.getNumber("MAXIMUM_SPEED", MAXIMUM_SPEED);
         target = turret.getNumber("TARGET", target);
-        SmartDashboard.putNumber("vroom vraam", calculateVelocity(target - turret.getTurretLocation()));
         turret.moveTurret(calculateVelocity(target - turret.getTurretLocation()));
     }
 

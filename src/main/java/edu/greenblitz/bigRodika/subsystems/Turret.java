@@ -76,10 +76,10 @@ public class Turret extends GBSubsystem {
 //        putBoolean("Switch", isSwitchPressed());
         double[] sim = MotionUtils.getSimulatedVisionLocation();
         if (sim != null) {
-            SmartDashboard.putNumberArray("Simulated Vision Location", sim);
-            SmartDashboard.putNumber("Simulated Angle", Math.toDegrees(Math.atan2(sim[0], sim[1])));
-            SmartDashboard.putNumber("Simulated Distance", Math.hypot(sim[0], sim[1]));
-            SmartDashboard.putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
+//            SmartDashboard.putNumberArray("Simulated Vision Location", sim);
+//            SmartDashboard.putNumber("Simulated Angle", Math.toDegrees(Math.atan2(sim[0], sim[1])));
+//            SmartDashboard.putNumber("Simulated Distance", Math.hypot(sim[0], sim[1]));
+//            SmartDashboard.putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
         }
 
 //        SmartDashboard.putNumber("vroom groom", lastPower);
@@ -88,16 +88,13 @@ public class Turret extends GBSubsystem {
 
     public void moveTurret(double power) {
         if (encoder.getRawTicks() < MIN_TICKS && power < 0) {
-            SmartDashboard.putNumber("ticks under asking", 0);
             motor.set(0);
             return;
         }
         if (encoder.getRawTicks() > MAX_TICKS && power > 0) {
-            SmartDashboard.putNumber("ticks over asking", 0);
             motor.set(0);
             return;
         }
-        SmartDashboard.putNumber("Turret Power", power);
         motor.set(power);
         lastPower = power;
     }

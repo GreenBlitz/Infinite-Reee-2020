@@ -50,6 +50,6 @@ public class Drive extends
         @Override
         public void end(boolean interrupted) {
         super.end(interrupted);
-        SmartDashboard.putBoolean("Auto interrupted2", interrupted);
+//        SmartDashboard.putBoolean("Auto interrupted2", interrupted);
     }
 }

@@ -76,7 +76,6 @@ public class Shifter extends GBSubsystem {
         m_currentShift = state;
         Chassis.getInstance().changeGear();
         GlobalGearContainer.getInstance().setGear(state);
-        SmartDashboard.putBoolean("works", true);
         SmartDashboard.putString("state value", shiftValue.getValue().toString());
         m_piston.set(shiftValue.getValue());
     }

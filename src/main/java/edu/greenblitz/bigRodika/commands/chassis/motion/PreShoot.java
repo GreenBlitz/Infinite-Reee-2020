@@ -30,7 +30,7 @@ public class PreShoot extends SequentialCommandGroup {
 
                                     @Override
                                     public void initialize() {
-                                        SmartDashboard.putBoolean("Initialized", true);
+//                                        SmartDashboard.putBoolean("Initialized", true);
                                         Chassis.getInstance().moveMotors(0, 0);
                                         Chassis.getInstance().toBrake();
                                     }

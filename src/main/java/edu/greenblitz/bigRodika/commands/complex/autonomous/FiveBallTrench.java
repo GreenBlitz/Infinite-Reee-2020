@@ -82,6 +82,6 @@ public class FiveBallTrench extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        SmartDashboard.putBoolean("Auto interrupted", interrupted);
+//        SmartDashboard.putBoolean("Auto interrupted", interrupted);
     }
 }

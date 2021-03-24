@@ -90,10 +90,10 @@ public class Robot extends TimedRobot {
 //        new ResetEncoderWhenInFront().schedule();
         new StopShooter().schedule();
 
-        SmartDashboard.putNumber("P", 0);
-        SmartDashboard.putNumber("I", 0);
-        SmartDashboard.putNumber("D", 0);
-        SmartDashboard.putNumber("F", 0);
+//        SmartDashboard.putNumber("P", 0);
+//        SmartDashboard.putNumber("I", 0);
+//        SmartDashboard.putNumber("D", 0);
+//        SmartDashboard.putNumber("F", 0);
 
 //        if (!DriverStation.getInstance().isFMSAttached()){
 //            new CompressorOn().schedule();

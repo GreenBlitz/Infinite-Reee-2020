@@ -17,7 +17,6 @@ public class TurretApproachSwiftlyRadians extends TurretApproachSwiftly {
 
     @Override
     public void execute() {
-        SmartDashboard.putNumber("broom vroom", calculateVelocity(target - turret.getNormAngleRads()));
         turret.moveTurret(calculateVelocity(target - turret.getNormAngleRads()));
     }
 

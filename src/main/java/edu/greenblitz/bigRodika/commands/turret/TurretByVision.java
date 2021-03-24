@@ -33,7 +33,6 @@ public class TurretByVision extends TurretCommand {
             turret.moveTurret(0);
             return;
         }
-        SmartDashboard.putNumber("groom broom", TurretApproachSwiftly.calculateVelocity(
                 Math.toRadians(VisionMaster.getInstance().getVisionLocation().getRelativeAngle())
         ));
         turret.moveTurret(TurretApproachSwiftly.calculateVelocity(

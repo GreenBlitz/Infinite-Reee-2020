@@ -179,8 +179,7 @@ public class VisionMaster extends GBSubsystem {
             this.rawStateName = rawStateName;
         }
 
-        public void
-        setAsCurrent() {
+        public void setAsCurrent() {
             VisionMaster.getInstance().setCurrentShifterState(this);
         }
 

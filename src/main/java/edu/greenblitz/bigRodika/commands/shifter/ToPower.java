@@ -12,7 +12,7 @@ public class ToPower extends ShifterCommand {
 
     @Override
     public void execute() {
-        SmartDashboard.putBoolean("is start", false);
+//        SmartDashboard.putBoolean("is start", false);
         shifter.setShift(Gear.POWER);
     }
 
