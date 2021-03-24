@@ -4,6 +4,7 @@ import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunne
 import edu.greenblitz.bigRodika.commands.climber.ClimbByTriggers;
 import edu.greenblitz.bigRodika.commands.climber.HookByTriggers;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
+import edu.greenblitz.bigRodika.commands.compressor.CompressorOn;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.turret.resets.ResetEncoderWhenInBack;
@@ -16,6 +17,7 @@ import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.greenblitz.motion.Localizer;
 
@@ -93,11 +95,17 @@ public class Robot extends TimedRobot {
         Shifter.getInstance().setShift(Gear.SPEED);
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
 
-//        new ResetDome(-0.3).schedule();
+        new ResetDome(-0.3).schedule();
+        new CompressorOn();
 //        new ResetEncoderWhenInFront().schedule();
         new StopShooter().schedule();
 
-        if (!DriverStation.getInstance().isFMSAttached()){
+//        SmartDashboard.putNumber("P", 0);
+//        SmartDashboard.putNumber("I", 0);
+//        SmartDashboard.putNumber("D", 0);
+//        SmartDashboard.putNumber("F", 0);
+
+//        if (!DriverStation.getInstance().isFMSAttached()){
 //            new CompressorOn().schedule();
 //            new ResetEncoderWhenInSide().schedule();
             new ClimbByTriggers(OI.getInstance().getMainJoystick(), OI.getInstance().getSideStick(), 0.4, 0.4).schedule();

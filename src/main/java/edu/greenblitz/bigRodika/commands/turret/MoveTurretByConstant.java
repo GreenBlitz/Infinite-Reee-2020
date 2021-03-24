@@ -13,7 +13,6 @@ public class MoveTurretByConstant extends TurretCommand {
 
     @Override
     public void execute() {
-        SmartDashboard.putNumber("raw ticks", turret.encoder.getRawTicks());
         turret.moveTurret(power);
     }
 

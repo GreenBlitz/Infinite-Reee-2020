@@ -88,9 +88,10 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = false;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
-            public static final double SHOOTER_P = 0.00075;
-            public static final double SHOOTER_I = 0.0000005;
-            public static final double SHOOTER_D = 0.00006*0.0;
+            public static final double SHOOTER_P = 0.000;
+            public static final double SHOOTER_I = 0.0000;
+            public static final double SHOOTER_D = 0.0000;
+            public static final double SHOOTER_F = 0.5500;
 
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(1.0);
 
@@ -175,7 +176,7 @@ public class RobotMap {
 
                 public static class Solenoid {
                     public static final int FORWARD = 2;
-                    public static final int REVERSE = 3;
+                    public static final int REVERSE = 6;
                 }
             }
 

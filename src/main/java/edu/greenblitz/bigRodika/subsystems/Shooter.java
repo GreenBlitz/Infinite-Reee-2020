@@ -7,7 +7,9 @@ import com.revrobotics.ControlType;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.interpolation.Dataset;
-import org.greenblitz.motion.pid.PIDObject;
+
+
+
 
 public class Shooter extends GBSubsystem {
 
@@ -16,7 +18,8 @@ public class Shooter extends GBSubsystem {
     // Leader is left, follower is right
     private CANSparkMax leader, follower;
     private Dataset rpmToPowerMap;
-    private boolean preparedToShoot;
+
+   private boolean preparedToShoot;
 
     private Shooter() {
         leader = new CANSparkMax(RobotMap.Limbo2.Shooter.PORT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);

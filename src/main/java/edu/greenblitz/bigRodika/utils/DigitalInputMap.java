@@ -40,7 +40,7 @@ public class DigitalInputMap extends GBSubsystem {
     @Override
     public void periodic() {
         for (int i = 0; i < NUMBER_OF_PORTS; i++) {
-            putBoolean("Input #" + i, getValue(i));
+//        SmartDashboard.putBoolean("Input #" + i, getValue(i)));
         }
     }
 }

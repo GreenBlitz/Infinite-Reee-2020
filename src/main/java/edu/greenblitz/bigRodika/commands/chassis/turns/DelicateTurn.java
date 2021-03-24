@@ -30,7 +30,7 @@ public class DelicateTurn implements IThreadable {
     @Override
     public void atEnd() {
         double err = Math.toDegrees(Position.normalizeAngle(Chassis.getInstance().getAngle() - goal));
-        SmartDashboard.putNumber("Final Final Error", err);
+//        SmartDashboard.putNumber("Final Final Error", err);
 
         Chassis.getInstance().moveMotors(0, 0);
     }

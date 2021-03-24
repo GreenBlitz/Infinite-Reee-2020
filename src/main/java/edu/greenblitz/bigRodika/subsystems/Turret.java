@@ -75,25 +75,27 @@ public class Turret extends GBSubsystem {
             encoder.reset();
         }
 
-        if (getCurrentCommand() == null && defaultCommand != null) {
-            defaultCommand.schedule();
-        }
+        SmartDashboard.putNumber("Turret Encoder", this.encoder.getRawTicks());
+//        if (getCurrentCommand() == null && defaultCommand != null) {
+//            defaultCommand.schedule();
+//        }
 
 //        double[] simData = MotionUtils.getSimulatedVisionLocation(
 //                VisionMaster.getInstance().getVisionLocation().toDoubleArray());
 
-        putNumber("Encoder", encoder.getRawTicks());
-        putNumber("normEncoder", encoder.getNormalizedTicks());
-        putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
-        putBoolean("Switch", isSwitchPressed());
+//        putNumber("Encoder", encoder.getRawTicks());
+//        putNumber("normEncoder", encoder.getNormalizedTicks());
+//        putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
+//        putBoolean("Switch", isSwitchPressed());
         double[] sim = MotionUtils.getSimulatedVisionLocation();
         if (sim != null) {
-            putNumberArray("Simulated Vision Location", sim);
-            putNumber("Simulated Angle", Math.toDegrees(Math.atan2(sim[0], sim[1])));
-            putNumber("Simulated Distance", Math.hypot(sim[0], sim[1]));
-            putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
+//            SmartDashboard.putNumberArray("Simulated Vision Location", sim);
+//            SmartDashboard.putNumber("Simulated Angle", Math.toDegrees(Math.atan2(sim[0], sim[1])));
+//            SmartDashboard.putNumber("Simulated Distance", Math.hypot(sim[0], sim[1]));
+//            SmartDashboard.putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
         }
 
+//        SmartDashboard.putNumber("vroom groom", lastPower);
         moveTurret(lastPower);
     }
 

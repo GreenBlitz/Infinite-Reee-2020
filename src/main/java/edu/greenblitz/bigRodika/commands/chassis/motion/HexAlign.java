@@ -84,7 +84,7 @@ public class HexAlign extends GBCommand {
         State startState = new State(0, 0, profileAngleVsGyroInverted * absAng);
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         VisionLocation location = VisionMaster.getInstance().getVisionLocation();
-        SmartDashboard.putString("Vision Location", location.toString());
+//        SmartDashboard.putString("Vision Location", location.toString());
         double[] difference = MotionUtils.getSimulatedVisionLocation();
 
         if (!VisionMaster.getInstance().isLastDataValid()) {
@@ -124,12 +124,12 @@ public class HexAlign extends GBCommand {
             System.out.println("Cant find " + r + " in dome radii");
         }
 
-        SmartDashboard.putNumber("rds", r);
+//        SmartDashboard.putNumber("rds", r);
 
         double desRadCenter = r + RobotMap.Limbo2.Chassis.VISION_CAM_Y_DIST_CENTER;
         double errRadCenter = Math.abs(radCenter - desRadCenter);
 
-        SmartDashboard.putNumber("errRadCenter", errRadCenter);
+//        SmartDashboard.putNumber("errRadCenter", errRadCenter);
 
         //if robot is very very  - do nothing
         if (errRadCenter < tolerance) {
@@ -137,7 +137,7 @@ public class HexAlign extends GBCommand {
             return;
         }
 
-        SmartDashboard.putBoolean("inDriveTol", errRadCenter < driveTolerance);
+//        SmartDashboard.putBoolean("inDriveTol", errRadCenter < driveTolerance);
 
         //if robot is close - drives straight
         if (errRadCenter < driveTolerance) {
@@ -152,7 +152,7 @@ public class HexAlign extends GBCommand {
         globHexPos = new Point(hexPos.getX() + Chassis.getInstance().getLocation().getX(),
                 hexPos.getY() + Chassis.getInstance().getLocation().getY());
 
-        SmartDashboard.putString("hex", hexPos.toString());
+//        SmartDashboard.putString("hex", hexPos.toString());
 
         //calculates the best point to get to, deals with exceptional cases
         double devConst = 1.5;
@@ -170,10 +170,10 @@ public class HexAlign extends GBCommand {
                     Math.sin(-relAng) *
                             ((targetY - Math.sqrt(r * r - targetX * targetX)) / r)
             );
-            SmartDashboard.putBoolean("As expected", true);
+//            SmartDashboard.putBoolean("As expected", true);
         }
 
-        SmartDashboard.putNumber("Hex Anlign angle", angle);
+//        SmartDashboard.putNumber("Hex Anlign angle", angle);
 
         //calculates the end point
         State endState = new State(
@@ -218,9 +218,9 @@ public class HexAlign extends GBCommand {
         //determines if reversed
         boolean reverse = Math.sqrt(Math.pow(difference[0], 2) + Math.pow(difference[1], 2)) < r;
 
-        SmartDashboard.putString("start", startState.toString());
-        SmartDashboard.putString("end", endState.toString());
-        System.err.println("end" + endState.toString());
+//        SmartDashboard.putString("start", startState.toString());
+//        SmartDashboard.putString("end", endState.toString());
+//        System.err.println("end" + endState.toString());
 
 
         globalEnd = new Position(Chassis.getInstance().getLocation().getX() + endState.getX(),
@@ -240,10 +240,10 @@ public class HexAlign extends GBCommand {
     public void end(boolean interupted) {
         if (!fucked) {
             cmd.stop();
-            SmartDashboard.putString("HexAlign error",
+            /*SmartDashboard.putString("HexAlign error",
                     new Position(Point.subtract(Chassis.getInstance().getLocation(), globalEnd), Chassis.getInstance().getAngle() - globalEnd.getAngle()).toString());
             Shifter.getInstance().setShift(gearBefore);
-        }
+        }*/
         cmd = null;
         prof = null;
     }
