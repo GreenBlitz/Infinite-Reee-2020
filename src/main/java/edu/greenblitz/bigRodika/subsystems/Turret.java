@@ -62,10 +62,10 @@ public class Turret extends GBSubsystem {
 //            encoder.reset();
 //        }
 
-        SmartDashboard.putNumber("Turret Encoder", this.encoder.getNormalizedTicks());
-        if (getCurrentCommand() == null && defaultCommand != null) {
-            defaultCommand.schedule();
-        }
+        SmartDashboard.putNumber("Turret Encoder", this.encoder.getRawTicks());
+//        if (getCurrentCommand() == null && defaultCommand != null) {
+//            defaultCommand.schedule();
+//        }
 
 //        double[] simData = MotionUtils.getSimulatedVisionLocation(
 //                VisionMaster.getInstance().getVisionLocation().toDoubleArray());
@@ -88,15 +88,16 @@ public class Turret extends GBSubsystem {
 
     public void moveTurret(double power) {
         if (encoder.getRawTicks() < MIN_TICKS && power < 0) {
-//            SmartDashboard.putNumber("vroom vroom", 0);
+            SmartDashboard.putNumber("ticks under asking", 0);
             motor.set(0);
             return;
         }
         if (encoder.getRawTicks() > MAX_TICKS && power > 0) {
-//            SmartDashboard.putNumber("vroom vroom", 0);
+            SmartDashboard.putNumber("ticks over asking", 0);
             motor.set(0);
             return;
         }
+        SmartDashboard.putNumber("Turret Power", power);
         motor.set(power);
         lastPower = power;
     }
