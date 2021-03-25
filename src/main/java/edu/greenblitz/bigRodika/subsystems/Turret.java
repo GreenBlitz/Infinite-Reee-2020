@@ -11,12 +11,13 @@ import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Turret extends GBSubsystem {
-    private static final double MAX_TICKS = 14000;//16400
-    private static final double MIN_TICKS = -7000;//-12400//-11000 todo :REALLY IMPORTANT FOR ROBOT NOT TO DIE.
+    private static final double MAX_TICKS = 19500;
+    private static final double MIN_TICKS = -1870; // TODO: REALLY IMPORTANT FOR ROBOT NOT TO DIE
     //ask @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;
@@ -42,13 +43,13 @@ public class Turret extends GBSubsystem {
         }
     }
 
-    public static void setDefaultCommand(){
+    public static void setDefaultCommand() {
         instance.defaultCommand = new TurretToDefaultGood(
-                    new JoystickButton[] {
-                            OI.getInstance().getSideStick().R1,
-                            OI.getInstance().getSideStick().START,
-                            OI.getInstance().getMainJoystick().R1,
-                            OI.getInstance().getMainJoystick().START},
+                new JoystickButton[]{
+                        OI.getInstance().getSideStick().R1,
+                        OI.getInstance().getSideStick().START,
+                        OI.getInstance().getMainJoystick().R1,
+                        OI.getInstance().getMainJoystick().START},
                 Math.toRadians(10.0),
                 Math.toRadians(20.0), Math.toRadians(5.0),
                 0.4, 0.02,
@@ -75,34 +76,18 @@ public class Turret extends GBSubsystem {
             encoder.reset();
         }
 
-        if (getCurrentCommand() == null && defaultCommand != null) {
-            defaultCommand.schedule();
-        }
-
-//        double[] simData = MotionUtils.getSimulatedVisionLocation(
-//                VisionMaster.getInstance().getVisionLocation().toDoubleArray());
-
-        putNumber("Encoder", encoder.getRawTicks());
-        putNumber("normEncoder", encoder.getNormalizedTicks());
-        putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
-        putBoolean("Switch", isSwitchPressed());
-        double[] sim = MotionUtils.getSimulatedVisionLocation();
-        if (sim != null) {
-            putNumberArray("Simulated Vision Location", sim);
-            putNumber("Simulated Angle", Math.toDegrees(Math.atan2(sim[0], sim[1])));
-            putNumber("Simulated Distance", Math.hypot(sim[0], sim[1]));
-            putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
-        }
+        SmartDashboard.putBoolean("Turret microSwitch", isSwitchPressed());
+        SmartDashboard.putNumber("Turret Encoder Raw", encoder.getRawTicks());
 
         moveTurret(lastPower);
     }
 
     public void moveTurret(double power) {
-        if (encoder.getRawTicks() < MIN_TICKS && power < 0) {
+        if (encoder.getRawTicks() < MIN_TICKS && power > 0) {
             motor.set(0);
             return;
         }
-        if (encoder.getRawTicks() > MAX_TICKS && power > 0) {
+        if (encoder.getRawTicks() > MAX_TICKS && power < 0) {
             motor.set(0);
             return;
         }
@@ -115,7 +100,7 @@ public class Turret extends GBSubsystem {
     }
 
     public boolean isSwitchPressed() {
-        return false;//!microSwitch.get(); // alexey i changed the code to match the new magnetic switch
+        return !microSwitch.get();
     }
 
     public double getTurretLocation() {
