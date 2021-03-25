@@ -75,12 +75,6 @@ public class Turret extends GBSubsystem {
             encoder.reset();
         }
 
-        if (getCurrentCommand() == null && defaultCommand != null) {
-            defaultCommand.schedule();
-        }
-
-//        double[] simData = MotionUtils.getSimulatedVisionLocation(
-//                VisionMaster.getInstance().getVisionLocation().toDoubleArray());
 
         putNumber("Encoder", encoder.getRawTicks());
         putNumber("normEncoder", encoder.getNormalizedTicks());
