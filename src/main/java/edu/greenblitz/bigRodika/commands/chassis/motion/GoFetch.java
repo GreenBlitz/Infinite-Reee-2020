@@ -33,7 +33,7 @@ public class GoFetch extends ChassisCommand {
         VisionMaster.Algorithm.POWER_CELLS.setAsCurrent();
         List<State> locations = new ArrayList<>();
         locations.add(new State(0, 0, 0));
-//
+
 
         if (end == null) {
             VisionLocation location = VisionMaster.getInstance().getVisionLocation();

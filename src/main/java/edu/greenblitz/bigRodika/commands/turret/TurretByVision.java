@@ -33,8 +33,7 @@ public class TurretByVision extends TurretCommand {
             turret.moveTurret(0);
             return;
         }
-                Math.toRadians(VisionMaster.getInstance().getVisionLocation().getRelativeAngle())
-        ));
+
         turret.moveTurret(TurretApproachSwiftly.calculateVelocity(
                 Math.toRadians(VisionMaster.getInstance().getVisionLocation().getRelativeAngle())
         ));

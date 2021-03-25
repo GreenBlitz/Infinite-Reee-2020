@@ -3,6 +3,8 @@ package edu.greenblitz.bigRodika;
 import edu.greenblitz.bigRodika.commands.chassis.motion.DumbAlign;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShoot;
 import edu.greenblitz.bigRodika.commands.chassis.motion.PreShootAndWait;
+import edu.greenblitz.bigRodika.commands.chassis.motion.ChainFetch;
+import edu.greenblitz.bigRodika.commands.chassis.driver.ArcadeDrive;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
@@ -18,6 +20,7 @@ import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
 import edu.greenblitz.bigRodika.commands.shifter.ToPower;
 import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
+import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
@@ -130,6 +133,9 @@ public class OI {
         secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()
                 , new StopRoller()));
 
+        secondStick.X.whileHeld(new ParallelCommandGroup(
+                new RollByConstant(0.6), new PushByConstant(0.5), new InsertByConstant(1)));
+
         secondStick.B.whenPressed(new ToggleExtender());
         secondStick.A.whileHeld(new RollByConstant(1.0));
         secondStick.R3.whileHeld(new RollByConstant(-1.0));
@@ -140,11 +146,9 @@ public class OI {
         ));
 
         secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
-
         secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
 
         secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
-
         secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
 
         secondStick.BACK.whenPressed(new ResetDome(-0.3));
@@ -161,8 +165,6 @@ public class OI {
             }
         });
 
-        secondStick.X.whileHeld(new ParallelCommandGroup(
-                new RollByConstant(0.6), new PushByConstant(0.5), new InsertByConstant(1)));
 
 
     }
