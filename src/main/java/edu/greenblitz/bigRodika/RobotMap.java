@@ -90,9 +90,9 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = false;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
-            public static final double SHOOTER_P = 0.00075;
-            public static final double SHOOTER_I = 0.0000005;
-            public static final double SHOOTER_D = 0.00006*0.0;
+            public static final double SHOOTER_P = 0.0004;
+            public static final double SHOOTER_I = 0.0000001;
+            public static final double SHOOTER_D = 0;
 
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 
