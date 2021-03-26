@@ -62,8 +62,7 @@ public class OI {
         //mainJoystick.B.whenPressed(new CheckMaxRot(0.8));
 
         mainJoystick.A.whenPressed(new ShootByConstant(0.25));
-        mainJoystick.POV_RIGHT.whileHeld(new SemiAutomaticInsertIntoShooter(
-                0.5,1.5,0.3,-0.25,0.5,0.2));
+        mainJoystick.POV_RIGHT.whileHeld(new SemiAutomaticInsertIntoShooter());
     }
 
     private void initOfficalButtons() {
