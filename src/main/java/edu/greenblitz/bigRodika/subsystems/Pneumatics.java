@@ -7,14 +7,11 @@ import edu.wpi.first.wpilibj.Compressor;
 public class Pneumatics extends GBSubsystem {
     private static Pneumatics instance;
 
-//    private edu.greenblitz.gblib.sensors.PressureSensor m_pressureSensor;
     private Compressor m_compressor;
 
     private Pneumatics() {
 
-//        m_pressureSensor = new edu.greenblitz.gblib.sensors.PressureSensor(RobotMap.Limbo2.Pneumatics.PressureSensor.PRESSURE);
         m_compressor = new Compressor(RobotMap.Limbo2.Pneumatics.PCM);
-
 
     }
 

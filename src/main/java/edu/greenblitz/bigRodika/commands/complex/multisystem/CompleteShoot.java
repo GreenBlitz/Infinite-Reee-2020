@@ -1,9 +1,9 @@
 package edu.greenblitz.bigRodika.commands.complex.multisystem;
 
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
 import edu.greenblitz.bigRodika.commands.turret.StopTurret;
 import edu.greenblitz.bigRodika.commands.turret.help.JustGoToTheFuckingTarget;
-import edu.greenblitz.bigRodika.commands.turret.help.TurretByTriggers;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.LogTime;
@@ -44,7 +44,7 @@ public class CompleteShoot extends SequentialCommandGroup {
                 //new WaitCommand(0.05),
 //                new ThreadedCommand(new TurretByVisionThreaded(VisionMaster.Algorithm.HEXAGON),
 //                        Turret.getInstance()).withTimeout(2),
-                new TurretByTriggers(secondStick) {
+                new MoveTurretByConstant(0) {
 
                     @Override
                     public boolean isFinished() {

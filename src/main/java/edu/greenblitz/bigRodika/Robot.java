@@ -35,7 +35,6 @@ public class Robot extends TimedRobot {
         Shooter.init();
         Dome.init();
         Turret.init();
-        Climber.init();
         Chassis.init(); // Must be last!
 
         UARTCommunication.getInstance().register();

@@ -74,10 +74,8 @@ public class RobotMap {
             }
 
             public static class Solenoid {
-                public static final int FORWARD_LEFT = 4;
-                public static final int REVERSE_LEFT = 3;
-                public static final int FORWARD_RIGHT = 5;
-                public static final int REVERSE_RIGHT = 2;
+                public static final int FORWARD = 1;
+                public static final int REVERSE = 5;
             }
         }
 
@@ -175,7 +173,7 @@ public class RobotMap {
 
                 public static class Solenoid {
                     public static final int FORWARD = 6;
-                    public static final int REVERSE = 1;
+                    public static final int REVERSE = 2;
                 }
             }
 

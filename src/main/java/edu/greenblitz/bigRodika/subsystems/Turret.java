@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Turret extends GBSubsystem {
     private static final double MAX_TICKS = 19500;
-    private static final double MIN_TICKS = -1870; // TODO: REALLY IMPORTANT FOR ROBOT NOT TO DIE
+    private static final double MIN_TICKS = -1000; // TODO: REALLY IMPORTANT FOR ROBOT NOT TO DIE
     //ask @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;

@@ -33,14 +33,19 @@ public class OI {
     private SmartJoystick mainJoystick;
     private SmartJoystick secondStick;
 
+    public static final boolean DEBUG = false;
+
     private OI() {
         mainJoystick = new SmartJoystick(RobotMap.Limbo2.Joystick.MAIN,
                 RobotMap.Limbo2.Joystick.MAIN_DEADZONE);
         secondStick = new SmartJoystick(RobotMap.Limbo2.Joystick.SIDE,
                 RobotMap.Limbo2.Joystick.SIDE_DEADZONE);
 
-        initTestButtons();
-//        initOfficalButtons();
+        if (DEBUG) {
+            initTestButtons();
+        } else {
+            initOfficalButtons();
+        }
     }
 
 
@@ -69,7 +74,7 @@ public class OI {
 
         // ---------------------------------------------------------------
 
-        secondStick.R1.whenPressed(new CompleteShoot(secondStick));
+        secondStick.R1.whenPressed(new ShootByConstant(0.2));
         secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
                 new ResetDome(-0.5)));
 
@@ -115,18 +120,6 @@ public class OI {
 
         secondStick.BACK.whenPressed(new ResetDome(-0.3));
 
-        secondStick.L3.whenPressed(new GBCommand() {
-            @Override
-            public void initialize() {
-                CommandScheduler.getInstance().cancelAll();
-                Shooter.getInstance().shoot(0);
-            }
-
-            @Override
-            public boolean isFinished() {
-                return true;
-            }
-        });
     }
 
     public SmartJoystick getMainJoystick() {

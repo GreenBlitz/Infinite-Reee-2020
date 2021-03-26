@@ -27,7 +27,7 @@ public class WaitUntilShooterSpeedClose extends GBCommand {
 
     @Override
     public void execute() {
-        if (wantedVel - Shooter.getInstance().getShooterSpeed() <= error) {
+        if (Math.abs(wantedVel - Shooter.getInstance().getShooterSpeed()) <= error) {
             count += 1;
         } else {
             count = 0;
