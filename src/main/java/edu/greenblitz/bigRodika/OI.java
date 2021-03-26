@@ -7,6 +7,7 @@ import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
+import edu.greenblitz.bigRodika.commands.funnel.SemiAutomaticInsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
@@ -33,7 +34,7 @@ public class OI {
     private SmartJoystick mainJoystick;
     private SmartJoystick secondStick;
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     private OI() {
         mainJoystick = new SmartJoystick(RobotMap.Limbo2.Joystick.MAIN,
@@ -57,8 +58,12 @@ public class OI {
     }
 
     private void initTestButtons() {
-        mainJoystick.A.whenPressed(new CheckMaxLin(0.8));
-        mainJoystick.B.whenPressed(new CheckMaxRot(0.8));
+        //mainJoystick.A.whenPressed(new CheckMaxLin(0.8));
+        //mainJoystick.B.whenPressed(new CheckMaxRot(0.8));
+
+        mainJoystick.A.whenPressed(new ShootByConstant(0.25));
+        mainJoystick.POV_RIGHT.whileHeld(new SemiAutomaticInsertIntoShooter(
+                0.5,1.5,0.3,-0.25,0.5,0.2));
     }
 
     private void initOfficalButtons() {
