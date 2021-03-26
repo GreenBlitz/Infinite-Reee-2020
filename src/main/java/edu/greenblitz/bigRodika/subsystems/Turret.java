@@ -35,6 +35,11 @@ public class Turret extends GBSubsystem {
         microSwitch = DigitalInputMap.getInstance().getDigitalInput(
                 RobotMap.Limbo2.Turret.SWITCH_PORT
         );
+
+        motor.enableCurrentLimit(true);
+        motor.configPeakCurrentLimit(RobotMap.Limbo2.Turret.PEAK_CURRENT_LIMIT);
+        motor.configPeakCurrentDuration(RobotMap.Limbo2.Turret.PEAK_CURRENT_DURATION);
+
     }
 
     public static void init() {

@@ -49,6 +49,10 @@ public class RobotMap {
                     - 2*ENCODER_90_DEG_ABS;
 
             public static final double TURRET_CAMERA_RADIUS = 0.25;
+
+            public static final int PEAK_CURRENT_LIMIT = 1;
+            public static final int PEAK_CURRENT_DURATION = 500;
+
         }
 
         public static class Funnel {
