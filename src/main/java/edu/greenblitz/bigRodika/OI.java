@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika;
 
+import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
@@ -21,11 +22,17 @@ import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
+import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
+import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import org.greenblitz.motion.base.State;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OI {
     private static OI instance;
@@ -33,7 +40,7 @@ public class OI {
     private SmartJoystick mainJoystick;
     private SmartJoystick secondStick;
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     private OI() {
         mainJoystick = new SmartJoystick(RobotMap.Limbo2.Joystick.MAIN,
@@ -59,6 +66,15 @@ public class OI {
     private void initTestButtons() {
         mainJoystick.A.whenPressed(new CheckMaxLin(0.8));
         mainJoystick.B.whenPressed(new CheckMaxRot(0.8));
+
+        List<State> locations = new ArrayList<>(2);
+        locations.add(new State(0, 0,
+                0, 0, 0));
+        locations.add(new State(0.0, 2.0, 0, 0, 0));
+        Follow2DProfileCommand command = new Follow2DProfileCommand(locations, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, false);
+        command.setSendData(true);
+        mainJoystick.POV_UP.whenPressed(new ThreadedCommand(command, Chassis.getInstance()));
+
     }
 
     private void initOfficalButtons() {
