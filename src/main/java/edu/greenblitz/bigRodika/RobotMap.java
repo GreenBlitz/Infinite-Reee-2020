@@ -189,8 +189,8 @@ public class RobotMap {
             public static class MotionData { // TODO: calibrate this
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
-                        0.85, 1.0, .0005,
-                        0.8, 0.0, 2.0, .01,
+                        1.0, 1.0, .0005,
+                        1, 0.0, 50, .01,
                         0.5 * 0, 0, 0, .01, 500);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
@@ -214,6 +214,9 @@ public class RobotMap {
 
                     SPEED.put("0.3",
                             new ProfilingData(1.93*1.2, 4.6, 4.3, 12.6));
+
+                    SPEED.put("0.8",
+                            new ProfilingData(3.6,10.75,9.5,10.5));
 
                     PROF.setValue(Gear.POWER, POWER);
                     PROF.setValue(Gear.SPEED, SPEED);
