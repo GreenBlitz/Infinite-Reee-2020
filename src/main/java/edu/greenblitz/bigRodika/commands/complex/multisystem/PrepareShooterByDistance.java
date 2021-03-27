@@ -60,7 +60,7 @@ public class PrepareShooterByDistance extends GBCommand {
 
     @Override
     public void initialize() {
-        double distance = distanceSupplier;
+        double distance = distanceSupplier.get();
         double[] shooterState = RobotMap.Limbo2.Shooter.
                 distanceToShooterState.linearlyInterpolate(
                 distance
@@ -88,7 +88,7 @@ public class PrepareShooterByDistance extends GBCommand {
 
     @Override
     public boolean isFinished() {
-        double distance = distanceSupplier;
+        double distance = distanceSupplier.get();
         double idealX1 = RobotMap.Limbo2.Shooter.distanceToShooterState.getAdjesent(distance).getFirst().getFirst();
         double idealX2 = RobotMap.Limbo2.Shooter.distanceToShooterState.getAdjesent(distance).getSecond().getFirst();
         double minDiff = Math.min(Math.abs(idealX1 - distance), Math.abs(idealX2 - distance));

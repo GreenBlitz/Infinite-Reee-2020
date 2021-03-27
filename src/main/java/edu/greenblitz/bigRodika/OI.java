@@ -124,8 +124,18 @@ public class OI {
         Follow2DProfileCommand f6 = new Follow2DProfileCommand(l6, config, maxPower, false);
         mainJoystick.POV_DOWN.whenPressed(new ThreadedCommand(f6, Chassis.getInstance()));
 
-        secondStick.A.whenPressed(new PrepareShooterByDistance(3.2));
-        secondStick.B.whenPressed(new PrepareShooterByDistance(3.3));
+        secondStick.A.whenPressed(new PrepareShooterByDistance(new Supplier<Double>() {
+            @Override
+            public Double get() {
+                return 3.2;
+            }
+        }));
+        secondStick.B.whenPressed(new PrepareShooterByDistance(new Supplier<Double>() {
+            @Override
+            public Double get() {
+                return 3.3;
+            }
+        }));
 
     }
 
