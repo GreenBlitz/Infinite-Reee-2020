@@ -48,6 +48,6 @@ public class CheckMaxLin extends ChassisCommand {
 
     @Override
     public void end(boolean interrupted) {
-        target.passToCSV();
+        target.passToCSV(true);
     }
 }

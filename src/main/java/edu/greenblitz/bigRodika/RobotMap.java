@@ -191,7 +191,7 @@ public class RobotMap {
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration(
                         1.0, 1.0, .0005,
                         1, 0.0, 50, .01,
-                        0.5 * 0, 0, 0, .01, 500);
+                        1, 0, 0, .01, 500);
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
                 public static GearDependentValue<HashMap<String, ProfilingData>> PROF;

@@ -58,7 +58,7 @@ public class CheckMaxRot extends ChassisCommand {
     @Override
     public void end(boolean inter) {
         System.out.println(System.currentTimeMillis() - tStart);
-        target.passToCSV();
+        target.passToCSV(true);
     }
 
     @Override

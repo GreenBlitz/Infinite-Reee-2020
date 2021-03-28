@@ -27,12 +27,12 @@ import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
 import org.greenblitz.motion.base.State;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class OI {
     private static OI instance;
@@ -71,9 +71,8 @@ public class OI {
         mainJoystick.BACK.whenPressed(new ToPower());
 
         List<State> locations = new ArrayList<>(2);
-        locations.add(new State(0, 0,
-                0, 0, 0));
-        locations.add(new State(0.0, 2.0, 0, 0, 0));
+        locations.add(new State(0, 0, 0, 0, 0));
+        locations.add(new State(2.0, 2.0, -0.25*Math.PI, 0, 0));
         Follow2DProfileCommand command = new Follow2DProfileCommand(locations, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3
                 , false);
         command.setSendData(true);
