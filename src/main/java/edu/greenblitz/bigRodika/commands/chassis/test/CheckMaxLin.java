@@ -3,15 +3,14 @@ package edu.greenblitz.bigRodika.commands.chassis.test;
 import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import org.greenblitz.debug.RemoteCSVTarget;
-import org.greenblitz.debug.RemoteCSVTargetBuffer;
 
+//TODO: add CSV
 public class CheckMaxLin extends ChassisCommand {
 
     int count;
     private double power;
     private double previousVel;
     private double previousTime;
-    private RemoteCSVTargetBuffer target;
     private long tStart;
 
     public CheckMaxLin(double power) {
@@ -24,7 +23,6 @@ public class CheckMaxLin extends ChassisCommand {
         previousVel = 0;
         count = 0;
         tStart = System.currentTimeMillis();
-        target = new RemoteCSVTargetBuffer("LinearData", "time", "vel", "acc");
     }
 
     @Override
@@ -35,7 +33,6 @@ public class CheckMaxLin extends ChassisCommand {
 
         double time = System.currentTimeMillis() / 1000.0;
         double V = Chassis.getInstance().getLinearVelocity();
-        target.report(time - tStart / 1000.0, V, (V - previousVel) / (time - previousTime));
         previousTime = time;
         previousVel = V;
 
@@ -44,10 +41,5 @@ public class CheckMaxLin extends ChassisCommand {
     @Override
     public boolean isFinished() {
         return System.currentTimeMillis() - tStart > 3000;
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        target.passToCSV(true);
     }
 }

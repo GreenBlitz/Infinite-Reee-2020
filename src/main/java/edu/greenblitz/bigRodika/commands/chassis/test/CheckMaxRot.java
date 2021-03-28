@@ -3,8 +3,8 @@ package edu.greenblitz.bigRodika.commands.chassis.test;
 import edu.greenblitz.bigRodika.commands.chassis.ChassisCommand;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import org.greenblitz.debug.RemoteCSVTarget;
-import org.greenblitz.debug.RemoteCSVTargetBuffer;
 
+//TODO: add CSV
 public class CheckMaxRot extends ChassisCommand {
 
     int count;
@@ -13,7 +13,6 @@ public class CheckMaxRot extends ChassisCommand {
     private double previousVel;
     private double previousTime;
     private long tStart;
-    private RemoteCSVTargetBuffer target;
 
     public CheckMaxRot(double power) {
         this.power = power;
@@ -26,7 +25,6 @@ public class CheckMaxRot extends ChassisCommand {
         previousVel = 0;
         count = 0;
         tStart = System.currentTimeMillis();
-        target = new RemoteCSVTargetBuffer("RotationalData", "time", "vel", "acc");
     }
 
     @Override
@@ -46,7 +44,6 @@ public class CheckMaxRot extends ChassisCommand {
             double angle = Chassis.getInstance().getLocation().getAngle();
             double V = (angle - previousAngle) / (time - previousTime);
             double A =(V - previousVel) / (time - previousTime);
-            if(Math.abs(A)<400)target.report(time - tStart / 1000.0, V, A);
             previousAngle = angle;
             previousTime = time;
             previousVel = V;
@@ -58,7 +55,6 @@ public class CheckMaxRot extends ChassisCommand {
     @Override
     public void end(boolean inter) {
         System.out.println(System.currentTimeMillis() - tStart);
-        target.passToCSV(true);
     }
 
     @Override
