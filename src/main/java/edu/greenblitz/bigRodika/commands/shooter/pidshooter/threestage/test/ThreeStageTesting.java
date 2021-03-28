@@ -19,17 +19,18 @@ public class ThreeStageTesting extends SequentialCommandGroup {
 
         double target = 2800;//Shooter.getInstance().getNumber("testing_target", 0);
         double ff = 0.48;//Shooter.getInstance().getNumber("testing_ff", 0);
+        String name = "FlyWheelVel";
 
         addCommands(
 
                 new ParallelRaceGroup(
                         new WaitUntilShooterSpeedClose(target, 100),
-                        new ShootByConstant(1.0)
+                        new ShootByConstant(1.0, name+1)
                 ),
 
                 new ParallelRaceGroup(
                         new ShootBySimplePid(
-                                new PIDObject(0.0015, 0.000004, 0.0, ff), target
+                                new PIDObject(0.0015, 0.000004, 0.0), target, name+2
                         ),
                         new SequentialCommandGroup(
 
@@ -39,7 +40,7 @@ public class ThreeStageTesting extends SequentialCommandGroup {
 
                 new ParallelCommandGroup(
                         new StageThreePID(
-                                new PIDObject(0.002, 0.000004, 0.00015, ff), target
+                                new PIDObject(0.002, 0.000004, 0.00015), target, name+3
                         )
                 )
         );

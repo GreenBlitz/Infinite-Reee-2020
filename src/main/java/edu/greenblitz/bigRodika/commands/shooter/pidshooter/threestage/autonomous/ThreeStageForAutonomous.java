@@ -20,17 +20,18 @@ public class ThreeStageForAutonomous extends SequentialCommandGroup {
         double kp = RobotMap.Limbo2.Shooter.SHOOTER_P;
         double ki = RobotMap.Limbo2.Shooter.SHOOTER_I;
         double kd = RobotMap.Limbo2.Shooter.SHOOTER_D;
+        String name = "FlyWheelVel";
 
         addCommands(
 
                 new ParallelRaceGroup(
                         new WaitUntilShooterSpeedClose(target, 100),
-                        new ShootByConstant(1.0)
+                        new ShootByConstant(1.0, name+1)
                 ),
 
                 new ParallelRaceGroup(
                         new ShootBySimplePid(
-                                new PIDObject(kp, ki, 0.0, ff), target
+                                new PIDObject(kp, ki, 0.0), target, name+2
                         ),
                         new SequentialCommandGroup(
 
@@ -40,7 +41,7 @@ public class ThreeStageForAutonomous extends SequentialCommandGroup {
 
                 new ParallelCommandGroup(
                         new StageThreePID(
-                                new PIDObject(kp, 0, kd, ff), target
+                                new PIDObject(kp, 0, kd), target, name+3
                         )
                 )
         );

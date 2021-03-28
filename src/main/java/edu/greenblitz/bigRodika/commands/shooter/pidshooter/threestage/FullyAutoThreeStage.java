@@ -25,6 +25,7 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
         double kp = RobotMap.Limbo2.Shooter.SHOOTER_P;
         double ki = RobotMap.Limbo2.Shooter.SHOOTER_I;
         double kd = RobotMap.Limbo2.Shooter.SHOOTER_D;
+        String name = "FlyWheelVel";
 
         addCommands(
 
@@ -32,17 +33,17 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
                         new WaitUntilShooterSpeedClose(target, 150),
 //                        new ShootByConstant(1.0)
                         new ShootBySimplePid(
-                                new PIDObject(kp*10, 0.0, 0.0, ff), target
+                                new PIDObject(kp*10, 0.0, 0.0, ff), target, name+1
                         )
                 ),
 
                 new ParallelRaceGroup(
                         new ShootBySimplePid(
-                                new PIDObject(kp, ki, 0.0, ff), target
+                                new PIDObject(kp, ki, 0.0, ff), target, name+2
                         ),
                         new SequentialCommandGroup(
 
-                                new WaitUntilShooterSpeedClose(target, 10, 15)
+                                new WaitUntilShooterSpeedClose(target, 10, 25)
 
                                 //new WaitUntilCommand(() ->
                                         //Funnel.getInstance().getPusher().getCurrentCommand() != null)
@@ -51,7 +52,7 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
 
                 new ParallelCommandGroup(
                         new StageThreePID(
-                                new PIDObject(kp, 0, kd, ff), target
+                                new PIDObject(kp, 0, kd, ff), target, name+3
                         )
                 )
         );

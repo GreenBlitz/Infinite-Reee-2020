@@ -8,9 +8,9 @@ public class ShootByConstant extends ShooterCommand {
     protected RemoteCSVTarget logger;
     protected long tStart;
 
-    public ShootByConstant(double power) {
+    public ShootByConstant(double power, String graphName) {
         this.power = power;
-        this.logger = RemoteCSVTarget.initTarget("FlyWheelVel", "time", "vel");
+        this.logger = RemoteCSVTarget.initTarget(graphName, "time", "vel");
     }
 
     @Override

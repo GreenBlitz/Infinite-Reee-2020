@@ -11,12 +11,13 @@ ShootBySimplePid extends ShooterCommand {
     protected RemoteCSVTarget logger;
     protected double target;
     protected long tStart;
+    protected int stage;
 
-    public ShootBySimplePid(PIDObject obj, double target) {
+    public ShootBySimplePid(PIDObject obj, double target, String name) {
         this.obj = obj;
         this.obj.setKf(shooter.getDesiredPower(target)/target);//(this.obj.getKf() / target); - I have no Idea what is this' there is a function to get kf
         this.target = target;
-        this.logger = RemoteCSVTarget.initTarget("FlyWheelVel", "time", "vel");
+        this.logger = RemoteCSVTarget.initTarget(name, "time", "vel");
     }
 
     @Override

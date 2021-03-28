@@ -10,7 +10,9 @@ import org.greenblitz.motion.pid.PIDObject;
 
 public class ThreeStageShoot extends SequentialCommandGroup {
 
-    public ThreeStageShoot(double target, double ff) {
+    public static String name = "FlyWheelVel";
+
+    public ThreeStageShoot(double target) {
 
         double kp = RobotMap.Limbo2.Shooter.SHOOTER_P;
         double ki = RobotMap.Limbo2.Shooter.SHOOTER_I;
@@ -20,18 +22,18 @@ public class ThreeStageShoot extends SequentialCommandGroup {
 
                 new ParallelRaceGroup(
                         new WaitUntilShooterSpeedClose(target, 100),
-                        new ShootByConstant(1.0)
+                        new ShootByConstant(1.0, name+1)
                 ),
 
                 new ParallelRaceGroup(
                         new ShootBySimplePid(
-                                new PIDObject(kp, ki, 0.0, ff), target
+                                new PIDObject(kp, ki, 0.0), target, name+2
                         ),
                         new WaitUntilShooterSpeedClose(target, 8, 8) // Temp, replace by something better
                 ),
 
                 new StageThreePID(
-                        new PIDObject(kp, 0, kd, ff), target
+                        new PIDObject(kp, 0, kd), target, name+3
                 )
         );
 

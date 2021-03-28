@@ -44,9 +44,7 @@ public class Robot extends TimedRobot {
 
         VisionMaster.getInstance().register();
 
-        new ResetEncoderWhenInSide().initialize();
 //        new ResetEncoderWhenInSide().initialize();
-//        new ResetEncoderWhenInFront().initialize();
     }
 
     @Override
@@ -95,17 +93,18 @@ public class Robot extends TimedRobot {
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         //Shifter.getInstance().setShift(Gear.SPEED);
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
-/*
+
+        new ResetEncoderWhenInSide().schedule();
         new ResetDome(-0.3).schedule();
 //        new ResetEncoderWhenInFront().schedule();
         new StopShooter().schedule();
 
-        if (!DriverStation.getInstance().isFMSAttached()){
-//            new CompressorOn().schedule();
-//            new ResetEncoderWhenInSide().schedule();
-            new ClimbByTriggers(OI.getInstance().getMainJoystick(), OI.getInstance().getSideStick(), 0.4, 0.4).schedule();
-            Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
-        }*/
+//        if (!DriverStation.getInstance().isFMSAttached()){
+//           new CompressorOn().schedule();
+//           new ResetEncoderWhenInSide().schedule();
+//            new ClimbByTriggers(OI.getInstance().getMainJoystick(), OI.getInstance().getSideStick(), 0.4, 0.4).schedule();
+//            Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
+//        }
 
     }
 }

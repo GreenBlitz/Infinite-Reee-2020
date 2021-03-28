@@ -8,8 +8,8 @@ import org.greenblitz.motion.pid.PIDObject;
 public class StageThreePID extends ShootBySimplePid {
 
 
-    public StageThreePID(PIDObject obj, double target) {
-        super(obj, target);
+    public StageThreePID(PIDObject obj, double target, String name) {
+        super(obj, target, name);
     }
 
     @Override
