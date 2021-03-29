@@ -72,7 +72,7 @@ public class OI {
 
         List<State> locations = new ArrayList<>(2);
         locations.add(new State(0, 0, 0, 0, 0));
-        locations.add(new State(2.0, 2.0, -0.25*Math.PI, 0, 0));
+        locations.add(new State(1.0, 1.0, 0.25*Math.PI, 0, 0));
         Follow2DProfileCommand command = new Follow2DProfileCommand(locations, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3
                 , false);
         command.setSendData(true);

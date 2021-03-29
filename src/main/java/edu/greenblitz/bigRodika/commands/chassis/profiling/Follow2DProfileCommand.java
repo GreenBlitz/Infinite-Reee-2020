@@ -5,6 +5,7 @@ import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.gblib.threading.IThreadable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import org.greenblitz.motion.base.State;
@@ -18,6 +19,8 @@ import org.greenblitz.motion.profiling.followers.PidFollower2D;
 import org.greenblitz.motion.profiling.kinematics.CurvatureConverter;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 
 public class Follow2DProfileCommand implements IThreadable {
 
@@ -222,7 +225,28 @@ public class Follow2DProfileCommand implements IThreadable {
             Chassis.getInstance().toBrake();
             Chassis.getInstance().moveMotors(0, 0);
         }
-        follower.sendCSV();
+        CommandScheduler.getInstance().schedule(new FunctionalCommand(new Runnable() {
+            @Override
+            public void run() {
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                follower.sendCSV();
+            }
+        },
+                new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) {
+
+                    }
+                },
+                new BooleanSupplier() {
+                    @Override
+                    public boolean getAsBoolean() {
+                        return true;
+                    }
+                }));
     }
 
 

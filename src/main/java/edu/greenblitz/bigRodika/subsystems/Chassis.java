@@ -128,7 +128,7 @@ public class Chassis extends GBSubsystem {
     }
 
     public double getAngularVelocityByWheels() {
-        return getWheelDistance() * (getRightRate() - getLeftRate());
+        return getWheelDistance() * (getLeftRate() - getRightRate());
     }
 
     public double getAngle() {
