@@ -3,12 +3,12 @@ package edu.greenblitz.bigRodika.commands.chassis;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.base.Position;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 
 public class ApproachSlow extends ChassisCommand { //TODO: make vision work
     private double targetD;
     private double power;
     private double epsilon;
-    private Localizer localizer;
 
 
     public ApproachSlow(double targetD) {
@@ -27,9 +27,8 @@ public class ApproachSlow extends ChassisCommand { //TODO: make vision work
 
     @Override
     public void execute() {
-        //double currD = VisionMaster.getInstance().getVisionLocation().getFullDistance();
-        Position currD = Localizer.getInstance().getLocation(); //we use the localizer for the testing
-        if (targetD < currD.norm()) {
+        double currD = VisionMaster.getInstance().getVisionLocation().getPlaneDistance();
+        if (targetD < currD) {
             Chassis.getInstance().moveMotors(this.power, this.power);
         } else {
             Chassis.getInstance().moveMotors(-this.power, -this.power);
@@ -43,7 +42,7 @@ public class ApproachSlow extends ChassisCommand { //TODO: make vision work
 
     @Override
     public boolean isFinished() {
-        double currD = Localizer.getInstance().getLocation().norm(); //VisionMaster.getInstance().getVisionLocation().getFullDistance();
+        double currD = VisionMaster.getInstance().getVisionLocation().getPlaneDistance();
         return Math.abs(currD - targetD) < this.epsilon;
     }
 }
