@@ -130,7 +130,7 @@ public class VisionMaster extends GBSubsystem {
         putNumber("Time to get data", System.currentTimeMillis() - t0);
 
         if(System.currentTimeMillis() - lastPrintTime > 500){
-            System.out.println(current.toString());
+            System.out.println(current.getPlaneDistance());
             lastPrintTime = System.currentTimeMillis();
         }
         if (currentAlgorithm != null) {

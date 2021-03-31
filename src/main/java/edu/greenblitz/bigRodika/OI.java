@@ -4,6 +4,7 @@ import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileComman
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.PrepareShooterByDistance;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
+import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
@@ -23,6 +24,7 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAuto
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
@@ -66,61 +68,14 @@ public class OI {
 
     private void initTestButtons() {
 
+        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.3));
+        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.3));
 
-        double maxPower = 0.3;
-        ProfilingConfiguration config = RobotMap.Limbo2.Chassis.MotionData.CONFIG;
+        secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.2));
+        secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.2));
 
-        //testing driving forward
-        List<State> l1 = new ArrayList<>();
-        l1.add(new State(0, 0, 0, 0, 0));
-        l1.add(new State(0, 1, 0, 0, 0));
-        Follow2DProfileCommand f1 = new Follow2DProfileCommand(l1, config, maxPower, false);
-        mainJoystick.X.whenPressed(new ThreadedCommand(f1, Chassis.getInstance()));
-
-        //testing 90 degrees rotation
-        List<State> l2 = new ArrayList<>();
-        l2.add(new State(0, 0, 0, 0, 0));
-        l2.add(new State(2, 2, -Math.PI / 2, 0, 0));
-        Follow2DProfileCommand f2 = new Follow2DProfileCommand(l2, config, maxPower, false);
-        mainJoystick.Y.whenPressed(new ThreadedCommand(f2, Chassis.getInstance()));
-
-        //driving like a 'tangent graph'
-        List<State> l3 = new ArrayList<>();
-        l3.add(new State(0, 0, 0, 0, 0));
-        l3.add(new State(2, 2, 0, 0, 0));
-        Follow2DProfileCommand f3 = new Follow2DProfileCommand(l3, config, maxPower, false);
-        mainJoystick.L1.whenPressed(new ThreadedCommand(f3, Chassis.getInstance()));
-
-        //velocity check: the velocity changes at the middle point
-        List<State> l4 = new ArrayList<>();
-        l4.add(new State(0, 0, 0, 0, 0));
-        l4.add(new State(0, 1, 0, 1, 0));
-        l4.add(new State(0, 2, 0, 0, 0));
-        Follow2DProfileCommand f4 = new Follow2DProfileCommand(l4, config, maxPower, false);
-        mainJoystick.R1.whenPressed(new ThreadedCommand(f4, Chassis.getInstance()));
-
-        //reverse test
-        List<State> l5 = new ArrayList<>();
-        l5.add(new State(0, 0, 0, 0, 0));
-        l5.add(new State(0, -2, 0, 0, 0));
-        Follow2DProfileCommand f5 = new Follow2DProfileCommand(l5, config, maxPower, true);
-        mainJoystick.POV_UP.whenPressed(new ThreadedCommand(f5, Chassis.getInstance()));
-
-        //driving in a circle clockwise
-        // Ittai Sheffy recommends using the Localizer to check if the location had changed during the test because it
-        // is not supposed to change.
-        List<State> l6 = new ArrayList<>();
-        l6.add(new State(0, 1, -Math.PI / 2, 0, 0));
-        l6.add(new State(1, 0, -Math.PI, 1, -Math.PI / 4));
-        l6.add(new State(0, -1, Math.PI / 2, 1, -Math.PI / 4));
-        l6.add(new State(-1, 0, 0, 1, -Math.PI / 4));
-        l6.add(new State(0, 1, -Math.PI / 2, 0, 0));
-        Follow2DProfileCommand f6 = new Follow2DProfileCommand(l6, config, maxPower, false);
-        mainJoystick.POV_DOWN.whenPressed(new ThreadedCommand(f6, Chassis.getInstance()));
-
-        secondStick.A.whenPressed(new PrepareShooterByDistance(() -> 3.2));
-        secondStick.B.whenPressed(new PrepareShooterByDistance(() -> 3.3));
-
+        secondStick.A.whenPressed(new PrepareShooterByDistance(() -> VisionMaster.getInstance().getVisionLocation().getPlaneDistance()));
+        secondStick.B.whenPressed(new StopShooter());
     }
 
     private void initOfficalButtons() {

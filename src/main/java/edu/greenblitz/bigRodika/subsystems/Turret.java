@@ -76,28 +76,17 @@ public class Turret extends GBSubsystem {
             encoder.reset();
         }
         SmartDashboard.putBoolean("Turret microSwitch", isSwitchPressed());
-
-        putNumber("Encoder", encoder.getRawTicks());
-        putNumber("normEncoder", encoder.getNormalizedTicks());
-        putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
-        putBoolean("Switch", isSwitchPressed());
-        double[] sim = MotionUtils.getSimulatedVisionLocation();
-        if (sim != null) {
-            putNumberArray("Simulated Vision Location", sim);
-            putNumber("Simulated Angle", Math.toDegrees(Math.atan2(sim[0], sim[1])));
-            putNumber("Simulated Distance", Math.hypot(sim[0], sim[1]));
-            putNumber("Angle from front deg", Math.toDegrees(getNormAngleRads()));
-        }
+        SmartDashboard.putNumber("Turret Encoder", encoder.getRawTicks());
 
         moveTurret(lastPower);
     }
 
     public void moveTurret(double power) {
-        if (encoder.getRawTicks() < MIN_TICKS && power < 0) {
+        if (encoder.getRawTicks() < MIN_TICKS && power > 0) {
             motor.set(0);
             return;
         }
-        if (encoder.getRawTicks() > MAX_TICKS && power > 0) {
+        if (encoder.getRawTicks() > MAX_TICKS && power < 0) {
             motor.set(0);
             return;
         }
