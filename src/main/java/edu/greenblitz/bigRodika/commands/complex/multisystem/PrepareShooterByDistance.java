@@ -82,6 +82,7 @@ public class PrepareShooterByDistance extends GBCommand {
 
     @Override
     public void end(boolean interrupted) {
+        SmartDashboard.putString("finished", "yes");
         domeCommand.end(interrupted);
         shooterCommand.end(interrupted);
     }
