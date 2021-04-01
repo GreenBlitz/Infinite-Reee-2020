@@ -95,11 +95,12 @@ public class Robot extends TimedRobot {
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
         //Shifter.getInstance().setShift(Gear.SPEED);
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
-/*
+
         new ResetDome(-0.3).schedule();
-//        new ResetEncoderWhenInFront().schedule();
+        new ResetEncoderWhenInSide().schedule();
         new StopShooter().schedule();
 
+        /*
         if (!DriverStation.getInstance().isFMSAttached()){
 //            new CompressorOn().schedule();
 //            new ResetEncoderWhenInSide().schedule();
