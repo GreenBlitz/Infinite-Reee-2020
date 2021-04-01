@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika;
 
+import edu.greenblitz.bigRodika.commands.chassis.ApproachSlow;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
@@ -23,14 +24,15 @@ import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
-import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
-import edu.greenblitz.bigRodika.commands.turret.resets.UnsafeResetTurret;
+import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.bigRodika.utils.StopCompleteShoot;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import org.greenblitz.motion.base.TwoTuple;
 
 public class OI {
     private static OI instance;
@@ -62,15 +64,20 @@ public class OI {
     }
 
     private void initTestButtons() {
-        //mainJoystick.A.whenPressed(new CheckMaxLin(0.8));
-        //mainJoystick.B.whenPressed(new CheckMaxRot(0.8));
-
         mainJoystick.L1.whenPressed(new StopCompleteShoot());
         mainJoystick.R1.whenPressed(new CompleteShootSkills());
+        mainJoystick.A.whenPressed(new ApproachSlow(() -> {
+            double visionDist = VisionMaster.getInstance().getVisionLocation().getPlaneDistance();
+            TwoTuple<TwoTuple<Double, double[]>, TwoTuple<Double, double[]>> dist = RobotMap.Limbo2.Shooter.distanceToShooterState.getAdjesent(visionDist);
+            return Math.abs(dist.getFirst().getFirst() - visionDist) < Math.abs(dist.getSecond().getFirst() - visionDist) ? dist.getFirst().getFirst() : dist.getSecond().getFirst();
+        }));
 
-        mainJoystick.A.whenPressed(new ShootByConstant(0.25));
-        mainJoystick.POV_RIGHT.whenPressed(new SemiAutomaticInsertIntoShooter());
-        mainJoystick.B.whenPressed(new InsertIntoShooter(0.5,0.4,0.2));
+        mainJoystick.B.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+
+        //-----------------------------------------------------
+
+        secondStick.B.whenPressed(new ToggleExtender());
+        secondStick.R1.whenPressed(new RollByConstant(0.5));
     }
 
     private void initOfficalButtons() {

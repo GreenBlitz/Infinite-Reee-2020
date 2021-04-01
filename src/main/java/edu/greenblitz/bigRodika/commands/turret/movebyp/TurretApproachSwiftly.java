@@ -13,7 +13,7 @@ public class TurretApproachSwiftly extends TurretCommand {
 
     public static final double SLOW_DOWN_BEGIN = Math.toRadians(7.0) / 2*Math.PI;
     public static final double SLOW_DOWN_END = Math.toRadians(3.0) / 2*Math.PI;
-    public static final double MINIMUM_SPEED = 0.065;
+    public static final double MINIMUM_SPEED = 0.075;
     public static final double MAXIMUM_SPEED = 0.4;
 
     protected double target;

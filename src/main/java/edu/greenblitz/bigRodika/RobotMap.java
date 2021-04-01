@@ -41,7 +41,8 @@ public class RobotMap {
             public static final boolean IS_INVERTED = false;
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
                     28672.0);//correct 110 present
-            public static double ENCODER_VALUE_WHEN_FORWARD = 18316.0; // what was before orel checked 8974.0
+
+            public static double ENCODER_VALUE_WHEN_FORWARD = 18316.0;
             public static double ENCODER_90_DEG_ABS = NORMALIZER.getValue() / 4.0;
             public static double ENCODER_VALUE_WHEN_NEGATIVE_90 = ENCODER_VALUE_WHEN_FORWARD -
                     ENCODER_90_DEG_ABS;
@@ -98,9 +99,9 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = false;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
-            public static final double SHOOTER_P = 0.00075;
-            public static final double SHOOTER_I = 0.0000005;
-            public static final double SHOOTER_D = 0.00006*0.0;
+            public static final double SHOOTER_P = 0.001;
+            public static final double SHOOTER_I = 0.00000030;
+            public static final double SHOOTER_D = 0;
 
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 

@@ -7,6 +7,7 @@ import edu.greenblitz.bigRodika.subsystems.Dome;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 public class PrepareShooterByDistance extends GBCommand {
@@ -26,10 +27,14 @@ public class PrepareShooterByDistance extends GBCommand {
     @Override
     public void initialize() {
 
+        System.out.println(distanceSupplier.get());
+
         double[] shooterState = RobotMap.Limbo2.Shooter.
-                distanceToShooterState.linearlyInterpolate(
+                distanceToShooterState.getAdjesent(
                         distanceSupplier.get()
-        );
+        ).getFirst().getSecond();
+
+        System.out.println(Arrays.toString(shooterState));
         domeCommand = new DomeApproachSwiftly(shooterState[1]);
         shooterCommand = new FullyAutoThreeStage(shooterState[0]);
 

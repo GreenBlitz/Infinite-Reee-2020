@@ -1,6 +1,8 @@
 package edu.greenblitz.bigRodika.commands.chassis;
 
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.base.Position;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
@@ -9,26 +11,25 @@ import java.util.function.Supplier;
 
 public class ApproachSlow extends ChassisCommand { //TODO: make vision work
     private double targetD;
+    private Supplier<Double> t_supplier;
     private double power;
     private double epsilon;
-
+    private Localizer localizer;
 
     public ApproachSlow(Supplier<Double> targetD) {
-        this(targetD.get());
+        this(targetD, 0.02, 0.03);
     }
 
-    public ApproachSlow(double targetD) {
-        this(targetD, 0.1, 0.1);
-    }
 
-    public ApproachSlow(double targetD, double power, double epsilon) {
-        this.targetD = targetD;
+    public ApproachSlow(Supplier<Double> targetD, double power, double epsilon) {
+        this.t_supplier = targetD;
         this.power = power;
         this.epsilon = epsilon;
     }
 
     @Override
     public void initialize() {
+        this.targetD = this.t_supplier.get();
     }
 
     @Override

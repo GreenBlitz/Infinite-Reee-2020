@@ -11,8 +11,8 @@ public class TurretByVision extends TurretCommand {
         this.algorithm = algorithm;
     }
 
-    public static final double SLOW_DOWN_BEGIN = TurretApproachSwiftly.SLOW_DOWN_BEGIN * 2 * Math.PI;
-    public static final double SLOW_DOWN_END = TurretApproachSwiftly.SLOW_DOWN_END * 2 * Math.PI;
+    public static final double SLOW_DOWN_BEGIN = TurretApproachSwiftly.SLOW_DOWN_BEGIN;
+    public static final double SLOW_DOWN_END = TurretApproachSwiftly.SLOW_DOWN_END;
     public static final double MINIMUM_SPEED = TurretApproachSwiftly.MINIMUM_SPEED;
     public static final double MAXIMUM_SPEED = TurretApproachSwiftly.MAXIMUM_SPEED;
 
