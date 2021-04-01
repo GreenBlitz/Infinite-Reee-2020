@@ -58,7 +58,7 @@ public class RobotMap {
         public static class Funnel {
 
             public static class SemiAuto{
-                public static final double pulseInTime = 0.5, pulseOutTime = 1.5,  pusherInPower = 0.3,  pusherOutPower = -0.25,
+                public static final double pulseInTime = 0.55, pulseOutTime = 2,  pusherInPower = 0.4,  pusherOutPower = -0.35,
                  insertByConstant = 0.5,  rollByConstant =  0.2;
             }
 

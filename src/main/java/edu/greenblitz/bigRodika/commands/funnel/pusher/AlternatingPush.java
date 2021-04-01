@@ -27,10 +27,10 @@ public class AlternatingPush extends PusherCommand {
 
     @Override
     public void execute() {
-        double timeNow = (System.currentTimeMillis() - startTime)/1000.0;
+        double timeNow = (System.currentTimeMillis() - startTime) / 1000.0;
         double timeNowMod = timeNow % (timeIn + timeOut);
         if (timeNowMod < timeIn) {
-            funnel.movePusher(powerIn);
+            funnel.movePusher(powerIn, 0.5 * powerIn);
         } else {
             funnel.movePusher(powerOut);
         }
