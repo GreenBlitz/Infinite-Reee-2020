@@ -16,14 +16,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Turret extends GBSubsystem {
-    private static final double MAX_TICKS = 19500;
-    private static final double MIN_TICKS = -1000; // TODO: REALLY IMPORTANT FOR ROBOT NOT TO DIE
+    public static final double MAX_TICKS = 23000;
+    public static final double MIN_TICKS = -1000; // TODO: REALLY IMPORTANT FOR ROBOT NOT TO DIE
     //ask @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;
     private IEncoder encoder;
     private DigitalInput microSwitch;
     private double lastPower = 0;
+
+    private static boolean reset = false;
 
     public Command defaultCommand;
 
@@ -61,7 +63,7 @@ public class Turret extends GBSubsystem {
                 0.02);
     }
 
-    public void resetEncoder() {
+    public void moveTurretToSwitch() {
         encoder.reset();
     }
 
@@ -100,6 +102,18 @@ public class Turret extends GBSubsystem {
         lastPower = power;
     }
 
+
+    public void moveTurretToSwitch(double power) {
+        if(!reset) {
+            long tStart = System.currentTimeMillis();
+            while(!this.isSwitchPressed() && System.currentTimeMillis() - tStart < 15000) {
+                this.motor.set(power);
+            }
+            this.moveTurret(0);
+            reset = true;
+        }
+    }
+
     public double getSpeed() {
         return (encoder.getNormalizedVelocity());
     }
@@ -110,6 +124,10 @@ public class Turret extends GBSubsystem {
 
     public double getTurretLocation() {
         return encoder.getNormalizedTicks();
+    }
+
+    public double getRawTicks() {
+        return encoder.getRawTicks();
     }
 
     public double getNormAngleRads() {
