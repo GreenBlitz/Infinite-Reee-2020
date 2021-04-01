@@ -22,6 +22,8 @@ import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
+import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
+import edu.greenblitz.bigRodika.commands.turret.resets.UnsafeResetTurret;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
@@ -61,9 +63,9 @@ public class OI {
         //mainJoystick.A.whenPressed(new CheckMaxLin(0.8));
         //mainJoystick.B.whenPressed(new CheckMaxRot(0.8));
 
-        mainJoystick.A.whenPressed(new ShootByConstant(0.25));
-        mainJoystick.POV_RIGHT.whenPressed(new SemiAutomaticInsertIntoShooter());
-        mainJoystick.B.whenPressed(new InsertIntoShooter(0.5,0.4,0.2));
+        mainJoystick.POV_LEFT.whileHeld(new MoveTurretByConstant(0.1));
+        mainJoystick.POV_RIGHT.whenHeld(new MoveTurretByConstant(-0.1));
+        mainJoystick.R1.whenPressed(new UnsafeResetTurret(0.1));
     }
 
     private void initOfficalButtons() {
