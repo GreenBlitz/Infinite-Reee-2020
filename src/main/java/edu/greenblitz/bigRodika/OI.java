@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
+import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShootSkills;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
@@ -25,6 +26,7 @@ import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
 import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.turret.resets.UnsafeResetTurret;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
+import edu.greenblitz.bigRodika.utils.StopCompleteShoot;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -63,9 +65,12 @@ public class OI {
         //mainJoystick.A.whenPressed(new CheckMaxLin(0.8));
         //mainJoystick.B.whenPressed(new CheckMaxRot(0.8));
 
-        mainJoystick.POV_LEFT.whileHeld(new MoveTurretByConstant(0.1));
-        mainJoystick.POV_RIGHT.whenHeld(new MoveTurretByConstant(-0.1));
-        mainJoystick.R1.whenPressed(new UnsafeResetTurret(0.1));
+        mainJoystick.L1.whenPressed(new StopCompleteShoot());
+        mainJoystick.R1.whenPressed(new CompleteShootSkills());
+
+        mainJoystick.A.whenPressed(new ShootByConstant(0.25));
+        mainJoystick.POV_RIGHT.whenPressed(new SemiAutomaticInsertIntoShooter());
+        mainJoystick.B.whenPressed(new InsertIntoShooter(0.5,0.4,0.2));
     }
 
     private void initOfficalButtons() {
