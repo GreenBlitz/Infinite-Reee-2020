@@ -21,7 +21,7 @@ public class SemiAutomaticInsertIntoShooter extends SequentialCommandGroup {
     public SemiAutomaticInsertIntoShooter(double pulseInTime, double pulseOutTime, double pusherInPower, double pusherOutPower,
     double insertByConstant, double rollByConstant) {
         addCommands(
-
+                new WaitUntilCommand(() -> Shooter.getInstance().isPreparedToShoot()),
                 new ParallelCommandGroup(
                         new AlternatingPush(pusherInPower,pusherOutPower,pulseInTime,pulseOutTime,0),
                         new InsertByConstant(insertByConstant),

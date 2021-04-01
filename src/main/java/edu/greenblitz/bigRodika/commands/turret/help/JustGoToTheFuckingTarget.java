@@ -17,7 +17,7 @@ public class JustGoToTheFuckingTarget extends TurretCommand {
 
     public JustGoToTheFuckingTarget(
             Supplier<Double> targetSupp) {
-        this(targetSupp,  Math.toRadians(1.0),
+        this(targetSupp, Math.toRadians(1.0),
                 Math.toRadians(20.0), Math.toRadians(5.0),
                 0.6, 0.02,
                 0.02);
@@ -36,9 +36,16 @@ public class JustGoToTheFuckingTarget extends TurretCommand {
     }
 
     @Override
+    public void initialize() {
+        target = targetSupplier.get();
+        startOfRise = Double.NaN;
+        timeStartBeingOnTarget = 0;
+    }
+
+    @Override
     public void execute() {
         double error = target - turret.getNormAngleRads();
-        if (Math.abs(error) <= tolerance){
+        if (Math.abs(error) <= tolerance) {
             if (timeStartBeingOnTarget == 0) timeStartBeingOnTarget = System.currentTimeMillis();
             turret.moveTurret(0);
             return;
@@ -48,39 +55,31 @@ public class JustGoToTheFuckingTarget extends TurretCommand {
     }
 
     @Override
-    public void initialize() {
-        target = targetSupplier.get();
-        startOfRise = Double.NaN;
-        timeStartBeingOnTarget = 0;
-    }
-
-    @Override
     public void end(boolean interrupted) {
         turret.moveTurret(0);
     }
 
-    public double calculateVelocity(double error){
+    public double calculateVelocity(double error) {
         double absError = Math.abs(error);
-        if (slowDownBegin < absError){
+        if (slowDownBegin < absError) {
             return Math.copySign(maximumSpeed, error);
         }
-        if (slowDownEnd < absError){
+        if (slowDownEnd < absError) {
             return Math.copySign(
-                    (maximumSpeed - minimumSpeed)*
-                    (absError - slowDownEnd)/(slowDownBegin - slowDownEnd)
-                    + minimumSpeed, error);
+                    (maximumSpeed - minimumSpeed) *
+                            (absError - slowDownEnd) / (slowDownBegin - slowDownEnd)
+                            + minimumSpeed, error);
         }
-        if (Double.isNaN(startOfRise)){
+        if (Double.isNaN(startOfRise)) {
             startOfRise = System.currentTimeMillis();
         }
-        double secondsPassed = (System.currentTimeMillis() - startOfRise)/1000.0;
-        return Math.copySign(minimumSpeed + secondsPassed*speedUpSlope, error);
+        double secondsPassed = (System.currentTimeMillis() - startOfRise) / 1000.0;
+        return Math.copySign(minimumSpeed + secondsPassed * speedUpSlope, error);
     }
 
     @Override
     public boolean isFinished() {
-        return
-                timeStartBeingOnTarget != 0 &&
-                        System.currentTimeMillis() - timeStartBeingOnTarget > MINIMUM_TIME_ON_TARGET;
+        return timeStartBeingOnTarget != 0 &&
+                System.currentTimeMillis() - timeStartBeingOnTarget > MINIMUM_TIME_ON_TARGET;
     }
 }

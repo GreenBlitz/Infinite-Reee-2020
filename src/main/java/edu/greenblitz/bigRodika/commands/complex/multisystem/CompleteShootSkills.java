@@ -54,7 +54,12 @@ public class CompleteShootSkills extends ParallelCommandGroup {
 
             ParallelCommandGroup stage1 = new ParallelCommandGroup();
                 ApproachSlow approachSlow = new ApproachSlow(distanceSupplier);
-                JustGoToTheFuckingTarget turret = new JustGoToTheFuckingTarget(turretAlignSupp);
+                JustGoToTheFuckingTarget turret = new JustGoToTheFuckingTarget(turretAlignSupp) {
+                    @Override
+                    public boolean isFinished() {
+                        return approachSlow.isFinished() && super.isFinished();
+                    }
+                };
             stage1.addCommands(approachSlow, turret);
 
             StopTurret stage2 = new StopTurret();
