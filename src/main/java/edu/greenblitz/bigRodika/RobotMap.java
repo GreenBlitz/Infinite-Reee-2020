@@ -62,8 +62,11 @@ public class RobotMap {
                 public static final int INSERTER_PORT = 12;
                 public static final boolean INSERTER_REVERSED = false;
 
-                public static final int PUSHER_PORT = 15;
-                public static final boolean PUSHER_REVERSED = true;
+                public static final int PUSHER_RIGHT_PORT = 15;
+                public static final boolean PUSHER_RIGHT_REVERSE = true;
+
+                public static final int PUSHER_LEFT_PORT = 13;
+                public static final boolean PUSHER_LEFT_REVERSE = true;
 
             }
 

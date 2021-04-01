@@ -33,7 +33,12 @@ public class Funnel {
     }
 
     public void movePusher(double power) {
-        pusher.pusher.set(power);
+        movePusher(power, power);
+    }
+
+    public void movePusher(double left, double right) {
+        pusher.pusher_right.set(left);
+        pusher.pusher_left.set(right);
     }
 
     public void moveInserter(double power) {
@@ -73,14 +78,17 @@ public class Funnel {
     }
 
     public class Pusher extends GBSubsystem {
-        private WPI_TalonSRX pusher;
+        private WPI_TalonSRX pusher_right, pusher_left;
 
         private Funnel parent;
 
         private Pusher(Funnel parent) {
             this.parent = parent;
-            pusher = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.PUSHER_PORT);
-            pusher.setInverted(RobotMap.Limbo2.Funnel.Motors.PUSHER_REVERSED);
+            pusher_right = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.PUSHER_RIGHT_PORT);
+            pusher_right.setInverted(RobotMap.Limbo2.Funnel.Motors.PUSHER_RIGHT_REVERSE);
+
+            pusher_left = new WPI_TalonSRX(RobotMap.Limbo2.Funnel.Motors.PUSHER_LEFT_PORT);
+            pusher_left.setInverted(RobotMap.Limbo2.Funnel.Motors.PUSHER_LEFT_REVERSE);
         }
 
         public Funnel getFunnel() {
@@ -95,7 +103,8 @@ public class Funnel {
         }
 
         public WPI_TalonSRX getTalon() {
-            return pusher;
+            // used solely for pigeonIMU, therefore there is not need for independent getters for right and left
+            return pusher_right;
         }
     }
 
