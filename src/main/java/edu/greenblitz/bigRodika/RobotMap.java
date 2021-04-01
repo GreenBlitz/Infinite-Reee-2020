@@ -41,7 +41,7 @@ public class RobotMap {
             public static final boolean IS_INVERTED = false;
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
                     28672.0);//correct 110 present
-            public static double ENCODER_VALUE_WHEN_FORWARD = 5292.000000; // what was before orel checked 8974.0
+            public static double ENCODER_VALUE_WHEN_FORWARD = 18316.0; // what was before orel checked 8974.0
             public static double ENCODER_90_DEG_ABS = NORMALIZER.getValue() / 4.0;
             public static double ENCODER_VALUE_WHEN_NEGATIVE_90 = ENCODER_VALUE_WHEN_FORWARD -
                     ENCODER_90_DEG_ABS;

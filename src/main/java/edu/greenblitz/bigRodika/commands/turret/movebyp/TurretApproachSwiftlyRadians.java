@@ -15,7 +15,7 @@ public class TurretApproachSwiftlyRadians extends TurretApproachSwiftly {
 
     @Override
     public void execute() {
-        turret.moveTurret(calculateVelocity(target - turret.getNormAngleRads()));
+        turret.moveTurret(calculateVelocity((target - turret.getNormAngleRads())/(2*Math.PI)));
     }
 
 

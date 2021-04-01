@@ -19,12 +19,10 @@ public class ResetEncoderWhenInSide extends TurretCommand {
     @Override
     public void end(boolean interrupted) {
         if (turret.getRawTicks() <= Turret.MIN_TICKS) {
-            SmartDashboard.putBoolean("Override uunsafe", true);
             Turret.getInstance().moveTurretToSwitch(0.1);
         }
 
         if (!interrupted) {
-            SmartDashboard.putBoolean("notIntrue;lkdsaj", true);
             Turret.getInstance().moveTurret(0);
             turret.resetEncoder(0);
         }
