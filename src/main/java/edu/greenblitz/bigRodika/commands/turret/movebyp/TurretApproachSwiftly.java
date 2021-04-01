@@ -1,14 +1,18 @@
 package edu.greenblitz.bigRodika.commands.turret.movebyp;
 
+import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.turret.TurretCommand;
 import edu.greenblitz.bigRodika.subsystems.Turret;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 import org.greenblitz.motion.tolerance.ITolerance;
 
+import java.text.Normalizer;
+
 public class TurretApproachSwiftly extends TurretCommand {
 
-    public static final double SLOW_DOWN_BEGIN = Math.toRadians(15.0) / 2*Math.PI;
-    public static final double SLOW_DOWN_END = Math.toRadians(8.0) / 2*Math.PI;
+    public static final double SLOW_DOWN_BEGIN = Math.toRadians(7.0) / 2*Math.PI;
+    public static final double SLOW_DOWN_END = Math.toRadians(3.0) / 2*Math.PI;
     public static final double MINIMUM_SPEED = 0.065;
     public static final double MAXIMUM_SPEED = 0.4;
 
@@ -31,6 +35,7 @@ public class TurretApproachSwiftly extends TurretCommand {
 
     @Override
     public void execute() {
+        SmartDashboard.putNumber("Error Turrert", target - turret.getTurretLocation());
         turret.moveTurret(calculateVelocity(target - turret.getTurretLocation()));
     }
 
@@ -49,7 +54,7 @@ public class TurretApproachSwiftly extends TurretCommand {
         Turret.getInstance().putNumber("Error", error);
 
         double absError = Math.abs(error);
-        double errorSign = Math.signum(error);
+        double errorSign = -Math.signum(error);
 
         if (absError <= SLOW_DOWN_END) {
             return MINIMUM_SPEED * errorSign;
