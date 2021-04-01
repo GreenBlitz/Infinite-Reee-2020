@@ -7,7 +7,6 @@ import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.Trench8BallAuto;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
-import edu.greenblitz.bigRodika.commands.turret.resets.ResetEncoderWhenInBack;
 import edu.greenblitz.bigRodika.commands.turret.resets.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
