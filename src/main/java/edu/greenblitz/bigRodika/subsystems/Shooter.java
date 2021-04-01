@@ -64,10 +64,13 @@ public class Shooter extends GBSubsystem {
 
     public void shoot(double power) {
         putNumber("power", power);
+        if (power == 0) {
+            this.toCoast();
+        }
         this.leader.set(power);
     }
 
-    public double getDesiredPower(double rpm){
+    public double getDesiredPower(double rpm) {
         return rpmToPowerMap.linearlyInterpolate(rpm)[0];
     }
 
@@ -116,5 +119,10 @@ public class Shooter extends GBSubsystem {
 
     public CANPIDController getPIDController() {
         return leader.getPIDController();
+    }
+
+    public void toCoast() {
+        this.leader.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.follower.setIdleMode(CANSparkMax.IdleMode.kCoast);
     }
 }
