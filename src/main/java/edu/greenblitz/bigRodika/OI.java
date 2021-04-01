@@ -10,6 +10,7 @@ import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
+import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByDifferentConstants;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
@@ -33,7 +34,7 @@ public class OI {
     private SmartJoystick mainJoystick;
     private SmartJoystick secondStick;
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     private OI() {
         mainJoystick = new SmartJoystick(RobotMap.Limbo2.Joystick.MAIN,
@@ -57,8 +58,14 @@ public class OI {
     }
 
     private void initTestButtons() {
-        mainJoystick.A.whenPressed(new CheckMaxLin(0.8));
-        mainJoystick.B.whenPressed(new CheckMaxRot(0.8));
+        mainJoystick.A.whileHeld(new ParallelCommandGroup(new PushByDifferentConstants(0.3, 0.3), new InsertByConstant(0.6)));
+        mainJoystick.B.whileHeld(new PushByDifferentConstants(-0.3, -0.3));
+
+        mainJoystick.X.whileHeld(new PushByDifferentConstants(0.3, -0.3));
+        mainJoystick.Y.whileHeld(new PushByDifferentConstants(0, 0.5));
+
+        mainJoystick.R1.whileHeld(new ShootByConstant(0.4));
+
     }
 
     private void initOfficalButtons() {
