@@ -114,6 +114,14 @@ public class Turret extends GBSubsystem {
         }
     }
 
+    public void toBrake() {
+        this.motor.setNeutralMode(NeutralMode.Brake);
+    }
+
+    public void toCoast() {
+        this.motor.setNeutralMode(NeutralMode.Coast);
+    }
+
     public double getSpeed() {
         return (encoder.getNormalizedVelocity());
     }

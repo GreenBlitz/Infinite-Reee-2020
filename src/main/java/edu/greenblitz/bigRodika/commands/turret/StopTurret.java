@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.commands.turret;
 public class StopTurret extends TurretCommand {
     @Override
     public void initialize() {
+        turret.toBrake();
         turret.moveTurret(0);
     }
 
