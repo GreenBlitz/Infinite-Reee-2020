@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika.commands.complex.multisystem;
 import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.ApproachSlow;
+import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.SemiAutomaticInsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
@@ -29,12 +30,9 @@ public class CompleteShootSkills extends ParallelCommandGroup {
 
     static Supplier<Double> distanceSupplier, visionDistanceSupplier, turretAlignSupp;
 
-    public static boolean finished = false;
     public static final double TOLERANCE = 0.01;
 
     public CompleteShootSkills() {
-
-        SmartDashboard.putBoolean("finished", false);
 
 
         visionDistanceSupplier = () -> VisionMaster.getInstance().getVisionLocation().getPlaneDistance();
@@ -87,16 +85,15 @@ public class CompleteShootSkills extends ParallelCommandGroup {
 
     @Override
     public boolean isFinished() {
-        return finished;
+        return OI.getInstance().completeShootStop.get();
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(true);
 
-        finished = false;
-        SmartDashboard.putBoolean("finished", true);
-
-//        new TurretToFront().schedule();
+        new TurretToFront().schedule();
+        new StopShooter().schedule();
+        new ResetDome().schedule();
     }
 }

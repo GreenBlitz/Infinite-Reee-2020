@@ -41,7 +41,9 @@ public class OI {
 
     private SmartJoystick mainJoystick;
     private SmartJoystick secondStick;
+
     public JoystickButton pusherAlternate;
+    public JoystickButton completeShootStop;
 
     public static final boolean DEBUG = true;
 
@@ -69,8 +71,8 @@ public class OI {
     private void initTestButtons() {
 
         pusherAlternate = mainJoystick.B;
+        completeShootStop = mainJoystick.L1;
 
-        mainJoystick.L1.whenPressed(new StopCompleteShoot());
         mainJoystick.R1.whenPressed(new CompleteShootSkills());
         mainJoystick.A.whenPressed(new ApproachSlow(() -> {
             double visionDist = VisionMaster.getInstance().getVisionLocation().getPlaneDistance();
