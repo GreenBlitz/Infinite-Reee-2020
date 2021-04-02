@@ -1,5 +1,7 @@
 package edu.greenblitz.bigRodika.commands.funnel.pusher;
 
+import edu.greenblitz.bigRodika.OI;
+
 public class AlternatingPush extends PusherCommand {
 
     private int number;
@@ -22,15 +24,16 @@ public class AlternatingPush extends PusherCommand {
     @Override
     public void initialize() {
         funnel.movePusher(powerOut);
-        startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis() + 500;
     }
 
     @Override
     public void execute() {
         double timeNow = (System.currentTimeMillis() - startTime) / 1000.0;
-        double timeNowMod = timeNow % (timeIn + timeOut);
-        if (timeNowMod < timeIn) {
-            funnel.movePusher(powerIn, 0.5 * powerIn);
+        double timeNowMod = (timeNow + timeIn + timeOut) % (timeIn + timeOut);//this is not because I stupid
+        // adding to startTime makes timeNow negative and modulo keeps it neg cause java is dumb
+        if (timeNowMod < timeIn || OI.getInstance().pusherAlternate.get()) {
+            funnel.movePusher(0.5 *powerIn, powerIn);
         } else {
             funnel.movePusher(powerOut);
         }
