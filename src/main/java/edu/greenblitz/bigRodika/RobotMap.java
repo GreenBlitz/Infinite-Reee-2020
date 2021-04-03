@@ -189,9 +189,9 @@ public class RobotMap {
             public static class MotionData { // TODO: calibrate this
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration( //0.4,0.00017,1.25
-                        0.8, 1.0, .0005,
-                        1.0, 0.0, 50, .01,
-                        3.15, 0.0, 10, .01, 500); //3.2, 0, 10
+                        1.0, 1.0, .0005,
+                        5.5, 0.0, 95, .01,
+                        0 * 3.15, 0.0, 0 * 10, .01, 500); //3.2, 0, 10
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
                 public static GearDependentValue<HashMap<String, ProfilingData>> PROF;
@@ -230,8 +230,7 @@ public class RobotMap {
                             new ProfilingData(1.93*1.2, 4.6, 4.3, 12.6));
 
                     SPEED.put("0.8",
-                            new ProfilingData(3.6,10.75,9.5,10.5));
-
+                            new ProfilingData(4.6,5,8.2,7.5));
 
                     PROF.setValue(Gear.POWER, POWER);
                     PROF.setValue(Gear.SPEED, SPEED);

@@ -70,10 +70,16 @@ public class OI {
         mainJoystick.START.whenPressed(new ToSpeed());
         mainJoystick.BACK.whenPressed(new ToPower());
 
-        List<State> locations = new ArrayList<>(2);
-        locations.add(new State(0, 0, 0, 0, 0));
-        locations.add(new State(-1.0, 3.0, 0.34, 0, 0));
-        Follow2DProfileCommand command = new Follow2DProfileCommand(locations, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3
+        /*ArrayList<State> redPathB = new ArrayList<>();
+        redPathB.add(new State(razToMeter(1.58), razToMeter(5.5),-2.5,0,0));
+        redPathB.add(new State(razToMeter(3), razToMeter(4),-2.52,3.6,7));
+        redPathB.add(new State(razToMeter(5), razToMeter(2),-1.55,3.6,9.5));
+        redPathB.add(new State(razToMeter(7), razToMeter(4),-1.15,3.6,9.5));
+        redPathB.add(new State(razToMeter(10), razToMeter(4.75),-1.15,0,0));*/
+        ArrayList<State> redPathB = new ArrayList<>();
+        redPathB.add(new State(0,0,0,0,0));
+        redPathB.add(new State(-2,2,0.5*Math.PI,0,0));
+        Follow2DProfileCommand command = new Follow2DProfileCommand(redPathB, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.8
                 , false);
         command.setSendData(true);
         mainJoystick.POV_UP.whenPressed(new ThreadedCommand(command, Chassis.getInstance()));
@@ -147,5 +153,9 @@ public class OI {
 
     public SmartJoystick getSideStick() {
         return secondStick;
+    }
+
+    public static double razToMeter(double inch){
+        return 0.762 * inch;
     }
 }
