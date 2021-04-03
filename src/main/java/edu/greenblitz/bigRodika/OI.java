@@ -1,15 +1,11 @@
 package edu.greenblitz.bigRodika;
 
 import edu.greenblitz.bigRodika.commands.chassis.ApproachSlow;
-import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
-import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
-import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShootSkills;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
-import edu.greenblitz.bigRodika.commands.funnel.SemiAutomaticInsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
@@ -27,12 +23,10 @@ import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretToFront;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
-import edu.greenblitz.bigRodika.utils.StopCompleteShoot;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import org.greenblitz.motion.base.TwoTuple;
 
@@ -80,7 +74,6 @@ public class OI {
             return Math.abs(dist.getFirst().getFirst() - visionDist) < Math.abs(dist.getSecond().getFirst() - visionDist) ? dist.getFirst().getFirst() : dist.getSecond().getFirst();
         }));
 
-        mainJoystick.B.whenPressed(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
         mainJoystick.X.whenPressed(new TurretToFront());
 
         //-----------------------------------------------------

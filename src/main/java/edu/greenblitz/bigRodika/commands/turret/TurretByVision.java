@@ -1,7 +1,10 @@
 package edu.greenblitz.bigRodika.commands.turret;
 
+import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
+import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurretByVision extends TurretCommand {
 
@@ -28,6 +31,8 @@ public class TurretByVision extends TurretCommand {
 
     @Override
     public void execute() {
+
+        SmartDashboard.putNumber("Turret Error", Math.abs(VisionMaster.getInstance().getVisionLocation().x));
 
         if (!VisionMaster.getInstance().isLastDataValid()) {
             turret.moveTurret(0);

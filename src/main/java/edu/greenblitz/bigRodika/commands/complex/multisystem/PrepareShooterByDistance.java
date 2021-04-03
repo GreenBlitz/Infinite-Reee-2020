@@ -6,6 +6,7 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAuto
 import edu.greenblitz.bigRodika.subsystems.Dome;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.Arrays;
 import java.util.function.Supplier;
@@ -15,6 +16,8 @@ public class PrepareShooterByDistance extends GBCommand {
     private Supplier<Double> distanceSupplier;
     private DomeApproachSwiftly domeCommand;
     private FullyAutoThreeStage shooterCommand;
+    // temp for debugging
+    private double[] shooterState;
 
     public PrepareShooterByDistance(Supplier<Double> distanceSupplier){
 
@@ -29,12 +32,12 @@ public class PrepareShooterByDistance extends GBCommand {
 
         System.out.println(distanceSupplier.get());
 
-        double[] shooterState = RobotMap.Limbo2.Shooter.
+        shooterState = RobotMap.Limbo2.Shooter.
                 distanceToShooterState.getAdjesent(
                         distanceSupplier.get()
         ).getFirst().getSecond();
 
-        System.out.println(Arrays.toString(shooterState));
+        SmartDashboard.putString("Shooter", Arrays.toString(shooterState));
         domeCommand = new DomeApproachSwiftly(shooterState[1]);
         shooterCommand = new FullyAutoThreeStage(shooterState[0]);
 
@@ -44,6 +47,10 @@ public class PrepareShooterByDistance extends GBCommand {
 
     @Override
     public void execute() {
+
+        SmartDashboard.putNumber("Shooter Speed Error", Shooter.getInstance().getAbsoluteShooterSpeed() - shooterState[0]);
+        SmartDashboard.putNumber("Dome Error", Dome.getInstance().getPotentiometerValue() - shooterState[1]);
+
         domeCommand.execute();
         shooterCommand.execute();
     }

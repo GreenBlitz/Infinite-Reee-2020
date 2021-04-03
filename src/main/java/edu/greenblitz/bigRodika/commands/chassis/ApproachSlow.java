@@ -14,7 +14,6 @@ public class ApproachSlow extends ChassisCommand { //TODO: make vision work
     private Supplier<Double> t_supplier;
     private double power;
     private double epsilon;
-    private Localizer localizer;
 
     public ApproachSlow(Supplier<Double> targetD) {
         this(targetD, 0.02, 0.03);
@@ -35,6 +34,9 @@ public class ApproachSlow extends ChassisCommand { //TODO: make vision work
     @Override
     public void execute() {
         double currD = VisionMaster.getInstance().getVisionLocation().getPlaneDistance();
+
+        SmartDashboard.putNumber("Distance Error", Math.abs(currD - targetD));
+
         if (targetD < currD) {
             Chassis.getInstance().moveMotors(this.power, this.power);
         } else {
@@ -45,6 +47,7 @@ public class ApproachSlow extends ChassisCommand { //TODO: make vision work
     @Override
     public void end(boolean interrupted) {
         Chassis.getInstance().moveMotors(0, 0);
+        Chassis.getInstance().toBrake();
     }
 
     @Override
