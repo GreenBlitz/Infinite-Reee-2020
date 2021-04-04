@@ -190,8 +190,8 @@ public class RobotMap {
 
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration( //0.4,0.00017,1.25
                         1.0, 1.0, .0005,
-                        5.5, 0.0, 95, .01,
-                         3.15, 0.0, 10, .01, 500); //3.2, 0, 10
+                        1.5, 0.0, 95, .01,
+                         1, 0.0, 0*13, .01, 500); //3.2, 0, 10
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
                 public static GearDependentValue<HashMap<String, ProfilingData>> PROF;
@@ -213,13 +213,13 @@ public class RobotMap {
 
 
                     SPEED.put("0.3",
-                            new ProfilingData(1.93*1.2, 4.6, 4.3, 12.6));*/
+                            new ProfilingData(1.93*1.2, 4.6, 4.3, 12.6));
 
 
                     POWER.put("1.0",
                             new ProfilingData(2.64, 7, 8, 30));
                     POWER.put("0.5",
-                            new ProfilingData(1.4, 8.4, 4, 10));
+                            new ProfilingData(1.4, 8.4, 4, 10));*/
 
                     // TODO this is dumb
                     POWER.put("0.3",
@@ -231,6 +231,9 @@ public class RobotMap {
 
                     SPEED.put("0.8",
                             new ProfilingData(4.6,5,11,12));
+
+                    SPEED.put("0.5",
+                            new ProfilingData(4,5,6,5));
 
                     PROF.setValue(Gear.POWER, POWER);
                     PROF.setValue(Gear.SPEED, SPEED);

@@ -1,7 +1,9 @@
 package edu.greenblitz.bigRodika.commands.chassis.profiling;
 
+import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
+import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.threading.IThreadable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -216,7 +218,7 @@ public class Follow2DProfileCommand implements IThreadable {
      */
     @Override
     public boolean isFinished() {
-        return follower.isFinished();// || died;
+        return follower.isFinished() || OI.getInstance().stopProfile.get();// || died;
     }
 
     @Override
@@ -225,28 +227,12 @@ public class Follow2DProfileCommand implements IThreadable {
             Chassis.getInstance().toBrake();
             Chassis.getInstance().moveMotors(0, 0);
         }
-        CommandScheduler.getInstance().schedule(new FunctionalCommand(new Runnable() {
+        new GBCommand(){
             @Override
-            public void run() {
-            }
-        }, new Runnable() {
-            @Override
-            public void run() {
+            public void initialize(){
                 follower.sendCSV();
             }
-        },
-                new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) {
-
-                    }
-                },
-                new BooleanSupplier() {
-                    @Override
-                    public boolean getAsBoolean() {
-                        return true;
-                    }
-                }));
+        }.schedule();
     }
 
 

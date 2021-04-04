@@ -3,6 +3,7 @@ package edu.greenblitz.bigRodika;
 import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
+import edu.greenblitz.bigRodika.commands.chassis.turns.TurnToAngle;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
@@ -28,6 +29,7 @@ import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import org.greenblitz.motion.base.State;
 
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ public class OI {
 
     private SmartJoystick mainJoystick;
     private SmartJoystick secondStick;
+    public JoystickButton stopProfile;
 
     public static final boolean DEBUG = true;
 
@@ -64,25 +67,28 @@ public class OI {
     }
 
     private void initTestButtons() {
-        mainJoystick.A.whenPressed(new CheckMaxLin(0.8));
-        mainJoystick.B.whenPressed(new CheckMaxRot(0.3));
+
+        stopProfile = mainJoystick.X;
+        mainJoystick.A.whenPressed(new CheckMaxLin(0.5));
+        mainJoystick.B.whenPressed(new CheckMaxRot(0.5));
 
         mainJoystick.START.whenPressed(new ToSpeed());
         mainJoystick.BACK.whenPressed(new ToPower());
 
-        /*ArrayList<State> redPathB = new ArrayList<>();
-        redPathB.add(new State(razToMeter(1.58), razToMeter(5.5),-2.5,0,0));
-        redPathB.add(new State(razToMeter(3), razToMeter(4),-2.52,3.6,7));
-        redPathB.add(new State(razToMeter(5), razToMeter(2),-1.55,3.6,9.5));
-        redPathB.add(new State(razToMeter(7), razToMeter(4),-1.15,3.6,9.5));
-        redPathB.add(new State(razToMeter(10), razToMeter(4.75),-1.15,0,0));*/
+        mainJoystick.X.whenPressed(new TurnToAngle(Math.toDegrees(-2.23), 0.5, 1, 6, 5, 0.5, true, 0.1));
+
         ArrayList<State> redPathB = new ArrayList<>();
-        redPathB.add(new State(0,0,0,0,0));
-        redPathB.add(new State(-2,2,0.5*Math.PI,0,0));
-        Follow2DProfileCommand command = new Follow2DProfileCommand(redPathB, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.8
+        redPathB.add(new State(razToMeter(1.52), razToMeter(5),-2.23,0,0));
+        redPathB.add(new State(razToMeter(3), razToMeter(4),-2.23,3.6,7));
+        redPathB.add(new State(razToMeter(5), razToMeter(2),-1.55,3.6,9.5));
+        redPathB.add(new State(razToMeter(7), razToMeter(4),-1.15,3.6,-9.5));
+        redPathB.add(new State(razToMeter(10), razToMeter(4.75),-1.15,0,0));
+        Follow2DProfileCommand command = new Follow2DProfileCommand(redPathB, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5
                 , false);
         command.setSendData(true);
         mainJoystick.POV_UP.whenPressed(new ThreadedCommand(command, Chassis.getInstance()));
+
+
 
     }
 
