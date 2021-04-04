@@ -65,7 +65,7 @@ public class OI {
 
     private void initTestButtons() {
         mainJoystick.A.whenPressed(new CheckMaxLin(0.8));
-        mainJoystick.B.whenPressed(new CheckMaxRot(0.8));
+        mainJoystick.B.whenPressed(new CheckMaxRot(0.3));
 
         mainJoystick.START.whenPressed(new ToSpeed());
         mainJoystick.BACK.whenPressed(new ToPower());

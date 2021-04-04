@@ -162,12 +162,12 @@ public class RobotMap {
 
             public static class Motor {
                 public static final int
-                        LEFT_LEADER = 4,
-                        LEFT_FOLLOWER_1 = 5,
-                        LEFT_FOLLOWER_2 = 6,
-                        RIGHT_LEADER = 1,
-                        RIGHT_FOLLOWER_1 = 2,
-                        RIGHT_FOLLOWER_2 = 3;
+                        LEFT_LEADER = 1,
+                        LEFT_FOLLOWER_1 = 2,
+                        LEFT_FOLLOWER_2 = 3,
+                        RIGHT_LEADER = 4,
+                        RIGHT_FOLLOWER_1 = 5,
+                        RIGHT_FOLLOWER_2 = 6;
 
 
             }
@@ -191,7 +191,7 @@ public class RobotMap {
                 public static final ProfilingConfiguration CONFIG = new ProfilingConfiguration( //0.4,0.00017,1.25
                         1.0, 1.0, .0005,
                         5.5, 0.0, 95, .01,
-                        0 * 3.15, 0.0, 0 * 10, .01, 500); //3.2, 0, 10
+                         3.15, 0.0, 10, .01, 500); //3.2, 0, 10
                 public static HashMap<String, ProfilingData> POWER;
                 public static HashMap<String, ProfilingData> SPEED;
                 public static GearDependentValue<HashMap<String, ProfilingData>> PROF;
@@ -230,7 +230,7 @@ public class RobotMap {
                             new ProfilingData(1.93*1.2, 4.6, 4.3, 12.6));
 
                     SPEED.put("0.8",
-                            new ProfilingData(4.6,5,8.2,7.5));
+                            new ProfilingData(4.6,5,11,12));
 
                     PROF.setValue(Gear.POWER, POWER);
                     PROF.setValue(Gear.SPEED, SPEED);

@@ -17,6 +17,7 @@ import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.greenblitz.motion.Localizer;
 
@@ -62,6 +63,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        SmartDashboard.putNumber("Right Rate", Chassis.getInstance().getRightRate());
+        SmartDashboard.putNumber("Left Rate", Chassis.getInstance().getLeftRate());
 //        Command shooterCommand = Shooter.getInstance().getCurrentCommand();
 //        SmartDashboard.putString("Shooter::currentCommand", shooterCommand == null ? "" : shooterCommand.getName());
 //        Command chassisCommand = Chassis.getInstance().getCurrentCommand();

@@ -10,6 +10,7 @@ import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.SparkEncoder;
 import edu.greenblitz.gblib.gyroscope.IGyroscope;
 import edu.greenblitz.gblib.gyroscope.PigeonGyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.Localizer;
 import org.greenblitz.motion.base.Position;
 
@@ -42,10 +43,10 @@ public class Chassis extends GBSubsystem {
         rightFollower1.follow(rightLeader);
         rightFollower2.follow(rightLeader);
 
-        leftLeader.setInverted(false);
+        leftLeader.setInverted(true);
 //        leftFollower1.setInverted(true);
 //        leftFollower2.setInverted(true);
-        rightLeader.setInverted(true);
+        rightLeader.setInverted(false);
 //        leftFollower1.setInverted(true);
 //        leftFollower2.setInverted(true);
 
@@ -79,8 +80,8 @@ public class Chassis extends GBSubsystem {
     }
 
     public void moveMotors(double left, double right) {
-        putNumber("Left Power", left);
-        putNumber("Right Power", right);
+        SmartDashboard.putNumber("Left Power", left);
+        SmartDashboard.putNumber("Right Power", right);
         rightLeader.set(right);
         leftLeader.set(left);
     }
@@ -104,7 +105,7 @@ public class Chassis extends GBSubsystem {
     }
 
     public void arcadeDrive(double moveValue, double rotateValue) {
-        moveMotors(moveValue - rotateValue, moveValue + rotateValue);
+        moveMotors(moveValue + rotateValue, moveValue - rotateValue);
     }
 
     public double getLeftMeters() {
@@ -128,7 +129,7 @@ public class Chassis extends GBSubsystem {
     }
 
     public double getAngularVelocityByWheels() {
-        return getWheelDistance() * (getRightRate() - getLeftRate());
+        return  (getRightRate() - getLeftRate())/ getWheelDistance();
     }
 
     public double getAngle() {

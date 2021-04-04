@@ -13,6 +13,8 @@ public class CheckMaxRot extends ChassisCommand {
     private double previousAngle;
     private double previousVel;
     private double previousTime;
+    private double prevGyroV;
+    private double prevWheelV;
     private long tStart;
     private RemoteCSVTargetBuffer target;
 
@@ -27,7 +29,7 @@ public class CheckMaxRot extends ChassisCommand {
         previousVel = 0;
         count = 0;
         tStart = System.currentTimeMillis();
-        target = new RemoteCSVTargetBuffer("RotationalData", "time", "vel", "acc");
+        target = new RemoteCSVTargetBuffer("RotationalData", "time", "vel", "gyroVel", "wheelVel", "acc","gyroA", "WheelAccByVel");
     }
 
     @Override
@@ -44,14 +46,23 @@ public class CheckMaxRot extends ChassisCommand {
             }
 
             double time = System.currentTimeMillis() / 1000.0;
+            double dt = time - previousTime;
             double angle = Chassis.getInstance().getLocation().getAngle();
-            double V = (angle - previousAngle) / (time - previousTime);
+            double V = (angle - previousAngle) / dt;
+            double GyroV = Chassis .getInstance().getAngularVelocityByGyro();
+            double WheelV = Chassis.getInstance().getAngularVelocityByWheels();
+            double GyroA = (GyroV - prevGyroV)/dt;
+            double WheelA = (WheelV - prevWheelV)/dt;
+
             double A =(V - previousVel) / (time - previousTime);
-            if(A <= 100)target.report(time -  tStart/1000.0, V, A);
+            if(Math.abs(A )<= 100) target.report(time -  tStart/1000.0, V,GyroV,WheelV, A, GyroA, WheelA);
 
             previousAngle = angle;
             previousTime = time;
             previousVel = V;
+            prevWheelV = WheelV;
+            prevGyroV = GyroV;
+
 
 
         }
