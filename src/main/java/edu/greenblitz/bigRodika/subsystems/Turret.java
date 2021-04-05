@@ -38,9 +38,9 @@ public class Turret extends GBSubsystem {
                 RobotMap.Limbo2.Turret.SWITCH_PORT
         );
 
-        motor.enableCurrentLimit(true);
-        motor.configPeakCurrentLimit(RobotMap.Limbo2.Turret.PEAK_CURRENT_LIMIT);
-        motor.configPeakCurrentDuration(RobotMap.Limbo2.Turret.PEAK_CURRENT_DURATION);
+//        motor.enableCurrentLimit(true);
+//        motor.configPeakCurrentLimit(RobotMap.Limbo2.Turret.PEAK_CURRENT_LIMIT);
+//        motor.configPeakCurrentDuration(RobotMap.Limbo2.Turret.PEAK_CURRENT_DURATION);
 
     }
 
@@ -84,7 +84,8 @@ public class Turret extends GBSubsystem {
         }
 
         SmartDashboard.putBoolean("Turret microSwitch", isSwitchPressed());
-        SmartDashboard.putNumber("Turret Encoder Raw", encoder.getRawTicks());
+        SmartDashboard.putNumber("Turret Encoder Raw", this.getRawTicks());
+        SmartDashboard.putNumber("Turret Encoder", getTurretLocation());
 
         moveTurret(lastPower);
     }

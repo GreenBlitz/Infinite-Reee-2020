@@ -8,21 +8,25 @@ public class ResetEncoderWhenInSide extends TurretCommand {
 
     @Override
     public void initialize() {
-
+        SmartDashboard.putString("Status", "Initialized");
     }
 
     @Override
     public void execute() {
-        Turret.getInstance().moveTurret(0.1);
+        Turret.getInstance().moveTurret(0.3);
     }
 
     @Override
     public void end(boolean interrupted) {
+
+
         if (turret.getRawTicks() <= Turret.MIN_TICKS) {
             Turret.getInstance().moveTurretToSwitch(0.1);
+            SmartDashboard.putString("Status", "override safeMove");
         }
 
         if (!interrupted) {
+            SmartDashboard.putString("Status", "Done");
             Turret.getInstance().moveTurret(0);
             turret.resetEncoder(0);
         }

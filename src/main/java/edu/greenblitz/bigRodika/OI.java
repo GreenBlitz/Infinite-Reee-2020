@@ -1,8 +1,10 @@
 package edu.greenblitz.bigRodika;
 
-import edu.greenblitz.bigRodika.commands.chassis.ApproachSlow;
+import edu.greenblitz.bigRodika.commands.chassis.Approach;
+import edu.greenblitz.bigRodika.commands.chassis.approaches.ApproachAccurate;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShootSkills;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
+import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftlyTesting;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
@@ -20,15 +22,19 @@ import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
-import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretToFront;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
+import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import org.greenblitz.motion.base.TwoTuple;
+import org.greenblitz.motion.tolerance.AbsoluteTolerance;
+
+import java.util.function.Supplier;
 
 public class OI {
     private static OI instance;
@@ -68,18 +74,39 @@ public class OI {
         completeShootStop = mainJoystick.L1;
 
         mainJoystick.R1.whenPressed(new CompleteShootSkills());
-        mainJoystick.A.whenPressed(new ApproachSlow(() -> {
+
+        Supplier<Double> power = () -> Math.abs(RobotMap.Limbo2.Turret.ENCODER_VALUE_WHEN_NEGATIVE_180 - Turret.getInstance().getRawTicks()) >
+                Math.abs(RobotMap.Limbo2.Turret.ENCODER_VALUE_WHEN_FORWARD - Turret.getInstance().getRawTicks()) ? 0.05:-0.05;
+
+        mainJoystick.A.whenPressed(new ApproachAccurate(() -> {
             double visionDist = VisionMaster.getInstance().getVisionLocation().getPlaneDistance();
             TwoTuple<TwoTuple<Double, double[]>, TwoTuple<Double, double[]>> dist = RobotMap.Limbo2.Shooter.distanceToShooterState.getAdjesent(visionDist);
-            return Math.abs(dist.getFirst().getFirst() - visionDist) < Math.abs(dist.getSecond().getFirst() - visionDist) ? dist.getFirst().getFirst() : dist.getSecond().getFirst();
-        }));
+            double d = Math.abs(dist.getFirst().getFirst() - visionDist) < Math.abs(dist.getSecond().getFirst() - visionDist) ? dist.getFirst().getFirst() : dist.getSecond().getFirst();
+            SmartDashboard.putNumber("Desired distance", d);
+            return d;
+        }, power, 0.03));
+
+
+        /*mainJoystick.B.whenPressed(new ApproachAccurate(() -> {
+            double visionDist = VisionMaster.getInstance().getVisionLocation().getPlaneDistance();
+            TwoTuple<TwoTuple<Double, double[]>, TwoTuple<Double, double[]>> dist = RobotMap.Limbo2.Shooter.distanceToShooterState.getAdjesent(visionDist);
+            double d = Math.abs(dist.getFirst().getFirst() - visionDist) < Math.abs(dist.getSecond().getFirst() - visionDist) ? dist.getFirst().getFirst() : dist.getSecond().getFirst();
+            SmartDashboard.putNumber("Desired distance", d);
+            return d;
+        }, 0.05, 0.03));*/
 
         mainJoystick.X.whenPressed(new TurretToFront());
 
         //-----------------------------------------------------
 
-        secondStick.B.whenPressed(new ToggleExtender());
+//        secondStick.B.whenPressed(new ToggleExtender());
         secondStick.R1.whenPressed(new RollByConstant(0.5));
+
+        mainJoystick.POV_UP.whileHeld(new DomeMoveByConstant(0.5));
+        mainJoystick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.2));
+
+        mainJoystick.POV_LEFT.whileHeld(new MoveTurretByConstant(0.3));
+        mainJoystick.POV_RIGHT.whileHeld(new MoveTurretByConstant(-0.3));
     }
 
     private void initOfficalButtons() {

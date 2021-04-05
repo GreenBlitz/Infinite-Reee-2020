@@ -46,8 +46,7 @@ public class RobotMap {
             public static double ENCODER_90_DEG_ABS = NORMALIZER.getValue() / 4.0;
             public static double ENCODER_VALUE_WHEN_NEGATIVE_90 = ENCODER_VALUE_WHEN_FORWARD -
                     ENCODER_90_DEG_ABS;
-            public static double ENCODER_VALUE_WHEN_NEGATIVE_180 = ENCODER_VALUE_WHEN_FORWARD
-                    - 2*ENCODER_90_DEG_ABS;
+            public static double ENCODER_VALUE_WHEN_NEGATIVE_180 = 4000.0;
 
             public static final double TURRET_CAMERA_RADIUS = 0.25;
 
@@ -59,7 +58,7 @@ public class RobotMap {
         public static class Funnel {
 
             public static class SemiAuto{
-                public static final double pulseInTime = 0.55, pulseOutTime = 2,  pusherInPower = 0.4,  pusherOutPower = -0.35,
+                public static final double pulseInTime = 0.58, pulseOutTime = 1,  pusherInPower = 0.4,  pusherOutPower = -0.35, //pulseintime:0.55
                  insertByConstant = 0.5,  rollByConstant =  0.2;
             }
 
@@ -112,6 +111,10 @@ public class RobotMap {
 
             static {
                 // First element = rpm. second = dome
+                Shooter.distanceToShooterState.addDatapoint(1.9,
+                        new double[] {1900, 0.27});
+                Shooter.distanceToShooterState.addDatapoint(2.7,
+                        new double[] {2350, 0.325});
                 Shooter.distanceToShooterState.addDatapoint(3.2,
                         new double[] {2000, 0.345});
                 Shooter.distanceToShooterState.addDatapoint(4.0,

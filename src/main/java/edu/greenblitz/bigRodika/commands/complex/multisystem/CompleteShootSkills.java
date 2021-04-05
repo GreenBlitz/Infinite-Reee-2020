@@ -2,25 +2,19 @@ package edu.greenblitz.bigRodika.commands.complex.multisystem;
 
 import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
-import edu.greenblitz.bigRodika.commands.chassis.ApproachSlow;
+import edu.greenblitz.bigRodika.commands.chassis.Approach;
+import edu.greenblitz.bigRodika.commands.chassis.approaches.ApproachAccurate;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
-import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.SemiAutomaticInsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.ThreeStageShoot;
 import edu.greenblitz.bigRodika.commands.turret.StopTurret;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
-import edu.greenblitz.bigRodika.commands.turret.help.JustGoToTheFuckingTarget;
 import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretToFront;
-import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import org.greenblitz.motion.base.TwoTuple;
 
@@ -30,7 +24,7 @@ public class CompleteShootSkills extends ParallelCommandGroup {
 
     static Supplier<Double> distanceSupplier, visionDistanceSupplier, turretAlignSupp;
 
-    public static final double TOLERANCE = 0.01;
+    public static final double TOLERANCE = 0.05;
 
     public CompleteShootSkills() {
 
@@ -59,19 +53,32 @@ public class CompleteShootSkills extends ParallelCommandGroup {
         SequentialCommandGroup etc = new SequentialCommandGroup();
 
             ParallelCommandGroup stage1 = new ParallelCommandGroup();
-                ApproachSlow approachSlow = new ApproachSlow(distanceSupplier){
-                    @Override
-                    public void initialize() {
-                        super.initialize();
-                    }
-                };
+            Supplier<Double> power = () -> Math.abs(RobotMap.Limbo2.Turret.ENCODER_VALUE_WHEN_NEGATIVE_180 - Turret.getInstance().getRawTicks()) >
+                Math.abs(RobotMap.Limbo2.Turret.ENCODER_VALUE_WHEN_FORWARD - Turret.getInstance().getRawTicks()) ? 0.05:-0.05;
+                ApproachAccurate approach = new ApproachAccurate(distanceSupplier, power, 0.03);
                 TurretByVision turret = new TurretByVision(VisionMaster.Algorithm.HEXAGON) {
                     @Override
                     public boolean isFinished() {
-                        return approachSlow.isFinished() && Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngleRad()) < TOLERANCE;
+                        return approach.isFinished() && Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngleRad()) < TOLERANCE;
                     }
+
+                    @Override
+                    public void execute() {
+
+                        SmartDashboard.putNumber("Turret Error", Math.abs(VisionMaster.getInstance().getVisionLocation().x));
+
+                        if (!VisionMaster.getInstance().isLastDataValid() || Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngleRad()) < TOLERANCE) {
+                            turret.moveTurret(0);
+                            return;
+                        }
+
+                        turret.moveTurret(TurretApproachSwiftly.calculateVelocity(
+                                Math.toRadians(VisionMaster.getInstance().getVisionLocation().getRelativeAngle())/(2*Math.PI)
+                        ));
+                    }
+
                 };
-            stage1.addCommands(approachSlow, turret);
+            stage1.addCommands(approach, turret);
 
             StopTurret stage2 = new StopTurret();
 

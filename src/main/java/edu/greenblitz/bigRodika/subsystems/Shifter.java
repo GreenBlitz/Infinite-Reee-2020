@@ -8,6 +8,7 @@ import edu.greenblitz.gblib.gears.GearDependentValue;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
 import edu.greenblitz.gblib.sendables.SendableDoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is in charge of the shifter subsystem of the robot.
@@ -81,7 +82,7 @@ public class Shifter extends GBSubsystem {
     @Override
     public void periodic() {
         super.periodic();
-        putString("Shift", m_currentShift.name());
+        SmartDashboard.putString("Shift", m_currentShift.name());
     }
 
     public void toggleShift() {
