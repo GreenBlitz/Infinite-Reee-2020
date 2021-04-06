@@ -107,7 +107,7 @@ public class Turret extends GBSubsystem {
     public void moveTurretToSwitch(double power) {
         if(!reset) {
             long tStart = System.currentTimeMillis();
-            while(!this.isSwitchPressed() && System.currentTimeMillis() - tStart < 15000) {
+            while(!this.isSwitchPressed() && System.currentTimeMillis() - tStart < 5000) {
                 this.motor.set(power);
             }
             this.moveTurret(0);

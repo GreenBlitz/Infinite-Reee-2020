@@ -21,7 +21,7 @@ public class ResetEncoderWhenInSide extends TurretCommand {
 
 
         if (turret.getRawTicks() <= Turret.MIN_TICKS) {
-            Turret.getInstance().moveTurretToSwitch(0.1);
+            Turret.getInstance().moveTurretToSwitch(0.3);
             SmartDashboard.putString("Status", "override safeMove");
         }
 
