@@ -113,7 +113,7 @@ public class Shooter extends GBSubsystem {
         putNumber("Position", leader.getEncoder().getPosition());
         SmartDashboard.putNumber("Velocity", leader.getEncoder().getVelocity());
         putNumber("Output", leader.getAppliedOutput());
-        putBoolean("ReadyToShoot", preparedToShoot);
+        SmartDashboard.putBoolean("ReadyToShoot", preparedToShoot);
 
     }
 

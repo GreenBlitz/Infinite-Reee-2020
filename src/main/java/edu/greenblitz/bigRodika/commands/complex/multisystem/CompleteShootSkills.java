@@ -11,6 +11,8 @@ import edu.greenblitz.bigRodika.commands.turret.StopTurret;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretToFront;
+import edu.greenblitz.bigRodika.subsystems.Dome;
+import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,7 +26,7 @@ public class CompleteShootSkills extends ParallelCommandGroup {
 
     static Supplier<Double> distanceSupplier, visionDistanceSupplier, turretAlignSupp;
 
-    public static final double TOLERANCE = 0.02;// 0.05 but 0.03 works no osilaitons
+    public static final double TOLERANCE = 0.03;// 0.05 but 0.03 works no osilaitons
 
     public CompleteShootSkills() {
 
@@ -48,6 +50,26 @@ public class CompleteShootSkills extends ParallelCommandGroup {
                 super.initialize();
                 System.out.println("prepare shooter by dist");
             }
+
+            @Override
+            public void execute() {
+
+                SmartDashboard.putNumber("Shooter Speed Error", Shooter.getInstance().getAbsoluteShooterSpeed() - shooterState[0]);
+                SmartDashboard.putNumber("Dome Error", Dome.getInstance().getPotentiometerValue() - shooterState[1]);
+                if(!domeCommand.isFinished()) {
+                    domeCommand.execute();
+                } else {
+                    domeCommand.end(false);
+                }
+
+                if(!shooterCommand.isFinished()) {
+                    shooterCommand.execute();
+                } else {
+                    shooterCommand.end(false);
+                }
+
+            }
+
         };
 
         SequentialCommandGroup etc = new SequentialCommandGroup();

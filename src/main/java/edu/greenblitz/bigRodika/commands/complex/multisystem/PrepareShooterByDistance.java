@@ -13,11 +13,11 @@ import java.util.function.Supplier;
 
 public class PrepareShooterByDistance extends GBCommand {
 
-    private Supplier<Double> distanceSupplier;
-    private DomeApproachSwiftly domeCommand;
-    private FullyAutoThreeStage shooterCommand;
+    protected Supplier<Double> distanceSupplier;
+    protected DomeApproachSwiftly domeCommand;
+    protected FullyAutoThreeStage shooterCommand;
     // temp for debugging
-    private double[] shooterState;
+    protected double[] shooterState;
 
     public PrepareShooterByDistance(Supplier<Double> distanceSupplier){
 

@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika.commands.dome;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 import org.greenblitz.motion.tolerance.ITolerance;
 
@@ -7,7 +8,7 @@ public class DomeApproachSwiftly extends DomeCommand {
 
     public double SLOW_DOWN_BEGIN = 0.1;
     public double SLOW_DOWN_END = 0.04;
-    public double MINIMUM_SPEED = 0.1;
+    public double MINIMUM_SPEED = 0.19;
     public double MAXIMUM_SPEED = 0.3;
 
     private double target;
@@ -31,6 +32,7 @@ public class DomeApproachSwiftly extends DomeCommand {
     @Override
     public void execute() {
         dome.safeMove(calculateVelocity(target - dome.getPotentiometerValue()));
+        SmartDashboard.putString("Dome Approach", "active");
     }
 
     @Override
@@ -41,11 +43,11 @@ public class DomeApproachSwiftly extends DomeCommand {
     @Override
     public void end(boolean interrupted) {
         dome.safeMove(0);
+        SmartDashboard.putString("Dome Approach", "finished");
     }
 
     public double calculateVelocity(double error) {
 
-        dome.putNumber("Error", error);
 
         double absError = Math.abs(error);
         double errorSign = Math.signum(error);
