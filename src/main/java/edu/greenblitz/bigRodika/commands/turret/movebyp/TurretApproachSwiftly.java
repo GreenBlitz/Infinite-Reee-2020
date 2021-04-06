@@ -35,7 +35,7 @@ public class TurretApproachSwiftly extends TurretCommand {
 
     @Override
     public void execute() {
-        SmartDashboard.putNumber("Error Turrert", target - turret.getTurretLocation());
+        SmartDashboard.putNumber("Error Turret", target - turret.getTurretLocation());
         turret.moveTurret(calculateVelocity(target - turret.getTurretLocation()));
     }
 

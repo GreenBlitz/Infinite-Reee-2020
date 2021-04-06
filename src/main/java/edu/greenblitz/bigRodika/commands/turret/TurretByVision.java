@@ -32,8 +32,6 @@ public class TurretByVision extends TurretCommand {
     @Override
     public void execute() {
 
-        SmartDashboard.putNumber("Turret Error", Math.abs(VisionMaster.getInstance().getVisionLocation().x));
-
         if (!VisionMaster.getInstance().isLastDataValid()) {
             turret.moveTurret(0);
             return;

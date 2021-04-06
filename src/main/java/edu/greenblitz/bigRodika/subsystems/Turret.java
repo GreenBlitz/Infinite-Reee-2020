@@ -8,6 +8,7 @@ import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.MotionUtils;
 import edu.greenblitz.bigRodika.commands.turret.help.TurretToDefaultGood;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -86,6 +87,8 @@ public class Turret extends GBSubsystem {
         SmartDashboard.putBoolean("Turret microSwitch", isSwitchPressed());
         SmartDashboard.putNumber("Turret Encoder Raw", this.getRawTicks());
         SmartDashboard.putNumber("Turret Encoder", getTurretLocation());
+        SmartDashboard.putNumber("Turret Error", VisionMaster.getInstance().getVisionLocation().x);
+
 
         moveTurret(lastPower);
     }

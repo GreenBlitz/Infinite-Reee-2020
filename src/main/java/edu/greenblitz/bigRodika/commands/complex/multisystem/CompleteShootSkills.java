@@ -24,7 +24,7 @@ public class CompleteShootSkills extends ParallelCommandGroup {
 
     static Supplier<Double> distanceSupplier, visionDistanceSupplier, turretAlignSupp;
 
-    public static final double TOLERANCE = 0.05;
+    public static final double TOLERANCE = 0.02;// 0.05 but 0.03 works no osilaitons
 
     public CompleteShootSkills() {
 
@@ -64,8 +64,6 @@ public class CompleteShootSkills extends ParallelCommandGroup {
 
                     @Override
                     public void execute() {
-
-                        SmartDashboard.putNumber("Turret Error", Math.abs(VisionMaster.getInstance().getVisionLocation().x));
 
                         if (!VisionMaster.getInstance().isLastDataValid() || Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngleRad()) < TOLERANCE) {
                             turret.moveTurret(0);
