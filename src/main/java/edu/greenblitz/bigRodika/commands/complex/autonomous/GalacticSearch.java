@@ -32,7 +32,7 @@ public class GalacticSearch extends ParallelCommandGroup {
         }};
         ArrayList<State> bluePathA = new ArrayList<>(){
             {
-                add(new State(razToMeter(1.1),razToMeter(2),-0.5*Math.PI,0,0));
+                add(new State(razToMeter(2.1),razToMeter(2),-0.5*Math.PI,0,0));
                 add(new State(razToMeter(6),razToMeter(1),-0.5,3.6,9.5));
                 add(new State(razToMeter(4.5),razToMeter(3),-1.2,3.6,-2));
                 add(new State(razToMeter(6),razToMeter(3 + 1.5*0.39),-1.2,3.6,0));
