@@ -58,7 +58,7 @@ public class RobotMap {
         public static class Funnel {
 
             public static class SemiAuto{
-                public static final double pulseInTime = 0.58, pulseOutTime = 1,  pusherInPower = 0.4,  pusherOutPower = -0.35, //pulseintime:0.55
+                public static final double pulseInTime = 0.57, pulseOutTime = 1.2,  pusherInPower = 0.4,  pusherOutPower = -0.35, //pulseintime:0.55
                  insertByConstant = 0.5,  rollByConstant =  0.2;
             }
 
@@ -111,22 +111,30 @@ public class RobotMap {
 
             static {
                 // First element = rpm. second = dome
+                Shooter.distanceToShooterState.addDatapoint(0,
+                        new double[] {0, 0});
                 Shooter.distanceToShooterState.addDatapoint(1.9,
-                        new double[] {1900, 0.27});
-                Shooter.distanceToShooterState.addDatapoint(2.7,
-                        new double[] {2350, 0.325});
-                Shooter.distanceToShooterState.addDatapoint(3.2,
-                        new double[] {2000, 0.345});
+                        new double[] {2000, 0.23});
+                Shooter.distanceToShooterState.addDatapoint(2.9,
+                        new double[] {2300, 0.363});
+                /*Shooter.distanceToShooterState.addDatapoint(3.2,
+                        new double[] {2000, 0.345});*/
+                Shooter.distanceToShooterState.addDatapoint(4.4,
+                        new double[] {2400, 0.437});/*
                 Shooter.distanceToShooterState.addDatapoint(4.0,
-                        new double[] {2100, 0.36});
-                Shooter.distanceToShooterState.addDatapoint(5.0,
-                        new double[] {2350, 0.403});
+                        new double[] {2100, 0.36});*/
+                Shooter.distanceToShooterState.addDatapoint(6.0,
+                        new double[] {2450, 0.42});
+                Shooter.distanceToShooterState.addDatapoint(10,
+                        new double[] {0, 0});
+/*
                 Shooter.distanceToShooterState.addDatapoint(6.1,
                         new double[] {2500, 0.48});
                 Shooter.distanceToShooterState.addDatapoint(6.5,
                         new double[] {2500, 0.50});
                 Shooter.distanceToShooterState.addDatapoint(6.7,
                         new double[] {2800, 0.486});
+*/
             }
 
         }
