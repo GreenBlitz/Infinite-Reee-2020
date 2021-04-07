@@ -10,6 +10,8 @@ import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import org.greenblitz.motion.base.Point;
+import org.greenblitz.motion.base.Position;
 import org.greenblitz.motion.base.State;
 
 import java.util.ArrayList;
@@ -38,10 +40,23 @@ public class GalacticSearch extends ParallelCommandGroup {
                 add(new State(razToMeter(6),razToMeter(3 + 1.5*0.39),-1.2,3.6,0));
                 add(new State(razToMeter(7),razToMeter(6),-0.4,0,0));
             }};
-        Follow2DProfileCommand command = new Follow2DProfileCommand(bluePathA, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5
+
+        ArrayList<State> bluePathB = new ArrayList<>(){{
+            add(new State(razToMeter(0.9),razToMeter(1.5),-0.5*Math.PI,0,0));
+            add(new State(razToMeter(6),razToMeter(2),-0.5*Math.PI + 1,1.0,3.6));
+            add(new State(razToMeter(8),razToMeter(4),-1.95,3.6,-9.5));
+            add(new State(razToMeter(11),razToMeter(3),-1.85,3.6,1));
+            add(new State(razToMeter(12),razToMeter(3),-0.5*Math.PI,0,0));
+        }};
+
+        rotatePath(bluePathB,4, -1.5);
+
+
+
+        Follow2DProfileCommand command = new Follow2DProfileCommand(bluePathB, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5
                 , false);
 
-        command.setSendData(false);
+        command.setSendData(true);
 
 
         addCommands(
@@ -69,5 +84,18 @@ public class GalacticSearch extends ParallelCommandGroup {
 
     public static double razToMeter(double raz){
         return 0.762 * raz;
+    }
+
+    public static void rotatePath(ArrayList<State> path, int index, double radians){
+        Position rotateAxis = path.get(index-1);
+
+        for( int i = index; i < path.size(); i++){
+            Point curr = path.get(i);
+            curr.set(curr.getX()-rotateAxis.getX(), curr.getY() - rotateAxis.getY());
+            curr.rotate(-radians);
+            curr.set(curr.getX() + rotateAxis.getX(), curr.getY() + rotateAxis.getY());
+            path.set(i, new State(curr, path.get(i).getAngle() + radians,path.get(i).getLinearVelocity(), path.get(i).getAngularVelocity()));
+        }
+
     }
 }
