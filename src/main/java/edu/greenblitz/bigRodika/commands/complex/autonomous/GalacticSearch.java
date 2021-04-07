@@ -32,11 +32,11 @@ public class GalacticSearch extends ParallelCommandGroup {
         }};
         ArrayList<State> bluePathA = new ArrayList<>(){
             {
-                add(new State(razToMeter(1.52), razToMeter(5), -2.23, 0, 0));
-                add(new State(razToMeter(3), razToMeter(4), -2.23, 3.6, 7));
-                add(new State(razToMeter(5), razToMeter(2), -1.55, 3.6, 9.5));
-                add(new State(razToMeter(8), razToMeter(4), -2.2, 3.6, -9.5));
-                add(new State(razToMeter(10), razToMeter(-3), -2.7, 0, 0));
+                add(new State(razToMeter(1.1),razToMeter(2),-0.5*Math.PI,0,0));
+                add(new State(razToMeter(6),razToMeter(1),-0.5,3.6,9.5));
+                add(new State(razToMeter(4.5),razToMeter(3),-1.2,3.6,-2));
+                add(new State(razToMeter(6),razToMeter(3 + 1.5*0.39),-1.2,3.6,0));
+                add(new State(razToMeter(7),razToMeter(6),-0.4,0,0));
             }};
         Follow2DProfileCommand command = new Follow2DProfileCommand(bluePathA, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5
                 , false);
@@ -46,19 +46,16 @@ public class GalacticSearch extends ParallelCommandGroup {
 
         addCommands(
                 new SequentialCommandGroup(
-                        new ExtendAndCollect(0.7){
+                        new ExtendAndCollect(1){
                             @Override
                             public boolean isFinished(){
-                                return (System.currentTimeMillis() - startTime)/1000.0 > 7;
+                                return (System.currentTimeMillis() - startTime)/1000.0 > 8;
                             }
                         },
                         new RetractAndStop()
                 ),
 
-                new SequentialCommandGroup(
-                        new WaitCommand(3.5),
                         new ThreadedCommand(command, Chassis.getInstance())
-                )
         );
     }
 

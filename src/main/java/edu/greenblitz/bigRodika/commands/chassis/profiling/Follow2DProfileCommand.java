@@ -183,9 +183,8 @@ public class Follow2DProfileCommand implements IThreadable {
     public void setSendData(boolean val) {
         if (follower != null) {
             follower.setSendData(val);
-        } else {
-            sendData = val;
         }
+        sendData = val;
     }
 
     @Override
