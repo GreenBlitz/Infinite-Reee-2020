@@ -81,11 +81,11 @@ public class OI {
         redPathB.add(new State(razToMeter(1.52), razToMeter(5),-2.23,0,0));
         redPathB.add(new State(razToMeter(3), razToMeter(4),-2.23,3.6,7));
         redPathB.add(new State(razToMeter(5), razToMeter(2),-1.55,3.6,9.5));
-        redPathB.add(new State(razToMeter(7), razToMeter(4),-1.15,3.6,-9.5));
-        redPathB.add(new State(razToMeter(10), razToMeter(4.75),-1.15,0,0));
+        redPathB.add(new State(razToMeter(7), razToMeter(4),-2.2,3.6,-9.5));
+        redPathB.add(new State(razToMeter(10), razToMeter(-3),-2.7,0,0));
         Follow2DProfileCommand command = new Follow2DProfileCommand(redPathB, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5
                 , false);
-        command.setSendData(true);
+        command.setSendData(false);
         mainJoystick.POV_UP.whenPressed(new ThreadedCommand(command, Chassis.getInstance()));
 
 
