@@ -4,6 +4,7 @@ import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileComman
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
 import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
 import edu.greenblitz.bigRodika.commands.chassis.turns.TurnToAngle;
+import edu.greenblitz.bigRodika.commands.complex.autonomous.GalacticSearch;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
@@ -75,19 +76,21 @@ public class OI {
         mainJoystick.START.whenPressed(new ToSpeed());
         mainJoystick.BACK.whenPressed(new ToPower());
 
-        mainJoystick.X.whenPressed(new TurnToAngle(Math.toDegrees(-2.23), 0.5, 1, 6, 5, 0.5, true, 0.1));
+        mainJoystick.R1.whenPressed(new TurnToAngle(Math.toDegrees(0.65920367), 0.5, 1, 6, 5, 0.5, true, 0.005)); //angle is 2.23 - Math.PI/2
 
-        ArrayList<State> redPathB = new ArrayList<>();
-        redPathB.add(new State(razToMeter(1.52), razToMeter(5),-2.23,0,0));
-        redPathB.add(new State(razToMeter(3), razToMeter(4),-2.23,3.6,7));
-        redPathB.add(new State(razToMeter(5), razToMeter(2),-1.55,3.6,9.5));
-        redPathB.add(new State(razToMeter(7), razToMeter(4),-2.2,3.6,-9.5));
-        redPathB.add(new State(razToMeter(10), razToMeter(-3),-2.7,0,0));
-        Follow2DProfileCommand command = new Follow2DProfileCommand(redPathB, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5
+        ArrayList<State> bluePathA = new ArrayList<>();
+        bluePathA.add(new State(razToMeter(1),razToMeter(2),-1.33,0,0));
+        bluePathA.add(new State(razToMeter(6),razToMeter(1),-1.33,3.6,2));
+        bluePathA.add(new State(razToMeter(7),razToMeter(4),-1.9,3.6,2));
+        bluePathA.add(new State(razToMeter(9),razToMeter(3),-1.9,3.6,2));
+        bluePathA.add(new State(razToMeter(11),razToMeter(2),-1.9,0,0));
+        Follow2DProfileCommand cmd = new Follow2DProfileCommand(bluePathA, RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.5
                 , false);
-        command.setSendData(false);
-        mainJoystick.POV_UP.whenPressed(new ThreadedCommand(command, Chassis.getInstance()));
+        cmd.setSendData(true);
+        mainJoystick.POV_UP.whenPressed(new ThreadedCommand(cmd, Chassis.getInstance()));
 
+        mainJoystick.POV_DOWN.whenPressed(new GalacticSearch());
+        mainJoystick.Y.whenPressed(new ToggleExtender());
 
 
     }
@@ -161,7 +164,7 @@ public class OI {
         return secondStick;
     }
 
-    public static double razToMeter(double inch){
-        return 0.762 * inch;
+    public static double razToMeter(double raz){
+        return 0.762 * raz;
     }
 }

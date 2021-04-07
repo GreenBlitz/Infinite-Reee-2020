@@ -227,12 +227,15 @@ public class Follow2DProfileCommand implements IThreadable {
             Chassis.getInstance().toBrake();
             Chassis.getInstance().moveMotors(0, 0);
         }
-        new GBCommand(){
-            @Override
-            public void initialize(){
-                follower.sendCSV();
-            }
-        }.schedule();
+
+        if(sendData!= null && sendData) {
+            new GBCommand() {
+                @Override
+                public void initialize() {
+                    follower.sendCSV();
+                }
+            }.schedule();
+        }
     }
 
 

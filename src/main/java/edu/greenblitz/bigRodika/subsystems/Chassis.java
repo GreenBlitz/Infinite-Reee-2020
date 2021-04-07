@@ -161,6 +161,7 @@ public class Chassis extends GBSubsystem {
 
         super.periodic();
 
+        SmartDashboard.putNumber("angle radians", getAngle());
         putNumber("Left vel enc", leftEncoder.getNormalizedVelocity());
         putNumber("Right vel enc", rightEncoder.getNormalizedVelocity());
         putNumber("Angle vel by wheel", getAngularVelocityByWheels());
