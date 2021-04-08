@@ -119,8 +119,8 @@ public class CompleteShootSkills extends ParallelCommandGroup {
     public void end(boolean interrupted) {
         super.end(true);
 
-        new TurretToFront().schedule();
+        /*new TurretToFront().schedule();
         new StopShooter().schedule();
-        new ResetDome().schedule();
+        new ResetDome().schedule();*/
     }
 }
