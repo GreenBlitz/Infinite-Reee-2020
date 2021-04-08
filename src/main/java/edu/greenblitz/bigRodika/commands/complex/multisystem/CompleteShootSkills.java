@@ -112,7 +112,7 @@ public class CompleteShootSkills extends ParallelCommandGroup {
 
     @Override
     public boolean isFinished() {
-        return OI.getInstance().completeShootStop.get() || VisionMaster.getInstance().isLastDataValid();
+        return OI.getInstance().completeShootStop.get() || !VisionMaster.getInstance().isLastDataValid();
     }
 
     @Override
