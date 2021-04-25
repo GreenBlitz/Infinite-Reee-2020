@@ -1,0 +1,3 @@
+[submodule "src/main/java/MotionControl"]
+	path = src/main/java/MotionControl
+	url = https://github.com/GreenBlitz/MotionControl
