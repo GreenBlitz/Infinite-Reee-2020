@@ -1,0 +1,4 @@
+[submodule "src/main/MotionControl"]
+	path = src/main/MotionControl
+	url = https://github.com/GreenBlitz/MotionControl.git
+	branch = submodule-test
