@@ -1,21 +1,49 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2020.3.2" // set this to the latest stable version
+    id "idea"
 }
-
-apply plugin: 'idea'
-apply plugin: 'java'
 
 sourceCompatibility = 1.11
-targetCompatibility = 1.11
+
+repositories {
+    jcenter()
+    maven{url "https://jitpack.io"}
+    mavenCentral()
+}
+
+dependencies {
+    implementation wpi.deps.wpilib()
+    implementation wpi.deps.vendor.java()
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+
+    implementation 'org.jetbrains:annotations:16.0.2'
+
+    nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
+    // Optional lines, adds common robot code libraries to the project
+    // The jitpack line in repositories is required for these libraries.
+    implementation 'com.github.GreenBlitz:GBLib:d570a3b3db97a268e86cc56ccf64d590c6d573b2'
+    implementation group: 'com.google.guava', name: 'guava', version: '11.0.2'
+
+    // Optional lines, used for writing tests
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
+    // Optional lines, used for logging
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
+    implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.8'
+
+}
 
 def ROBOT_MAIN_CLASS = "edu.greenblitz.bigRodika.main" // set this to the full name of the robot class (including package)
-
-gradle.projectsEvaluated {
-    tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:all" << "-Werror"
-    }
+jar {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }
+
 
 deploy {
     targets {
@@ -37,6 +65,57 @@ deploy {
     }
 }
 
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:all"
+    }
+}
+
+test {
+    // Optional if you use Juint for testing
+    useJUnitPlatform()
+}
+
+
+sourceSets { //blame raz if doesn't work
+    main {
+        java {
+            srcDirs = ['src/main/java', 'src/main/MotionControl/motion/src/main/java']
+        }
+    }
+
+    test {
+        java {
+            srcDirs = ['src/main/MotionControl/motion/src/test/java']
+        }
+    }
+}
+
+
+
+
+/*
+plugins {
+    id "java"
+    id "edu.wpi.first.GradleRIO" version "2020.3.2" // set this to the latest stable version
+    id "idea"
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
+def ROBOT_MAIN_CLASS = "edu.greenblitz.bigRodika.main" // set this to the full name of the robot class (including package)
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:all" << "-Werror"
+    }
+}
+
+
 repositories {
     jcenter()
     maven { url "https://jitpack.io" }
@@ -51,11 +130,11 @@ dependencies {
 
     compile 'org.jetbrains:annotations:16.0.2'
 
+
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio) 
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
     // Optional lines, adds common robot code libraries to the project
     // The jitpack line in repositories is required for these libraries.
-    compile 'com.github.GreenBlitz.MotionControl:motion:1232859d20da194f2ec58ed6accbe36d1d097004'
     compile 'com.github.GreenBlitz:GBLib:d570a3b3db97a268e86cc56ccf64d590c6d573b2'
     compile group: 'com.google.guava', name: 'guava', version: '11.0.2'
 
@@ -78,7 +157,42 @@ test {
     useJUnitPlatform()
 }
 
+
+deploy {
+    targets {
+        roboRIO("roborio") {
+            team = frc.getTeamNumber()
+        }
+    }
+    artifacts {
+        frcJavaArtifact('frcJava') {
+            targets << "roborio"
+            debug = frc.getDebugOrDefault(false)
+        }
+
+        fileTreeArtifact('frcStaticFileDeploy') {
+            files = fileTree(dir: 'src/main/deploy')
+            targets << "roborio"
+            directory = '/home/lvuser/deploy'
+        }
+    }
+}
+
+sourceSets { //blame raz if doesn't work
+    main {
+        java {
+            srcDirs = ['src/main/java', 'src/main/MotionControl/motion/src/main/java']
+        }
+    }
+
+    test {
+        java {
+            srcDirs = ['src/main/MotionControl/motion/src/test/java']
+        }
+    }
+}
+
 wrapper{
     gradleVersion = '5.6'
 }
-
+*/
