@@ -19,7 +19,8 @@ public class RobotMap {
             public static final boolean IS_MOTOR_REVERSE = true;
             public static final boolean IS_POTENTIOMETER_REVERSE = true;
             public static final int LIMIT_SWITCH_PORT = 2;
-
+            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
+                    28672.0); // FIXME: I copied the turret's gear dependent value
             public static final double ANGLE_PER_POT_VALUE = Math.toRadians(65);
             public static final double DOME_ZERO_ANGLE = Math.toRadians(17);
 

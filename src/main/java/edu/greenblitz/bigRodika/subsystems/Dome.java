@@ -4,9 +4,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.greenblitz.gblib.encoder.IEncoder;
+import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Dome extends GBSubsystem {
@@ -19,18 +19,18 @@ public class Dome extends GBSubsystem {
     private static final double MIN_VELOCITY = 0.004;
     private static final boolean SWITCH_ON = true;
     protected double lastPower = 0;
-    protected double lastPotValue = Double.POSITIVE_INFINITY;
+    protected double lastValue = Double.POSITIVE_INFINITY;
     protected long lastPotMeasureTime;
     private WPI_TalonSRX domeMotor;
-    private Potentiometer potentiometer;
+    private IEncoder encoder;
     private DigitalInput limitSwitch;
-    private double zeroValue = 0.35;
+    private double zeroValue = 0.35; //TODO: calibrate
 
     private Dome() {
         domeMotor = new WPI_TalonSRX(RobotMap.Limbo2.Dome.MOTOR_PORT);
         domeMotor.setInverted(RobotMap.Limbo2.Dome.IS_MOTOR_REVERSE);
         domeMotor.setNeutralMode(NeutralMode.Brake);
-        potentiometer = new AnalogPotentiometer(RobotMap.Limbo2.Dome.POTENTIOMETER_PORT);
+        encoder = new TalonEncoder(RobotMap.Limbo2.Dome.NORMALIZER, domeMotor);
         limitSwitch = DigitalInputMap.getInstance().getDigitalInput(
                 RobotMap.Limbo2.Dome.LIMIT_SWITCH_PORT
         );
@@ -47,13 +47,12 @@ public class Dome extends GBSubsystem {
         return instance;
     }
 
-    public double getPotentiometerRaw() {
-        return (RobotMap.Limbo2.Dome.IS_POTENTIOMETER_REVERSE
-                ? 1 - potentiometer.get() : potentiometer.get());
+    public double getRawTicks() {
+        return encoder.getRawTicks();
     }
 
-    public double getPotentiometerValue() {
-        return lastPotValue - zeroValue;
+    public double getEncoderValue() {
+        return lastValue - zeroValue;
     }
 
     private void moveMotor(double power) {
@@ -66,10 +65,10 @@ public class Dome extends GBSubsystem {
             moveMotor(0);
             return;
         }
-        if (getPotentiometerValue() < POT_LOWER_LIMIT && power < 0) {
+        if (getEncoderValue() < POT_LOWER_LIMIT && power < 0) {
             moveMotor(Math.max(power, POWER_AT_LOWER_END));
         }
-        if (getPotentiometerValue() > POT_HIGHER_LIMIT && power > 0) {
+        if (getEncoderValue() > POT_HIGHER_LIMIT && power > 0) {
             moveMotor(0);
             return;
         }
@@ -84,27 +83,28 @@ public class Dome extends GBSubsystem {
     public void periodic() {
         super.periodic();
         safeMove(lastPower);
-        SmartDashboard.putNumber("Potentiometer", getPotentiometerValue());
+        SmartDashboard.putNumber("Potentiometer", getEncoderValue());
+        SmartDashboard.putNumber("RawEncoderValues", getRawTicks());
         SmartDashboard.putBoolean("LimitSwitch", switchTriggered());
         putNumber("PotZero", zeroValue);
 
-        double tempVal = getPotentiometerRaw();
+        double tempVal = getRawTicks();
 
-        putNumber("DeltaPot", Math.abs(tempVal - lastPotValue));
+        putNumber("DeltaPot", Math.abs(tempVal - lastValue));
         putNumber("Period Time", System.currentTimeMillis() - lastPotMeasureTime);
-        if (lastPotValue == Double.POSITIVE_INFINITY ||
+        if (lastValue == Double.POSITIVE_INFINITY ||
                 (
-                        Math.abs(tempVal - lastPotValue) < MAX_VELOCITY
+                        Math.abs(tempVal - lastValue) < MAX_VELOCITY
                 )
 
         ){
-            lastPotValue = tempVal;
+            lastValue = tempVal;
             lastPotMeasureTime = System.currentTimeMillis();
         }
 
         if (switchTriggered() && getCurrentCommand() != null && getCurrentCommand().getName().equals("ResetDome")
-        && Math.abs(getPotentiometerRaw()) < 1.0) {
-            zeroValue += getPotentiometerValue();
+        && Math.abs(getRawTicks()) < 1.0) {
+            zeroValue += getEncoderValue();
         }
     }
 }

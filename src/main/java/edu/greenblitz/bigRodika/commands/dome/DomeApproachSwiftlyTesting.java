@@ -41,12 +41,12 @@ public class DomeApproachSwiftlyTesting extends DomeCommand {
         MINIMUM_SPEED = dome.getNumber("MINIMUM_SPEED", MINIMUM_SPEED);
         MAXIMUM_SPEED = dome.getNumber("MAXIMUM_SPEED", MAXIMUM_SPEED);
         target = dome.getNumber("TARGET", target);
-        dome.safeMove(calculateVelocity(target - dome.getPotentiometerValue()));
+        dome.safeMove(calculateVelocity(target - dome.getEncoderValue()));
     }
 
     @Override
     public boolean isFinished() {
-        return tolerance.onTarget(target, dome.getPotentiometerValue());
+        return tolerance.onTarget(target, dome.getEncoderValue());
     }
 
     @Override
