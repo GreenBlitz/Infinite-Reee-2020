@@ -95,9 +95,9 @@ public class Robot extends TimedRobot {
         //Shifter.getInstance().setShift(Gear.SPEED);
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
 
-        new ResetDome(-0.3).schedule();
-        new ResetEncoderWhenInSide().schedule();
-        new StopShooter().schedule();
+        //new ResetDome(-0.3).schedule();
+//        new ResetEncoderWhenInSide().schedule();
+//        new StopShooter().schedule();
 
         /*
         if (!DriverStation.getInstance().isFMSAttached()){

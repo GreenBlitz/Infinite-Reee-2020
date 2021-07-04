@@ -76,22 +76,22 @@ public class Dome extends GBSubsystem {
     }
 
     public boolean switchTriggered() {
-        return limitSwitch.get() && SWITCH_ON;
+        return limitSwitch.get();
     }
 
     @Override
     public void periodic() {
         super.periodic();
         safeMove(lastPower);
-        SmartDashboard.putNumber("Potentiometer", getEncoderValue());
-        SmartDashboard.putNumber("RawEncoderValues", getRawTicks());
-        SmartDashboard.putBoolean("LimitSwitch", switchTriggered());
-        putNumber("PotZero", zeroValue);
+        SmartDashboard.putNumber("DOME: RelaviveEncoderValue", getEncoderValue());
+        SmartDashboard.putNumber("DOME: RawEncoderValues", getRawTicks());
+        SmartDashboard.putBoolean("DOME: LimitSwitch", switchTriggered());
+        putNumber("DOME: PotZero", zeroValue);
 
         double tempVal = getRawTicks();
 
-        putNumber("DeltaPot", Math.abs(tempVal - lastValue));
-        putNumber("Period Time", System.currentTimeMillis() - lastPotMeasureTime);
+        putNumber("DOME: DeltaPot", Math.abs(tempVal - lastValue));
+        putNumber("DOME: Period Time", System.currentTimeMillis() - lastPotMeasureTime);
         if (lastValue == Double.POSITIVE_INFINITY ||
                 (
                         Math.abs(tempVal - lastValue) < MAX_VELOCITY

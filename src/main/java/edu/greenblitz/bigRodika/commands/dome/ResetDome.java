@@ -34,7 +34,7 @@ public class ResetDome extends DomeMoveByConstant {
     @Override
     public void execute() {
         super.execute();
-        if (dome.switchTriggered() && dome.getPotentiometerRaw() < 1) {
+        if (dome.switchTriggered() && dome.getRawTicks() < 1) {
             count += 1;
         }
     }

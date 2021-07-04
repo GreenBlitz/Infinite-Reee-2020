@@ -54,13 +54,9 @@ public class OI {
     }
 
     private void initTestButtons() {
-        //mainJoystick.A.whenPressed(new CheckMaxLin(0.8));
-        //mainJoystick.B.whenPressed(new CheckMaxRot(0.8));
-
-        mainJoystick.POV_LEFT.whileHeld(new MoveTurretByConstant(0.1));
-        mainJoystick.POV_RIGHT.whenHeld(new MoveTurretByConstant(-0.1));
-        mainJoystick.R1.whenPressed(new UnsafeResetTurret(0.1));
-    }
+        mainJoystick.POV_UP.whileHeld(new DomeMoveByConstant(0.5));
+        mainJoystick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.2));
+}
 
     private void initOfficialButtons() {
 
