@@ -4,33 +4,35 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
-import edu.greenblitz.gblib.encoder.IEncoder;
-import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Dome extends GBSubsystem {
 
     private static Dome instance;
-    private final double POT_LOWER_LIMIT = 0.1,
-            POT_HIGHER_LIMIT = 0.52;
+    private final double ENCODER_LOWER_LIMIT = 0.1,
+            ENCODER_HIGHER_LIMIT = 2964; // soft limit for dome disconnection from gear
     private static final double POWER_AT_LOWER_END = -0.05;
-    private static final double MAX_VELOCITY = 0.2;
-    private static final double MIN_VELOCITY = 0.004;
+    private static final double MAX_VELOCITY = 100; // arbitrary, find speed
+    private static final double MIN_VELOCITY = 2; // arbitrary, find speed
     private static final boolean SWITCH_ON = true;
     protected double lastPower = 0;
     protected double lastValue = Double.POSITIVE_INFINITY;
     protected long lastPotMeasureTime;
     private WPI_TalonSRX domeMotor;
-    private IEncoder encoder;
+    private Encoder encoder;
     private DigitalInput limitSwitch;
-    private double zeroValue = 0.35; //TODO: calibrate
+    private double zeroValue = 0;
 
     private Dome() {
         domeMotor = new WPI_TalonSRX(RobotMap.Limbo2.Dome.MOTOR_PORT);
         domeMotor.setInverted(RobotMap.Limbo2.Dome.IS_MOTOR_REVERSE);
         domeMotor.setNeutralMode(NeutralMode.Brake);
-        encoder = new TalonEncoder(RobotMap.Limbo2.Dome.NORMALIZER, domeMotor);
+        DigitalInput channelA = DigitalInputMap.getInstance().getDigitalInput(RobotMap.Limbo2.Dome.ENCODER_PORT_A);
+        DigitalInput channelB = DigitalInputMap.getInstance().getDigitalInput(RobotMap.Limbo2.Dome.ENCODER_PORT_B);
+        encoder = new Encoder(channelA, channelB);
+        encoder.reset();
         limitSwitch = DigitalInputMap.getInstance().getDigitalInput(
                 RobotMap.Limbo2.Dome.LIMIT_SWITCH_PORT
         );
@@ -49,7 +51,7 @@ public class Dome extends GBSubsystem {
     }
 
     public double getRawTicks() {
-        return encoder.getRawTicks();
+        return encoder.getRaw();
     }
 
     public double getEncoderValue() {
@@ -66,10 +68,10 @@ public class Dome extends GBSubsystem {
             moveMotor(0);
             return;
         }
-        if (getEncoderValue() < POT_LOWER_LIMIT && power < 0) {
+        if (getEncoderValue() < ENCODER_LOWER_LIMIT && power < 0) {
             moveMotor(Math.max(power, POWER_AT_LOWER_END));
         }
-        if (getEncoderValue() > POT_HIGHER_LIMIT && power > 0) {
+        if (getEncoderValue() > ENCODER_HIGHER_LIMIT && power > 0) {
             moveMotor(0);
             return;
         }
@@ -87,25 +89,20 @@ public class Dome extends GBSubsystem {
         SmartDashboard.putNumber("DOME: RelativeEncoderValue", getEncoderValue());
         SmartDashboard.putNumber("DOME: RawEncoderValues", getRawTicks());
         SmartDashboard.putBoolean("DOME: LimitSwitch", switchTriggered());
-        putNumber("DOME: PotZero", zeroValue);
+        SmartDashboard.putNumber("DOME: ZeroValue", zeroValue);
+
 
         double tempVal = getRawTicks();
 
         putNumber("DOME: DeltaPot", Math.abs(tempVal - lastValue));
         putNumber("DOME: Period Time", System.currentTimeMillis() - lastPotMeasureTime);
-        if (lastValue == Double.POSITIVE_INFINITY ||
-                (
-                        Math.abs(tempVal - lastValue) < MAX_VELOCITY
-                )
-
-        ){
+        if (lastValue == Double.POSITIVE_INFINITY || (Math.abs(tempVal - lastValue) < MAX_VELOCITY)) {
             lastValue = tempVal;
             lastPotMeasureTime = System.currentTimeMillis();
         }
 
-        if (switchTriggered() && getCurrentCommand() != null && getCurrentCommand().getName().equals("ResetDome")
-        && Math.abs(getRawTicks()) < 1.0) {
-            zeroValue += getEncoderValue();
+        if (switchTriggered() && getCurrentCommand() != null && getCurrentCommand().getName().equals("ResetDome")) {
+            zeroValue = getRawTicks();
         }
     }
 }
