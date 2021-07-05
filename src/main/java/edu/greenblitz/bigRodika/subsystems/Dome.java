@@ -34,6 +34,7 @@ public class Dome extends GBSubsystem {
         limitSwitch = DigitalInputMap.getInstance().getDigitalInput(
                 RobotMap.Limbo2.Dome.LIMIT_SWITCH_PORT
         );
+
     }
 
     public static void init() {
@@ -83,7 +84,7 @@ public class Dome extends GBSubsystem {
     public void periodic() {
         super.periodic();
         safeMove(lastPower);
-        SmartDashboard.putNumber("DOME: RelaviveEncoderValue", getEncoderValue());
+        SmartDashboard.putNumber("DOME: RelativeEncoderValue", getEncoderValue());
         SmartDashboard.putNumber("DOME: RawEncoderValues", getRawTicks());
         SmartDashboard.putBoolean("DOME: LimitSwitch", switchTriggered());
         putNumber("DOME: PotZero", zeroValue);
