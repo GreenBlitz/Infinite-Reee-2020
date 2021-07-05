@@ -13,23 +13,16 @@ public class ResetEncoderWhenInSide extends TurretCommand {
 
     @Override
     public void execute() {
-        Turret.getInstance().moveTurret(0.1);
+        Turret.getInstance().moveTurret(-0.1);
     }
 
     @Override
     public void end(boolean interrupted) {
-        if (turret.getRawTicks() <= Turret.MIN_TICKS) {
-            Turret.getInstance().moveTurretToSwitch(0.1);
-        }
-
-        if (!interrupted) {
-            Turret.getInstance().moveTurret(0);
-            turret.resetEncoder(0);
-        }
+        Turret.getInstance().moveTurret(0);
     }
 
     @Override
     public boolean isFinished() {
-        return Turret.getInstance().isSwitchPressed() || turret.getRawTicks() <= Turret.MIN_TICKS;
+        return Turret.getInstance().isSwitchPressed();
     }
 }
