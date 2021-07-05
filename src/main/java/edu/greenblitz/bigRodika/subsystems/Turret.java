@@ -23,7 +23,7 @@ public class Turret extends GBSubsystem {
     //ask @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;
-    private Encoder encoder;
+    private IEncoder encoder;
     private DigitalInput microSwitch;
     private double lastPower = 0;
 
@@ -35,7 +35,7 @@ public class Turret extends GBSubsystem {
         motor = new WPI_TalonSRX(RobotMap.Limbo2.Turret.MOTOR_PORT);
         motor.setInverted(RobotMap.Limbo2.Turret.IS_INVERTED);
         motor.setNeutralMode(NeutralMode.Brake);
-        encoder = new Encoder(RobotMap.Limbo2.Turret.ENCODER_PORT_A, RobotMap.Limbo2.Turret.ENCODER_PORT_B, RobotMap.Limbo2.Turret.IS_INVERTED);
+        encoder = new TalonEncoder(RobotMap.Limbo2.Turret.NORMALIZER, motor);
         microSwitch = DigitalInputMap.getInstance().getDigitalInput(
                 RobotMap.Limbo2.Turret.SWITCH_PORT
         );
@@ -93,6 +93,8 @@ public class Turret extends GBSubsystem {
     }
 
     public void moveTurret(double power) {
+        motor.set(power);
+        lastPower = power;
         if (encoder.getRawTicks() < MIN_TICKS && power > 0) {
             motor.set(0);
             return;

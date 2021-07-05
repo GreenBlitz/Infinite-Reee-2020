@@ -15,7 +15,8 @@ public class RobotMap {
         public static class Dome {
 
             public static final int MOTOR_PORT = 14;
-            public static final int POTENTIOMETER_PORT = 3;
+            public static final int ENCODER_PORT_A = 3; // blue cable
+            public static final int ENCODER_PORT_B = 4; // yellow cable
             public static final boolean IS_MOTOR_REVERSE = true;
             public static final boolean IS_POTENTIOMETER_REVERSE = true;
             public static final int LIMIT_SWITCH_PORT = 1;
@@ -39,8 +40,6 @@ public class RobotMap {
         public static class Turret {
             public static final int MOTOR_PORT = 11;
             public static final int SWITCH_PORT = 0;
-            public static final int ENCODER_PORT_A = 3; // blue cable
-            public static final int ENCODER_PORT_B = 4; // yellow cable
             public static final boolean IS_INVERTED = false;
             public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
                     28672.0);//correct 110 present
