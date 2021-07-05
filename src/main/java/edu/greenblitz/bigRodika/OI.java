@@ -1,13 +1,9 @@
 package edu.greenblitz.bigRodika;
 
-import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxLin;
-import edu.greenblitz.bigRodika.commands.chassis.test.CheckMaxRot;
-import edu.greenblitz.bigRodika.commands.complex.multisystem.CompleteShoot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
-import edu.greenblitz.bigRodika.commands.funnel.SemiAutomaticInsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
@@ -22,12 +18,10 @@ import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
-import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.turret.resets.UnsafeResetTurret;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 public class OI {
@@ -47,7 +41,7 @@ public class OI {
         if (DEBUG) {
             initTestButtons();
         } else {
-            initOfficalButtons();
+            initOfficialButtons();
         }
     }
 
@@ -68,7 +62,7 @@ public class OI {
         mainJoystick.R1.whenPressed(new UnsafeResetTurret(0.1));
     }
 
-    private void initOfficalButtons() {
+    private void initOfficialButtons() {
 
         mainJoystick.L1.whenReleased(new ToggleShift());
 
