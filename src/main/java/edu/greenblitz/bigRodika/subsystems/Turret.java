@@ -4,6 +4,7 @@ package edu.greenblitz.bigRodika.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.greenblitz.bigRodika.OI;
+import edu.greenblitz.bigRodika.Robot;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.MotionUtils;
 import edu.greenblitz.bigRodika.commands.turret.help.TurretToDefaultGood;
@@ -11,6 +12,7 @@ import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -21,7 +23,7 @@ public class Turret extends GBSubsystem {
     //ask @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;
-    private IEncoder encoder;
+    private Encoder encoder;
     private DigitalInput microSwitch;
     private double lastPower = 0;
 
@@ -33,10 +35,11 @@ public class Turret extends GBSubsystem {
         motor = new WPI_TalonSRX(RobotMap.Limbo2.Turret.MOTOR_PORT);
         motor.setInverted(RobotMap.Limbo2.Turret.IS_INVERTED);
         motor.setNeutralMode(NeutralMode.Brake);
-        encoder = new TalonEncoder(RobotMap.Limbo2.Turret.NORMALIZER, motor);
+        encoder = new Encoder(RobotMap.Limbo2.Turret.ENCODER_PORT_A, RobotMap.Limbo2.Turret.ENCODER_PORT_B, RobotMap.Limbo2.Turret.IS_INVERTED);
         microSwitch = DigitalInputMap.getInstance().getDigitalInput(
                 RobotMap.Limbo2.Turret.SWITCH_PORT
         );
+
 
         motor.enableCurrentLimit(true);
         motor.configPeakCurrentLimit(RobotMap.Limbo2.Turret.PEAK_CURRENT_LIMIT);
