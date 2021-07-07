@@ -8,6 +8,8 @@ import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import static edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putString;
+
 public class Intake {
 
     private static Intake instance;
@@ -36,11 +38,11 @@ public class Intake {
     }
 
     public void extend() {
-        extender.extender.set(DoubleSolenoid.Value.kForward);
+        extender.extend();
     }
 
     public void retract() {
-        extender.extender.set(DoubleSolenoid.Value.kReverse);
+        extender.safeRetract();
     }
 
     public boolean isExtended() {
@@ -112,7 +114,7 @@ public class Intake {
             setValue(DoubleSolenoid.Value.kForward);
         }
 
-        public void retract() {
+        private void retract() {
             setValue(DoubleSolenoid.Value.kReverse);
         }
 
@@ -121,6 +123,13 @@ public class Intake {
         public void periodic() {
             super.periodic();
             putString("Extender", extender.get().toString());
+        }
+
+        public void safeRetract(){ //TODO: check safe angle zone
+            double angle = Turret.getInstance().getNormAngleRads();
+            if(angle){
+                retract();
+            }
         }
     }
 }
