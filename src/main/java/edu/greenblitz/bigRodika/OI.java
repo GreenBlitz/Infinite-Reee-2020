@@ -7,6 +7,7 @@ import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
+import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByDifferentConstants;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
@@ -16,13 +17,18 @@ import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
 import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.ThreeStageShoot;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
+import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.commands.turret.resets.UnsafeResetTurret;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import org.greenblitz.motion.pid.PIDObject;
 
 public class OI {
     private static OI instance;
@@ -30,7 +36,7 @@ public class OI {
     private SmartJoystick mainJoystick;
     private SmartJoystick secondStick;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private OI() {
         mainJoystick = new SmartJoystick(RobotMap.Limbo2.Joystick.MAIN,
@@ -54,8 +60,36 @@ public class OI {
     }
 
     private void initTestButtons() {
-        mainJoystick.POV_UP.whileHeld(new DomeMoveByConstant(0.5));
-        mainJoystick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.2));
+        mainJoystick.A.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+
+        secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
+
+        secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
+
+        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
+
+        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
+
+        double target = 3000;
+        double p = RobotMap.Limbo2.Shooter.SHOOTER_P,
+                i = RobotMap.Limbo2.Shooter.SHOOTER_I,
+                d = RobotMap.Limbo2.Shooter.SHOOTER_D,
+                f = Shooter.getInstance().rpmToPowerMap.linearlyInterpolate(target)[0];
+
+        secondStick.A.whenPressed(new ShootBySimplePid(new PIDObject(p, i, d, f), target) {
+
+            @Override
+            public boolean isFinished() {
+                return super.isFinished() || System.currentTimeMillis() - tStart > 10000;
+            }
+        });
+
+        secondStick.B.whileHeld(new ParallelCommandGroup(new PushByDifferentConstants(0.6, 0.2), new InsertByConstant(0.6)));
+
+        secondStick.Y.whenPressed(new StopShooter());
+
+        secondStick.L1.whenPressed(new ToggleExtender());
+
 }
 
     private void initOfficialButtons() {
@@ -71,9 +105,9 @@ public class OI {
 
         // ---------------------------------------------------------------
 
-        secondStick.R1.whenPressed(new ShootByConstant(0.2));
-        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
-                new ResetDome(-0.5)));
+//        secondStick.R1.whenPressed(new ShootByConstant(0.4));
+//        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
+//                new ResetDome(-0.5)));
 
         secondStick.L1.whileHeld(new InsertIntoShooter(1.0, 0.8, 0.6));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
@@ -89,33 +123,40 @@ public class OI {
         secondStick.A.whileHeld(new RollByConstant(1.0));
         secondStick.R3.whileHeld(new RollByConstant(-0.7));
 
-        secondStick.START.whenPressed(new FullyAutoThreeStage(1650)); // 1650
-        secondStick.START.whenReleased(new StopShooter());
+        secondStick.R1.whenPressed(new FullyAutoThreeStage(2062)); // 1650
+        secondStick.R1.whenReleased(new StopShooter());
 
-        secondStick.X.whenPressed(new ShootByConstant(
-                Shooter.getInstance().getDesiredPower(2000)
-        ));
-        secondStick.X.whenReleased(new GBCommand() {
-            @Override
-            public void initialize() {
-                if (!secondStick.R1.get()) new StopShooter().schedule();
-            }
+//        secondStick.X.whenPressed(new ShootByConstant(
+//                Shooter.getInstance().getDesiredPower(2000)
+//        ));
+//        secondStick.X.whenReleased(new GBCommand() {
+//            @Override
+//            public void initialize() {
+//                if (!secondStick.R1.get()) new StopShooter().schedule();
+//            }
+//
+//            @Override
+//            public boolean isFinished() {
+//                return true;
+//            }
+//        });
 
-            @Override
-            public boolean isFinished() {
-                return true;
-            }
-        });
+//        secondStick.X.whenPressed(new ThreeStageShoot());
 
-        secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
+        // TODO: uncomment, microswitch broken so disaling dome function
+//        secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
 
-        secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
+//        secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
 
         secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
 
         secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
 
         secondStick.BACK.whenPressed(new ResetDome(-0.3));
+
+        secondStick.X.whileHeld(new InsertIntoShooter(-1.0, -0.8, 0.6));
+        secondStick.X.whenReleased(new ParallelCommandGroup(new StopPusher(),
+                new StopInserter(), new StopRoller()));
 
     }
 
