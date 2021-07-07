@@ -69,21 +69,7 @@ public class OI {
         secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
 
         secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
-
-        double target = 3000;
-        double p = RobotMap.Limbo2.Shooter.SHOOTER_P,
-                i = RobotMap.Limbo2.Shooter.SHOOTER_I,
-                d = RobotMap.Limbo2.Shooter.SHOOTER_D,
-                f = Shooter.getInstance().rpmToPowerMap.linearlyInterpolate(target)[0];
-
-        secondStick.A.whenPressed(new ShootBySimplePid(new PIDObject(p, i, d, f), target) {
-
-            @Override
-            public boolean isFinished() {
-                return super.isFinished() || System.currentTimeMillis() - tStart > 10000;
-            }
-        });
-
+        
         secondStick.B.whileHeld(new ParallelCommandGroup(new PushByDifferentConstants(0.6, 0.2), new InsertByConstant(0.6)));
 
         secondStick.Y.whenPressed(new StopShooter());

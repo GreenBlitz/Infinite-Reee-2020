@@ -23,7 +23,6 @@ public class Shooter extends GBSubsystem {
         follower = new CANSparkMax(RobotMap.Limbo2.Shooter.PORT_FOLLOWER, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         leader.setInverted(RobotMap.Limbo2.Shooter.IS_INVERTED_LEADER);
-
         follower.follow(leader, RobotMap.Limbo2.Shooter.IS_INVERTED_FOLLOWER);
 
         leader.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -35,10 +34,10 @@ public class Shooter extends GBSubsystem {
         preparedToShoot = false;
         rpmToPowerMap = new Dataset(2);
         rpmToPowerMap.addDatapoint(0, new double[]{0});
-        rpmToPowerMap.addDatapoint(720, new double[]{0.2});
-        rpmToPowerMap.addDatapoint(1860, new double[]{0.4});
-        rpmToPowerMap.addDatapoint(2920, new double[]{0.6});
-        rpmToPowerMap.addDatapoint(3500, new double[]{0.8});
+        rpmToPowerMap.addDatapoint(975, new double[]{0.2});
+        rpmToPowerMap.addDatapoint(2062.5, new double[]{0.4});
+        rpmToPowerMap.addDatapoint(3075, new double[]{0.6});
+        rpmToPowerMap.addDatapoint(3960, new double[]{0.8});
         // No fucking idea how much is 1.0, but 0.8 is already very fucking scary
 //        rpmToPowerMap.addDatapoint(5500, new double[]{1.0});
 
