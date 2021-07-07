@@ -7,8 +7,10 @@ import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.Robot;
 import edu.greenblitz.bigRodika.RobotMap;
 import edu.greenblitz.bigRodika.commands.chassis.motion.MotionUtils;
+import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.commands.turret.help.TurretToDefaultGood;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
+import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.encoder.IEncoder;
 import edu.greenblitz.gblib.encoder.TalonEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -18,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Turret extends GBSubsystem {
-    public static final double MAX_TICKS = 23000;
-    public static final double MIN_TICKS = -1000; // TODO: REALLY IMPORTANT FOR ROBOT NOT TO DIE
+    public static final double MAX_TICKS = 1.22;
+    public static final double MIN_TICKS = -0.083; // TODO: REALLY IMPORTANT FOR ROBOT NOT TO DIE
     //ask @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;
@@ -88,18 +90,19 @@ public class Turret extends GBSubsystem {
 
         SmartDashboard.putBoolean("Turret microSwitch", isSwitchPressed());
         SmartDashboard.putNumber("Turret Encoder Raw", encoder.getRawTicks());
+        SmartDashboard.putNumber("TURRET Encoder NORM", encoder.getNormalizedTicks());
+        SmartDashboard.putBoolean("MAX", encoder.getNormalizedTicks() > MAX_TICKS);
+        SmartDashboard.putBoolean("MIN", encoder.getNormalizedTicks() < MIN_TICKS);
 
         moveTurret(lastPower);
     }
 
     public void moveTurret(double power) {
-        motor.set(power);
-        lastPower = power;
-        if (encoder.getRawTicks() < MIN_TICKS && power > 0) {
+        if (encoder.getNormalizedTicks() < MIN_TICKS && power > 0) {
             motor.set(0);
             return;
         }
-        if (encoder.getRawTicks() > MAX_TICKS && power < 0) {
+        if (encoder.getNormalizedTicks() > MAX_TICKS && power < 0) {
             motor.set(0);
             return;
         }
@@ -112,6 +115,11 @@ public class Turret extends GBSubsystem {
         if(!reset) {
             long tStart = System.currentTimeMillis();
             while(!this.isSwitchPressed() && System.currentTimeMillis() - tStart < 15000) {
+                this.motor.set(power);
+            }
+
+            while(this.encoder.getRawTicks() > RobotMap.Limbo2.Turret.MIN_LIMIT &&
+                    this.encoder.getRawTicks() < RobotMap.Limbo2.Turret.MAX_LIMIT) {
                 this.motor.set(power);
             }
             this.moveTurret(0);
