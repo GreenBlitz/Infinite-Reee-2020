@@ -41,8 +41,8 @@ public class RobotMap {
             public static final int MOTOR_PORT = 11;
             public static final int SWITCH_PORT = 0;
             public static final boolean IS_INVERTED = false;
-            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(28672.0,
-                    28672.0);//correct 110 present
+            public static final GearDependentValue<Double> NORMALIZER = new GearDependentValue<>(18189.0,
+                    18189.0);//correct 110 percent
             public static double ENCODER_VALUE_WHEN_FORWARD = 18316.0; // what was before orel checked 8974.0
             public static double ENCODER_90_DEG_ABS = NORMALIZER.getValue() / 4.0;
             public static double ENCODER_VALUE_WHEN_NEGATIVE_90 = ENCODER_VALUE_WHEN_FORWARD -
@@ -53,6 +53,11 @@ public class RobotMap {
             public static final double TURRET_CAMERA_RADIUS = 0.25;
 
             public static final int PEAK_CURRENT_LIMIT = 1;
+
+            public static final int MAX_LIMIT = 0;
+            public static final int MIN_LIMIT = 0;
+
+
             public static final int PEAK_CURRENT_DURATION = 500;
 
         }
@@ -88,7 +93,7 @@ public class RobotMap {
             }
 
             public static class Solenoid {
-                public static final int FORWARD = 1;
+                public static final int FORWARD = 0;
                 public static final int REVERSE = 5;
             }
         }
@@ -97,12 +102,13 @@ public class RobotMap {
             public static final int PORT_LEADER = 7;
             public static final int PORT_FOLLOWER = 8;
 
-            public static final boolean IS_INVERTED_LEADER = false;
+            public static final boolean IS_INVERTED_LEADER = true;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
+//            public static final double SHOOTER_KF = 1;
             public static final double SHOOTER_P = 0.00075;
-            public static final double SHOOTER_I = 0.0000005;
-            public static final double SHOOTER_D = 0.00006*0.0;
+            public static final double SHOOTER_I = 0;
+            public static final double SHOOTER_D = 0;
 
             public static final double SHOOTER_ANGLE_OFFSET = Math.toRadians(0.0);
 
