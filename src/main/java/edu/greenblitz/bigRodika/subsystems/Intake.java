@@ -2,7 +2,9 @@ package edu.greenblitz.bigRodika.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.greenblitz.bigRodika.OI;
 import edu.greenblitz.bigRodika.RobotMap;
+import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -79,7 +81,17 @@ public class Intake {
 
         @Override
         public void periodic() {
+            if(this.getCurrentCommand() == null) {
+                double left = OI.getInstance().getSideStick().getAxisValue(SmartJoystick.Axis.LEFT_TRIGGER);
+                double right = OI.getInstance().getSideStick().getAxisValue(SmartJoystick.Axis.RIGHT_TRIGGER);
+                if(left > right) {
+                    this.roller.set(-OI.getInstance().getSideStick().getAxisValue(SmartJoystick.Axis.LEFT_TRIGGER));
+                } else {
+                    this.roller.set(OI.getInstance().getSideStick().getAxisValue(SmartJoystick.Axis.RIGHT_TRIGGER));
+                }
+            }
         }
+
     }
 
     public class Extender extends IntakeSubsystem {
