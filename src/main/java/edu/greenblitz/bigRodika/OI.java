@@ -29,6 +29,7 @@ import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import org.greenblitz.motion.pid.PIDObject;
 
 public class OI {
@@ -67,9 +68,9 @@ public class OI {
 
         mainJoystick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
 //
-//        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
-//
-//        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
+        mainJoystick.POV_LEFT.whileHeld(new MoveTurretByConstant(0.2));
+
+        mainJoystick.POV_RIGHT.whileHeld(new MoveTurretByConstant(-0.2));
 //
 //        secondStick.B.whileHeld(new ParallelCommandGroup(new PushByDifferentConstants(0.6, 0.2), new InsertByConstant(0.6)));
 //
@@ -78,6 +79,12 @@ public class OI {
 //        secondStick.L1.whenPressed(new ToggleExtender());
 
         mainJoystick.A.whileHeld(new FullShoot());
+//        mainJoystick.B.whenPressed(new ParallelCommandGroup(
+//                new StopShooter(),
+//                new ResetDome()
+//        ));
+
+
 
 }
 
