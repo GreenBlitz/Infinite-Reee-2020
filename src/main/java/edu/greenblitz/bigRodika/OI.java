@@ -32,13 +32,15 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import org.greenblitz.motion.pid.PIDObject;
 
+import java.util.function.Supplier;
+
 public class OI {
     private static OI instance;
 
     private SmartJoystick mainJoystick;
     private SmartJoystick secondStick;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private OI() {
         mainJoystick = new SmartJoystick(RobotMap.Limbo2.Joystick.MAIN,
@@ -76,13 +78,22 @@ public class OI {
 //
 //        secondStick.Y.whenPressed(new StopShooter());
 //
-//        secondStick.L1.whenPressed(new ToggleExtender());
+        mainJoystick.L1.whenPressed(new ToggleExtender());
 
-        mainJoystick.A.whileHeld(new FullShoot());
+        Supplier<Double> visionDist = new Supplier<Double>() {
+            @Override
+            public Double get() {
+                return VisionMaster.getInstance().getVisionLocation().getPlaneDistance();
+            }
+        };
+
+        mainJoystick.A.whileHeld(new FullShoot(visionDist));
 //        mainJoystick.B.whenPressed(new ParallelCommandGroup(
 //                new StopShooter(),
 //                new ResetDome()
 //        ));
+
+        mainJoystick.B.whenPressed(new StopShooter());
 
 
 

@@ -3,6 +3,8 @@ package edu.greenblitz.bigRodika.commands.dome;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 import org.greenblitz.motion.tolerance.ITolerance;
 
+import java.util.function.Supplier;
+
 public class DomeApproachSwiftly extends DomeCommand {
 
     public double SLOW_DOWN_BEGIN = 0.1;
@@ -27,6 +29,7 @@ public class DomeApproachSwiftly extends DomeCommand {
     public DomeApproachSwiftly(double target) {
         this(target, new AbsoluteTolerance(DEFAULT_TOLERENCE));
     }
+
 
     @Override
     public void execute() {
