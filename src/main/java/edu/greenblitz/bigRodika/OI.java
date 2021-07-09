@@ -15,6 +15,7 @@ import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
 import edu.greenblitz.bigRodika.commands.shifter.ToPower;
 import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
 import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
+import edu.greenblitz.bigRodika.commands.shooter.FullShoot;
 import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
@@ -36,7 +37,7 @@ public class OI {
     private SmartJoystick mainJoystick;
     private SmartJoystick secondStick;
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     private OI() {
         mainJoystick = new SmartJoystick(RobotMap.Limbo2.Joystick.MAIN,
@@ -60,21 +61,23 @@ public class OI {
     }
 
     private void initTestButtons() {
-        mainJoystick.A.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+//       mainJoystick.A.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+//
+        mainJoystick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
 
-        secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
+        mainJoystick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
+//
+//        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
+//
+//        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
+//
+//        secondStick.B.whileHeld(new ParallelCommandGroup(new PushByDifferentConstants(0.6, 0.2), new InsertByConstant(0.6)));
+//
+//        secondStick.Y.whenPressed(new StopShooter());
+//
+//        secondStick.L1.whenPressed(new ToggleExtender());
 
-        secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
-
-        secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
-
-        secondStick.POV_RIGHT.whileHeld(new MoveTurretByConstant(0.2));
-        
-        secondStick.B.whileHeld(new ParallelCommandGroup(new PushByDifferentConstants(0.6, 0.2), new InsertByConstant(0.6)));
-
-        secondStick.Y.whenPressed(new StopShooter());
-
-        secondStick.L1.whenPressed(new ToggleExtender());
+        mainJoystick.A.whileHeld(new FullShoot());
 
 }
 
