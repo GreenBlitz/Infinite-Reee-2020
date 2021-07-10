@@ -19,6 +19,7 @@ public class ResetEncoderWhenInSide extends TurretCommand {
     @Override
     public void end(boolean interrupted) {
         Turret.getInstance().moveTurret(0);
+        Turret.getInstance().resetZeroValue();
     }
 
     @Override

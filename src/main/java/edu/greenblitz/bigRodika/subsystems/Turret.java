@@ -20,14 +20,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Turret extends GBSubsystem {
-    public static final double MAX_TICKS = 1.22;
-    public static final double MIN_TICKS = -0.083; // TODO: REALLY IMPORTANT FOR ROBOT NOT TO DIE
+    public static final double MAX_TICKS = 1.26;
+    public static final double MIN_TICKS = -0.14; // TODO: REALLY IMPORTANT FOR ROBOT NOT TO DIE
     //ask @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;
     private IEncoder encoder;
     private DigitalInput microSwitch;
     private double lastPower = 0;
+    private double zeroValue;
 
     private static boolean reset = false;
 
@@ -84,25 +85,30 @@ public class Turret extends GBSubsystem {
     @Override
     public void periodic() {
         super.periodic();
-        if (isSwitchPressed()) {
-            encoder.reset();
-        }
 
         SmartDashboard.putBoolean("Turret microSwitch", isSwitchPressed());
         SmartDashboard.putNumber("Turret Encoder Raw", encoder.getRawTicks());
-        SmartDashboard.putNumber("TURRET Encoder NORM", encoder.getNormalizedTicks());
+        SmartDashboard.putNumber("TURRET Encoder NORM", getTurretLocation());
         SmartDashboard.putBoolean("MAX", encoder.getNormalizedTicks() > MAX_TICKS);
         SmartDashboard.putBoolean("MIN", encoder.getNormalizedTicks() < MIN_TICKS);
 
         moveTurret(lastPower);
     }
 
+    private void setZeroValue(double zeroValue) {
+        this.zeroValue = zeroValue;
+    }
+
+    public void resetZeroValue() {
+        setZeroValue(this.encoder.getNormalizedTicks());
+    }
+
     public void moveTurret(double power) {
-        if (encoder.getNormalizedTicks() < MIN_TICKS && power > 0) {
+        if (getTurretLocation() < MIN_TICKS && power > 0) {
             motor.set(0);
             return;
         }
-        if (encoder.getNormalizedTicks() > MAX_TICKS && power < 0) {
+        if (getTurretLocation() > MAX_TICKS && power < 0) {
             motor.set(0);
             return;
         }
@@ -144,7 +150,7 @@ public class Turret extends GBSubsystem {
     }
 
     public double getTurretLocation() {
-        return encoder.getNormalizedTicks();
+        return encoder.getNormalizedTicks() - zeroValue;
     }
 
     public double getRawTicks() {
