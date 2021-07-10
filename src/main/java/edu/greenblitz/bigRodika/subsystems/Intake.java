@@ -112,11 +112,11 @@ public class Intake {
         }
 
         public void extend() {
-            setValue(DoubleSolenoid.Value.kForward);
+            setValue(DoubleSolenoid.Value.kReverse);
         }
 
         public void retract() {
-            setValue(DoubleSolenoid.Value.kReverse);
+            setValue(DoubleSolenoid.Value.kForward);
         }
 
 
