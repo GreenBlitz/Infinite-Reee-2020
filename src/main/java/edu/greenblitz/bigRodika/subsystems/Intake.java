@@ -15,6 +15,7 @@ public class Intake {
     private static Intake instance;
     private Roller roller;
     private Extender extender;
+    public static final double SAFE_ZONE = 0.46;
 
     private Intake() {
         roller = new Intake.Roller();
@@ -38,7 +39,7 @@ public class Intake {
     }
 
     public void extend() {
-        extender.extend();
+        extender.safeExtend();
     }
 
     public void retract() {
@@ -114,7 +115,7 @@ public class Intake {
             setValue(DoubleSolenoid.Value.kForward);
         }
 
-        private void retract() {
+        public void retract() {
             setValue(DoubleSolenoid.Value.kReverse);
         }
 
@@ -126,9 +127,16 @@ public class Intake {
         }
 
         public void safeRetract(){ //TODO: check safe angle zone
-            double angle = Turret.getInstance().getNormAngleRads();
-            if(angle){
+            double angle = Turret.getInstance().getTurretLocation();
+            if(angle <= Turret.MIN_TICKS || angle >= SAFE_ZONE){
                 retract();
+            }
+        }
+
+        public void safeExtend() {
+            double angle = Turret.getInstance().getTurretLocation();
+            if(angle <= Turret.MIN_TICKS || angle >= SAFE_ZONE) {
+                extend();
             }
         }
     }
