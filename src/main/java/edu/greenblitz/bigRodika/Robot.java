@@ -6,6 +6,7 @@ import edu.greenblitz.bigRodika.commands.climber.HookByTriggers;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.Trench8BallAuto;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
+import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRoller;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
 import edu.greenblitz.bigRodika.commands.turret.resets.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
@@ -95,6 +96,7 @@ public class Robot extends TimedRobot {
 
         new ResetDome(-0.3).schedule();
         new ResetEncoderWhenInSide().schedule();
+        new ExtendRoller().schedule();
 //        new StopShooter().schedule();
 
         /*
