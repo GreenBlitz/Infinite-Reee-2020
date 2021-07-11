@@ -49,7 +49,6 @@ public class DomeApproachSwiftly extends DomeCommand {
     public double calculateVelocity(double error) {
 
         dome.putNumber("Error", error);
-
         double absError = Math.abs(error);
         double errorSign = Math.signum(error);
 

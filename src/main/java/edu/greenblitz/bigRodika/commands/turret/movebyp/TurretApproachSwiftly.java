@@ -56,15 +56,18 @@ public class TurretApproachSwiftly extends TurretCommand {
         double absError = Math.abs(error);
         double errorSign = -Math.signum(error);
 
-        if (absError <= SLOW_DOWN_END) {
-            return MINIMUM_SPEED * errorSign;
-        }
-        if (absError >= SLOW_DOWN_BEGIN) {
-            return MAXIMUM_SPEED * errorSign;
-        }
 
-        return ((absError - X_OFFSET) * SLOPE + Y_OFFSET) * errorSign;
 
+//        if (absError <= SLOW_DOWN_END) {
+//            return MINIMUM_SPEED * errorSign;
+//        }
+//        if (absError >= SLOW_DOWN_BEGIN) {
+//            return MAXIMUM_SPEED * errorSign;
+//        }
+//
+//        //return ((absError - X_OFFSET) * SLOPE + Y_OFFSET) * errorSign;
+        SmartDashboard.putNumber("TURRET ABD ERROR", absError);
+        return errorSign * (absError * 2 + 0.05);
     }
 
 }

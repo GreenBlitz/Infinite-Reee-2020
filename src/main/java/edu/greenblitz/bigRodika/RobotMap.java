@@ -118,6 +118,8 @@ public class RobotMap {
             public static final double MAXIMUM_SHOOT_DIST = 6.7;
 
             static {
+                Shooter.distanceToShooterState.addDatapoint(0,
+                        new double[] {1000, 0.2});
                 // First element = rpm. second = dome
                 Shooter.distanceToShooterState.addDatapoint(3.2,
                         new double[] {2000, 0.345});

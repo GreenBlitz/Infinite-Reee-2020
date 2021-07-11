@@ -30,13 +30,15 @@ public class TurretByVision extends TurretCommand {
     public void execute() {
 
         if (!VisionMaster.getInstance().isLastDataValid()) {
+            System.out.println("NOT VALID VISION");
             turret.moveTurret(0);
             return;
         }
 
-        turret.moveTurret(TurretApproachSwiftly.calculateVelocity(
-                Math.toRadians(VisionMaster.getInstance().getVisionLocation().getRelativeAngle())/(2*Math.PI)
-                ));
+        double power = TurretApproachSwiftly.calculateVelocity(
+                Math.toRadians(VisionMaster.getInstance().getVisionLocation().getRelativeAngle())/(2*Math.PI));
+        System.out.println("Moving turret with power: " + power);
+        turret.moveTurret(power);
     }
 
     @Override
