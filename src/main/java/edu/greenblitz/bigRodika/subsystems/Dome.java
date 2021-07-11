@@ -14,7 +14,7 @@ public class Dome extends GBSubsystem {
     private final double ENCODER_LOWER_LIMIT = 0.1,
             ENCODER_HIGHER_LIMIT = 2964; // soft limit for dome disconnection from gear
     private static final double POWER_AT_LOWER_END = -0.05;
-    private static final double MAX_VELOCITY = 100; // arbitrary, find speed
+    private static final double MAX_VELOCITY = 500; // arbitrary, find speed
     private static final double MIN_VELOCITY = 2; // arbitrary, find speed
     private static final boolean SWITCH_ON = true;
     protected double lastPower = 0;

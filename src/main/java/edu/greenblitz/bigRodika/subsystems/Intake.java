@@ -39,11 +39,19 @@ public class Intake {
     }
 
     public void extend() {
-        extender.safeExtend();
+        if (Turret.getInstance().getTurretLocation() > 0.48 || Turret.getInstance().getTurretLocation() < -0.15) {
+            extender.extender.set(DoubleSolenoid.Value.kForward);
+        }
+    }
+
+    public void extendSpecial() { // THIS IS ONLY FOR TELEOPINIT, DO NOT USE FOR MALICIOUS PURPOSES!!!
+        extender.extender.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void retract() {
-        extender.safeRetract();
+        if (Turret.getInstance().getTurretLocation() > 0.48 || Turret.getInstance().getTurretLocation() < -0.15) {
+            extender.extender.set(DoubleSolenoid.Value.kReverse);
+        }
     }
 
     public boolean isExtended() {
@@ -84,10 +92,10 @@ public class Intake {
 
         @Override
         public void periodic() {
-            if(this.getCurrentCommand() == null) {
+            if (this.getCurrentCommand() == null) {
                 double left = OI.getInstance().getSideStick().getAxisValue(SmartJoystick.Axis.LEFT_TRIGGER);
                 double right = OI.getInstance().getSideStick().getAxisValue(SmartJoystick.Axis.RIGHT_TRIGGER);
-                if(left > right) {
+                if (left > right) {
                     this.roller.set(-OI.getInstance().getSideStick().getAxisValue(SmartJoystick.Axis.LEFT_TRIGGER));
                 } else {
                     this.roller.set(OI.getInstance().getSideStick().getAxisValue(SmartJoystick.Axis.RIGHT_TRIGGER));
@@ -108,7 +116,9 @@ public class Intake {
         }
 
         private void setValue(DoubleSolenoid.Value value) {
-            extender.set(value);
+            if (Turret.getInstance().getTurretLocation() > 0.48 || Turret.getInstance().getTurretLocation() < -0.15) {
+                extender.set(value);
+            }
         }
 
         public void extend() {

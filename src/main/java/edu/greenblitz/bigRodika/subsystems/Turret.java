@@ -85,6 +85,10 @@ public class Turret extends GBSubsystem {
     @Override
     public void periodic() {
         super.periodic();
+        if (isSwitchPressed()) {
+            encoder.reset();
+            System.err.println("HULL SENSOR WENT OFF");
+        }
 
         SmartDashboard.putBoolean("Turret microSwitch", isSwitchPressed());
         SmartDashboard.putNumber("Turret Encoder Raw", encoder.getRawTicks());

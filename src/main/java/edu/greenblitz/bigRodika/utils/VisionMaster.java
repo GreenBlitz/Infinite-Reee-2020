@@ -131,6 +131,8 @@ public class VisionMaster extends GBSubsystem {
 
         if(System.currentTimeMillis() - lastPrintTime > 500){
             System.out.println(current.toString());
+            SmartDashboard.putString("Vision Location: ", current.toString());
+            SmartDashboard.putNumber("Vision Full Distance: ", current.getFullDistance());
             lastPrintTime = System.currentTimeMillis();
         }
         if (currentAlgorithm != null) {
