@@ -84,6 +84,10 @@ public class Turret extends GBSubsystem {
         }
     }
 
+    public void unreset() {
+        reset = false;
+    }
+
 
     public static Turret getInstance() {
         return instance;
@@ -98,7 +102,7 @@ public class Turret extends GBSubsystem {
 
         SmartDashboard.putBoolean("Turret microSwitch", isSwitchPressed());
         SmartDashboard.putNumber("Turret Encoder Raw", encoder.getRawTicks());
-        SmartDashboard.putNumber("TURRET Encoder NORM", encoder.getNormalizedTicks());
+        SmartDashboard.putNumber("TURRET Encoder NORM", getTurretLocation());
         SmartDashboard.putBoolean("MAX", encoder.getNormalizedTicks() > MAX_TICKS);
         SmartDashboard.putBoolean("MIN", encoder.getNormalizedTicks() < MIN_TICKS);
         SmartDashboard.putBoolean("TurretReset", reset);
@@ -107,18 +111,43 @@ public class Turret extends GBSubsystem {
     }
 
     public void moveTurret(double power) {
-        if ((encoder.getNormalizedTicks() < MIN_TICKS && power > 0) || !reset) {
+        if(reset) {
+            moveTurretReset(power);
+        } else {
+            moveTurretNoResest(power);
+        }
+    }
+
+    private void moveTurretReset(double power) {
+        System.out.println("RESET");
+        if (power == 0){
             motor.set(0);
             return;
         }
-        if (encoder.getNormalizedTicks() > MAX_TICKS && power < 0) {
+        if ((getTurretLocation() < MIN_TICKS && power > 0)) {
+            motor.set(0);
+            return;
+        }
+        if (getTurretLocation() > MAX_TICKS && power < 0) {
             motor.set(0);
             return;
         }
         motor.set(power);
-        lastPower = power;
     }
 
+    private void moveTurretNoResest(double power) {
+        System.out.println("NO RESET");
+        if (power == 0){
+            motor.set(0);
+            return;
+        }
+        if (power > 0) {
+            motor.set(0);
+            return;
+        }
+        motor.set(power);
+
+    }
 
     public void moveTurretToSwitch(double power) {
         if (!reset) {

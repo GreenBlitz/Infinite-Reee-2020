@@ -59,6 +59,7 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         VisionMaster.GameState.DISABLED.setAsCurrent();
         CommandScheduler.getInstance().cancelAll();
+        Turret.getInstance().unreset();
     }
 
     @Override
@@ -86,7 +87,7 @@ public class Robot extends TimedRobot {
         //new FiveBallTrench().schedule();
 //        new ThreeBallNoVision().schedule();
 //        new FiveBallTrench().schedule();
-        new ThreeBallShoot().schedule();
+        new MoveFromLine().schedule();
     }
 
     @Override
