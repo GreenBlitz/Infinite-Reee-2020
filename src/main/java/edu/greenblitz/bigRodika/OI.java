@@ -132,11 +132,9 @@ public class OI {
         secondStick.Y.whileHeld(new SequentialFullShoot());
         secondStick.Y.whenReleased(new StopShooter());
 
-        secondStick.L3.whenPressed(new StopShooter());
+        secondStick.A.whenPressed(new StopShooter());
 
         secondStick.B.whenPressed(new ToggleExtender());
-        secondStick.A.whileHeld(new RollByConstant(1.0));
-        secondStick.R3.whileHeld(new RollByConstant(-0.7));
 
         secondStick.R1.whenPressed(new FullyAutoThreeStage(2062)); // 1650
         secondStick.R1.whenReleased(new StopShooter());
