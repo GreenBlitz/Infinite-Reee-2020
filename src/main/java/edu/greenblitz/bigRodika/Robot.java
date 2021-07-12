@@ -3,7 +3,9 @@ package edu.greenblitz.bigRodika;
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
 import edu.greenblitz.bigRodika.commands.climber.ClimbByTriggers;
 import edu.greenblitz.bigRodika.commands.climber.HookByTriggers;
+import edu.greenblitz.bigRodika.commands.complex.autonomous.Drive;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
+import edu.greenblitz.bigRodika.commands.complex.autonomous.MoveFromLine;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.Trench8BallAuto;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRollerTeleop;
@@ -83,9 +85,12 @@ public class Robot extends TimedRobot {
         new ResetEncoderWhenInSide().initialize();
         new LocalizerCommandRunner().schedule();
 //        new Trench8BallAuto().schedule();
-        new FiveBallTrench().schedule();
+        //new FiveBallTrench().schedule();
 //        new ThreeBallNoVision().schedule();
 //        new FiveBallTrenchSteal().schedule();
+
+
+        new Drive().schedule();
     }
 
     @Override

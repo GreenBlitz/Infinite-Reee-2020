@@ -114,15 +114,17 @@ public class RobotMap {
 
             public static Dataset distanceToShooterState = new Dataset(3);
 
-            public static final double MINIMUM_SHOOT_DIST = 3.2;
+            public static final double MINIMUM_SHOOT_DIST = 2;
             public static final double MAXIMUM_SHOOT_DIST = 6.7;
 
             static {
                 Shooter.distanceToShooterState.addDatapoint(0,
-                        new double[] {1000, 0.2});
+                        new double[] {1500, 0.25});
+                Shooter.distanceToShooterState.addDatapoint(2,
+                        new double[] {1765, 0.32});
                 // First element = rpm. second = dome
                 Shooter.distanceToShooterState.addDatapoint(3.2,
-                        new double[] {2000, 0.345});
+                        new double[] {2100, 0.6});
                 Shooter.distanceToShooterState.addDatapoint(4.0,
                         new double[] {2100, 0.36});
                 Shooter.distanceToShooterState.addDatapoint(5.0,

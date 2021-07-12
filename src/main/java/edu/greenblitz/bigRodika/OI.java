@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika;
 
+import edu.greenblitz.bigRodika.commands.complex.multisystem.SequentialFullShoot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
@@ -31,6 +32,7 @@ import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import org.greenblitz.motion.pid.PIDObject;
 
 import java.util.function.Supplier;
@@ -95,12 +97,15 @@ public class OI {
 
 //                new ResetDome()
 //        ));
-        mainJoystick.A.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
-        mainJoystick.B.whileHeld(new DomeApproachSwiftly(800));
-        mainJoystick.X.whileHeld(new FullyAutoThreeStage(1000));
-        mainJoystick.Y.whileHeld(new InsertIntoShooter(0.5, 0.5, 0.5));
 
-        mainJoystick.R1.whenPressed(new StopShooter());
+        mainJoystick.A.whileHeld(new SequentialFullShoot());
+//        mainJoystick.A.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
+//        mainJoystick.B.whileHeld(new DomeApproachSwiftly(800));
+//        mainJoystick.X.whileHeld(new FullyAutoThreeStage(1000));
+        mainJoystick.R1
+                .whileHeld(new InsertIntoShooter(0.5, 0.5, 0.5));
+
+        mainJoystick.Y.whenPressed(new StopShooter());
 }
 
     private void initOfficialButtons() {
