@@ -7,11 +7,13 @@ import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRoller;
+import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRollerTeleop;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
+import edu.greenblitz.bigRodika.commands.turret.resets.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
@@ -39,10 +41,11 @@ public class FiveBallTrench extends SequentialCommandGroup {
         secondHardCodedShit.add(new State(0, 0.5));
 
         addCommands(
+                new ExtendRollerTeleop(),
+                new ResetEncoderWhenInSide(),
                 new DomeMoveByConstant(0.4).withTimeout(0.2),
-                new ParallelCommandGroup(
-                        new ResetDome(-0.3),
-                        new ExtendRoller(),
+        new ParallelCommandGroup(
+                new ResetDome(-0.3),
                         new ParallelRaceGroup(
                                 new ThreadedCommand(new Follow2DProfileCommand(hardCodedShit,
                                         RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, true),
@@ -56,7 +59,7 @@ public class FiveBallTrench extends SequentialCommandGroup {
                         new ThreadedCommand(new Follow2DProfileCommand(secondHardCodedShit,
                                 RobotMap.Limbo2.Chassis.MotionData.CONFIG, 0.3, false),
                                 Chassis.getInstance()),
-                        new TurretApproachSwiftly((-12.5)).withInterrupt(() ->
+                        new TurretApproachSwiftly((0.127)).withInterrupt(() ->
                                 VisionMaster.getInstance().isLastDataValid() &&
                                         Math.abs(VisionMaster.getInstance().getVisionLocation().getRelativeAngle()) < 10).withTimeout(2)
                 ),

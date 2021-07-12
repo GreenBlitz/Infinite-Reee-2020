@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Turret extends GBSubsystem {
     public static final double MAX_TICKS = 1.22;
-    public static final double MIN_TICKS = -0.083; // TODO: REALLY IMPORTANT FOR ROBOT NOT TO DIE
+    public static final double MIN_TICKS = -0.02; // TODO: REALLY IMPORTANT FOR ROBOT NOT TO DIE
     //ask @Peleg before changing
     private static Turret instance;
     private WPI_TalonSRX motor;
@@ -30,6 +30,7 @@ public class Turret extends GBSubsystem {
     private double lastPower = 0;
 
     private static boolean reset = false;
+    public double zeroValue;
 
     public Command defaultCommand;
 
@@ -76,6 +77,13 @@ public class Turret extends GBSubsystem {
         motor.setSelectedSensorPosition(value);
     }
 
+    public void reset() {
+        if (!reset) {
+            this.zeroValue = this.encoder.getNormalizedTicks();
+            reset = true;
+        }
+    }
+
 
     public static Turret getInstance() {
         return instance;
@@ -85,8 +93,7 @@ public class Turret extends GBSubsystem {
     public void periodic() {
         super.periodic();
         if (isSwitchPressed()) {
-            encoder.reset();
-            System.err.println("HULL SENSOR WENT OFF");
+            reset();
         }
 
         SmartDashboard.putBoolean("Turret microSwitch", isSwitchPressed());
@@ -94,12 +101,13 @@ public class Turret extends GBSubsystem {
         SmartDashboard.putNumber("TURRET Encoder NORM", encoder.getNormalizedTicks());
         SmartDashboard.putBoolean("MAX", encoder.getNormalizedTicks() > MAX_TICKS);
         SmartDashboard.putBoolean("MIN", encoder.getNormalizedTicks() < MIN_TICKS);
+        SmartDashboard.putBoolean("TurretReset", reset);
 
         moveTurret(lastPower);
     }
 
     public void moveTurret(double power) {
-        if (encoder.getNormalizedTicks() < MIN_TICKS && power > 0) {
+        if ((encoder.getNormalizedTicks() < MIN_TICKS && power > 0) || !reset) {
             motor.set(0);
             return;
         }
@@ -113,13 +121,13 @@ public class Turret extends GBSubsystem {
 
 
     public void moveTurretToSwitch(double power) {
-        if(!reset) {
+        if (!reset) {
             long tStart = System.currentTimeMillis();
-            while(!this.isSwitchPressed() && System.currentTimeMillis() - tStart < 15000) {
+            while (!this.isSwitchPressed() && System.currentTimeMillis() - tStart < 15000) {
                 this.motor.set(power);
             }
 
-            while(this.encoder.getRawTicks() > RobotMap.Limbo2.Turret.MIN_LIMIT &&
+            while (this.encoder.getRawTicks() > RobotMap.Limbo2.Turret.MIN_LIMIT &&
                     this.encoder.getRawTicks() < RobotMap.Limbo2.Turret.MAX_LIMIT) {
                 this.motor.set(power);
             }
@@ -145,7 +153,7 @@ public class Turret extends GBSubsystem {
     }
 
     public double getTurretLocation() {
-        return encoder.getNormalizedTicks();
+        return encoder.getNormalizedTicks() - zeroValue;
     }
 
     public double getRawTicks() {

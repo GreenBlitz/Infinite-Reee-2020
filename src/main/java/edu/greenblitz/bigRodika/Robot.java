@@ -3,10 +3,7 @@ package edu.greenblitz.bigRodika;
 import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunner;
 import edu.greenblitz.bigRodika.commands.climber.ClimbByTriggers;
 import edu.greenblitz.bigRodika.commands.climber.HookByTriggers;
-import edu.greenblitz.bigRodika.commands.complex.autonomous.Drive;
-import edu.greenblitz.bigRodika.commands.complex.autonomous.FiveBallTrench;
-import edu.greenblitz.bigRodika.commands.complex.autonomous.MoveFromLine;
-import edu.greenblitz.bigRodika.commands.complex.autonomous.Trench8BallAuto;
+import edu.greenblitz.bigRodika.commands.complex.autonomous.*;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRollerTeleop;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
@@ -82,15 +79,14 @@ public class Robot extends TimedRobot {
         //Shifter.getInstance().setShift(Gear.SPEED);
         VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
-        new ResetEncoderWhenInSide().initialize();
-        new LocalizerCommandRunner().schedule();
+//        new ResetEncoderWhenInSide().schedule();
+//        new MoveFromLine().schedule();
+        //new LocalizerCommandRunner().schedule();
 //        new Trench8BallAuto().schedule();
         //new FiveBallTrench().schedule();
 //        new ThreeBallNoVision().schedule();
-//        new FiveBallTrenchSteal().schedule();
-
-
-        new Drive().schedule();
+//        new FiveBallTrench().schedule();
+        new ThreeBallShoot().schedule();
     }
 
     @Override
@@ -108,7 +104,7 @@ public class Robot extends TimedRobot {
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
 
         new ResetDome(-0.3).schedule();
-        new ResetEncoderWhenInSide();
+        new ResetEncoderWhenInSide().schedule();
         new ExtendRollerTeleop().schedule();
 
 //        new StopShooter().schedule();
