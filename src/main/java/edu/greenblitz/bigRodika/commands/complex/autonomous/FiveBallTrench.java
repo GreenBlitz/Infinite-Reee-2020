@@ -10,7 +10,6 @@ import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRoller;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
 import edu.greenblitz.bigRodika.commands.intake.roller.StopRoller;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.autonomous.ThreeStageForAutonomous;
-import edu.greenblitz.bigRodika.commands.turret.TurretApproachSwiftlyRadians;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
@@ -85,3 +84,4 @@ public class FiveBallTrench extends SequentialCommandGroup {
         super.end(interrupted);
         SmartDashboard.putBoolean("Auto interrupted", interrupted);
     }
+}
