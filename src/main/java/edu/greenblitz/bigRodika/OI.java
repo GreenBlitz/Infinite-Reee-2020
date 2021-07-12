@@ -26,10 +26,12 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.ThreeStag
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
 import edu.greenblitz.bigRodika.commands.turret.resets.UnsafeResetTurret;
+import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -171,6 +173,19 @@ public class OI {
         secondStick.X.whenReleased(new ParallelCommandGroup(new StopPusher(),
                 new StopInserter(), new StopRoller()));
 
+        secondStick.R3.whenPressed(new GBCommand() {
+            @Override
+            public void initialize() {
+                CommandScheduler.getInstance().cancelAll();
+
+                new StopInserter().schedule();
+                new StopPusher().schedule();
+                new StopRoller().schedule();
+                new StopShooter().schedule();
+
+                Chassis.getInstance().moveMotors(0, 0);
+            }
+        }); // Fake disable command to make robot not die but still operating for the rest of the game after.
     }
 
     public SmartJoystick getMainJoystick() {
