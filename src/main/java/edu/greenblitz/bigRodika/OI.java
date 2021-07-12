@@ -43,7 +43,7 @@ public class OI {
     private SmartJoystick mainJoystick;
     private SmartJoystick secondStick;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private OI() {
         mainJoystick = new SmartJoystick(RobotMap.Limbo2.Joystick.MAIN,
@@ -129,11 +129,10 @@ public class OI {
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
                 new StopInserter(), new StopRoller()));
 
-        secondStick.Y.whileHeld(new
-                ParallelCommandGroup(
-                new RollByConstant(0.5), new PushByConstant(0.8), new InsertByConstant(0.6)));
-        secondStick.Y.whenReleased(new ParallelCommandGroup(new StopPusher(), new StopInserter()
-                , new StopRoller()));
+        secondStick.Y.whileHeld(new SequentialFullShoot());
+        secondStick.Y.whenReleased(new StopShooter());
+
+        secondStick.L3.whenPressed(new StopShooter());
 
         secondStick.B.whenPressed(new ToggleExtender());
         secondStick.A.whileHeld(new RollByConstant(1.0));
@@ -160,9 +159,9 @@ public class OI {
 //        secondStick.X.whenPressed(new ThreeStageShoot());
 
         // TODO: uncomment, microswitch broken so disaling dome function
-//        secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
+        secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
 
-//        secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
+        secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));
 
         secondStick.POV_LEFT.whileHeld(new MoveTurretByConstant(-0.2));
 

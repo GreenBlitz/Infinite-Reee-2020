@@ -28,7 +28,7 @@ public class SequentialFullShoot extends SequentialCommandGroup {
         double[] shooterState = linearlyInter(domeVal);
         addCommands(
                 new TurretByVision(VisionMaster.Algorithm.HEXAGON).withTimeout(0.8),
-                new DomeApproachSwiftly(shooterState[1]).withTimeout(0.10),
+                new DomeApproachSwiftly(shooterState[1]).withTimeout(0.8),
                 new FullyAutoThreeStage(shooterState[0])
 //                new ParallelCommandGroup(
 //                        new InsertIntoShooter(0.5, 0.5, 0.5)
