@@ -13,13 +13,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class SequentialFullShoot extends SequentialCommandGroup {
     public static double[][] data = {
-            {1500, 0.25},
-            {1600, 0.28},
-            {1765, 0.32},
-            {2100, 0.6},
-            {2100, 0.36},
-            {2350, 0.403},
-            {2500, 0.48}
+            {0, 0},
+            {1563, 0.295},
+            {1722, 0.4648},
+            {1898, 0.5548},
+            {2070, 0.6068},
+            {2234, 0.6408},
+            {2389, 0.6638}
     };
 
 
