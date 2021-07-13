@@ -1,5 +1,6 @@
 package edu.greenblitz.bigRodika.commands.dome;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
 import org.greenblitz.motion.tolerance.ITolerance;
 
@@ -27,7 +28,13 @@ public class DomeApproachSwiftly extends DomeCommand {
     }
 
     public DomeApproachSwiftly(double target) {
+
         this(target, new AbsoluteTolerance(DEFAULT_TOLERENCE));
+    }
+
+    @Override
+    public void initialize() {
+        DriverStation.reportError("Initialized DomeApproachSwiftly", false);
     }
 
 

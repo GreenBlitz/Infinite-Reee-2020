@@ -13,7 +13,7 @@ public class ResetEncoderWhenInSide extends TurretCommand {
 
     @Override
     public void execute() {
-        Turret.getInstance().moveTurret(-0.1);
+        Turret.getInstance().moveTurret(-0.2);
     }
 
     @Override

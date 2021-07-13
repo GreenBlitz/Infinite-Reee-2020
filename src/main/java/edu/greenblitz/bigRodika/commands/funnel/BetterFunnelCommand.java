@@ -4,6 +4,7 @@ import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByDifferentConstants;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.gblib.command.GBCommand;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class BetterFunnelCommand extends GBCommand {
     private double targetSpeed;
@@ -13,8 +14,9 @@ public class BetterFunnelCommand extends GBCommand {
     private InsertByConstant insert;
 
     public BetterFunnelCommand(double wantedSpeed) {
+
         this.targetSpeed = wantedSpeed;
-        this.push = new PushByDifferentConstants(0.8, -0.3);
+        this.push = new PushByDifferentConstants(0.8, 0.3);
         this.insert = new InsertByConstant(0.6);
     }
 
@@ -22,18 +24,20 @@ public class BetterFunnelCommand extends GBCommand {
     public void initialize() {
         this.push.initialize();
         this.insert.initialize();
+
+        DriverStation.reportError("Initialized BetterFunnelCommand", false);
     }
 
     @Override
     public void execute() {
-        if(Math.abs(Shooter.getInstance().getShooterSpeed() - this.targetSpeed) > deltaLimit) {
+        if(Math.abs(Shooter.getInstance().getShooterSpeed() - this.targetSpeed) < deltaLimit) {
             push.execute();
             insert.execute();
         } else {
             push.end(true);
             insert.end(true);
 
-            this.push = new PushByDifferentConstants(0.8, -0.3);
+            this.push = new PushByDifferentConstants(0.8, 0.3);
             this.insert = new InsertByConstant(0.6);
         }
     }

@@ -1,10 +1,12 @@
 package edu.greenblitz.bigRodika;
 
+import edu.greenblitz.bigRodika.commands.chassis.profiling.Follow2DProfileCommand;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.SequentialFullShoot;
 import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
+import edu.greenblitz.bigRodika.commands.funnel.BetterFunnelCommand;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
@@ -25,18 +27,23 @@ import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAuto
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.ThreeStageShoot;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
 import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
+import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.turret.resets.UnsafeResetTurret;
 import edu.greenblitz.bigRodika.subsystems.Chassis;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
+import edu.greenblitz.gblib.threading.ThreadedCommand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import org.greenblitz.motion.base.State;
 import org.greenblitz.motion.pid.PIDObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class OI {
@@ -100,65 +107,45 @@ public class OI {
 //                new ResetDome()
 //        ));
 
-        mainJoystick.A.whileHeld(new SequentialFullShoot());
+//        mainJoystick.A.whileHeld(new BetterFunnelCommand(1906));
 //        mainJoystick.A.whileHeld(new TurretByVision(VisionMaster.Algorithm.HEXAGON));
 //        mainJoystick.B.whileHeld(new DomeApproachSwiftly(800));
-//        mainJoystick.X.whileHeld(new FullyAutoThreeStage(1000));
+        mainJoystick.X.whileHeld(new FullyAutoThreeStage(1906));
         mainJoystick.R1
                 .whileHeld(new InsertIntoShooter(0.5, 0.5, 0.5));
 
+        List<State> hardCodedShit = new ArrayList<>();
+        hardCodedShit.add(new State(0, 0));
+        hardCodedShit.add(new State(0, -1));
+
+        mainJoystick.A.whenPressed(new DomeApproachSwiftly(2300));
+
         mainJoystick.Y.whenPressed(new StopShooter());
-}
+    }
 
     private void initOfficialButtons() {
 
         mainJoystick.L1.whenReleased(new ToggleShift());
-
-        mainJoystick.X.whenPressed(new ResetDome(-0.3));
-
-        mainJoystick.Y.whenPressed(new ShootAdjesant(mainJoystick.Y));
-
+        
         mainJoystick.START.whenPressed(new ToSpeed());
         mainJoystick.BACK.whenPressed(new ToPower());
 
-        // ---------------------------------------------------------------
+        // --------------------SECOND STICK---------------------------------
 
-//        secondStick.R1.whenPressed(new ShootByConstant(0.4));
-//        secondStick.R1.whenReleased(new ParallelCommandGroup(new StopShooter(),
-//                new ResetDome(-0.5)));
-
-        secondStick.L1.whileHeld(new InsertIntoShooter(1.0, 0.8, 0.6));
+        secondStick.L1.whileHeld(new BetterFunnelCommand(2062));
         secondStick.L1.whenReleased(new ParallelCommandGroup(new StopPusher(),
                 new StopInserter(), new StopRoller()));
 
         secondStick.Y.whileHeld(new SequentialFullShoot());
         secondStick.Y.whenReleased(new StopShooter());
 
-        secondStick.A.whenPressed(new StopShooter());
+//        secondStick.A.whenPressed(new StopShooter());
 
         secondStick.B.whenPressed(new ToggleExtender());
 
         secondStick.R1.whenPressed(new FullyAutoThreeStage(2062)); // 1650
         secondStick.R1.whenReleased(new StopShooter());
 
-//        secondStick.X.whenPressed(new ShootByConstant(
-//                Shooter.getInstance().getDesiredPower(2000)
-//        ));
-//        secondStick.X.whenReleased(new GBCommand() {
-//            @Override
-//            public void initialize() {
-//                if (!secondStick.R1.get()) new StopShooter().schedule();
-//            }
-//
-//            @Override
-//            public boolean isFinished() {
-//                return true;
-//            }
-//        });
-
-//        secondStick.X.whenPressed(new ThreeStageShoot());
-
-        // TODO: uncomment, microswitch broken so disaling dome function
         secondStick.POV_UP.whileHeld(new DomeMoveByConstant(0.3));
 
         secondStick.POV_DOWN.whileHeld(new DomeMoveByConstant(-0.3));

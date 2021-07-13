@@ -119,7 +119,6 @@ public class Turret extends GBSubsystem {
     }
 
     private void moveTurretReset(double power) {
-        System.out.println("RESET");
         if (power == 0){
             motor.set(0);
             return;
@@ -136,7 +135,6 @@ public class Turret extends GBSubsystem {
     }
 
     private void moveTurretNoResest(double power) {
-        System.out.println("NO RESET");
         if (power == 0){
             motor.set(0);
             return;

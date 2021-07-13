@@ -6,6 +6,7 @@ import edu.greenblitz.bigRodika.commands.shooter.WaitUntilShooterSpeedClose;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import edu.greenblitz.bigRodika.subsystems.Funnel;
 import edu.greenblitz.bigRodika.subsystems.Shooter;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -57,6 +58,13 @@ public class FullyAutoThreeStage extends SequentialCommandGroup {
         );
 
 
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+
+        DriverStation.reportError("Initialized FullyAutoThreeStage", false);
     }
 
 

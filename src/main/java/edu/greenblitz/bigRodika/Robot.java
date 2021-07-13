@@ -4,15 +4,21 @@ import edu.greenblitz.bigRodika.commands.chassis.locazlier.LocalizerCommandRunne
 import edu.greenblitz.bigRodika.commands.climber.ClimbByTriggers;
 import edu.greenblitz.bigRodika.commands.climber.HookByTriggers;
 import edu.greenblitz.bigRodika.commands.complex.autonomous.*;
+import edu.greenblitz.bigRodika.commands.dome.DomeApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
+import edu.greenblitz.bigRodika.commands.funnel.BetterFunnelCommand;
+import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.intake.extender.ExtendRollerTeleop;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
+import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
+import edu.greenblitz.bigRodika.commands.turret.movebyp.TurretApproachSwiftly;
 import edu.greenblitz.bigRodika.commands.turret.resets.ResetEncoderWhenInSide;
 import edu.greenblitz.bigRodika.subsystems.*;
 import edu.greenblitz.bigRodika.utils.DigitalInputMap;
 import edu.greenblitz.bigRodika.utils.UARTCommunication;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.bigRodika.utils.WaitMiliSeconds;
+import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
 import edu.greenblitz.gblib.hid.SmartJoystick;
@@ -46,8 +52,6 @@ public class Robot extends TimedRobot {
         Turret.setDefaultCommand();
 
         VisionMaster.getInstance().register();
-
-        new ResetEncoderWhenInSide().initialize();
     }
 
     @Override
@@ -76,23 +80,24 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        CommandScheduler.getInstance().onCommandInterrupt(cmd -> DriverStation.reportError(cmd.getName(), false));
         Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
-        //Shifter.getInstance().setShift(Gear.SPEED);
+        Shifter.getInstance().setShift(Gear.POWER);
         VisionMaster.GameState.AUTONOMOUS.setAsCurrent();
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
-//        new ResetEncoderWhenInSide().schedule();
-//        new MoveFromLine().schedule();
-        //new LocalizerCommandRunner().schedule();
-//        new Trench8BallAuto().schedule();
-        //new FiveBallTrench().schedule();
-//        new ThreeBallNoVision().schedule();
-//        new FiveBallTrench().schedule();
-        new MoveFromLine().schedule();
+
+        new ExtendRollerTeleop().andThen(new WaitMiliSeconds(4000).andThen(
+                new ResetEncoderWhenInSide().andThen(
+                        new TurretApproachSwiftly(0.216).alongWith(
+                                new DomeApproachSwiftly(2000)).andThen(
+                                new FullyAutoThreeStage(2000)).alongWith(
+                                new BetterFunnelCommand(2000))).alongWith(
+                        new WaitMiliSeconds(6000).andThen(new MoveFromLine())))).schedule();
+
     }
 
     @Override
     public void teleopInit() {
-        //Shifter.getInstance().setShift(Gear.SPEED);
         CommandScheduler.getInstance().cancelAll();
         VisionMaster.GameState.TELEOP.setAsCurrent();
         Chassis.getInstance().toBrake();
@@ -101,23 +106,11 @@ public class Robot extends TimedRobot {
         new LocalizerCommandRunner().schedule();
 
         VisionMaster.Algorithm.HEXAGON.setAsCurrent();
-        //Shifter.getInstance().setShift(Gear.SPEED);
         GlobalGearContainer.getInstance().setGear(Gear.SPEED);
 
         new ResetDome(-0.3).schedule();
         new ResetEncoderWhenInSide().schedule();
-        new ExtendRollerTeleop().schedule();
-
-//        new StopShooter().schedule();
-
-
-        /*
-        if (!DriverStation.getInstance().isFMSAttached()){
-//            new CompressorOn().schedule();
-//            new ResetEncoderWhenInSide().schedule();
-            new ClimbByTriggers(OI.getInstance().getMainJoystick(), OI.getInstance().getSideStick(), 0.4, 0.4).schedule();
-            Localizer.getInstance().reset(Chassis.getInstance().getLeftMeters(), Chassis.getInstance().getRightMeters());
-        }*/
-
+//        new ExtendRollerTeleop().schedule();
+        new StopShooter().schedule();
     }
 }

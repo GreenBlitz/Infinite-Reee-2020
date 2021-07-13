@@ -1,5 +1,7 @@
 package edu.greenblitz.bigRodika.utils;
 
+import edu.greenblitz.gblib.command.GBCommand;
+
 public class WaitCommand extends GBCommand {
 
     private double timeout;

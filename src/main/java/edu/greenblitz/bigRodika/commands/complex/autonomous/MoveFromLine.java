@@ -20,7 +20,7 @@ public class MoveFromLine extends ChassisCommand {
 
     @Override
     public void execute() {
-        Chassis.getInstance().moveMotors(-0.3,-0.3);
+        Chassis.getInstance().moveMotors(-0.2,-0.2);
     }
 
     @Override

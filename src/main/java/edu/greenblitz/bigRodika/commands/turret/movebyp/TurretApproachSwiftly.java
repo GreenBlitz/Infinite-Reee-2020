@@ -67,7 +67,7 @@ public class TurretApproachSwiftly extends TurretCommand {
 //
 //        //return ((absError - X_OFFSET) * SLOPE + Y_OFFSET) * errorSign;
         SmartDashboard.putNumber("TURRET ABD ERROR", absError);
-        return errorSign * (absError * 2.5 + 0.05);
+        return errorSign * (absError * 1.5 + 0.05);
     }
 
 }
