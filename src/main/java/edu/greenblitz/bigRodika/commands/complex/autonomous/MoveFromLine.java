@@ -27,4 +27,11 @@ public class MoveFromLine extends ChassisCommand {
     public boolean isFinished() {
         return System.currentTimeMillis() - tstart > 2000;
     }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+
+        chassis.moveMotors(0, 0);
+    }
 }
