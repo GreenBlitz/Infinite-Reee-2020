@@ -89,8 +89,8 @@ public class Robot extends TimedRobot {
         new ExtendRollerTeleop().andThen(new WaitMiliSeconds(4000).andThen(
                 new ResetEncoderWhenInSide().andThen(
                         new TurretApproachSwiftly(0.216).alongWith(
-                                new DomeApproachSwiftly(2000)).andThen(
-                                new FullyAutoThreeStage(2000)).alongWith(
+                                new DomeApproachSwiftly(2000)).withTimeout(1.5).andThen(
+                                new FullyAutoThreeStage(2100)).alongWith(
                                 new BetterFunnelCommand(2000))).alongWith(
                         new WaitMiliSeconds(6000).andThen(new MoveFromLine())))).schedule();
 

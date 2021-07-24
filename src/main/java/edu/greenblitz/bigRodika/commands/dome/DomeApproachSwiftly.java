@@ -19,7 +19,7 @@ public class DomeApproachSwiftly extends DomeCommand {
     private double X_OFFSET = SLOW_DOWN_END;
     private double Y_OFFSET = MINIMUM_SPEED;
 
-    private static final double DEFAULT_TOLERENCE = 0.005;
+    private static final double DEFAULT_TOLERENCE = 50;
 
     public DomeApproachSwiftly(double target, ITolerance tol) {
         super();
@@ -51,6 +51,7 @@ public class DomeApproachSwiftly extends DomeCommand {
     @Override
     public void end(boolean interrupted) {
         dome.safeMove(0);
+        DriverStation.reportError("Dome Finished", false);
     }
 
     public double calculateVelocity(double error) {
