@@ -1,13 +1,11 @@
 package edu.greenblitz.bigRodika;
 
-import edu.greenblitz.bigRodika.commands.complex.multisystem.ShootAdjesant;
 import edu.greenblitz.bigRodika.commands.dome.DomeMoveByConstant;
 import edu.greenblitz.bigRodika.commands.dome.ResetDome;
 import edu.greenblitz.bigRodika.commands.funnel.InsertIntoShooter;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.InsertByConstant;
 import edu.greenblitz.bigRodika.commands.funnel.inserter.StopInserter;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByConstant;
-import edu.greenblitz.bigRodika.commands.funnel.pusher.PushByDifferentConstants;
 import edu.greenblitz.bigRodika.commands.funnel.pusher.StopPusher;
 import edu.greenblitz.bigRodika.commands.intake.extender.ToggleExtender;
 import edu.greenblitz.bigRodika.commands.intake.roller.RollByConstant;
@@ -16,21 +14,12 @@ import edu.greenblitz.bigRodika.commands.shifter.ToPower;
 import edu.greenblitz.bigRodika.commands.shifter.ToSpeed;
 import edu.greenblitz.bigRodika.commands.shifter.ToggleShift;
 import edu.greenblitz.bigRodika.commands.shooter.FullShoot;
-import edu.greenblitz.bigRodika.commands.shooter.ShootByConstant;
 import edu.greenblitz.bigRodika.commands.shooter.StopShooter;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.ShootBySimplePid;
 import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.FullyAutoThreeStage;
-import edu.greenblitz.bigRodika.commands.shooter.pidshooter.threestage.ThreeStageShoot;
 import edu.greenblitz.bigRodika.commands.turret.MoveTurretByConstant;
-import edu.greenblitz.bigRodika.commands.turret.TurretByVision;
-import edu.greenblitz.bigRodika.commands.turret.resets.UnsafeResetTurret;
-import edu.greenblitz.bigRodika.subsystems.Shooter;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
-import edu.greenblitz.gblib.command.GBCommand;
 import edu.greenblitz.gblib.hid.SmartJoystick;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import org.greenblitz.motion.pid.PIDObject;
 
 import java.util.function.Supplier;
 
