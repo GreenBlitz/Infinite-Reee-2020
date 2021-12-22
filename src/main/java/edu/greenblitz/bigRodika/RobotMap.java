@@ -48,7 +48,7 @@ public class RobotMap {
             public static double ENCODER_VALUE_WHEN_NEGATIVE_90 = ENCODER_VALUE_WHEN_FORWARD -
                     ENCODER_90_DEG_ABS;
             public static double ENCODER_VALUE_WHEN_NEGATIVE_180 = ENCODER_VALUE_WHEN_FORWARD
-                    - 2*ENCODER_90_DEG_ABS;
+                    - 2 * ENCODER_90_DEG_ABS;
 
             public static final double TURRET_CAMERA_RADIUS = 0.25;
 
@@ -64,9 +64,9 @@ public class RobotMap {
 
         public static class Funnel {
 
-            public static class SemiAuto{
-                public static final double pulseInTime = 0.55, pulseOutTime = 2,  pusherInPower = 0.4,  pusherOutPower = -0.35,
-                 insertByConstant = 0.5,  rollByConstant =  0.2;
+            public static class SemiAuto {
+                public static final double pulseInTime = 0.55, pulseOutTime = 2, pusherInPower = 0.4, pusherOutPower = -0.35,
+                        insertByConstant = 0.5, rollByConstant = 0.2;
             }
 
             public static class Motors {
@@ -105,7 +105,7 @@ public class RobotMap {
             public static final boolean IS_INVERTED_LEADER = true;
             public static final boolean IS_INVERTED_FOLLOWER = true;
 
-//            public static final double SHOOTER_KF = 1;
+            //            public static final double SHOOTER_KF = 1;
             public static final double SHOOTER_P = 0.00075;
             public static final double SHOOTER_I = 0;
             public static final double SHOOTER_D = 0;
@@ -120,17 +120,17 @@ public class RobotMap {
             static {
                 // First element = rpm. second = dome
                 Shooter.distanceToShooterState.addDatapoint(3.2,
-                        new double[] {2000, 0.345});
+                        new double[]{2000, 0.345});
                 Shooter.distanceToShooterState.addDatapoint(4.0,
-                        new double[] {2100, 0.36});
+                        new double[]{2100, 0.36});
                 Shooter.distanceToShooterState.addDatapoint(5.0,
-                        new double[] {2350, 0.403});
+                        new double[]{2350, 0.403});
                 Shooter.distanceToShooterState.addDatapoint(6.1,
-                        new double[] {2500, 0.48});
+                        new double[]{2500, 0.48});
                 Shooter.distanceToShooterState.addDatapoint(6.5,
-                        new double[] {2500, 0.50});
+                        new double[]{2500, 0.50});
                 Shooter.distanceToShooterState.addDatapoint(6.7,
-                        new double[] {2800, 0.486});
+                        new double[]{2800, 0.486});
             }
 
         }
@@ -156,8 +156,8 @@ public class RobotMap {
                 public static final int HOOK = 9;
                 public static final boolean HOOK_REVERSE = true;
                 public static final int ELEVATOR = 13;
-                public static final GearDependentValue<Double> ELEVATOR_TICKS_PER_METER = new GearDependentValue<>(1.0,1.0);
-                public static final GearDependentValue<Double> HOOK_TICKS_PER_METER = new GearDependentValue<>(1.0,1.0);
+                public static final GearDependentValue<Double> ELEVATOR_TICKS_PER_METER = new GearDependentValue<>(1.0, 1.0);
+                public static final GearDependentValue<Double> HOOK_TICKS_PER_METER = new GearDependentValue<>(1.0, 1.0);
                 public static final double ELEVATOR_RATIO = 0.025;
                 public static final boolean ELEVATOR_REVERSE = false;
             }
@@ -178,14 +178,10 @@ public class RobotMap {
 
             public static class Motor {
                 public static final int
-                        LEFT_LEADER = 4,
-                        LEFT_FOLLOWER_1 = 5,
-                        LEFT_FOLLOWER_2 = 6,
+                        LEFT_LEADER = 5,
+                        LEFT_FOLLOWER = 6,
                         RIGHT_LEADER = 1,
-                        RIGHT_FOLLOWER_1 = 2,
-                        RIGHT_FOLLOWER_2 = 3;
-
-
+                        RIGHT_FOLLOWER = 2;
             }
 
             public static class Shifter { // TODO: check this
@@ -216,7 +212,7 @@ public class RobotMap {
 
                     POWER = new HashMap<>();
                     SPEED = new HashMap<>();
-                    PROF = new GearDependentValue<>(null,null);
+                    PROF = new GearDependentValue<>(null, null);
 
                     POWER.put("1.0",
                             new ProfilingData(2.64, 7, 8, 30));
@@ -225,11 +221,11 @@ public class RobotMap {
 
                     // TODO this is dumb
                     POWER.put("0.3",
-                            new ProfilingData(1.93*1.2, 4.6, 4.3, 12.6));
+                            new ProfilingData(1.93 * 1.2, 4.6, 4.3, 12.6));
 
 
                     SPEED.put("0.3",
-                            new ProfilingData(1.93*1.2, 4.6, 4.3, 12.6));
+                            new ProfilingData(1.93 * 1.2, 4.6, 4.3, 12.6));
 
                     PROF.setValue(Gear.POWER, POWER);
                     PROF.setValue(Gear.SPEED, SPEED);
