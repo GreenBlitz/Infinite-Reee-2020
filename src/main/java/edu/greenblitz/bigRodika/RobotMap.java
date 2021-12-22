@@ -183,12 +183,9 @@ public class RobotMap {
             public static class Motor {
                 public static final int
                         LEFT_LEADER = 4,
-                        LEFT_FOLLOWER_1 = 5,
-                        LEFT_FOLLOWER_2 = 6,
+                        LEFT_FOLLOWER = 5,
                         RIGHT_LEADER = 1,
-                        RIGHT_FOLLOWER_1 = 2,
-                        RIGHT_FOLLOWER_2 = 3;
-
+                        RIGHT_FOLLOWER = 2;
 
             }
 

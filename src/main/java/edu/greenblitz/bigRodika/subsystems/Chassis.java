@@ -17,30 +17,24 @@ import org.greenblitz.motion.base.Position;
 public class Chassis extends GBSubsystem {
     private static Chassis instance;
 
-    private CANSparkMax rightLeader, rightFollower1, rightFollower2, leftLeader, leftFollower1, leftFollower2;
+    private CANSparkMax rightLeader, rightFollower1, leftLeader, leftFollower1;
     private IEncoder leftEncoder, rightEncoder;
     private IGyroscope gyroscope;
 //    private PowerDistributionPanel robotPDP;
 
     private Chassis() {
         rightLeader = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        rightFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
-        rightFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);
+        rightFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.RIGHT_FOLLOWER, CANSparkMaxLowLevel.MotorType.kBrushless);
         leftLeader = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_LEADER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        leftFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_1, CANSparkMaxLowLevel.MotorType.kBrushless);
-        leftFollower2 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER_2, CANSparkMaxLowLevel.MotorType.kBrushless);   //big-haim
+        leftFollower1 = new CANSparkMax(RobotMap.Limbo2.Chassis.Motor.LEFT_FOLLOWER, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         rightLeader.setSmartCurrentLimit(40);
         rightFollower1.setSmartCurrentLimit(40);
-        rightFollower2.setSmartCurrentLimit(40);
         leftLeader.setSmartCurrentLimit(40);
         leftFollower1.setSmartCurrentLimit(40);
-        leftFollower2.setSmartCurrentLimit(40);
 
         leftFollower1.follow(leftLeader);
-        leftFollower2.follow(leftLeader);
         rightFollower1.follow(rightLeader);
-        rightFollower2.follow(rightLeader);
 
         leftLeader.setInverted(false);
 //        leftFollower1.setInverted(true);
@@ -88,19 +82,15 @@ public class Chassis extends GBSubsystem {
     public void toBrake() {
         rightLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
         rightFollower1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        rightFollower2.setIdleMode(CANSparkMax.IdleMode.kBrake);
         leftLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
         leftFollower1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        leftFollower2.setIdleMode(CANSparkMax.IdleMode.kBrake);   //big-haim
     }
 
     public void toCoast() {
         rightLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
         rightFollower1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        rightFollower2.setIdleMode(CANSparkMax.IdleMode.kCoast);
         leftLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
         leftFollower1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        leftFollower2.setIdleMode(CANSparkMax.IdleMode.kCoast);   //big-haim
     }
 
     public void arcadeDrive(double moveValue, double rotateValue) {
