@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
 
     private double startTime;
     private boolean recordDriver = true;//will be false when we need to stop the recording.
-    private HashMap<Double, HashMap<String, Double>> followDriverData;
+    private HashMap<Double, HashMap<String, Double>> followDriverData = new HashMap<>();
 
     @Override
     public void robotInit() {
@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putNumber("RIGHT STICK X", OI.getInstance().getMainJoystick().getAxisValue(SmartJoystick.Axis.RIGHT_X));
 
-        //SmartDashboard.putString("THING", Chassis.getInstance().getCurrentCommand().toString());
+        //SmartDotring("THING", Chassis.getInstance().getCurrentCommand().toString());
 //        Command shooterCommand = Shooter.getInstance().getCurrentCommand();
 //        SmartDashboard.putString("Shooter::currentCommand", shooterCommand == null ? "" : shooterCommand.getName());
 //        Command chassisCommand = Chassis.getInstance().getCurrentCommand();
@@ -135,7 +135,8 @@ public class Robot extends TimedRobot {
     public void testPeriodic() {
         if (OI.getInstance().getMainJoystick().START.get() && recordDriver) {
             recordDriver = false;
-
+            serializeHashMap(followDriverData);
+            System.out.println(followDriverData);
         }
         if (recordDriver) {
             followDriverData.put((System.currentTimeMillis() / 1000.0) - startTime, OI.getInstance().getMainJoystick().getButtonsOn());
@@ -146,7 +147,7 @@ public class Robot extends TimedRobot {
     private <T, K> void serializeHashMap(HashMap<T, K> myMap) {
         try {
             //when u run this code make sure to know the dest for the file.
-            FileOutputStream myFileOutStream = new FileOutputStream("/src/main/resources/saveHashmap.txt");
+            FileOutputStream myFileOutStream = new FileOutputStream("/home/lvuser/command_recordings/ourRecord");
             ObjectOutputStream myObjectOutStream = new ObjectOutputStream(myFileOutStream);
             myObjectOutStream.writeObject(myMap);//should check that writeObject will work recursively (we deal with HashMap in HashMap)
             //asaf said it will be find and it will work recursively
@@ -158,13 +159,17 @@ public class Robot extends TimedRobot {
     }
     //we copied those functions from gf"g, link:
     //https://www.geeksforgeeks.org/how-to-serialize-hashmap-in-java/
-    private HashMap deserializeHashMap(String fileName) {
+
+
+    @SuppressWarnings("unchecked")
+    private HashMap<Double, HashMap<String, Double>> deserializeHashMap(String fileName) {
         try {
-            FileInputStream fileInput = new FileInputStream("/src/main/resources/".concat(fileName).concat("txt"));
+            FileInputStream fileInput = new FileInputStream("C:\\Users\\GreenBlitz User\\Desktop\\ourRecord");
             ObjectInputStream objectInput = new ObjectInputStream(fileInput);
-            HashMap myMap = (HashMap) objectInput.readObject();
+            HashMap<Double, HashMap<String, Double>> myMap = (HashMap<Double, HashMap<String, Double>>) objectInput.readObject();
             objectInput.close();
             fileInput.close();
+            System.out.println(myMap);
             return myMap;
         } catch (IOException obj1) {
             obj1.printStackTrace();
@@ -176,5 +181,9 @@ public class Robot extends TimedRobot {
         }
     }
 
+    public static void main(String[] args) {
+        Robot r = new Robot();
+        System.out.println(r.deserializeHashMap(""));
 
+    }
 }
