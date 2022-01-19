@@ -18,6 +18,7 @@ import edu.greenblitz.bigRodika.utils.WaitMiliSeconds;
 import edu.greenblitz.gblib.gears.Gear;
 import edu.greenblitz.gblib.gears.GlobalGearContainer;
 import edu.greenblitz.gblib.hid.SmartJoystick;
+import edu.greenblitz.gblib.hid.virtualHid.VirtualJoystick;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,7 +33,7 @@ public class Robot extends TimedRobot {
 
     private double startTime;
     private boolean recordDriver = true;//will be false when we need to stop the recording.
-    private HashMap<Double, HashMap<String, Double>> followDriverData = new HashMap<>();
+    private HashMap<Double, HashMap<Integer, Double>> followDriverData = new HashMap<>();
 
     @Override
     public void robotInit() {
@@ -133,13 +134,18 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testPeriodic() {
-        if (OI.getInstance().getMainJoystick().START.get() && recordDriver) {
-            recordDriver = false;
-            serializeHashMap(followDriverData);
-            System.out.println(followDriverData);
+        if(true) {
+            if (OI.getInstance().getMainJoystick().START.get() && recordDriver) {
+                recordDriver = false;
+                serializeHashMap(followDriverData);
+                System.out.println(followDriverData);
+            }
+            if (recordDriver) {
+                followDriverData.put((System.currentTimeMillis() / 1000.0) - startTime, OI.getInstance().getMainJoystick().getButtonsOn());
+            }
         }
-        if (recordDriver) {
-            followDriverData.put((System.currentTimeMillis() / 1000.0) - startTime, OI.getInstance().getMainJoystick().getButtonsOn());
+        else{
+            OI.getInstance().setMainJoystick(new SmartJoystick(new VirtualJoystick(deserializeHashMap("C:\\Users\\GreenBlitz User\\Desktop\\ourRecord"))));
         }
     }
 
@@ -162,11 +168,11 @@ public class Robot extends TimedRobot {
 
 
     @SuppressWarnings("unchecked")
-    private HashMap<Double, HashMap<String, Double>> deserializeHashMap(String fileName) {
+    private HashMap<Double, HashMap<Integer, Double>> deserializeHashMap(String fileName) {
         try {
             FileInputStream fileInput = new FileInputStream("C:\\Users\\GreenBlitz User\\Desktop\\ourRecord");
             ObjectInputStream objectInput = new ObjectInputStream(fileInput);
-            HashMap<Double, HashMap<String, Double>> myMap = (HashMap<Double, HashMap<String, Double>>) objectInput.readObject();
+            HashMap<Double, HashMap<Integer, Double>> myMap = (HashMap<Double, HashMap<Integer, Double>>) objectInput.readObject();
             objectInput.close();
             fileInput.close();
             System.out.println(myMap);

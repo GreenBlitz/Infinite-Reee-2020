@@ -175,4 +175,9 @@ public class OI {
         return secondStick;
     }
 
+    protected void setMainJoystick(SmartJoystick mainJoystick) {
+        this.mainJoystick = mainJoystick;
+    }
+
+
 }
