@@ -24,7 +24,7 @@ public class LocalizerCommand implements IThreadable {
 
     @Override
     public void run() {
-        localizer.update(chassis.getLeftMeters(), chassis.getRightMeters(), chassis.getAngle());
+//        localizer.update(chassis.getLeftMeters(), chassis.getRightMeters(), chassis.getAngle());
         SmartDashboard.putString("Location", localizer.getLocation().toString());
 //        localizer.update(chassis.getLeftMeters(), chassis.getRightMeters());
 

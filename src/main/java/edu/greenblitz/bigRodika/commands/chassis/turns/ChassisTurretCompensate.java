@@ -1,7 +1,6 @@
 package edu.greenblitz.bigRodika.commands.chassis.turns;
 
 import edu.greenblitz.bigRodika.subsystems.Chassis;
-import edu.greenblitz.bigRodika.subsystems.Turret;
 import edu.greenblitz.bigRodika.utils.VisionMaster;
 import edu.greenblitz.gblib.command.GBCommand;
 import org.greenblitz.motion.tolerance.AbsoluteTolerance;
@@ -40,24 +39,7 @@ public class ChassisTurretCompensate extends GBCommand { // NOT A TURRET COMMAND
         System.out.println("Init ChassisTurretCompensate");
     }
 
-    @Override
-    public void execute() {
-        if (Math.abs(Turret.getInstance().getNormAngleRads()) <= MAX_ANGLE_RADS) {
-            return;
-        }
-        double sign;
-        if (VisionMaster.getInstance().isLastDataValid()) {
-            sign = Math.signum(VisionMaster.getInstance().getVisionLocation().getRelativeAngle());
-        } else {
-            sign = -Math.signum(Turret.getInstance().getNormAngleRads());
-        }
-        Chassis.getInstance().moveMotors(-sign * power, sign * power);
-    }
 
-    @Override
-    public boolean isFinished() {
-        if (!VisionMaster.getInstance().isLastDataValid())
-            return Math.abs(Turret.getInstance().getNormAngleRads()) <= MAX_ANGLE_RADS;
-        return tolerance.onTarget(0, VisionMaster.getInstance().getVisionLocation().getRelativeAngle());
-    }
+
+
 }

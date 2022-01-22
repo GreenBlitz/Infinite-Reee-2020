@@ -35,14 +35,14 @@ public class TurnToAngle extends ChassisCommand {
 
     @Override
     public void initialize() {
-        ActuatorLocation start = new ActuatorLocation(chassis.getAngle(),
-                0);
+//        ActuatorLocation start = new ActuatorLocation(chassis.getAngle(),
+//                0);
 
-        this.motionProfile = Profiler1D.generateProfile(
-                maxV,
-                maxA,
-                -maxA,
-                0, start, end);
+//        this.motionProfile = Profiler1D.generateProfile(
+//                maxV,
+//                maxA,
+//                -maxA,
+//                0, start, end);
 
         t0 = System.currentTimeMillis();
         overCount = 0;
@@ -66,13 +66,13 @@ public class TurnToAngle extends ChassisCommand {
         double location = motionProfile.getLocation(timePassed);
 
         double ff = velocity / maxV + accel / maxA;
-        double locPVal = locP * Position.normalizeAngle(location - chassis.getAngle());
+//        double locPVal = locP * Position.normalizeAngle(location - chassis.getAngle());
         double velPLeft = velP * (perWheelVel - chassis.getLeftRate());
         double velPRight = velP * (-perWheelVel - chassis.getRightRate());
 
-        chassis.moveMotors(
-                clamp(ff + locPVal + velPLeft),
-                -clamp(ff + locPVal + velPRight));
+//        chassis.moveMotors(
+//                clamp(ff + locPVal + velPLeft),
+//                -clamp(ff + locPVal + velPRight));
     }
 
     private double clamp(double inp) {
@@ -81,11 +81,11 @@ public class TurnToAngle extends ChassisCommand {
 
     @Override
     public void end(boolean interrupted) {
-        double err = Math.toDegrees(Position.normalizeAngle(chassis.getAngle() - end.getX()));
-        SmartDashboard.putNumber("Final Error", err);
-        if (Math.abs(err) > maxError && !interrupted && allowRedo) {
-            new ThreadedCommand(new DelicateTurn(end.getX()), Chassis.getInstance()).schedule();
-        }
+//        double err = Math.toDegrees(Position.normalizeAngle(chassis.getAngle() - end.getX()));
+//        SmartDashboard.putNumber("Final Error", err);
+//        if (Math.abs(err) > maxError && !interrupted && allowRedo) {
+//            new ThreadedCommand(new DelicateTurn(end.getX()), Chassis.getInstance()).schedule();
+//        }
     }
 
     @Override

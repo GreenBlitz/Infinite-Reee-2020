@@ -24,13 +24,18 @@ public class DelicateTurn implements IThreadable {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(Position.normalizeAngle(Chassis.getInstance().getAngle() - goal)) <= TOL;
+        return false;
     }
+
+//    @Override
+//    public boolean isFinished() {
+//        return Math.abs(Position.normalizeAngle(Chassis.getInstance().getAngle() - goal)) <= TOL;
+//    }
 
     @Override
     public void atEnd() {
-        double err = Math.toDegrees(Position.normalizeAngle(Chassis.getInstance().getAngle() - goal));
-        SmartDashboard.putNumber("Final Final Error", err);
+//        double err = Math.toDegrees(Position.normalizeAngle(Chassis.getInstance().getAngle() - goal));
+//        SmartDashboard.putNumber("Final Final Error", err);
 
         Chassis.getInstance().moveMotors(0, 0);
     }
